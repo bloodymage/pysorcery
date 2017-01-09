@@ -23,11 +23,10 @@
 
 import sys
 
-#sys.path.append("/home/geoff/src/python-sorcery/sorcery/")
-
 import argparse
-from ..lib import libmisc
-#from .. import __version__
+from pysorcery.lib.libmisc import *
+#from lib import libmisc
+from pysorcery import __version__
 
 
 #------
@@ -37,6 +36,7 @@ command="cast"
 
 def main():
     debug (command, "main","Begin Function",7,7)
+    print(__version__)
     return 0
 
 if __name__ == '__main__':
