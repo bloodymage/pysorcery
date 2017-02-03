@@ -35,9 +35,9 @@ import os
 
 # Local application
 import pysorcery
-from pysorcery import lib 
-from pysorcery.lib.libmisc import *
-from pysorcery.lib.libdefault import *
+#from pysorcery import lib 
+#from pysorcery.lib.libmisc import *
+#from pysorcery.lib.libdefault import *
 from pysorcery import __version__
 
 

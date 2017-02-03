@@ -1,0 +1,15 @@
+Metadata-Version: 1.1
+Name: pydionysius
+Version: 0.1.1
+Summary: Dionysies
+Home-page: https://github.com/gderber/python-dionysius/
+Author: Geoff S Derber
+Author-email: gd.smlinux@gmail.com
+License: GPLv3+
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: Linux
+Classifier: Programming Language :: Python
+Classifier: Development Status :: 4 - Beta
+Classifier: Topic :: Utilities

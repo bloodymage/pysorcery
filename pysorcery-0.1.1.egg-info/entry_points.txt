@@ -1,0 +1,4 @@
+[sorcery_cast]
+cast = pysorcery.cast.__main__:main
+
+
