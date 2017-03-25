@@ -1,4 +1,38 @@
+[sorcery_alter]
+alter = pysorcery.cli.alter:main
+
+[sorcery_cabal]
+cabal = pysorcery.cli.cabal:main
+
 [sorcery_cast]
-cast = pysorcery.cast.__main__:main
+cast = pysorcery.cli.cast:main
 
+[sorcery_cleanse]
+cleanse = pysorcery.cli.cleanse:main
 
+[sorcery_dispel]
+dispel = pysorcery.cli.dispel:main
+
+[sorcery_gaze]
+gaze = pysorcery.cli.gaze:main
+
+[sorcery_ressurect]
+ressurect = pysorcery.cli.ressurect:main
+
+[sorcery_scribbler]
+scribbler = pysorcery.cli.scribbler:main
+
+[sorcery_scribe]
+scribe = pysorcery.cli.scribe:main
+
+[sorcery_summon]
+summon = pysorcery.cli.summon:main
+
+[sorcery_upstream]
+upstream = pysorcery.cli.upstream:main
+
+[sorcery_vcast]
+vcast = pysorcery.cli.vcast:main
+
+[sorcery_xsorcery]
+xsorcery = pysorcery.gui.xsorcery:main
