@@ -71,16 +71,11 @@ from pysorcery.lib import libcodex
 # create logger
 logger = logging.getLogger(__name__)
 
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]
-
 #-------------------------------------------------------------------------------
 #
 # Classes
 #
 #-------------------------------------------------------------------------------
-
             
 #-------------------------------------------------------------------------------
 #
@@ -92,50 +87,18 @@ distro_id=distro.linux_distribution()[0]
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_what
+# Function dispel
 #
 #
 #
 #-------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-#
-# Functions
-#
-#
-#
-#-------------------------------------------------------------------------------
-def gaze_depends(args):
+def dispel(args):
     logger.debug("Begin Function")
 
-    
-    logger.debug("End Function")
-    return
+    for i in args.spell:
+        spell = libspell.Spell(i)
+        spell.remove(args)
 
-#-------------------------------------------------------------------------------
-#
-# Functions
-#
-#
-#
-#-------------------------------------------------------------------------------
-def gaze_dependencies(args):
-    logger.debug("Begin Function")
-
-    logger.debug("End Function")
-    return
-
-#-------------------------------------------------------------------------------
-#
-# Functions
-#
-#
-#
-#-------------------------------------------------------------------------------
-def gaze_time(args):
-    logger.debug("Begin Function")
-
-    
     logger.debug("End Function")
     return
 
@@ -152,9 +115,25 @@ def real_main(args):
     # Parse Command Line Arguments
 
     parser = argparse.ArgumentParser(description="Query / View Sorcery package management information")
+    parser.add_argument("spell",
+                        nargs=1,
+                    help="Spell")
+    parser.add_argument("-d", "--downgrade",
+                        action="store_true",
+                        help="increase output verbosity")
+    parser.add_argument("-e", "--exile",
+                        action="count_true",
+                        help="increase output verbosity")
+    parser.add_argument("--notriggers",
+                        action="store_true",
+                        help="increase output verbosity")
     parser.add_argument("--config",
                         nargs=1,
                     help="Use specified config file")
+    parser.add_argument("-q", "--quiet",
+                        action="count",
+                        default=0,
+                    help="increase output verbosity")
     parser.add_argument("-v", "--verbosity",
                         action="count",
                         default=0,
@@ -172,15 +151,15 @@ def real_main(args):
     
     subparsers = parser.add_subparsers(help='Sub commands')
 
-    # create the parser for the "alien" command
-    parser_what = subparsers.add_parser('alien', help='Find and Display all files not tracked by the Sorcery Package Management System (Not Working)')
-    parser_what.add_argument('--debug',
-                             action='store_true',
-                             help='Display System Info')
-    parser_what.set_defaults(func=gaze_alien)
-
 
     args = parser.parse_args()
+
+    if os.geteuid() != 0:
+        # os.execvp() replaces the running process, rather than launching a child
+        # process, so there's no need to exit afterwards. The extra "sudo" in the
+        # second parameter is required because Python doesn't automatically set $0
+        # in the new process.
+        os.execvp("sudo", ["sudo"] + sys.argv)
 
     config = libconfig.main_configure(args)
 
@@ -189,7 +168,7 @@ def real_main(args):
     logger.debug3("Arguments: " + str(args))
 
     # "application" code
-    args.func(args)
+    dispel(args)
     
 #    logging.verifydebuglevels()
     logger.debug("End Function")

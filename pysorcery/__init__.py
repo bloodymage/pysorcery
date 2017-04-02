@@ -59,6 +59,11 @@ from pysorcery.lib import logging
 #
 #-------------------------------------------------------------------------------
 __version__ = '0.1.1'
+enable_debugging_mode=True
+deb_distro_list=['Ubuntu','debian','linuxmint']
+smgl_distro_list=['Source Mage']
+distro_id=distro.linux_distribution()[0]
+
 
 # Enable Logging
 # create logger

@@ -15,18 +15,18 @@
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Dionysius is distributed in the hope that it will be useful,
+#    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
 # Gaze
 #
-# is part of the sorcery source-based package management suite. It is a
+# is part of the Sorcery source-based package management suite. It is a
 # general purpose command-line tool for displaying package logs, version 
 # information, checking for installed packages, checksums, message digests,
 # maintainer information, package URL information, removing obsolete packages,
@@ -61,7 +61,9 @@ import distro
 # System Library Overrides
 from pysorcery.lib import argparse
 from pysorcery.lib import logging
+
 # Other Application Libraries
+import pysorcery
 from pysorcery import __version__, enable_debugging_mode
 from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
@@ -78,10 +80,6 @@ from pysorcery.lib import libcodex
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
-
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]
 
 #-------------------------------------------------------------------------------
 #
@@ -112,7 +110,7 @@ distro_id=distro.linux_distribution()[0]
 def gaze_alien(args):
     logger.debug("Begin Function")
 
-    # 
+    # create 'alien' object
     alien = libsystem.Alien()
 
     alien.identify()
@@ -175,7 +173,7 @@ def gaze_install_queue(args):
     queue = libspell.SpellQueue()
     queue.inst_queue()
 
-    print("shit")
+#    print("shit")
 
     queue.print_queue()
 
@@ -271,16 +269,18 @@ def gaze_what(args):
     logger.debug("Begin Function")
 
     for i in args.spell:
+        logger.debug2("Loop iteration: " + i)
+        
         spell = libspell.Spell(i)
 
-        logger.debug(spell)
+        logger.debug3("Spell: " + str(spell))
         
         colortext = libtext.ConsoleText()
         message = colortext.colorize(spell.name, "bold","white","black")
-        print(message)
+        logger.info(message)
 
         message = colortext.colorize(spell.description, "none","white","black")
-        print(message)
+        logger.info1(message)
     
     logger.debug("End Function")
     return
@@ -326,7 +326,8 @@ def gaze_where(args):
         colortext = libtext.ConsoleText()
         name = colortext.colorize(str(spell.name), "bold","white","black")
         section = colortext.colorize(str(spell.section), "none","white","black")
-        print(name + ": " + section)
+        logger.info(name + ": ")
+        logger.info1(section)
     
     logger.debug("End Function")
     return
@@ -353,7 +354,8 @@ def gaze_url(args):
         colortext = libtext.ConsoleText()
         name = colortext.colorize(spell.name, "bold","white","black")
         url = colortext.colorize(spell.url, "none","white","black")
-        print(name + ": " + url)
+        logger.info(name + ": ")
+        logger.info1(url)
 
     logger.debug("End Function")
     return
@@ -608,6 +610,10 @@ def gaze_import(args):
 #-------------------------------------------------------------------------------
 def gaze_grimoire(args):
     logger.debug("Begin Function")
+
+    if args.multi:
+        grimoires = libcodex.Codex()
+        grimoires.print_grimoires()
 
     
     logger.debug("End Function")
@@ -949,10 +955,14 @@ def real_main(args):
                               choices=["debug","info","warning","error","critical",
                                        "DEBUG","INFO","WARNING","ERROR","CRITICAL"],
                               help="Set minimum logging level")
+    parser_alien.add_argument("-q", "--quiet",
+                              action="count",
+                              default=0,
+                              help="Decrease output verbosity")
     parser_alien.add_argument("-v", "--verbosity",
                               action="count",
                               default=0,
-                              help="increase output verbosity")
+                              help="Increase output verbosity")
     parser_alien.set_defaults(func=gaze_alien)
 
     # create the parser for the "orphans" command
@@ -967,10 +977,14 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_orphans.add_argument("-q", "--quiet",
+                             action="count",
+                             default=0,
+                             help="Decrease output verbosity")
     parser_orphans.add_argument("-v", "--verbosity",
                              action="count",
                              default=0,
-                             help="increase output verbosity")
+                             help="Increase output verbosity")
     parser_orphans.set_defaults(func=gaze_orphans)
 
     # create the parser for the "activity" command
@@ -984,10 +998,14 @@ def real_main(args):
                                           "error","critical", "DEBUG",
                                           "INFO","WARNING","ERROR","CRITICAL"],
                                  help="Set minimum logging level")
+    parser_activity.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="Increase output verbosity")
     parser_activity.add_argument("-v", "--verbosity",
                                  action="count",
                                  default=0,
-                                 help="increase output verbosity")
+                                 help="Increase output verbosity")
     parser_activity.set_defaults(func=gaze_activity)
 
 
@@ -1003,6 +1021,10 @@ def real_main(args):
                                                "INFO","WARNING","ERROR",
                                                "CRITICAL"],
                                       help="Set minimum logging level")
+    parser_install_queue.add_argument("-q", "--quiet",
+                                      action="count",
+                                      default=0,
+                                      help="Increase output verbosity")
     parser_install_queue.add_argument("-v", "--verbosity",
                                       action="count",
                                       default=0,
@@ -1021,6 +1043,10 @@ def real_main(args):
                                               "INFO","WARNING","ERROR",
                                               "CRITICAL"],
                                      help="Set minimum logging level")
+    parser_remove_queue.add_argument("-q", "--quiet",
+                                     action="count",
+                                     default=0,
+                                     help="increase output verbosity")
     parser_remove_queue.add_argument("-v", "--verbosity",
                                      action="count",
                                      default=0,
@@ -1039,6 +1065,10 @@ def real_main(args):
                                            "INFO","WARNING","ERROR",
                                            "CRITICAL"],
                                   help="Set minimum logging level")
+    parser_show_held.add_argument("-q", "--quiet",
+                                  action="count",
+                                  default=0,
+                                  help="increase output verbosity")
     parser_show_held.add_argument("-v", "--verbosity",
                                   action="count",
                                   default=0,
@@ -1057,6 +1087,10 @@ def real_main(args):
                                            "INFO","WARNING","ERROR",
                                            "CRITICAL"],
                                   help="Set minimum logging level")
+    parser_show_exiled.add_argument("-q", "--quiet",
+                                  action="count",
+                                  default=0,
+                                  help="increase output verbosity")
     parser_show_exiled.add_argument("-v", "--verbosity",
                                   action="count",
                                   default=0,
@@ -1078,6 +1112,10 @@ def real_main(args):
                                           "INFO","WARNING","ERROR",
                                           "CRITICAL"],
                                  help="Set minimum logging level")
+    parser_provides.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="increase output verbosity")
     parser_provides.add_argument("-v", "--verbosity",
                                  action="count",
                                  default=0,
@@ -1099,13 +1137,17 @@ def real_main(args):
                                           "INFO","WARNING","ERROR",
                                           "CRITICAL"],
                                  help="Set minimum logging level")
+    parser_what.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="Decrease output verbosity")
     parser_what.add_argument("-v", "--verbosity",
                                  action="count",
                                  default=0,
-                                 help="increase output verbosity")
+                                 help="Increase output verbosity")
     parser_what.set_defaults(func=gaze_what)
 
-    # create the parser for the "what" command
+    # create the parser for the "short" command
     parser_short = subparsers.add_parser('short',
                                          help='Display spell short description (Not Working)')
     parser_short.add_argument('spell',
@@ -1120,6 +1162,10 @@ def real_main(args):
                                        "INFO","WARNING","ERROR",
                                        "CRITICAL"],
                               help="Set minimum logging level")
+    parser_short.add_argument("-q", "--quiet",
+                              action="count",
+                              default=0,
+                              help="increase output verbosity")
     parser_short.add_argument("-v", "--verbosity",
                               action="count",
                               default=0,
@@ -1144,6 +1190,10 @@ def real_main(args):
                                        "INFO","WARNING","ERROR",
                                        "CRITICAL"],
                               help="Set minimum logging level")
+    parser_where.add_argument("-q", "--quiety",
+                              action="count",
+                              default=0,
+                              help="increase output verbosity")
     parser_where.add_argument("-v", "--verbosity",
                               action="count",
                               default=0,
@@ -1166,6 +1216,10 @@ def real_main(args):
                                      "INFO","WARNING","ERROR",
                                      "CRITICAL"],
                             help="Set minimum logging level")
+    parser_url.add_argument("-q", "--quiet",
+                            action="count",
+                            default=0,
+                            help="increase output verbosity")
     parser_url.add_argument("-v", "--verbosity",
                             action="count",
                             default=0,
@@ -1187,6 +1241,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_sources.add_argument("-q", "--quiet",
+                            action="count",
+                            default=0,
+                            help="increase output verbosity")
     parser_sources.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1208,6 +1266,10 @@ def real_main(args):
                                             "INFO","WARNING","ERROR",
                                             "CRITICAL"],
                                    help="Set minimum logging level")
+    parser_source_url.add_argument("-q", "--quiet",
+                                   action="count",
+                                   default=0,
+                                   help="increase output verbosity")
     parser_source_url.add_argument("-v", "--verbosity",
                                    action="count",
                                    default=0,
@@ -1229,6 +1291,10 @@ def real_main(args):
                                             "INFO","WARNING","ERROR",
                                             "CRITICAL"],
                                    help="Set minimum logging level")
+    parser_maintainer.add_argument("-q", "--quiet",
+                                   action="count",
+                                   default=0,
+                                   help="increase output verbosity")
     parser_maintainer.add_argument("-v", "--verbosity",
                                    action="count",
                                    default=0,
@@ -1253,6 +1319,10 @@ def real_main(args):
                                           "INFO","WARNING","ERROR",
                                           "CRITICAL"],
                                  help="Set minimum logging level")
+    parser_compile.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="increase output verbosity")
     parser_compile.add_argument("-v", "--verbosity",
                                  action="count",
                                  default=0,
@@ -1277,6 +1347,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_install.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_install.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1302,6 +1376,10 @@ def real_main(args):
                                               "INFO","WARNING","ERROR",
                                               "CRITICAL"],
                                      help="Set minimum logging level")
+    parser_install_full.add_argument("-q", "--quiet",
+                                     action="count",
+                                     default=0,
+                                     help="increase output verbosity")
     parser_install_full.add_argument("-v", "--verbosity",
                                      action="count",
                                      default=0,
@@ -1327,6 +1405,10 @@ def real_main(args):
                                                "INFO","WARNING","ERROR",
                                                "CRITICAL"],
                                       help="Set minimum logging level")
+    parser_install_spell.add_argument("-q", "--quiet",
+                                      action="count",
+                                      default=0,
+                                      help="increase output verbosity")
     parser_install_spell.add_argument("-v", "--verbosity",
                                       action="count",
                                       default=0,
@@ -1349,6 +1431,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_version.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_version.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1371,6 +1457,10 @@ def real_main(args):
                                           "INFO","WARNING","ERROR",
                                           "CRITICAL"],
                                  help="Set minimum logging level")
+    parser_versions.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="increase output verbosity")
     parser_versions.add_argument("-v", "--verbosity",
                                  action="count",
                                  default=0,
@@ -1378,7 +1468,7 @@ def real_main(args):
     parser_versions.set_defaults(func=gaze_version,
                                  multi=True)
 
-    # create the parser for the "what" command
+    # create the parser for the "license" command
     parser_license = subparsers.add_parser('license',
                                            help='View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s) (Not Working)')
     parser_license.add_argument('ssl',
@@ -1393,6 +1483,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_license.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_license.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1414,6 +1508,10 @@ def real_main(args):
                                      "INFO","WARNING","ERROR",
                                      "CRITICAL"],
                             help="Set minimum logging level")
+    parser_sum.add_argument("-q", "--quiet",
+                            action="count",
+                            default=0,
+                            help="increase output verbosity")
     parser_sum.add_argument("-v", "--verbosity",
                             action="count",
                             default=0,
@@ -1436,6 +1534,10 @@ def real_main(args):
                                         "INFO","WARNING","ERROR",
                                         "CRITICAL"],
                                help="Set minimum logging level")
+    parser_md5sum.add_argument("-q", "--quiet",
+                               action="count",
+                               default=0,
+                               help="increase output verbosity")
     parser_md5sum.add_argument("-v", "--verbosity",
                                action="count",
                                default=0,
@@ -1461,6 +1563,10 @@ def real_main(args):
                                       "INFO","WARNING","ERROR",
                                       "CRITICAL"],
                              help="Set minimum logging level")
+    parser_size.add_argument("-q", "--quiet",
+                             action="count",
+                             default=0,
+                             help="increase output verbosity")
     parser_size.add_argument("-v", "--verbosity",
                              action="count",
                              default=0,
@@ -1479,6 +1585,10 @@ def real_main(args):
                                         "INFO","WARNING","ERROR",
                                         "CRITICAL"],
                                help="Set minimum logging level")
+    parser_export.add_argument("-q", "--quiet",
+                               action="count",
+                               default=0,
+                               help="increase output verbosity")
     parser_export.add_argument("-v", "--verbosity",
                                action="count",
                                default=0,
@@ -1503,6 +1613,10 @@ def real_main(args):
                                         "INFO","WARNING","ERROR",
                                         "CRITICAL"],
                                help="Set minimum logging level")
+    parser_import.add_argument("-q", "--quiet",
+                               action="count",
+                               default=0,
+                               help="increase output verbosity")
     parser_import.add_argument("-v", "--verbosity",
                                action="count",
                                default=0,
@@ -1524,6 +1638,10 @@ def real_main(args):
                                           "INFO","WARNING","ERROR",
                                           "CRITICAL"],
                                  help="Set minimum logging level")
+    parser_grimoire.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="increase output verbosity")
     parser_grimoire.add_argument("-v", "--verbosity",
                                  action="count",
                                  default=0,
@@ -1535,9 +1653,6 @@ def real_main(args):
     # create the parser for the "what" command
     parser_grimoires = subparsers.add_parser('grimoires',
                                              help='Display installed grimoires by name only. (Not Working)')
-    parser_grimoires.add_argument('grimoire',
-                                  nargs='+',
-                                  help='Display System Info')
     parser_grimoires.add_argument('--debug',
                                   action='store_true',
                                   help='Display System Info')
@@ -1547,6 +1662,10 @@ def real_main(args):
                                            "INFO","WARNING","ERROR",
                                            "CRITICAL"],
                                   help="Set minimum logging level")
+    parser_grimoires.add_argument("-q", "--quiet",
+                                  action="count",
+                                  default=0,
+                                  help="Decrease output verbosity")
     parser_grimoires.add_argument("-v", "--verbosity",
                                   action="count",
                                   default=0,
@@ -1573,6 +1692,10 @@ def real_main(args):
                                       "INFO","WARNING","ERROR",
                                       "CRITICAL"],
                              help="Set minimum logging level")
+    parser_html.add_argument("-q", "--quiet",
+                             action="count",
+                             default=0,
+                             help="increase output verbosity")
     parser_html.add_argument("-v", "--verbosity",
                              action="count",
                              default=0,
@@ -1604,6 +1727,10 @@ def real_main(args):
                                         "INFO","WARNING","ERROR",
                                         "CRITICAL"],
                                help="Set minimum logging level")
+    parser_search.add_argument("-q", "--quiet",
+                               action="count",
+                               default=0,
+                               help="increase output verbosity")
     parser_search.add_argument("-v", "--verbosity",
                                action="count",
                                default=0,
@@ -1626,6 +1753,10 @@ def real_main(args):
                                        "INFO","WARNING","ERROR",
                                        "CRITICAL"],
                               help="Set minimum logging level")
+    parser_newer.add_argument("-q", "--quiet",
+                              action="count",
+                              default=0,
+                              help="increase output verbosity")
     parser_newer.add_argument("-v", "--verbosity",
                               action="count",
                               default=0,
@@ -1647,6 +1778,10 @@ def real_main(args):
                                        "INFO","WARNING","ERROR",
                                        "CRITICAL"],
                               help="Set minimum logging level")
+    parser_older.add_argument("-q", "--quiet",
+                              action="count",
+                              default=0,
+                              help="increase output verbosity")
     parser_older.add_argument("-v", "--verbosity",
                               action="count",
                               default=0,
@@ -1671,6 +1806,10 @@ def real_main(args):
                                       "INFO","WARNING","ERROR",
                                       "CRITICAL"],
                              help="Set minimum logging level")
+    parser_from.add_argument("-q", "--quiet",
+                             action="count",
+                             default=0,
+                             help="increase output verbosity")
     parser_from.add_argument("-v", "--verbosity",
                              action="count",
                              default=0,
@@ -1692,6 +1831,10 @@ def real_main(args):
                                            "INFO","WARNING","ERROR",
                                            "CRITICAL"],
                                   help="Set minimum logging level")
+    parser_installed.add_argument("-q", "--quiet",
+                                  action="count",
+                                  default=0,
+                                  help="increase output verbosity")
     parser_installed.add_argument("-v", "--verbosity",
                                   action="count",
                                   default=0,
@@ -1700,9 +1843,9 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_section = subparsers.add_parser('section',
-                                           help='Display grimoire section (Not Working)')
+                                           help='View a list of all sections in the software catalogue or display a list of packages from a specific section. (Not Working)')
     parser_section.add_argument('section',
-                                nargs=1,
+                                nargs='?',
                                 help='Display System Info')
     parser_section.add_argument('--debug',
                                 action='store_true',
@@ -1713,6 +1856,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_section.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_section.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1721,9 +1868,9 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_voyeur = subparsers.add_parser('voyeur',
-                                          help='Watch spell compilation (Not Working)')
+                                          help='start looking at what cast is compiling at the moment and outputs its compiler messages. A spell can be optionally specified, or a delay after which to abort when no casts could be found. (Not Working)')
     parser_voyeur.add_argument('spell',
-                               nargs=1,
+                               nargs='?',
                                help='Display System Info')
     parser_voyeur.add_argument('--debug',
                                action='store_true',
@@ -1734,16 +1881,19 @@ def real_main(args):
                                         "INFO","WARNING","ERROR",
                                         "CRITICAL"],
                                help="Set minimum logging level")
+    parser_voyeur.add_argument("-q", "--quiet",
+                               action="count",
+                               default=0,
+                               help="increase output verbosity")
     parser_voyeur.add_argument("-v", "--verbosity",
                                action="count",
                                default=0,
                                help="increase output verbosity")
-    parser_voyeur.set_defaults(func=gaze_file,
-                               filename='DEPENDS')
+    parser_voyeur.set_defaults(func=gaze_voyeur)
 
     # create the parser for the "what" command
     parser_DEPENDS = subparsers.add_parser('DEPENDS',
-                                           help='Display DEPENDS script (Not Working)')
+                                           help='Show DEPENDS of the spell (Not Working)')
     parser_DEPENDS.add_argument('spell',
                                 nargs=1,
                                 help='Display System Info')
@@ -1756,6 +1906,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_DEPENDS.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_DEPENDS.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1765,7 +1919,7 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_HISTORY = subparsers.add_parser('HISTORY',
-                                           help='Display HISTORY script (Not Working)')
+                                           help='Shom HISTORY of the spell (Not Working)')
     parser_HISTORY.add_argument('spell',
                                 nargs=1,
                                 help='Spell')
@@ -1778,6 +1932,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_HISTORY.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_HISTORY.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1787,7 +1945,7 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_history = subparsers.add_parser('history',
-                                           help='Show spell history (Not Working)')
+                                           help='Show history for a spell (alias for gaze HISTORY). (Not Working)')
     parser_history.add_argument('spell',
                                 nargs=1,
                                 help='Display System Info')
@@ -1800,6 +1958,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_history.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_history.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1809,9 +1971,9 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_checkmd5s = subparsers.add_parser('checkmd5s',
-                                             help='Check MD5s (Not Working)')
+                                             help='Computes the md5sum on spell sources based on passed spell(s), section(s) or entire grimoire(s) if left blank. (Not Working)')
     parser_checkmd5s.add_argument('spell',
-                                  nargs=1,
+                                  nargs='*',
                                   help='Display System Info')
     parser_checkmd5s.add_argument('--debug',
                                   action='store_true',
@@ -1822,6 +1984,10 @@ def real_main(args):
                                            "INFO","WARNING","ERROR",
                                            "CRITICAL"],
                                   help="Set minimum logging level")
+    parser_checkmd5s.add_argument("-q", "--quiet",
+                                  action="count",
+                                  default=0,
+                                  help="increase output verbosity")
     parser_checkmd5s.add_argument("-v", "--verbosity",
                                   action="count",
                                   default=0,
@@ -1831,19 +1997,19 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_depends = subparsers.add_parser('depends',
-                                           help='Display spell dependency tree (Not Working)')
+                                           help='shows the spells that explicitly or recursively depend on this installed spell.  Only enabled dependencies are shown. (Not Working)')
     parser_depends.add_argument('spell',
                                 nargs=1,
                                 help='Display System Info')
     parser_depends.add_argument('level',
                                 nargs='?',
-                                help='Display System Info')
+                                help='Up to level $level if specified')
     parser_depends.add_argument('--fast',
                                 action='store_true',
-                                help='Display System Info')
+                                help='Limit output, but runs much faster.')
     parser_depends.add_argument('--required',
                                 action='store_true',
-                                help='Display System Info')
+                                help='Show only the required dependencies and skip the runtime dependencies.')
     parser_depends.add_argument('--debug',
                                 action='store_true',
                                 help='Display System Info')
@@ -1853,6 +2019,10 @@ def real_main(args):
                                          "INFO","WARNING","ERROR",
                                          "CRITICAL"],
                                 help="Set minimum logging level")
+    parser_depends.add_argument("-q", "--quiet",
+                                action="count",
+                                default=0,
+                                help="increase output verbosity")
     parser_depends.add_argument("-v", "--verbosity",
                                 action="count",
                                 default=0,
@@ -1861,19 +2031,19 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_dependencies = subparsers.add_parser('dependencies',
-                                                help='Display tree of all spells that depend on spell (Not Working)')
+                                                help='shows the spells that spell explicitly or recursively depends on. (Not Working)')
     parser_dependencies.add_argument('spell',
                                      nargs=1,
                                      help='Display System Info')
     parser_dependencies.add_argument('level',
                                      nargs='?',
-                                     help='Display System Info')
+                                     help='Up to level $level if specified.')
     parser_dependencies.add_argument('-c',
                                      action='store_true',
-                                     help='Display System Info')
+                                     help='skips trees that have already been shown')
     parser_dependencies.add_argument('--no-optionals',
                                      action='store_true',
-                                     help='Display System Info')
+                                     help='skips optional dependencies.')
     parser_dependencies.add_argument('--debug',
                                      action='store_true',
                                      help='Display System Info')
@@ -1883,6 +2053,10 @@ def real_main(args):
                                               "INFO","WARNING","ERROR",
                                               "CRITICAL"],
                                      help="Set minimum logging level")
+    parser_dependencies.add_argument("-q", "--quiet",
+                                     action="count",
+                                     default=0,
+                                     help="increase output verbosity")
     parser_dependencies.add_argument("-v", "--verbosity",
                                      action="count",
                                      default=0,
@@ -1891,9 +2065,9 @@ def real_main(args):
 
     # create the parser for the "what" command
     parser_time = subparsers.add_parser('time',
-                                        help='Display spell compile time (Not Working)')
+                                        help='Shows the time the spell(s) needed to get cast. By default the last casting time is shown, alternatively the median, mean or weighted mean can be shown.  If more then one spell is specified, also a total time is shown. (Not Working)')
     parser_time.add_argument('spell',
-                             nargs=1,
+                             nargs='+',
                              help='Display System Info')
     parser_time.add_argument('--last',
                              action='store_true',
@@ -1906,7 +2080,7 @@ def real_main(args):
                              help='Display System Info')
     parser_time.add_argument('--weight-last',
                              action='store_true',
-                             help='Display System Info')
+                             help='Give more weight to the last casting time.')
     parser_time.add_argument('--full',
                              action='store_true',
                              help='Display System Info')
@@ -1919,6 +2093,10 @@ def real_main(args):
                                       "INFO","WARNING","ERROR",
                                       "CRITICAL"],
                              help="Set minimum logging level")
+    parser_time.add_argument("-q", "--quiet",
+                             action="count",
+                             default=0,
+                             help="increase output verbosity")
     parser_time.add_argument("-v", "--verbosity",
                              action="count",
                              default=0,
@@ -1927,10 +2105,10 @@ def real_main(args):
                              system=False)
 
     # create the parser for the "what" command
-    parser_time_system = subparsers.add_parser('time-system', help='Display time to compile all installed spells (Not Working)')
+    parser_time_system = subparsers.add_parser('time-system', help='Shows the time the whole system needed to get cast. (Not Working)')
     parser_time_system.add_argument('--no-orphans',
                              action='store_true',
-                             help='Display System Info')
+                             help='Skip orphaned spells.')
     parser_time_system.add_argument('--last',
                              action='store_true',
                              help='Display System Info')
@@ -1955,6 +2133,10 @@ def real_main(args):
                                              "INFO","WARNING","ERROR",
                                              "CRITICAL"],
                                     help="Set minimum logging level")
+    parser_time_system.add_argument("-q", "--quiet",
+                                    action="count",
+                                    default=0,
+                                    help="increase output verbosity")
     parser_time_system.add_argument("-v", "--verbosity",
                                     action="count",
                                     default=0,
@@ -1965,12 +2147,21 @@ def real_main(args):
     # Store all the arguments in a variable
     args = parser.parse_args()
 
+    if os.geteuid() != 0:
+        # os.execvp() replaces the running process, rather than launching a child
+        # process, so there's no need to exit afterwards. The extra "sudo" in the
+        # second parameter is required because Python doesn't automatically set $0
+        # in the new process.
+        os.execvp("sudo", ["sudo"] + sys.argv)
+
+    # Now we are definitely running as root
+
     # Parse the config files
     config = libconfig.main_configure(args)
 
-    logger.debug("Configuration set")
-    logger.debug2("Configuration Settings: " + str(config))
-    logger.debug3("Arguments: " + str(args))
+    logger.debug2("Configuration set")
+    logger.debug3("Configuration Settings: " + str(config))
+    logger.debug4("Arguments: " + str(args))
 
     # "application" code
     # Run the specified subcommand as per args
@@ -2013,6 +2204,7 @@ def main(args=None):
         """
 
         logger.debug("Begin Application")
+
 #        try:         
 #            real_main(args)
         real_main(args)

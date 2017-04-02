@@ -603,6 +603,13 @@ def real_main(args):
 
     args = parser.parse_args()
 
+    if os.geteuid() != 0:
+        # os.execvp() replaces the running process, rather than launching a child
+        # process, so there's no need to exit afterwards. The extra "sudo" in the
+        # second parameter is required because Python doesn't automatically set $0
+        # in the new process.
+        os.execvp("sudo", ["sudo"] + sys.argv)
+
     config = main_configure(args)
     logger.debug("Configuration set")
 #    logger.debug2("Configuration Settings: " + str(config))

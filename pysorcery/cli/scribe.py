@@ -71,10 +71,6 @@ from pysorcery.lib import libcodex
 # create logger
 logger = logging.getLogger(__name__)
 
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]
-
 #-------------------------------------------------------------------------------
 #
 # Classes
@@ -92,20 +88,12 @@ distro_id=distro.linux_distribution()[0]
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_what
+# Function scribe_add
 #
 #
 #
 #-------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-#
-# Functions
-#
-#
-#
-#-------------------------------------------------------------------------------
-def gaze_depends(args):
+def scribe_add(args):
     logger.debug("Begin Function")
 
     
@@ -114,12 +102,12 @@ def gaze_depends(args):
 
 #-------------------------------------------------------------------------------
 #
-# Functions
+# Function scribe_remove
 #
 #
 #
 #-------------------------------------------------------------------------------
-def gaze_dependencies(args):
+def scribe_remove(args):
     logger.debug("Begin Function")
 
     logger.debug("End Function")
@@ -132,8 +120,11 @@ def gaze_dependencies(args):
 #
 #
 #-------------------------------------------------------------------------------
-def gaze_time(args):
+def scribe_update(args):
     logger.debug("Begin Function")
+
+    codex=libcodex.Codex()
+    codex.update()
 
     
     logger.debug("End Function")
@@ -172,15 +163,92 @@ def real_main(args):
     
     subparsers = parser.add_subparsers(help='Sub commands')
 
-    # create the parser for the "alien" command
-    parser_what = subparsers.add_parser('alien', help='Find and Display all files not tracked by the Sorcery Package Management System (Not Working)')
-    parser_what.add_argument('--debug',
-                             action='store_true',
+    # create the parser for the "what" command
+    parser_add = subparsers.add_parser('add',
+                                        help='Display spell description')
+    parser_add.add_argument('grimoire',
+                             nargs=1,
                              help='Display System Info')
-    parser_what.set_defaults(func=gaze_alien)
+    parser_add.add_argument('url',
+                             nargs='?',
+                             help='Display System Info')
+    parser_add.add_argument('--debug',
+                             action='store_true',
+                             help='Enable debugging information')
+    parser_add.add_argument("--loglevel",
+                                 choices=["debug","info","warning",
+                                          "error","critical","DEBUG",
+                                          "INFO","WARNING","ERROR",
+                                          "CRITICAL"],
+                                 help="Set minimum logging level")
+    parser_add.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="Decrease output verbosity")
+    parser_add.add_argument("-v", "--verbosity",
+                                 action="count",
+                                 default=0,
+                                 help="Increase output verbosity")
+    parser_add.set_defaults(func=scribe_add)
 
+    # create the parser for the "remove" command
+    parser_remove = subparsers.add_parser('remove',
+                                        help='Display spell description')
+    parser_remove.add_argument('grimoire',
+                             nargs=1,
+                             help='Display System Info')
+    parser_remove.add_argument('--debug',
+                             action='store_true',
+                             help='Enable debugging information')
+    parser_remove.add_argument("--loglevel",
+                                 choices=["debug","info","warning",
+                                          "error","critical","DEBUG",
+                                          "INFO","WARNING","ERROR",
+                                          "CRITICAL"],
+                                 help="Set minimum logging level")
+    parser_remove.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="Decrease output verbosity")
+    parser_remove.add_argument("-v", "--verbosity",
+                                 action="count",
+                                 default=0,
+                                 help="Increase output verbosity")
+    parser_remove.set_defaults(func=scribe_remove)
+
+    # create the parser for the "update" command
+    parser_update = subparsers.add_parser('update',
+                                        help='Update repositories')
+    parser_update.add_argument('grimoire',
+                             nargs='*',
+                             help='Grimoire to update')
+    parser_update.add_argument('--debug',
+                             action='store_true',
+                             help='Enable debugging information')
+    parser_update.add_argument("--loglevel",
+                                 choices=["debug","info","warning",
+                                          "error","critical","DEBUG",
+                                          "INFO","WARNING","ERROR",
+                                          "CRITICAL"],
+                                 help="Set minimum logging level")
+    parser_update.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="Decrease output verbosity")
+    parser_update.add_argument("-v", "--verbosity",
+                                 action="count",
+                                 default=0,
+                                 help="Increase output verbosity")
+    parser_update.set_defaults(func=scribe_update)
 
     args = parser.parse_args()
+
+    if os.geteuid() != 0:
+        # os.execvp() replaces the running process, rather than launching a child
+        # process, so there's no need to exit afterwards. The extra "sudo" in the
+        # second parameter is required because Python doesn't automatically set $0
+        # in the new process.
+        os.execvp("sudo", ["sudo"] + sys.argv)
 
     config = libconfig.main_configure(args)
 

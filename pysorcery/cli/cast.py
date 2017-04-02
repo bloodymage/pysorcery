@@ -15,7 +15,7 @@
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Dionysius is distributed in the hope that it will be useful,
+#    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
@@ -24,9 +24,7 @@
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-#
-#
-# This file is a flat file prototype.  There are several things I flat out do not
+# This file is a prototype.  There are several things I flat out do not
 # know how to do.  This allows me to try out the parts I do know.
 #
 #-------------------------------------------------------------------------------
@@ -70,10 +68,6 @@ from pysorcery.lib import libcodex
 # Enable Logging
 logger = logging.getLogger(__name__)
 
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]
-
 #-------------------------------------------------------------------------------
 #
 # Classes
@@ -100,10 +94,7 @@ def cast(args):
 
     for i in args.spell:
         spell = libspell.Spell(i)
-
-        logger.debug(spell)
-
-        spell.install()
+        spell.install(args)
     
     logger.debug("End Function")
     return
@@ -193,14 +184,19 @@ def real_main(args):
     parser.add_argument("spell",
                         nargs='+',
                         help='Spells to cast, separated by spaces')
-
+    parser.add_argument("-q", "--quiet",
+                        action="count",
+                        default=0,
+                    help="increase output verbosity")
     parser.add_argument("-v", "--verbosity",
                         action="count",
                         default=0,
                     help="increase output verbosity")
     parser.add_argument("--loglevel",
                         help="Set minimum logging level",
-                        choices=["debug","info","warning","error","critical","DEBUG","INFO","WARNING","ERROR","CRITICAL"])
+                        choices=["debug","info","warning",
+                                 "error","critical","DEBUG",
+                                 "INFO","WARNING","ERROR","CRITICAL"])
     parser.add_argument("--version",
                         help="Print version information and exit",
                         action="version",
@@ -210,6 +206,13 @@ def real_main(args):
                         action="store_true")
 
     args = parser.parse_args()
+
+    if os.geteuid() != 0:
+        # os.execvp() replaces the running process, rather than launching a child
+        # process, so there's no need to exit afterwards. The extra "sudo" in the
+        # second parameter is required because Python doesn't automatically set $0
+        # in the new process.
+        os.execvp("sudo", ["sudo"] + sys.argv)
 
     # Get configuration settings
     config = libconfig.main_configure(args)
