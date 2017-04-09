@@ -1,0 +1,219 @@
+.TH GRIMOIRE 5 "September 2004" "Source Mage GNU Linux" "File Formats"
+.SH NAME
+grimoire \- a software catalogue for sorcery
+.SH "DESCRIPTION"
+A software catalogue is a list of software packages (simply referred to
+as "packages" or "spells") divided into sections. Each package contains one
+or more description files. Description files contain such information as
+package name, version, URL, directory information, etc. Other description files 
+provide unpacking, compilation, installation, and tracking instructions.
+.SH "SUMMARY"
+The grimoires are found under /var/lib/sorcery. The top level of directories
+are the grimoires names. The list of grimoires is found under
+/etc/sorcery/local/grimoire
+
+The subdirectories are the sections.
+The directories under the section names are the
+packages. Each package directory will have a BASH description file called
+DETAILS and optionally contain one or more of the following description
+files:
+.PP
+PREPARE, CONFLICTS, CONFIGURE, DEPENDS,
+PRE_BUILD, BUILD, PRE_INSTALL, INSTALL, POST_INSTALL, FINAL,
+PRE_REMOVE, POST_REMOVE.
+.PP
+If a description file does not exist in
+the package directory then a set of default description instructions are
+used. The default instructions for each description file can be found in 
+/var/lib/sorcery/modules/build_api/api2.
+.SH "PRELIMINARY NOTES"
+.PP
+This manpage describes build_api 2. The older build_api 1 is
+deprecated and getting removed.
+For spells to work with api1, BUILD_API=1 needs to be set in DETAILS.
+.PP
+A better description of these file are found on the website, under the spell 
+howto:
+.IP
+http://wiki.sourcemage.org/index.php?page=Spellbook
+.PP
+A typical manual source code installation might look like this (assume the
+application is called foo):
+.IP
+step 1) find the URL and download the tarball
+.IP
+step 2) tar xvfz foo-1.00.tar.gz
+.IP
+step 3) cd foo
+.IP
+step 4) less README (perhaps you skip this step?)
+.IP
+step 5) less INSTALL (... and this one?)
+.IP
+step 6) ./configure
+.IP
+step 7) make
+.IP
+step 8) make install
+.PP
+Sourcemage basically automates these steps.
+.PP
+Note on the defaults: While the defaults are found in
+.I build_api/api2
+as e.g. real_default_pre_build,
+any calls of sorcery functions from grimoire files should be limited to
+functions from
+.I libapi.
+This is so your spell doesn't break as soon as some
+sorcery code is rewritten.
+So if you want your spell to patch some files after the unpacking of sources,
+your PRE_BUILD file should contain
+.IP
+default_pre_build && patch
+.SH "DESCRIPTION FILES"
+.PP
+.I PREPARE
+.IP
+This file can be created if there needs to be some kind of preconfiguration
+before DETAILS is sourced. Note that this file is only used in a cast.
+.PP
+.I DETAILS
+(necessary for every spell)
+.IP
+This file is required and describes the URL for step 1.
+It also contains version information,
+package name, source name, source directory, and a description of the package.
+.PP
+.I CONFLICTS
+.IP
+This file contains a list of spells conflicting with this one.
+Usually only used when two spells install the same file(s).
+.PP
+.I CONFIGURE
+.IP
+The configure script. This is not step 6, but rather questions about
+options to be passed to ./configure and other changes to the build.
+.PP
+.I DEPENDS
+.IP
+This file contains a list of other packages upon which the package depends.
+This enables automatic installing of packages needed.
+If dependencies are turned on then the packages listed are installed in order
+prior to installing package.
+.PP
+If any of the files mentioned up to now are missing, nothing will be used.
+(except DETAILS, which is required)
+.PP
+(dependencies are being cast, DETAILS run again)
+.PP
+all the following files have defaults as default_<name in lowercase>,
+or real_default_... in build_api/api2.
+(except FINAL and TRIGGERS)
+.PP
+.I PRE_BUILD
+.IP
+This describes the unpacking process as performed in step 2 and current 
+working directory for this step is the $BUILD_DIRECTORY, usually /usr/src.
+The default PRE_BUILD will work for the following compressions:
+.IP
+bzip2, gzip, compress, zip, RPM, tar, xz, 7z, lzma
+.PP
+.I BUILD
+.IP
+This describes the compilation process as performed in steps 
+6 and 7. Here the package is built, not installed yet. The current 
+working directory for this step is $SOURCE_DIRECTORY set in the DETAILS
+file. If the software package compiles using these 2 steps then the default
+BUILD can be used. Sorcery automatically changes the install path and sets
+optimization options.
+.PP
+.I PRE_INSTALL
+.IP
+This will start installwatch, sorcery's install logging system. 
+It will log every file touched during install so we can get the install log
+of files installed by the spell. The current working directory for this step
+is the old working directory of the BUILD step.
+
+It is recommended that if you add this file it contains 
+.I default_pre_install.
+.PP
+.I INSTALL
+.IP
+This is step 8. "make install" by default.
+If your spell needs another way to install its files, here is the place to
+do so. The current working directory of this step is the old working directory
+of PRE_INSTALL
+.PP
+.I POST_INSTALL
+.IP
+This step finishes off the install process. It installs configuration files
+and documentation, and finally turns off installwatch. If the spell is being
+staged this step will also copy the files back to the system and stage config
+files in a different location to be merged back to the system by the user.
+Also, if the spell is being staged the working directory for this step is one 
+directory above the root of the staged area after the INSTALL step else the 
+working directory is the system root. To access files in the stage directory 
+prefix the with the directory name 'TRANSL'. This provides a simple safety 
+check so system files won't get wiped out. A second check against the 
+enviromental variable STAGED_INSTALL is also highly recommended, STAGED_INSTALL 
+will be set to 'off' if the spell isn't going to be staged before installing. 
+This allows packages to move/remove files before they are installed to the 
+system safely. 
+It is highly recommended to run
+.I default_post_install
+at the end of this file.
+.PP
+.I FINAL
+.IP
+This file contains instructions on files to be installed and instructions
+to be performed that should for some reason not appear in the install logs
+(e.g. modifying another package's /etc files). The working directory of this
+step is the root of the system.
+
+This is the only file in the build process that does not have a default,
+so if it does not exist, nothing will be done.
+.PP
+.I TRIGGERS
+.IP
+If this file exists, the triggers in it are registered.
+A trigger is a mechanism in sorcery to recompile a package as soon as
+another package is recompiled/removed
+(e.g. drivers are triggered to recast on kernel recasts)
+.PP
+The next two files are run at remove. Their defaults are to do nothing.
+.PP
+.I PRE_REMOVE
+.IP
+This file contains instructions on what to do before dispelling the package,
+e.g. stopping the daemon installed by it.
+.PP
+.I POST_REMOVE
+.IP
+This file contains instructions to perform after successfully removing the
+package. This might be used to undo changes done in FINAL.
+.SH "FINAL NOTES"
+The best way to learn the software catalogue is to examine some of the
+description files yourself. Most software catalogue entries are simple. For
+example try looking under /var/lib/sorcery/codex/test/editors/emacs.
+(use your grimoire for test)
+
+If however you want to look at a very unusual,
+but much more complex example, look at
+/var/lib/sorcery/codex/test/x11-libs/xorg. To understand how the software
+catalog works it is also important to look at
+/var/lib/sorcery/modules/build_api/api2 and examine the default functions.
+.SH "AUTHOR"
+Original version by Kyle Sallee, and updated Thomas Stewart
+and Karsten Behrmann.
+.PP
+Maintained by the Source Mage GNU Linux Team (http://www.sourcemage.org)
+.SH "REPORTING BUGS"
+.PP
+Report bugs to bugzilla <http://bugs.sourcemage.org>
+.SH "SEE ALSO"
+cast(8), cleanse(8), dispel(8), gaze(1), scribbler(8),
+scribe(8), sorcery(8), sorcery_config(8), summon(8)
+.PP
+.SH "WARRANTY"
+.PP
+This is free software with ABSOLUTELY NO WARRANTY

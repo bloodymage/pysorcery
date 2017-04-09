@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 #-------------------------------------------------------------------------------
 #
-# Original BASH version
+# BASH version
 # Original version Copyright 2001 by Kyle Sallee
 # Additions/corrections Copyright 2002 by the Source Mage Team
 #
@@ -37,7 +37,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='pySorcery',
-    version='0.1.1a1',
+    version='0.1.1',
     
     description='Sorcery Package Management System',
     long_description='Sorcery Package Management System ...',
