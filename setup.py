@@ -1,5 +1,29 @@
-#!/usr/bin/env python3
-
+#! /usr/bin/env python3
+#-------------------------------------------------------------------------------
+#
+# Original BASH version
+# Original version Copyright 2001 by Kyle Sallee
+# Additions/corrections Copyright 2002 by the Source Mage Team
+#
+# Python rewrite
+# Copyright 2017 Geoff S Derber
+#
+# This file is part of Sorcery.
+#
+#    Sorcery is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    Sorcery is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
+#
+#-------------------------------------------------------------------------------
 from setuputils import setup, find_packages
 
 from codecs import open
@@ -15,8 +39,8 @@ setup(
     name='pySorcery',
     version='0.1.1a1',
     
-    description='Sorcery',
-    long_description='Sorcery Package Management System',
+    description='Sorcery Package Management System',
+    long_description='Sorcery Package Management System ...',
     
     url='https://www.github.com/gderber/python-sorcery/',
 
@@ -32,11 +56,16 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
+        #   6 - Mature
+        #   7 - Inactive
         'Development Status :: 2 - Pre-Alpha',
         
         # Indicate who your project is intended for
-        'Intended Audience :: Developers',
-        'Topic :: Software Development :: Build Tools',
+        'Intended Audience :: System Administrators',
+        'Intended Audience :: System Administrators',
+
+        # Operating Systems
+	'Operating System :: POSIX',
         
         # Pick your license as you wish (should match "license" above)
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',        
@@ -45,6 +74,11 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+
+        'Topic :: System :: Installation/Setup'
+
+        'Environment :: Console'
+        'Environment :: Console :: Curses'
     ],
 
     keywords='blah'

@@ -24,15 +24,16 @@
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# This file is a prototype.  There are several things I flat out do not
-# know how to do.  This allows me to try out the parts I do know.
+#  Cast
+#
+#    is part of the sorcery package management suite. It is a command-line
+#    tool for automatically retrieving, unpacking, compiling, installing,
+#    and tracking software installations.
+#
+#    In order to find a package (known as a 'spell') to cast, refer to
+#    gaze (1) and scribe.
 #
 #-------------------------------------------------------------------------------
-
-# added so distributors can consistently specify a private module location
-#private_module_path = "/usr/share/weather-util"
-#if private_module_path:
-#    sys.path.insert(1, private_module_path)
 
 
 #-------------------------------------------------------------------------------
@@ -44,7 +45,6 @@
 # System Libraries
 import sys
 import os
-import argparse
 import copy
 import subprocess
 
@@ -52,13 +52,22 @@ import subprocess
 import distro
 
 # Application Libraries
+# Application Overrides
+from pysorcery.lib import argparse
+from pysorcery.lib import logging
+# Other Application Libraries
+import pysorcery
 from pysorcery import __version__
 from pysorcery.lib import libtext
-from pysorcery.lib import logging
 from pysorcery.lib import libconfig
 from pysorcery.lib import libspell
 from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
+
+# Other Optional Libraries
+#if pysorcery.distro_id in pysorcery.distro_dict['deb']:
+#    import apt
+
 
 #-------------------------------------------------------------------------------
 #
@@ -78,7 +87,9 @@ logger = logging.getLogger(__name__)
 #
 # Functions
 #
-#
+# cast
+# real_main
+# main
 #
 #-------------------------------------------------------------------------------
 
@@ -86,7 +97,16 @@ logger = logging.getLogger(__name__)
 #
 # Function cast
 #
+# ... Description ...
 #
+# Input:  args
+#    args.spell - list of packages to instalr
+#    args.queue -
+#    
+#    args....
+#
+# Output: 
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def cast(args):
@@ -102,9 +122,13 @@ def cast(args):
 
 #-------------------------------------------------------------------------------
 #
-# Real_Main
+# Function Real_Main
 #
-# 
+# ... Description ...
+#
+# Input:  args
+# Output: 
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def real_main(args):    
@@ -113,100 +137,118 @@ def real_main(args):
     # Parse Command Line Arguments
 
     parser = argparse.ArgumentParser(description='Process parameters')
-    parser.add_argument('--cflags',
-                        help='Custom CFLAGS',
-                        nargs='*')
-    parser.add_argument('--cxxflags',
-                        help='Custom CXXFLAGS',
-                        nargs='*')
-    parser.add_argument('--cppflags',
-                        help='Custom CPPFLAGS',
-                        nargs='*')
-    parser.add_argument('--ldflags',
-                        help='Custom LDFLAGS',
-                        nargs='*')
-    parser.add_argument('--no-opts',
-                        help='Turn off setting optimization flags, except for those found in --cflags, --cxxflags, --cppflags and --ldflags.',
-                        action='store_true')
-    parser.add_argument('-V',
-                        help='Override \$VOYEUR setting',
-                        nargs='?',
-                        choices=['yes','no'])
+
+    #
+    packages = parser.add_argument_group('Package List')
+    packages.add_argument('--queue',
+                        action='store_true',
+                        help='Cast all spells listed in the install-queue')
+
+    packages.add_argument("spell",
+                        nargs='*',
+                        help='Spells to cast, separated by spaces')
+
+    # Configure Options
+    config_opts = parser.add_argument_group('Compile Options')
+    config_opts.add_argument('--cflags',
+                             nargs='+',
+                             help='Custom CFLAGS')
+    config_opts.add_argument('--cxxflags',
+                             nargs='+',
+                             help='Custom CXXFLAGS')
+    config_opts.add_argument('--cppflags',
+                             nargs='+',
+                             help='Custom CPPFLAGS')
+    config_opts.add_argument('--ldflags',
+                             nargs='+',
+                        help='Custom LDFLAGS')
+    config_opts.add_argument('--no-opts',
+                             action='store_true',
+                             help='Turn off setting optimization flags, except for those found in --cflags, --cxxflags, --cppflags and --ldflags.')
+
     parser.add_argument('-d',
                         '--download',
-                        help='Force download of sources (overwrite existing files).',
-                        action='store_true')
+                        action='store_true',
+                        help='Force download of sources (overwrite existing files).')
     parser.add_argument('-s',
-                        help='Download all given spells before compiling',
-                        action='store_true')
+                        '--summon',
+                        action='store_true',
+                        help='Download all given spells before compiling')
     parser.add_argument('--deps',
-                        help='Configure spells and determine dependencies, only cast dependencies, not spells themselves',
-                        action='store_true')
+                        action='store_true',
+                        help='Configure spells and determine dependencies, only cast dependencies, not spells themselves')
     parser.add_argument('-c',
                         '--compile',
-                        help="Recompile the spells (don't install from cache).",
-                        action='store_true')
+                        action='store_true',
+                        help="Recompile the spells (don't install from cache).")
     parser.add_argument('-r',
                         '--reconfigure',
                         action='store_true',
-                        help='Select new dependencies for spells (implies -c)')
+                        help='Reconfigure spell options')
     parser.add_argument('-g',
                         '--grimoire',
-                        nargs='*',
+                        nargs='+',
                         help='Use only the specified grimoires for this cast.  NOTE: If there are any cross-grimoire dependencies on unspecified grimoires they will not work. The target spell will not be found. To avoid this, specify all relevant grimoires to the -g parameter in the order you wish them to be searched.')
     parser.add_argument('-R',
                         '--recast-down',
-                        help='Recursively recast depended-upon spells, even if they are already installed. You probably also want to pass the -c flag to make sure they are recompiled, not resurrected.',
-                        action='store_true')
+                        action='store_true',
+                        help='Recursively recast depended-upon spells, even if they are already installed. You probably also want to pass the -c flag to make sure they are recompiled, not resurrected.')
     parser.add_argument('-B',
                         '--recast-up',
-                        help='Recursively recast dependent spells. You probably also want to pass the -c flag to make sure they are recompiled, not resurrected.',
-                        action='store_true')
+                        action='store_true',
+                        help='Recursively recast dependent spells. You probably also want to pass the -c flag to make sure they are recompiled, not resurrected.')
     parser.add_argument('-O',
                         '--recast-optional',
-                        help='If a spell being built has spells which could optionally depend on it, but those dependencies are disabled, ask to recast the dependee. Optional parameter can be one of: "always", "ask-yes", "ask-no", or "ignore"; it defaults to what is set via the sorcery menu. Implies -c.',
                         nargs='?',
-                        choices=['always','ask-yes','ask-no','ignore'])
+                        choices=['always','ask-yes','ask-no','ignore'],
+                        help='If a spell being built has spells which could optionally depend on it, but those dependencies are disabled, ask to recast the dependee. Optional parameter can be one of: "always", "ask-yes", "ask-no", or "ignore"; it defaults to what is set via the sorcery menu. Implies -c.')
     parser.add_argument('-Z',
                         '--lazy-updates',
-                        help='Perform updates on installed spells that need updates. Optional parameter same as above.',
                         nargs='?',
-                        choices=['always','ask-yes','ask-no','ignore'])
+                        choices=['always','ask-yes','ask-no','ignore'],
+                        help='Perform updates on installed spells that need updates. Optional parameter same as above.')
     parser.add_argument('-b',
                         '--force-base-dep',
-                        help='Force all spells to depend on basesystem',
-                        action='store_true')
+                        action='store_true',
+                        help='Force all spells to depend on basesystem')
     parser.add_argument('--from',
+                        nargs=1,
                         help='Specify an alternate directory for $SOURCE_CACHE')
-    parser.add_argument('--queue',
-                        help='Cast all spells listed in $INSTALL_QUEUE',
-                        action='store_true')
-    parser.add_argument("spell",
-                        nargs='+',
-                        help='Spells to cast, separated by spaces')
-    parser.add_argument("-q", "--quiet",
-                        action="count",
-                        default=0,
-                    help="increase output verbosity")
-    parser.add_argument("-v", "--verbosity",
-                        action="count",
-                        default=0,
-                    help="increase output verbosity")
-    parser.add_argument("--loglevel",
-                        help="Set minimum logging level",
-                        choices=["debug","info","warning",
-                                 "error","critical","DEBUG",
-                                 "INFO","WARNING","ERROR","CRITICAL"])
+    parser.add_argument('-V',
+                        '--voyeur',
+                        nargs='?',
+                        choices=['yes','no'],
+                        help='Override "Voyeur" setting')
+
+
+    #
+    log_opts = parser.add_argument_group('Logging Options')
+    log_opts.add_argument("-q", "--quiet",
+                          action="count",
+                          default=0,
+                          help="Decrease output verbosity")
+    log_opts.add_argument("-v", "--verbosity",
+                          action="count",
+                          default=0,
+                          help="Increase output verbosity")
+    log_opts.add_argument("--loglevel",
+                          choices=["debug","info","warning",
+                                   "error","critical","DEBUG",
+                                   "INFO","WARNING","ERROR","CRITICAL"],
+                          help="Set minimum logging level")
+    log_opts.add_argument("--debug",
+                          action="store_true",
+                          help="Maximize logging information")
+
+    #
     parser.add_argument("--version",
-                        help="Print version information and exit",
                         action="version",
+                        help="Print version information and exit",
                         version="%(prog)s " + __version__)
-    parser.add_argument("--debug",
-                        help="Enable Debugging",
-                        action="store_true")
 
     args = parser.parse_args()
 
+    # Ensure we have root access
     if os.geteuid() != 0:
         # os.execvp() replaces the running process, rather than launching a child
         # process, so there's no need to exit afterwards. The extra "sudo" in the

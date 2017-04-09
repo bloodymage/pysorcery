@@ -15,7 +15,7 @@
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Dionysius is distributed in the hope that it will be useful,
+#    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
@@ -50,11 +50,12 @@ import copy
 import subprocess
 
 # Other Libraries
-import distro
+
 
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib import argparse
+from pysorcery.lib import distro
 from pysorcery.lib import logging
 
 # Other Application Libraries
@@ -65,6 +66,10 @@ from pysorcery.lib import libsystem
 from pysorcery.lib import libspell
 from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
+
+# Other Optional Libraries
+if distro.distro_id in distro.distro_dict['deb']:
+    import apt
 
 #-------------------------------------------------------------------------------
 #
@@ -103,8 +108,7 @@ logger = logging.getLogger(__name__)
 def sorcery_update(args):
     logger.debug("Begin Function")
 
-    codex = libcodex.Codex()
-    codex.update
+    logger.info("Updating Sorcery")
     
     logger.debug("End Function")
     return
@@ -113,7 +117,11 @@ def sorcery_update(args):
 #
 # Function sorcery_update
 #
-# Display installed spells that have no explicit dependencies on them
+# Updates entiro system
+# 1. Sorcery Update
+# 2. Scribe Update
+# 3. Sorcery Queue
+# 4. Cast Queue
 #
 # Input:  args
 # Output:
@@ -123,7 +131,17 @@ def sorcery_update(args):
 def sorcery_system_update(args):
     logger.debug("Begin Function")
 
-    print("Fix Me")
+    # 1. Sorcery Update
+    logger.info("Updating Sorcery")
+
+    # 2. Scribe Update
+    codex = libcodex.Codex()
+    codex.update
+
+    # 3. Sorcery Queue
+
+    #. Cast Queue
+    
     
     logger.debug("End Function")
     return
@@ -383,23 +401,6 @@ def real_main(args):
     parser.add_argument("--config",
                         nargs=1,
                         help="Use specified config file")
-    parser.add_argument("--debug",
-                        action="store_true",
-                        help="Enable Debugging")
-    parser.add_argument("--loglevel",
-                        choices=["debug","info","warning","error","critical",
-                                 "DEBUG","INFO","WARNING","ERROR","CRITICAL"],
-                        help="Set minimum logging level")
-    parser.add_argument("-v", "--verbosity",
-                        action="count",
-                        default=0,
-                        help="increase output verbosity")
-    # help is required to go before version
-    parser.add_argument("-V", "--version",
-                        action="version",
-                        help="Print version information and exit",
-                        version="%(prog)s " + __version__)
-    parser.set_defaults(func=False)
     
     subparsers = parser.add_subparsers(title='commands',
                                        metavar='Commands',
@@ -681,26 +682,30 @@ def real_main(args):
                                 help="increase output verbosity")
     parser_remove_queue.set_defaults(func=sorcery_remove_queue)
 
-    # create the parser for the "source_urls" command
-    parser_default = subparsers.add_parser('default',
-                                              help='This is a sorcery feature to pre-answer some depends questions. They will still be asked, but they will default to what you set this to. (Not Working)')
-    parser_default.add_argument('spell',
-                                   nargs='+',
-                                   help='Spell')
-    parser_default.add_argument('--debug',
-                                   action='store_true',
-                                   help='Enable debugging information')
-    parser_default.add_argument("--loglevel",
-                                   choices=["debug","info","warning",
-                                            "error","critical","DEBUG",
-                                            "INFO","WARNING","ERROR",
-                                            "CRITICAL"],
-                                   help="Set minimum logging level")
-    parser_default.add_argument("-v", "--verbosity",
-                                   action="count",
-                                   default=0,
-                                   help="increase output verbosity")
-    parser_default.set_defaults(func=sorcery_default)
+
+    parser.add_argument("--debug",
+                        action="store_true",
+                        help="Enable Debugging")
+    parser.add_argument("--loglevel",
+                        choices=["debug","info","warning","error","critical",
+                                 "DEBUG","INFO","WARNING","ERROR","CRITICAL"],
+                        help="Set minimum logging level")
+    parser.add_argument("-q", "--quiet",
+                        action="count",
+                        default=0,
+                        help="Decrease output verbosity")
+    parser.add_argument("-v", "--verbosity",
+                        action="count",
+                        default=0,
+                        help="Increase output verbosity")
+    # help is required to go before version
+    parser.add_argument("-V", "--version",
+                        action="version",
+                        help="Print version information and exit",
+                        version="%(prog)s " + __version__)
+    parser.set_defaults(func=sorcery_main)
+
+    
 
     # Store all the arguments in a variable
     args = parser.parse_args()
@@ -721,13 +726,8 @@ def real_main(args):
 
     # "application" code
     # Run the specified subcommand as per args
-    if args.func:
-        args.func(args)
-    else:
-        sorcery_main(args)
+    args.func(args)
 
-    print(distro_id)
-#    logging.verifydebuglevels()
     logger.debug("End Function")
     return 0
 

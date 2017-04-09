@@ -23,6 +23,10 @@ This program works on hardening your system, setting up firewalls...
 ### pycabal
 
 ### pycast
+    is part of the sorcery package management suite. It is a command-line
+    tool for automatically retrieving, unpacking, compiling, installing,
+    and tracking software installations.
+
 
 ### pycleanse
 

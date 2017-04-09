@@ -15,26 +15,19 @@
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Dionysius is distributed in the hope that it will be useful,
+#    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
 #
 #
-# This file is a flat file prototype.  There are several things I flat out do not
-# know how to do.  This allows me to try out the parts I do know.
 #
 #-------------------------------------------------------------------------------
-
-# added so distributors can consistently specify a private module location
-#private_module_path = "/usr/share/weather-util"
-#if private_module_path:
-#    sys.path.insert(1, private_module_path)
 
 
 #-------------------------------------------------------------------------------
@@ -47,11 +40,13 @@
 import sys
 
 # Other Libraries
-import distro
+
 
 # Application Libraries
-from pysorcery.lib import libtext
+# System Library Overrides
 from pysorcery.lib import logging
+# Other Application Libraries
+from pysorcery.lib import libtext
 
 #-------------------------------------------------------------------------------
 #
@@ -60,10 +55,6 @@ from pysorcery.lib import logging
 #-------------------------------------------------------------------------------
 __version__ = '0.1.1'
 enable_debugging_mode=True
-deb_distro_list=['Ubuntu','debian','linuxmint']
-smgl_distro_list=['Source Mage']
-distro_id=distro.linux_distribution()[0]
-
 
 # Enable Logging
 # create logger
@@ -77,12 +68,8 @@ consolehandler = logging.ColorizingStreamHandler()
 consoleformatter = logging.ConsoleLvlFormatter("%(name)s:%(funcName)s:%(lineno)d - %(levelname)s - %(message)s")
 
 # Set handler ...
-consolehandler.setLevel(20)
+consolehandler.setLevel(0)
 consolehandler.setFormatter(consoleformatter)
 
 # Add handlers to logger
 logger.addHandler(consolehandler)
-
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]

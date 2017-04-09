@@ -15,26 +15,19 @@
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Dionysius is distributed in the hope that it will be useful,
+#    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
 #
 #
-# This file is a flat file prototype.  There are several things I flat out do not
-# know how to do.  This allows me to try out the parts I do know.
 #
 #-------------------------------------------------------------------------------
-
-# added so distributors can consistently specify a private module location
-#private_module_path = "/usr/share/weather-util"
-#if private_module_path:
-#    sys.path.insert(1, private_module_path)
 
 
 #-------------------------------------------------------------------------------
@@ -62,6 +55,10 @@ from pysorcery.lib import libspell
 from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
 
+# Other Optional Libraries
+if pysorcery.distro_id in pysorcery.distro_dict['deb']:
+    import apt
+
 #-------------------------------------------------------------------------------
 #
 # Global Variables
@@ -71,9 +68,6 @@ from pysorcery.lib import libcodex
 # create logger
 logger = logging.getLogger(__name__)
 
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]
 
 #-------------------------------------------------------------------------------
 #

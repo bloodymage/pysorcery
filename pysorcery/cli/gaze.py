@@ -37,10 +37,6 @@
 #
 #-------------------------------------------------------------------------------
 
-# added so distributors can consistently specify a private module location
-#private_module_path = "/usr/share/weather-util"
-#if private_module_path:
-#    sys.path.insert(1, private_module_path)
 
 #-------------------------------------------------------------------------------
 #
@@ -55,11 +51,11 @@ import copy
 import subprocess
 
 # Other Libraries
-import distro
 
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib import argparse
+from pysorcery.lib import distro
 from pysorcery.lib import logging
 
 # Other Application Libraries
@@ -72,6 +68,10 @@ from pysorcery.lib import libspell
 from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
 
+# Other Optional Libraries
+#if distro.distro_id in distro.distro_dict['deb']:
+#    import apt
+
 #-------------------------------------------------------------------------------
 #
 # Global Variables
@@ -80,6 +80,7 @@ from pysorcery.lib import libcodex
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
+colortext = libtext.ConsoleText()
 
 #-------------------------------------------------------------------------------
 #
@@ -91,7 +92,8 @@ logger = logging.getLogger(__name__)
 #
 # Functions
 #
-#
+# gaze_alien
+# gaze_orphans
 #
 #-------------------------------------------------------------------------------
 
@@ -103,7 +105,7 @@ logger = logging.getLogger(__name__)
 # sorcery package management system
 #
 # Input:  args
-# Output:
+# Output: Prints list of alien files
 # Return: None
 #
 #-------------------------------------------------------------------------------
@@ -173,10 +175,7 @@ def gaze_install_queue(args):
     queue = libspell.SpellQueue()
     queue.inst_queue()
 
-#    print("shit")
-
     queue.print_queue()
-
     
     logger.debug("End Function")
     return
@@ -275,7 +274,6 @@ def gaze_what(args):
 
         logger.debug3("Spell: " + str(spell))
         
-        colortext = libtext.ConsoleText()
         message = colortext.colorize(spell.name, "bold","white","black")
         logger.info(message)
 
@@ -351,7 +349,6 @@ def gaze_url(args):
 
         logger.debug(spell)
         
-        colortext = libtext.ConsoleText()
         name = colortext.colorize(spell.name, "bold","white","black")
         url = colortext.colorize(spell.url, "none","white","black")
         logger.info(name + ": ")
@@ -747,7 +744,15 @@ def gaze_from(args):
 def gaze_installed(args):
     logger.debug("Begin Function")
 
-    
+    if args.spell:
+        for i in args.spell:
+            spell = libspell.Spell(i)
+            spell.print_version()
+
+    else:
+        installed_spells = libspell.InstalledSpells()
+        installed_spells.print_installed()
+        
     logger.debug("End Function")
     return
 
@@ -913,1240 +918,1817 @@ def gaze_time(args):
 #
 #-------------------------------------------------------------------------------
 def real_main(args):    
-    logger.debug("Entered Function")
+    logger.debug('Entered Function')
+
+    # Common Help Descriptions:
+    quiet_help = 'Decrease output'
+    verbose_help = 'Increase output'
+    loglevel_help = 'Specify output level'
+    debug_help = 'Maximize output level'
 
     # Parse Command Line Arguments
+    parser = argparse.ArgumentParser(description = 'Query / View Sorcery package management information')
 
-    parser = argparse.ArgumentParser(description="Query / View Sorcery package management information")
-    parser.register('action', 'parsers', argparse.AliasedSubParsersAction)
-    parser.add_argument("--config",
-                        nargs=1,
-                        help="Use specified config file")
-    parser.add_argument("--debug",
-                        action="store_true",
-                        help="Enable Debugging")
-    parser.add_argument("--loglevel",
-                        choices=["debug","info","warning","error","critical",
-                                 "DEBUG","INFO","WARNING","ERROR","CRITICAL"],
-                        help="Set minimum logging level")
-    parser.add_argument("-v", "--verbosity",
-                        action="count",
-                        default=0,
-                        help="increase output verbosity")
-    # help is required to go before version
-    parser.add_argument("-V", "--version",
-                        action="version",
-                        help="Print version information and exit",
-                        version="%(prog)s " + __version__)
-    parser.set_defaults(func=False)
-    
-    subparsers = parser.add_subparsers(title='commands',
-                                       metavar='Commands',
-                                       help='Sub commands')
 
-    # create the parser for the "alien" command
+    # Create subcommands
+    subparsers = parser.add_subparsers(title = 'commands',
+                                       metavar = 'Command',
+                                       help = 'Description')
+    # Enable aliases for subcommands
+    parser.register('action',
+                    'parsers',
+                    argparse.AliasedSubParsersAction)
+
+    #------------------------------------------
+    #
+    # Create the parser for the "alien" command
+    #
+    #-------------------------------------------
+    alien_help = "Find and Display all files not tracked by the Sorcery Package Management System " + colortext.colorize('(Functionally Working, buggy)', 'bold', 'yellow', 'black') + "."
     parser_alien = subparsers.add_parser('alien',
-                                         aliases=('aliens',),
-                                         help='Find and Display all files not tracked by the Sorcery Package Management System (Not Working)')
-    parser_alien.add_argument('--debug',
-                              action='store_true',
-                              help='Enable Debugging')
-    parser_alien.add_argument("--loglevel",
-                              choices=["debug","info","warning","error","critical",
-                                       "DEBUG","INFO","WARNING","ERROR","CRITICAL"],
-                              help="Set minimum logging level")
-    parser_alien.add_argument("-q", "--quiet",
-                              action="count",
-                              default=0,
-                              help="Decrease output verbosity")
-    parser_alien.add_argument("-v", "--verbosity",
-                              action="count",
-                              default=0,
-                              help="Increase output verbosity")
-    parser_alien.set_defaults(func=gaze_alien)
+                                         aliases = ('aliens',),
+                                         help = alien_help)
 
+    # Parser Groups
+    alien_logging_opts = parser_alien.add_argument_group('Logging Options')
+
+    # Parser Arguments
+    alien_logging_opts.add_argument("-q", "--quiet",
+                                    action = "count",
+                                    default = 0,
+                                    help= quiet_help)
+
+    if enable_debugging_mode is True:
+        alien_logging_opts.add_argument("-v", "--verbosity",
+                                        action = "count",
+                                        default = 0,
+                                        help = verbose_help)
+        alien_logging_opts.add_argument("--loglevel",
+                                        choices = ["debug","info","warning",
+                                                 "error","critical",
+                                                 "DEBUG","INFO","WARNING",
+                                                 "ERROR","CRITICAL"],
+                                        help = loglevel_help)
+        alien_logging_opts.add_argument('--debug',
+                                        action = 'store_true',
+                                        help = debug_help)
+
+    parser_alien.set_defaults(func = gaze_alien)
+
+    #-------------------------------------------
+    #
     # create the parser for the "orphans" command
+    #
+    #-------------------------------------------
+    orphans_help = "Display installed spells that do not have any explicit dependencies on them " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
     parser_orphans = subparsers.add_parser('orphans',
-                                           help='Display installed spells that do not have any explicit dependencies on them (Not Working)')
-    parser_orphans.add_argument('--debug',
-                                action='store_true',
-                                help='Enable Debugging')
-    parser_orphans.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical", "DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_orphans.add_argument("-q", "--quiet",
-                             action="count",
-                             default=0,
-                             help="Decrease output verbosity")
-    parser_orphans.add_argument("-v", "--verbosity",
-                             action="count",
-                             default=0,
-                             help="Increase output verbosity")
-    parser_orphans.set_defaults(func=gaze_orphans)
+                                           help = orphans_help)
+    orphans_logging_opts = parser_orphans.add_argument_group('Logging Option')
+    orphans_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                      help = quiet_help)
 
-    # create the parser for the "activity" command
-    parser_activity = subparsers.add_parser('activity',
-                                            help='Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.)  (Not Working)')
-    parser_activity.add_argument('--debug',
-                                 action='store_true',
-                                 help='Display System Info')
-    parser_activity.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical", "DEBUG",
-                                          "INFO","WARNING","ERROR","CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_activity.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="Increase output verbosity")
-    parser_activity.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="Increase output verbosity")
-    parser_activity.set_defaults(func=gaze_activity)
+    if enable_debugging_mode is True:
+        orphans_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        orphans_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                   "error","critical", "DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        orphans_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_orphans.set_defaults(func = gaze_orphans)
 
-
-    # create the parser for the "install-queue" command
-    parser_install_queue = subparsers.add_parser('install-queue',
-                                                 help='Show spells waiting to be installed (Not Working)')
-    parser_install_queue.add_argument('--debug',
-                                      action='store_true',
-                                      help='Enable debugging information')
-    parser_install_queue.add_argument("--loglevel",
-                                      choices=["debug","info","warning",
-                                               "error","critical","DEBUG",
-                                               "INFO","WARNING","ERROR",
-                                               "CRITICAL"],
-                                      help="Set minimum logging level")
-    parser_install_queue.add_argument("-q", "--quiet",
-                                      action="count",
-                                      default=0,
-                                      help="Increase output verbosity")
-    parser_install_queue.add_argument("-v", "--verbosity",
-                                      action="count",
-                                      default=0,
-                                      help="Increase output verbosity")
-    parser_install_queue.set_defaults(func=gaze_install_queue)
-
-    # create the parser for the "remove-queue" command
-    parser_remove_queue = subparsers.add_parser('remove-queue',
-                                                help='Show spells to be removed (Not Working)')
-    parser_remove_queue.add_argument('--debug',
-                                     action='store_true',
-                                     help='Enable debugging information')
-    parser_remove_queue.add_argument("--loglevel",
-                                     choices=["debug","info","warning",
-                                              "error","critical","DEBUG",
-                                              "INFO","WARNING","ERROR",
-                                              "CRITICAL"],
-                                     help="Set minimum logging level")
-    parser_remove_queue.add_argument("-q", "--quiet",
-                                     action="count",
-                                     default=0,
-                                     help="increase output verbosity")
-    parser_remove_queue.add_argument("-v", "--verbosity",
-                                     action="count",
-                                     default=0,
-                                     help="increase output verbosity")
-    parser_remove_queue.set_defaults(func=gaze_remove_queue)
-
-    # create the parser for the "show-held" command
-    parser_show_held = subparsers.add_parser('show-held',
-                                             help='Shows all spells currently held (which means they are not to be updated). (Not Working)')
-    parser_show_held.add_argument('--debug',
-                                  action='store_true',
-                                  help='Enable debugging information')
-    parser_show_held.add_argument("--loglevel",
-                                  choices=["debug","info","warning",
-                                           "error","critical","DEBUG",
-                                           "INFO","WARNING","ERROR",
-                                           "CRITICAL"],
-                                  help="Set minimum logging level")
-    parser_show_held.add_argument("-q", "--quiet",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_show_held.add_argument("-v", "--verbosity",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_show_held.set_defaults(func=gaze_show_held)
-
-    # create the parser for the "what" command
-    parser_show_exiled = subparsers.add_parser('show-exiled',
-                                               help='Shows all spells currently exiled (which means they are not to be cast in any way). (Not Working)')
-    parser_show_exiled.add_argument('--debug',
-                                    action='store_true',
-                                    help='Enable debugging information')
-    parser_show_exiled.add_argument("--loglevel",
-                                  choices=["debug","info","warning",
-                                           "error","critical","DEBUG",
-                                           "INFO","WARNING","ERROR",
-                                           "CRITICAL"],
-                                  help="Set minimum logging level")
-    parser_show_exiled.add_argument("-q", "--quiet",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_show_exiled.add_argument("-v", "--verbosity",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_show_exiled.set_defaults(func=gaze_show_exiled)
-
-    # create the parser for the "what" command
-    parser_provides = subparsers.add_parser('provides',
-                                            help='Displays spells that provide the feature. (Not Working)')
-    parser_provides.add_argument('feature',
-                             nargs=1,
-                             help='Feature')
-    parser_provides.add_argument('--debug',
-                             action='store_true',
-                             help='Enable debugging information')
-    parser_provides.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_provides.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_provides.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_provides.set_defaults(func=gaze_provides)
     
+    # create the parser for the "activity" command
+    activity_help = "Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.) " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
+    parser_activity = subparsers.add_parser('activity',
+                                            help = activity_help)
+    activity_logging_opts = parser_activity.add_argument_group('Logging Options')
+    activity_logging_opts.add_argument("-q", "--quiet",
+                                       action = "count",
+                                       default = 0,
+                                       help = quiet_help)
+
+    if enable_debugging_mode is True:
+        activity_logging_opts.add_argument("-v", "--verbosity",
+                                           action = "count",
+                                           default = 0,
+                                           help = verbose_help)
+        activity_logging_opts.add_argument("--loglevel",
+                                           choices = ["debug","info","warning",
+                                                    "error","critical", "DEBUG",
+                                                    "INFO","WARNING",
+                                                    "ERROR","CRITICAL"],
+                                           help = loglevel_help)
+        activity_logging_opts.add_argument('--debug',
+                                           action = 'store_true',
+                                           help = debug_help)
+        
+    activity_logging_opts.set_defaults(func = gaze_activity)
+
+    #-------------------------------------------
+    #
+    # create the parser for the "install-queue" command
+    #
+    #-------------------------------------------
+    install_help = "Show spells waiting to be installed " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
+    parser_install_queue = subparsers.add_parser('install-queue',
+                                                 help = install_help)
+    inst_queue_logging_opts = parser_install_queue.add_argument_group('Logging Options')
+    inst_queue_logging_opts.add_argument("-q", "--quiet",
+                                         action = "count",
+                                         default = 0,
+                                         help = quiet_help)
+
+    if enable_debugging_mode is True:
+        inst_queue_logging_opts.add_argument("-v", "--verbosity",
+                                             action = "count",
+                                             default = 0,
+                                             help = verbose_help)
+        inst_queue_logging_opts.add_argument("--loglevel",
+                                             choices = ["debug","info","warning",
+                                                      "error","critical","DEBUG",
+                                                      "INFO","WARNING","ERROR",
+                                                      "CRITICAL"],
+                                             help = loglevel_help)
+        inst_queue_logging_opts.add_argument('--debug',
+                                             action = 'store_true',
+                                             help = debug_help)
+
+    parser_install_queue.set_defaults(func = gaze_install_queue)
+
+    #-------------------------------------------
+    #
+    # create the parser for the "remove-queue" command
+    #
+    #-------------------------------------------
+    remove_help = "Show spells to be removed  " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
+    parser_remove_queue = subparsers.add_parser('remove-queue',
+                                                help = remove_help)
+
+    remove_queue_logging_opts = parser_remove_queue.add_argument_group('Logging Options')
+    remove_queue_logging_opts.add_argument("-q", "--quiet",
+                                     action = "count",
+                                     default = 0,
+                                     help = quiet_help)
+
+    if enable_debugging_mode is True:
+        remove_queue_logging_opts.add_argument("-v", "--verbosity",
+                                               action = "count",
+                                               default = 0,
+                                               help = verbose_help)
+        remove_queue_logging_opts.add_argument("--loglevel",
+                                               choices = ["debug","info","warning",
+                                                        "error","critical","DEBUG",
+                                                        "INFO","WARNING","ERROR",
+                                                        "CRITICAL"],
+                                               help = loglevel_help)
+        remove_queue_logging_opts.add_argument('--debug',
+                                               action = 'store_true',
+                                               help = debug_help)
+
+    parser_remove_queue.set_defaults(func = gaze_remove_queue)
+
+    #-------------------------------------------
+    #
+    # create the parser for the "show-held" command
+    #
+    #-------------------------------------------
+    show_held_help = 'Shows all spells currently held (which means they are not to be updated). (Not Working)'
+    parser_show_held = subparsers.add_parser('show-held',
+                                             help = show_held_help)
+
+
+    show_held_logging_opts = parser_show_held.add_argument_group('Logging Options')
+
+
+    show_held_logging_opts.add_argument("-q", "--quiet",
+                                        action = "count",
+                                        default = 0,
+                                        help = quiet_help)
+
+    if enable_debugging_mode is True:
+        show_held_logging_opts.add_argument("-v", "--verbosity",
+                                            action = "count",
+                                            default = 0,
+                                            help = verbose_help)
+        show_held_logging_opts.add_argument("--loglevel",
+                                            choices = ["debug","info","warning",
+                                                     "error","critical","DEBUG",
+                                                     "INFO","WARNING","ERROR",
+                                                     "CRITICAL"],
+                                            help = loglevel_help)
+        show_held_logging_opts.add_argument('--debug',
+                                            action = 'store_true',
+                                            help = debug_help)
+        
+    parser_show_held.set_defaults(func = gaze_show_held)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "show-exiled" command
+    #
+    #-------------------------------------------
+    show_exiled_help = 'Shows all spells currently exiled (which means they are not to be cast in any way). (Not Working)'
+    parser_show_exiled = subparsers.add_parser('show-exiled',
+                                               help = show_exiled_help)
+    show_exiled_logging_opts = parser_show_exiled.add_argument_group('Logging Options')
+    show_exiled_logging_opts.add_argument("-q", "--quiet",
+                                  action = "count",
+                                  default = 0,
+                                  help = quiet_help)
+
+    if enable_debugging_mode is True:
+        show_exiled_logging_opts.add_argument("-v", "--verbosity",
+                                              action = "count",
+                                              default = 0,
+                                              help = verbose_help)
+        show_exiled_logging_opts.add_argument("--loglevel",
+                                              choices = ["debug","info","warning",
+                                                       "error","critical","DEBUG",
+                                                       "INFO","WARNING","ERROR",
+                                                       "CRITICAL"],
+                                              help = loglevel_help)
+        show_exiled_logging_opts.add_argument('--debug',
+                                              action = 'store_true',
+                                              help = debug_help)
+
+    parser_show_exiled.set_defaults(func = gaze_show_exiled)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "provides" command
+    #
+    #-------------------------------------------
+    parser_provides = subparsers.add_parser('provides',
+                                            help = 'Displays spells that provide the feature. (Not Working)')
+    provides_logging_opts = parser_provides.add_argument_group('Logging Options')
+    parser_provides.add_argument('feature',
+                             nargs = 1,
+                             help = 'Feature')
+    provides_logging_opts.add_argument("-q", "--quiet",
+                                 action = "count",
+                                 default = 0,
+                                 help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        provides_logging_opts.add_argument("-v", "--verbosity",
+                                           action = "count",
+                                           default = 0,
+                                           help = verbose_help)
+        provides_logging_opts.add_argument("--loglevel",
+                                           choices = ["debug","info","warning",
+                                                    "error","critical","DEBUG",
+                                                    "INFO","WARNING","ERROR",
+                                                    "CRITICAL"],
+                                           help = loglevel_help)
+        provides_logging_opts.add_argument('--debug',
+                                           action = 'store_true',
+                                           help = debug_help)
+
+    parser_provides.set_defaults(func = gaze_provides)
+    
+
+    #-------------------------------------------
+    #
     # create the parser for the "what" command
+    #
+    #-------------------------------------------
     parser_what = subparsers.add_parser('what',
-                                        help='Display spell description')
+                                        help = 'Display spell description')
+    what_logging_opts = parser_what.add_argument_group('Logging Options')
     parser_what.add_argument('spell',
-                             nargs='+',
-                             help='Display System Info')
-    parser_what.add_argument('--debug',
-                             action='store_true',
-                             help='Enable debugging information')
-    parser_what.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_what.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="Decrease output verbosity")
-    parser_what.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="Increase output verbosity")
-    parser_what.set_defaults(func=gaze_what)
+                             nargs = '+',
+                             help = 'Display System Info')
+    parser_what.add_argument('-g','--grimoire',
+                             nargs = '+',
+                             help = 'specify which grimoire(s) to look in.')
+    what_logging_opts.add_argument("-q", "--quiet",
+                                   action = "count",
+                                   default = 0,
+                                   help = quiet_help)
 
+    if enable_debugging_mode is True:
+        what_logging_opts.add_argument("-v", "--verbosity",
+                                       action = "count",
+                                       default = 0,
+                                       help = verbose_help)
+        what_logging_opts.add_argument("--loglevel",
+                                       choices = ["debug","info","warning",
+                                                "error","critical","DEBUG",
+                                                "INFO","WARNING","ERROR",
+                                                "CRITICAL"],
+                                       help = loglevel_help)
+        what_logging_opts.add_argument('--debug',
+                                       action = 'store_true',
+                                       help = debug_help)
+
+    parser_what.set_defaults(func = gaze_what)
+
+
+    #-------------------------------------------
+    #
     # create the parser for the "short" command
+    #
+    #-------------------------------------------
     parser_short = subparsers.add_parser('short',
-                                         help='Display spell short description (Not Working)')
+                                         help = 'Display spell short description (Not Working)')
     parser_short.add_argument('spell',
-                              nargs='+',
+                              nargs = '+',
                               help='Display System Info')
-    parser_short.add_argument('--debug',
-                              action='store_true',
-                              help='Enable debugging information')
-    parser_short.add_argument("--loglevel",
-                              choices=["debug","info","warning",
-                                       "error","critical","DEBUG",
-                                       "INFO","WARNING","ERROR",
-                                       "CRITICAL"],
-                              help="Set minimum logging level")
+    parser_short.add_argument('-g','--grimoire',
+                              nargs = '+',
+                              help = 'Specify which grimoire(s) to look in.')
     parser_short.add_argument("-q", "--quiet",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_short.add_argument("-v", "--verbosity",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_short.set_defaults(func=gaze_short)
-
-    # create the parser for the "where" command
-    parser_where = subparsers.add_parser('where',
-                                         help='Display the section a spell belongs to.')
-    parser_where.add_argument('spell',
-                             nargs='+',
-                             help='Spell(s) to display')
-    parser_where.add_argument('-p','-path', '--path',
-                             action='store_true',
-                             help='Display the full path to spell')
-    parser_where.add_argument('--debug',
-                             action='store_true',
-                             help='Enable Debugging')
-    parser_where.add_argument("--loglevel",
-                              choices=["debug","info","warning",
-                                       "error","critical","DEBUG",
-                                       "INFO","WARNING","ERROR",
-                                       "CRITICAL"],
-                              help="Set minimum logging level")
-    parser_where.add_argument("-q", "--quiety",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_where.add_argument("-v", "--verbosity",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_where.set_defaults(func=gaze_where)
-
-    # create the parser for the "url" command
-    parser_url = subparsers.add_parser('url',
-                                       aliases=('website',),
-                                       help='Display spell homepage')
-    parser_url.add_argument('spell',
-                             nargs='+',
-                             help='Display System Info')
-    parser_url.add_argument('--debug',
-                             action='store_true',
-                             help='Enable debugging information')
-    parser_url.add_argument("--loglevel",
-                            choices=["debug","info","warning",
-                                     "error","critical","DEBUG",
-                                     "INFO","WARNING","ERROR",
-                                     "CRITICAL"],
-                            help="Set minimum logging level")
-    parser_url.add_argument("-q", "--quiet",
-                            action="count",
-                            default=0,
-                            help="increase output verbosity")
-    parser_url.add_argument("-v", "--verbosity",
-                            action="count",
-                            default=0,
-                            help="increase output verbosity")
-    parser_url.set_defaults(func=gaze_url)
-
-    # create the parser for the "sources" command
-    parser_sources = subparsers.add_parser('sources',
-                                           help='List all source files contained in a spell. (Not Working)')
-    parser_sources.add_argument('spell',
-                                nargs='+',
-                                help='Display System Info')
-    parser_sources.add_argument('--debug',
-                                action='store_true',
-                                help='Enable debugging information')
-    parser_sources.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_sources.add_argument("-q", "--quiet",
-                            action="count",
-                            default=0,
-                            help="increase output verbosity")
-    parser_sources.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_sources.set_defaults(func=gaze_sources)
-
-    # create the parser for the "source_urls" command
-    parser_source_url = subparsers.add_parser('source_urls',
-                                              help='Lists the urls to all files contained in a spell. (Not Working)')
-    parser_source_url.add_argument('spell',
-                                   nargs='+',
-                                   help='Spell')
-    parser_source_url.add_argument('--debug',
-                                   action='store_true',
-                                   help='Enable debugging information')
-    parser_source_url.add_argument("--loglevel",
-                                   choices=["debug","info","warning",
-                                            "error","critical","DEBUG",
-                                            "INFO","WARNING","ERROR",
-                                            "CRITICAL"],
-                                   help="Set minimum logging level")
-    parser_source_url.add_argument("-q", "--quiet",
-                                   action="count",
-                                   default=0,
-                                   help="increase output verbosity")
-    parser_source_url.add_argument("-v", "--verbosity",
-                                   action="count",
-                                   default=0,
-                                   help="increase output verbosity")
-    parser_source_url.set_defaults(func=gaze_source_urls)
-
-    # create the parser for the "maintainer" command
-    parser_maintainer = subparsers.add_parser('maintainer',
-                                              help='Display the email address of the person responsible for maintaining a specified spell. (Not Working)')
-    parser_maintainer.add_argument('spell',
-                                   nargs='+',
-                                   help='Spell')
-    parser_maintainer.add_argument('--debug',
-                                   action='store_true',
-                                   help='Display System Info')
-    parser_maintainer.add_argument("--loglevel",
-                                   choices=["debug","info","warning",
-                                            "error","critical","DEBUG",
-                                            "INFO","WARNING","ERROR",
-                                            "CRITICAL"],
-                                   help="Set minimum logging level")
-    parser_maintainer.add_argument("-q", "--quiet",
-                                   action="count",
-                                   default=0,
-                                   help="increase output verbosity")
-    parser_maintainer.add_argument("-v", "--verbosity",
-                                   action="count",
-                                   default=0,
-                                   help="increase output verbosity")
-    parser_maintainer.set_defaults(func=gaze_maintainer)
-
-    # create the parser for the "compile" command
-    parser_compile = subparsers.add_parser('compile',
-                                           help='Show the compiler output generated when the spell was built.  If no optional version was given, try the installed version.  If the spell is not installed use the version in the grimoire. (Not Working)')
-    parser_compile.add_argument('spell',
-                                nargs=1,
-                                help='Spell')
-    parser_compile.add_argument('version',
-                                nargs='?',
-                                help='Specifies which Version of spell to view.')
-    parser_compile.add_argument('--debug',
-                                action='store_true',
-                                help='Display Debugging Information')
-    parser_compile.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_compile.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_compile.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_compile.set_defaults(func=gaze_compile)
-
-    # create the parser for the "install" command
-    parser_install = subparsers.add_parser('install',
-                                           help='Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files. If no optional version was given, try the installed version. (Not Working)')
-    parser_install.add_argument('spell',
-                                nargs=1,
-                                help='Spell')
-    parser_install.add_argument('version',
-                                nargs=1,
-                                help='Specifies which version of spell to view')
-    parser_install.add_argument('--debug',
-                                action='store_true',
-                                help='Display Debugging Information')
-    parser_install.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_install.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_install.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_install.set_defaults(func=gaze_install,
-                                install_display=False)
-
-    # create the parser for the "install-full" command
-    parser_install_full = subparsers.add_parser('install-full',
-                                                help='Used to determine what files were installed by a spell and where those files are located.  If no optional version was given, try the installed version.  (Not Working)')
-    parser_install_full.add_argument('spell',
-                                     nargs=1,
-                                     help='Spell')
-    parser_install_full.add_argument('version',
-                                     nargs=1,
-                                     help='Specifies which version of the spell to view.')
-    parser_install_full.add_argument('--debug',
-                                     action='store_true',
-                                     help='Display Debugging Information')
-    parser_install_full.add_argument("--loglevel",
-                                     choices=["debug","info","warning",
-                                              "error","critical","DEBUG",
-                                              "INFO","WARNING","ERROR",
-                                              "CRITICAL"],
-                                     help="Set minimum logging level")
-    parser_install_full.add_argument("-q", "--quiet",
-                                     action="count",
-                                     default=0,
-                                     help="increase output verbosity")
-    parser_install_full.add_argument("-v", "--verbosity",
-                                     action="count",
-                                     default=0,
-                                     help="increase output verbosity")
-    parser_install_full.set_defaults(func=gaze_install,
-                                     install_display='Full')
-
-    # create the parser for the "install-spell" command
-    parser_install_spell = subparsers.add_parser('install-spell',
-                                                 help='Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files and sorcery log files.  If no optional version was given, try the installed version. (Not Working)')
-    parser_install_spell.add_argument('spell',
-                                      nargs=1,
-                                      help='Spell')
-    parser_install_spell.add_argument('version',
-                                      nargs=1,
-                                      help='Specifies which version of the spell to view')
-    parser_install_spell.add_argument('--debug',
-                                      action='store_true',
-                                      help='Display System Info')
-    parser_install_spell.add_argument("--loglevel",
-                                      choices=["debug","info","warning",
-                                               "error","critical","DEBUG",
-                                               "INFO","WARNING","ERROR",
-                                               "CRITICAL"],
-                                      help="Set minimum logging level")
-    parser_install_spell.add_argument("-q", "--quiet",
-                                      action="count",
-                                      default=0,
-                                      help="increase output verbosity")
-    parser_install_spell.add_argument("-v", "--verbosity",
-                                      action="count",
-                                      default=0,
-                                      help="increase output verbosity")
-    parser_install_spell.set_defaults(func=gaze_install,
-                                      install_display='Spell')
-
-    # create the parser for the "what" command
-    parser_version = subparsers.add_parser('version',
-                                           help='Shows the installed version of the spell and the main grimoires version.')
-    parser_version.add_argument('spell',
-                                nargs=1,
-                                help='Display System Info')
-    parser_version.add_argument('--debug',
-                                action='store_true',
-                                help='Display System Info')
-    parser_version.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_version.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_version.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_version.set_defaults(func=gaze_version,
-                                multi=False)
-
-    # create the parser for the "versions" command
-    parser_versions = subparsers.add_parser('versions',
-                                            help='Shows the installed version of the spell and lists all available versions in all grimoires. If used without a spell name, then lists order of available grimoires.')
-    parser_versions.add_argument('spell',
-                                 nargs=1,
-                                 help='Display System Info')
-    parser_versions.add_argument('--debug',
-                                 action='store_true',
-                                 help='Display System Info')
-    parser_versions.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_versions.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_versions.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_versions.set_defaults(func=gaze_version,
-                                 multi=True)
-
-    # create the parser for the "license" command
-    parser_license = subparsers.add_parser('license',
-                                           help='View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s) (Not Working)')
-    parser_license.add_argument('ssl',
-                                nargs='+',
-                                help='Specify Spell, Section, or License to view')
-    parser_license.add_argument('--debug',
-                                action='store_true',
-                                help='Enable debugging information')
-    parser_license.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_license.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_license.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_license.set_defaults(func=gaze_license)
-
-    # create the parser for the "versions" command
-    parser_sum = subparsers.add_parser('sum',
-                                       help='Print CRC checksums for spells(s). If no spell is given it default to all. (Not Working)')
-    parser_sum.add_argument('spell',
-                            nargs='?',
-                            help='Display System Info')
-    parser_sum.add_argument('--debug',
-                            action='store_true',
-                            help='Display System Info')
-    parser_sum.add_argument("--loglevel",
-                            choices=["debug","info","warning",
-                                     "error","critical","DEBUG",
-                                     "INFO","WARNING","ERROR",
-                                     "CRITICAL"],
-                            help="Set minimum logging level")
-    parser_sum.add_argument("-q", "--quiet",
-                            action="count",
-                            default=0,
-                            help="increase output verbosity")
-    parser_sum.add_argument("-v", "--verbosity",
-                            action="count",
-                            default=0,
-                            help="increase output verbosity")
-    parser_sum.set_defaults(func=gaze_checksum,
-                            check_type='CRC')
-
-    # create the parser for the "versions" command
-    parser_md5sum = subparsers.add_parser('md5sum',
-                                          help='Print spell MD5 message digests (fingerprints). If no spell is given it default to all (Not Working)')
-    parser_md5sum.add_argument('spell',
-                               nargs='?',
-                               help='Display System Info')
-    parser_md5sum.add_argument('--debug',
-                               action='store_true',
-                               help='Display System Info')
-    parser_md5sum.add_argument("--loglevel",
-                               choices=["debug","info","warning",
-                                        "error","critical","DEBUG",
-                                        "INFO","WARNING","ERROR",
-                                        "CRITICAL"],
-                               help="Set minimum logging level")
-    parser_md5sum.add_argument("-q", "--quiet",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_md5sum.add_argument("-v", "--verbosity",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_md5sum.set_defaults(func=gaze_checksum,
-                               check_type='MD5')
-
-    # create the parser for the "versions" command
-    parser_size = subparsers.add_parser('size',
-                                        help='print the sizes and file counts of the passed installed spell(s). (Not Working)')
-    parser_size.add_argument('spell',
-                             nargs='+',
-                             help='Display System Info')
-    parser_size.add_argument('-a','-all','--all',
-                             action='store_true',
-                             help='Display sizes of all the spells. In addition, this will print the largest spell.')
-    parser_size.add_argument('--debug',
-                             action='store_true',
-                             help='Enable debugging information')
-    parser_size.add_argument("--loglevel",
-                             choices=["debug","info","warning",
-                                      "error","critical","DEBUG",
-                                      "INFO","WARNING","ERROR",
-                                      "CRITICAL"],
-                             help="Set minimum logging level")
-    parser_size.add_argument("-q", "--quiet",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_size.add_argument("-v", "--verbosity",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_size.set_defaults(func=gaze_size)
-
-    # create the parser for the "versions" command
-    parser_export = subparsers.add_parser('export',
-                                          help='Take a snapshot of all currently installed spells and their configuration. (Not Working)')
-    parser_export.add_argument('--debug',
-                               action='store_true',
-                               help='Display System Info')
-    parser_export.add_argument("--loglevel",
-                               choices=["debug","info","warning",
-                                        "error","critical","DEBUG",
-                                        "INFO","WARNING","ERROR",
-                                        "CRITICAL"],
-                               help="Set minimum logging level")
-    parser_export.add_argument("-q", "--quiet",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_export.add_argument("-v", "--verbosity",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_export.set_defaults(func=gaze_export)
-
-    # create the parser for the "import" command
-    parser_import = subparsers.add_parser('import',
-                                          help='restore the snapshot from a previous "gaze export" command (see above). (Not Working)')
-    parser_import.add_argument('snapshot',
-                               nargs=1,
-                               help='Display System Info')
-    parser_import.add_argument('--depreciated',
-                               action='store_true',
-                               help='Use the old behaviour.  An old cache is expected. There is no significant problem if an old cache is restored with the new importer. A few files will be ignored - only the files that the new exporter saves are considered - and the queuing logic wille be slighty more agressive.')
-    parser_import.add_argument('--debug',
-                               action='store_true',
-                               help='Display Debugging Information')
-    parser_import.add_argument("--loglevel",
-                               choices=["debug","info","warning",
-                                        "error","critical","DEBUG",
-                                        "INFO","WARNING","ERROR",
-                                        "CRITICAL"],
-                               help="Set minimum logging level")
-    parser_import.add_argument("-q", "--quiet",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_import.add_argument("-v", "--verbosity",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_import.set_defaults(func=gaze_import)
-
-    # create the parser for the "grimoire" command
-    parser_grimoire = subparsers.add_parser('grimoire',
-                                            help="Prints specified grimoire's spells or all grimoires if grimoire-name is omitted (Not Working)")
-    parser_grimoire.add_argument('grimoire',
-                                 nargs='*',
-                                 help='Specify grimoire to view')
-    parser_grimoire.add_argument('--debug',
-                                 action='store_true',
-                                 help='Display System Info')
-    parser_grimoire.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_grimoire.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_grimoire.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="increase output verbosity")
-    parser_grimoire.set_defaults(func=gaze_grimoire,
-                                 multi=False,
-                                 display_format='console')
-
-    # create the parser for the "what" command
-    parser_grimoires = subparsers.add_parser('grimoires',
-                                             help='Display installed grimoires by name only. (Not Working)')
-    parser_grimoires.add_argument('--debug',
-                                  action='store_true',
-                                  help='Display System Info')
-    parser_grimoires.add_argument("--loglevel",
-                                  choices=["debug","info","warning",
+                              action = "count",
+                              default = 0,
+                              help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        parser_short.add_argument("-v", "--verbosity",
+                                  action = "count",
+                                  default = 0,
+                                  help = verbose_help)
+        parser_short.add_argument("--loglevel",
+                                  choices = ["debug","info","warning",
                                            "error","critical","DEBUG",
                                            "INFO","WARNING","ERROR",
                                            "CRITICAL"],
-                                  help="Set minimum logging level")
-    parser_grimoires.add_argument("-q", "--quiet",
-                                  action="count",
-                                  default=0,
-                                  help="Decrease output verbosity")
-    parser_grimoires.add_argument("-v", "--verbosity",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_grimoires.set_defaults(func=gaze_grimoire,
-                                  multi=True,
-                                  display_format='console')
+                                  help = loglevel_help)
+        parser_short.add_argument('--debug',
+                                  action = 'store_true',
+                                  help = debug_help)
 
-    # create the parser for the "html" command
-    parser_html = subparsers.add_parser('html',
-                                        help='Prints the specified grimoire or all grimoires if grimoire-name is omitted in a nice html format. (Not Working)')
-    parser_html.add_argument('grimoire',
-                             nargs='*',
-                             help='Specified grimoire(s)')
-    parser_html.add_argument('-s','--source',
-                             action='store_true',
-                             help='Displays links to the source files.')
-    parser_html.add_argument('--debug',
-                             action='store_true',
-                             help='Display System Info')
-    parser_html.add_argument("--loglevel",
-                             choices=["debug","info","warning",
-                                      "error","critical","DEBUG",
-                                      "INFO","WARNING","ERROR",
-                                      "CRITICAL"],
-                             help="Set minimum logging level")
-    parser_html.add_argument("-q", "--quiet",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_html.add_argument("-v", "--verbosity",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_html.set_defaults(func=gaze_grimoire,
-                             multi=False,
-                             display_format='html')
+    parser_short.set_defaults(func = gaze_short)
 
 
+    #-------------------------------------------
+    #
+    # create the parser for the "where" command
+    #
+    #-------------------------------------------
+    parser_where = subparsers.add_parser('where',
+                                         help = 'Display the section a spell belongs to.')
+
+
+    where_logging_opts = parser_where.add_argument_group('Logging Options')
+
+
+    parser_where.add_argument('spell',
+                             nargs = '+',
+                             help = 'Spell(s) to display')
+    parser_where.add_argument('-p','-path', '--path',
+                             action = 'store_true',
+                             help = 'Display the full path to spell')
+    parser_where.add_argument('-g','--grimoire',
+                              nargs = '+',
+                              help = 'specify which grimoire(s) to look in.')
+    where_logging_opts.add_argument("-q", "--quiety",
+                              action = "count",
+                              default = 0,
+                              help = quiet_help)
+
+    if enable_debugging_mode is True:
+        where_logging_opts.add_argument("-v", "--verbosity",
+                                        action = "count",
+                                        default = 0,
+                                        help = verbose_help)
+        where_logging_opts.add_argument("--loglevel",
+                                        choices = ["debug","info","warning",
+                                                 "error","critical","DEBUG",
+                                                 "INFO","WARNING","ERROR",
+                                                 "CRITICAL"],
+                                        help = loglevel_help)
+        where_logging_opts.add_argument('--debug',
+                                        action = 'store_true',
+                                        help = debug_help)
+        
+    parser_where.set_defaults(func = gaze_where)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "url" command
+    #
+    #-------------------------------------------
+    parser_url = subparsers.add_parser('url',
+                                       aliases = ('website',),
+                                       help = 'Display spell homepage')
+
+    
+    url_logging_opts = parser_url.add_argument_group('Logging Options')
+
+
+    parser_url.add_argument('spell',
+                             nargs = '+',
+                             help = 'Display System Info')
+    parser_url.add_argument('-g','--grimoire',
+                            nargs = '+',
+                            help = 'Specify which grimoire(s) to look in.')
+    url_logging_opts.add_argument("-q", "--quiet",
+                                  action = "count",
+                                  default = 0,
+                                  help = quiet_help)
+
+    if enable_debugging_mode is True:
+        url_logging_opts.add_argument("-v", "--verbosity",
+                                      action = "count",
+                                      default = 0,
+                                      help = verbose_help)
+        url_logging_opts.add_argument("--loglevel",
+                                      choices = ["debug","info","warning",
+                                               "error","critical","DEBUG",
+                                               "INFO","WARNING","ERROR",
+                                               "CRITICAL"],
+                                      help = loglevel_help)
+        url_logging_opts.add_argument('--debug',
+                                      action = 'store_true',
+                                      help = debug_help)
+
+    parser_url.set_defaults(func = gaze_url)
+
+    
+    #-------------------------------------------
+    #
+    # create the parser for the "sources" command
+    #
+    #-------------------------------------------
+    parser_sources = subparsers.add_parser('sources',
+                                           help = 'List all source files contained in a spell. (Not Working)')
+
+
+    sources_logging_opts = parser_sources.add_argument_group('Logging Options')
+
+
+    parser_sources.add_argument('spell',
+                                nargs = '+',
+                                help = 'Display System Info')
+    parser_sources.add_argument('-g','--grimoire',
+                                nargs = '+',
+                                help = 'specify which grimoire(s) to look in.')
+    sources_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                      help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        sources_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        sources_logging_opts.add_argument("--loglevel",
+                                          choices=["debug","info","warning",
+                                                   "error","critical","DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        sources_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_sources.set_defaults(func = gaze_sources)
+
+
+        #-------------------------------------------
+        #
+        # create the parser for the "source_urls" command
+        #
+        #-------------------------------------------
+    parser_source_url = subparsers.add_parser('source_urls',
+                                              help = 'Lists the urls to all files contained in a spell. (Not Working)')
+
+
+    source_url_logging_opts = parser_source_url.add_argument_group('Logging Options')
+
+
+    parser_source_url.add_argument('spell',
+                                   nargs = '+',
+                                   help = 'Spell')
+    parser_source_url.add_argument('-g','--grimoire',
+                                   nargs = '+',
+                                   help = 'specify which grimoire(s) to look in.')
+    source_url_logging_opts.add_argument("-q", "--quiet",
+                                         action = "count",
+                                         default = 0,
+                                         help = quiet_help)
+
+    if enable_debugging_mode is True:
+        source_url_logging_opts.add_argument("-v", "--verbosity",
+                                             action = "count",
+                                             default = 0,
+                                             help = verbose_help)
+        source_url_logging_opts.add_argument("--loglevel",
+                                             choices = ["debug","info","warning",
+                                                      "error","critical","DEBUG",
+                                                      "INFO","WARNING","ERROR",
+                                                      "CRITICAL"],
+                                             help = loglevel_help)
+        source_url_logging_opts.add_argument('--debug',
+                                             action = 'store_true',
+                                             help = debug_help)
+        
+    parser_source_url.set_defaults(func = gaze_source_urls)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "maintainer" command
+    #
+    #-------------------------------------------
+    parser_maintainer = subparsers.add_parser('maintainer',
+                                              help = 'Display the email address of the person responsible for maintaining a specified spell. (Not Working)')
+
+
+    maintainer_logging_opts = parser_maintainer.add_argument_group('Logging Options')
+
+
+    parser_maintainer.add_argument('spell',
+                                   nargs = '+',
+                                   help = 'Spell')
+    parser_maintainer.add_argument('-g','--grimoire',
+                                   nargs = '+',
+                                   help = 'specify which grimoire(s) to look in.')
+    maintainer_logging_opts.add_argument("-q", "--quiet",
+                                         action = "count",
+                                         default = 0,
+                                         help = quiet_help)
+
+    if enable_debugging_mode is True:
+        maintainer_logging_opts.add_argument("-v", "--verbosity",
+                                             action = "count",
+                                             default = 0,
+                                             help = verbose_help)
+        maintainer_logging_opts.add_argument("--loglevel",
+                                             choices = ["debug","info","warning",
+                                                      "error","critical","DEBUG",
+                                                      "INFO","WARNING","ERROR",
+                                                      "CRITICAL"],
+                                             help = loglevel_help)
+        maintainer_logging_opts.add_argument('--debug',
+                                             action = 'store_true',
+                                             help = debug_help)
+        
+    parser_maintainer.set_defaults(func = gaze_maintainer)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "compile" command
+    #
+    #-------------------------------------------
+    parser_compile = subparsers.add_parser('compile',
+                                           help = 'Show the compiler output generated when the spell was built.  If no optional version was given, try the installed version.  If the spell is not installed use the version in the grimoire. (Not Working)')
+
+    #
+    compile_logging_opts = parser_compile.add_argument_group('Logging Options')
+
+    #
+    parser_compile.add_argument('spell',
+                                nargs = 1,
+                                help = 'Spell')
+    parser_compile.add_argument('version',
+                                nargs = '?',
+                                help = 'Specifies which Version of spell to view.')
+    compile_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                      help = quiet_help)
+
+
+    if enable_debugging_mode is True:
+        compile_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        compile_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                   "error","critical","DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        compile_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_compile.set_defaults(func = gaze_compile)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "install" command
+    #
+    #-------------------------------------------
+    parser_install = subparsers.add_parser('install',
+                                           help = 'Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files. If no optional version was given, try the installed version. (Not Working)')
+
+
+    install_logging_opts = parser_install.add_argument_group('Logging Options')
+
+
+    parser_install.add_argument('spell',
+                                nargs = 1,
+                                help = 'Spell')
+    parser_install.add_argument('version',
+                                nargs = 1,
+                                help = 'Specifies which version of spell to view')
+    install_logging_opts.add_argument("-q", "--quiet",
+                                action = "count",
+                                default = 0,
+                                help = quiet_help)
+
+    if enable_debugging_mode is True:
+        install_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)        
+        install_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                   "error","critical","DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        install_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_install.set_defaults(func = gaze_install,
+                                install_display = False)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "install-full" command
+    #
+    #-------------------------------------------
+    parser_install_full = subparsers.add_parser('install-full',
+                                                help = 'Used to determine what files were installed by a spell and where those files are located.  If no optional version was given, try the installed version.  (Not Working)')
+
+    #
+    install_full_logging_opts = parser_install_full.add_argument_group('Logging Options')
+
+    #
+    parser_install_full.add_argument('spell',
+                                     nargs = 1,
+                                     help = 'Spell')
+    parser_install_full.add_argument('version',
+                                     nargs = 1,
+                                     help = 'Specifies which version of the spell to view.')
+    install_full_logging_opts.add_argument("-q", "--quiet",
+                                     action = "count",
+                                     default = 0,
+                                           help = quiet_help)
+
+    if enable_debugging_mode is True:
+        install_full_logging_opts.add_argument("-v", "--verbosity",
+                                               action = "count",
+                                               default = 0,
+                                               help = verbose_help)
+        install_full_logging_opts.add_argument("--loglevel",
+                                               choices = ["debug","info","warning",
+                                                        "error","critical","DEBUG",
+                                                        "INFO","WARNING","ERROR",
+                                                        "CRITICAL"],
+                                               help = loglevel_help)
+        install_full_logging_opts.add_argument('--debug',
+                                               action = 'store_true',
+                                               help = debug_help)
+        
+    parser_install_full.set_defaults(func = gaze_install,
+                                     install_display = 'Full')
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "install-spell" command
+    #
+    #-------------------------------------------
+    parser_install_spell = subparsers.add_parser('install-spell',
+                                                 help = 'Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files and sorcery log files.  If no optional version was given, try the installed version. (Not Working)')
+
+
+    install_spell_logging_opts = parser_install_spell.add_argument_group('Logging Options')
+
+
+    parser_install_spell.add_argument('spell',
+                                      nargs = 1,
+                                      help = 'Spell')
+    parser_install_spell.add_argument('version',
+                                      nargs = 1,
+                                      help = 'Specifies which version of the spell to view')
+    install_spell_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                            help = quiet_help)
+
+    if enable_debugging_mode is True:
+        install_spell_logging_opts.add_argument("-v", "--verbosity",
+                                                action = "count",
+                                                default = 0,
+                                                help = verbose_help)
+        install_spell_logging_opts.add_argument("--loglevel",
+                                                choices = ["debug","info","warning",
+                                                         "error","critical","DEBUG",
+                                                         "INFO","WARNING","ERROR",
+                                                         "CRITICAL"],
+                                                help = loglevel_help)
+        install_spell_logging_opts.add_argument('--debug',
+                                                action = 'store_true',
+                                                help = debug_help)
+        
+    parser_install_spell.set_defaults(func = gaze_install,
+                                      install_display = 'Spell')
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "version" command
+    #
+    #-------------------------------------------
+    parser_version = subparsers.add_parser('version',
+                                           help = 'Shows the installed version of the spell and the main grimoires version.')
+
+
+    version_logging_opts = parser_version.add_argument_group('Logging Options')
+
+
+    parser_version.add_argument('spell',
+                                nargs = 1,
+                                help = 'Display System Info')
+    parser_version.add_argument('-g','--grimoire',
+                                nargs = '+',
+                                help = 'specify which grimoire(s) to look in.')
+    version_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                      help = quiet_help)
+
+    if enable_debugging_mode is True:
+        version_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        version_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                   "error","critical","DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        version_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_version.set_defaults(func = gaze_version,
+                                multi = False)
+
+
+    #-------------------------------------------
+    #
     # create the parser for the "versions" command
+    #
+    #-------------------------------------------
+    parser_versions = subparsers.add_parser('versions',
+                                            help = 'Shows the installed version of the spell and lists all available versions in all grimoires. If used without a spell name, then lists order of available grimoires.')
+
+    #
+    versions_logging_opts = parser_versions.add_argument_group('Logging Options')
+
+    #
+    parser_versions.add_argument('spell',
+                                 nargs = 1,
+                                 help = 'Display System Info')
+    versions_logging_opts.add_argument("-q", "--quiet",
+                                 action = "count",
+                                 default = 0,
+                                       help = quiet_help)
+
+    if enable_debugging_mode is True:
+        versions_logging_opts.add_argument("-v", "--verbosity",
+                                           action = "count",
+                                           default = 0,
+                                           help = verbose_help)
+        versions_logging_opts.add_argument("--loglevel",
+                                           choices = ["debug","info","warning",
+                                                    "error","critical","DEBUG",
+                                                    "INFO","WARNING","ERROR",
+                                                    "CRITICAL"],
+                                           help = loglevel_help)
+        versions_logging_opts.add_argument('--debug',
+                                           action = 'store_true',
+                                           help = debug_help)
+        
+    parser_versions.set_defaults(func = gaze_version,
+                                 multi = True)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "license" command
+    #
+    #-------------------------------------------
+    parser_license = subparsers.add_parser('license',
+                                           help = 'View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s) (Not Working)')
+
+    #
+    license_logging_opts = parser_license.add_argument_group('Logging Options')
+
+    #
+    parser_license.add_argument('ssl',
+                                nargs = '+',
+                                help = 'Specify Spell, Section, or License to view')
+    parser_license.add_argument('-g','--grimoire',
+                                nargs = '+',
+                                help = 'specify which grimoire(s) to look in.')
+    license_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                      help = debug_help)
+
+    if enable_debugging_mode is True:
+        license_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        license_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                   "error","critical","DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        license_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_license.set_defaults(func = gaze_license)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "versions" command
+    #
+    #-------------------------------------------
+    parser_sum = subparsers.add_parser('sum',
+                                       help = 'Print CRC checksums for spells(s). If no spell is given it default to all. (Not Working)')
+
+
+    sum_logging_opts = parser_sum.add_argument_group('Logging Options')
+
+
+    parser_sum.add_argument('spell',
+                            nargs = '?',
+                            help = 'Display System Info')
+    sum_logging_opts.add_argument("-q", "--quiet",
+                            action = "count",
+                            default = 0,
+                                  help = quiet_help)
+
+    if enable_debugging_mode is True:
+        sum_logging_opts.add_argument("-v", "--verbosity",
+                                      action = "count",
+                                      default = 0,
+                                      help = verbose_help)
+        sum_logging_opts.add_argument("--loglevel",
+                                      choices = ["debug","info","warning",
+                                               "error","critical","DEBUG",
+                                               "INFO","WARNING","ERROR",
+                                               "CRITICAL"],
+                                      help = loglevel_help)
+        sum_logging_opts.add_argument('--debug',
+                                      action = 'store_true',
+                                      help = debug_help)
+        
+    parser_sum.set_defaults(func = gaze_checksum,
+                            check_type = 'CRC')
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "md5sum" command
+    #
+    #-------------------------------------------
+    parser_md5sum = subparsers.add_parser('md5sum',
+                                          help = 'Print spell MD5 message digests (fingerprints). If no spell is given it default to all (Not Working)')
+
+
+    md5sum_logging_opts = parser_md5sum.add_argument_group('Logging Options')
+
+
+    parser_md5sum.add_argument('spell',
+                               nargs = '?',
+                               help = 'Display System Info')
+    md5sum_logging_opts.add_argument("-q", "--quiet",
+                               action = "count",
+                               default = 0,
+                                     help = quiet_help)
+
+    if enable_debugging_mode is True:
+        md5sum_logging_opts.add_argument("-v", "--verbosity",
+                                         action = "count",
+                                         default = 0,
+                                         help = verbose_help)
+        md5sum_logging_opts.add_argument("--loglevel",
+                                         choices = ["debug","info","warning",
+                                                  "error","critical","DEBUG",
+                                                  "INFO","WARNING","ERROR",
+                                                  "CRITICAL"],
+                                         help = loglevel_help)
+        md5sum_logging_opts.add_argument('--debug',
+                                         action = 'store_true',
+                                         help = debug_help)
+        
+    parser_md5sum.set_defaults(func = gaze_checksum,
+                               check_type = 'MD5')
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "size" command
+    #
+    #-------------------------------------------
+    parser_size = subparsers.add_parser('size',
+                                        help = 'print the sizes and file counts of the passed installed spell(s). (Not Working)')
+
+
+    size_logging_opts = parser_size.add_argument_group('Logging Options')
+
+
+    parser_size.add_argument('spell',
+                             nargs = '+',
+                             help = 'Display System Info')
+    parser_size.add_argument('-a','-all','--all',
+                             action = 'store_true',
+                             help = 'Display sizes of all the spells. In addition, this will print the largest spell.')
+    size_logging_opts.add_argument("-q", "--quiet",
+                             action = "count",
+                             default = 0,
+                                   help = quiet_help)
+
+    if enable_debugging_mode is True:
+        size_logging_opts.add_argument("-v", "--verbosity",
+                                       action = "count",
+                                       default = 0,
+                                       help = verbose_help)
+        size_logging_opts.add_argument("--loglevel",
+                                       choices = ["debug","info","warning",
+                                                  "error","critical","DEBUG",
+                                                  "INFO","WARNING","ERROR",
+                                                  "CRITICAL"],
+                                       help = loglevel_help)
+        size_logging_opts.add_argument('--debug',
+                                       action = 'store_true',
+                                       help = debug_help)
+        
+    parser_size.set_defaults(func = gaze_size)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "export" command
+    #
+    #-------------------------------------------
+    parser_export = subparsers.add_parser('export',
+                                          help = 'Take a snapshot of all currently installed spells and their configuration. (Not Working)')
+
+
+    export_logging_opts = parser_export.add_argument_group('Logging Options')
+
+
+    export_logging_opts.add_argument("-q", "--quiet",
+                                     action = "count",
+                                     default = 0,
+                                     help = quiet_help)
+
+    if enable_debugging_mode is True:
+        export_logging_opts.add_argument("-v", "--verbosity",
+                                         action = "count",
+                                         default = 0,
+                                         help = verbose_help)
+        export_logging_opts.add_argument("--loglevel",
+                                         choices = ["debug","info","warning",
+                                                    "error","critical","DEBUG",
+                                                    "INFO","WARNING","ERROR",
+                                                    "CRITICAL"],
+                                         help = loglevel_help)
+        export_logging_opts.add_argument('--debug',
+                                         action = 'store_true',
+                                         help = debug_help)
+        
+    parser_export.set_defaults(func = gaze_export)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "import" command
+    #
+    #-------------------------------------------
+    parser_import = subparsers.add_parser('import',
+                                          help = 'restore the snapshot from a previous "gaze export" command (see above). (Not Working)')
+
+
+    import_logging_opts = parser_import.add_argument_group('Logging Options')
+
+
+    parser_import.add_argument('snapshot',
+                               nargs = 1,
+                               help = 'Display System Info')
+    parser_import.add_argument('--depreciated',
+                               action = 'store_true',
+                               help = 'Use the old behaviour.  An old cache is expected. There is no significant problem if an old cache is restored with the new importer. A few files will be ignored - only the files that the new exporter saves are considered - and the queuing logic wille be slighty more agressive.')
+    import_logging_opts.add_argument("-q", "--quiet",
+                                     action = "count",
+                                     default = 0,
+                                     help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        import_logging_opts.add_argument("-v", "--verbosity",
+                                         action = "count",
+                                         default = 0,
+                                         help = verbose_help)
+        import_logging_opts.add_argument("--loglevel",
+                                         choices = ["debug","info","warning",
+                                                  "error","critical","DEBUG",
+                                                  "INFO","WARNING","ERROR",
+                                                  "CRITICAL"],
+                                         help = loglevel_help)
+        import_logging_opts.add_argument('--debug',
+                                         action = 'store_true',
+                                         help = debug_help)
+        
+    parser_import.set_defaults(func = gaze_import)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "grimoire" command
+    #
+    #-------------------------------------------
+    parser_grimoire = subparsers.add_parser('grimoire',
+                                            help = "Prints specified grimoire's spells or all grimoires if grimoire-name is omitted (Not Working)")
+
+    
+    grimoire_logging_opts = parser_grimoire.add_argument_group('Logging Options')
+
+
+    parser_grimoire.add_argument('grimoire',
+                                 nargs = '*',
+                                 help = 'Specify grimoire to view')
+    grimoire_logging_opts.add_argument("-q", "--quiet",
+                                 action = "count",
+                                 default = 0,
+                                       help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        grimoire_logging_opts.add_argument("-v", "--verbosity",
+                                           action = "count",
+                                           default = 0,
+                                           help = verbose_help)
+        grimoire_logging_opts.add_argument("--loglevel",
+                                           choices = ["debug","info","warning",
+                                                    "error","critical","DEBUG",
+                                                    "INFO","WARNING","ERROR",
+                                                    "CRITICAL"],
+                                           help = loglevel_help)
+        grimoire_logging_opts.add_argument('--debug',
+                                           action = 'store_true',
+                                           help = debug_help)
+        
+    parser_grimoire.set_defaults(func = gaze_grimoire,
+                                 multi = False,
+                                 display_format = 'console')
+
+
+    # create the parser for the "grimoires" command
+    parser_grimoires = subparsers.add_parser('grimoires',
+                                             help = 'Display installed grimoires by name only. (Not Working)')
+
+
+    grimoires_logging_opts = parser_grimoires.add_argument_group('Logging Options')
+
+
+    grimoires_logging_opts.add_argument("-q", "--quiet",
+                                        action = "count",
+                                        default = 0,
+                                        help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        grimoires_logging_opts.add_argument("-v", "--verbosity",
+                                            action = "count",
+                                            default = 0,
+                                            help = verbose_help)
+        grimoires_logging_opts.add_argument("--loglevel",
+                                            choices = ["debug","info","warning",
+                                                     "error","critical","DEBUG",
+                                                     "INFO","WARNING","ERROR",
+                                                     "CRITICAL"],
+                                            help = loglevel_help)
+        grimoires_logging_opts.add_argument('--debug',
+                                            action = 'store_true',
+                                            help = debug_help)
+        
+    parser_grimoires.set_defaults(func = gaze_grimoire,
+                                  multi = True,
+                                  display_format = 'console')
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "html" command
+    #
+    #-------------------------------------------
+    parser_html = subparsers.add_parser('html',
+                                        help = 'Prints the specified grimoire or all grimoires if grimoire-name is omitted in a nice html format. (Not Working)')
+
+    
+    html_logging_opts = parser_html.add_argument_group('Logging Options')
+
+    
+    parser_html.add_argument('grimoire',
+                             nargs = '*',
+                             help = 'Specified grimoire(s)')
+    parser_html.add_argument('-s','--source',
+                             action = 'store_true',
+                             help = 'Displays links to the source files.')
+    html_logging_opts.add_argument("-q", "--quiet",
+                             action = "count",
+                             default = 0,
+                                   help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        html_logging_opts.add_argument("-v", "--verbosity",
+                                       action = "count",
+                                       default = 0,
+                                       help = verbose_help)
+        html_logging_opts.add_argument("--loglevel",
+                                       choices = ["debug","info","warning",
+                                                "error","critical","DEBUG",
+                                                "INFO","WARNING","ERROR",
+                                                "CRITICAL"],
+                                       help = loglevel_help)
+        html_logging_opts.add_argument('--debug',
+                                       action = 'store_true',
+                                       help = debug_help)
+        
+    parser_html.set_defaults(func = gaze_grimoire,
+                             multi = False,
+                             display_format = 'html')
+
+    
+    #-------------------------------------------
+    #
+    # create the parser for the "search" command
+    #
+    #-------------------------------------------
     parser_search = subparsers.add_parser('search',
-                                          help='Searches spells name, short description and long description for phrase (Not Working)')
+                                          help = 'Searches spells name, short description and long description for phrase (Not Working)')
+
+    #
+    search_logging_opts = parser_search.add_argument_group('Logging Options')
+
+    #
     # Need to make the following mutually exclusive
     parser_search.add_argument('-n','-name','--name',
-                             action='store_true',
-                             help='Only search spells name')
+                             action = 'store_true',
+                             help = 'Only search spells name')
     parser_search.add_argument('-s','-short','--short',
-                             action='store_true',
-                             help='Only search spells short description')
+                             action = 'store_true',
+                             help = 'Only search spells short description')
+
+    #
     parser_search.add_argument('phrase',
-                               nargs=1,
-                               help="Any valid extended regular expression. For optimal results, don't forget to escape any special characters and use quotes to protect the expression.")
-    parser_search.add_argument('--debug',
-                             action='store_true',
-                             help='Display System Info')
-    parser_search.add_argument("--loglevel",
-                               choices=["debug","info","warning",
-                                        "error","critical","DEBUG",
-                                        "INFO","WARNING","ERROR",
-                                        "CRITICAL"],
-                               help="Set minimum logging level")
-    parser_search.add_argument("-q", "--quiet",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_search.add_argument("-v", "--verbosity",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_search.set_defaults(func=gaze_search)
+                               nargs = 1,
+                               help = "Any valid extended regular expression. For optimal results, don't forget to escape any special characters and use quotes to protect the expression.")
+    parser_search.add_argument('-g','--grimoire',
+                               nargs = '+',
+                               help = 'specify which grimoire(s) to look in.')
+    search_logging_opts.add_argument("-q", "--quiet",
+                                     action = "count",
+                                     default = 0,
+                                     help = quiet_help)
 
-    # create the parser for the "what" command
+    if enable_debugging_mode is True:
+        search_logging_opts.add_argument("-v", "--verbosity",
+                                         action = "count",
+                                         default = 0,
+                                         help = verbose_help)
+        search_logging_opts.add_argument("--loglevel",
+                                         choices = ["debug","info","warning",
+                                                    "error","critical","DEBUG",
+                                                    "INFO","WARNING","ERROR",
+                                                    "CRITICAL"],
+                                         help = loglevel_help)
+        search_logging_opts.add_argument('--debug',
+                                         action = 'store_true',
+                                         help = debug_help)
+        
+    parser_search.set_defaults(func = gaze_search)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "newer" command
+    #
+    #-------------------------------------------
     parser_newer = subparsers.add_parser('newer',
-                                         help="Print packages first submitted after a specified date. (Not Working)")
+                                         help = "Print packages first submitted after a specified date. (Not Working)")
+
+    
+    newer_logging_opts = parser_newer.add_argument_group('Logging Options')
+
+
     parser_newer.add_argument('date',
-                              nargs='?',
-                              default='last_sorcery_update',
-                              help="Specify Date.  The date must be in the 'yyyymmdd' format, where y=year, m=month, and d=day.  There are two special dates, last_sorcery_update and last_cast.")
-    parser_newer.add_argument('--debug',
-                              action='store_true',
-                              help='Display System Info')
-    parser_newer.add_argument("--loglevel",
-                              choices=["debug","info","warning",
-                                       "error","critical","DEBUG",
-                                       "INFO","WARNING","ERROR",
-                                       "CRITICAL"],
-                              help="Set minimum logging level")
-    parser_newer.add_argument("-q", "--quiet",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_newer.add_argument("-v", "--verbosity",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_newer.set_defaults(func=gaze_newer)
+                              nargs = '?',
+                              default = 'last_sorcery_update',
+                              help = "Specify Date.  The date must be in the 'yyyymmdd' format, where y = year, m = month, and d = day.  There are two special dates, last_sorcery_update and last_cast.")
+    parser_newer.add_argument('-g','--grimoire',
+                              nargs = '+',
+                              help = 'specify which grimoire(s) to look in.')
+    newer_logging_opts.add_argument("-q", "--quiet",
+                                    action = "count",
+                                    default = 0,
+                                    help = quiet_help)
 
-    # create the parser for the "what" command
+    if enable_debugging_mode is True:
+        newer_logging_opts.add_argument("-v", "--verbosity",
+                                        action = "count",
+                                        default = 0,
+                                        help = verbose_help)
+        newer_logging_opts.add_argument("--loglevel",
+                                        choices = ["debug","info","warning",
+                                                 "error","critical","DEBUG",
+                                                 "INFO","WARNING","ERROR",
+                                                 "CRITICAL"],
+                                        help = loglevel_help)
+        newer_logging_opts.add_argument('--debug',
+                                        action = 'store_true',
+                                        help = debug_help)
+        
+    parser_newer.set_defaults(func = gaze_newer)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "older" command
+    #
+    #-------------------------------------------
     parser_older = subparsers.add_parser('older',
-                                         help='print packages that were first submitted before a specified date. (Not Working)')
+                                         help = 'print packages that were first submitted before a specified date. (Not Working)')
+
+    #
+    older_logging_opts = parser_older.add_argument_group('Logging Options')
+
+    #
     parser_older.add_argument('date',
-                              nargs='?',
-                              help="Specify Date.  The date must be in the 'yyyymmdd' format, where y=year, m=month, and d=day.  There are two special dates, last_sorcery_update and last_cast.")
-    parser_older.add_argument('--debug',
-                              action='store_true',
-                              help='Display System Info')
-    parser_older.add_argument("--loglevel",
-                              choices=["debug","info","warning",
-                                       "error","critical","DEBUG",
-                                       "INFO","WARNING","ERROR",
-                                       "CRITICAL"],
-                              help="Set minimum logging level")
-    parser_older.add_argument("-q", "--quiet",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_older.add_argument("-v", "--verbosity",
-                              action="count",
-                              default=0,
-                              help="increase output verbosity")
-    parser_older.set_defaults(func=gaze_older)
+                              nargs = '?',
+                              help = "Specify Date.  The date must be in the 'yyyymmdd' format, where y = year, m = month, and d = day.  There are two special dates, last_sorcery_update and last_cast.")
+    parser_older.add_argument('-g','--grimoire',
+                               nargs = '+',
+                               help = 'specify which grimoire(s) to look in.')
+    older_logging_opts.add_argument("-q", "--quiet",
+                                    action = "count",
+                                    default = 0,
+                                    help = quiet_help)
 
+    if enable_debugging_mode is True:
+        older_logging_opts.add_argument("-v", "--verbosity",
+                                        action = "count",
+                                        default = 0,
+                                        help = verbose_help)
+        older_logging_opts.add_argument("--loglevel",
+                                        choices = ["debug","info","warning",
+                                                 "error","critical","DEBUG",
+                                                 "INFO","WARNING","ERROR",
+                                                 "CRITICAL"],
+                                        help = loglevel_help)
+        older_logging_opts.add_argument('--debug',
+                                        action = 'store_true',
+                                        help = debug_help)
+        
+    parser_older.set_defaults(func = gaze_older)
+
+
+    #-------------------------------------------
+    #
     # create the parser for the "from" command
+    #
+    #-------------------------------------------
     parser_from = subparsers.add_parser('from',
-                                        help="find out which spell has installed 'path/file.'  Matching is done literally against the end of the path names in the lists of installed files. (Not Working)")
+                                        help = "find out which spell has installed 'path/file.'  Matching is done literally against the end of the path names in the lists of installed files. (Not Working)")
+
+    
+    from_logging_opts = parser_from.add_argument_group('Logging Options')
+
+    
     parser_from.add_argument('filename',
-                             nargs=1,
-                             help='Display System Info')
+                             nargs = 1,
+                             help = 'Display System Info')
     parser_from.add_argument('-r','-regex','--regex',
-                             action='store_true',
-                             help='Matching using basic regular expressions against the whole paths in the lists of installed files.')
-    parser_from.add_argument('--debug',
-                             action='store_true',
-                             help='Display System Info')
-    parser_from.add_argument("--loglevel",
-                             choices=["debug","info","warning",
-                                      "error","critical","DEBUG",
-                                      "INFO","WARNING","ERROR",
-                                      "CRITICAL"],
-                             help="Set minimum logging level")
-    parser_from.add_argument("-q", "--quiet",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_from.add_argument("-v", "--verbosity",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_from.set_defaults(func=gaze_from)
+                             action = 'store_true',
+                             help = 'Matching using basic regular expressions against the whole paths in the lists of installed files.')
+    from_logging_opts.add_argument("-q", "--quiet",
+                             action = "count",
+                             default = 0,
+                             help = quiet_help)
+    if enable_debugging_mode is True:
+        from_logging_opts.add_argument("-v", "--verbosity",
+                                       action = "count",
+                                       default = 0,
+                                       help = verbose_help)
+        from_logging_opts.add_argument("--loglevel",
+                                       choices = ["debug","info","warning",
+                                                "error","critical","DEBUG",
+                                                "INFO","WARNING","ERROR",
+                                                "CRITICAL"],
+                                       help = loglevel_help)
+        from_logging_opts.add_argument('--debug',
+                                       action = 'store_true',
+                                       help = debug_help)
+        
+    parser_from.set_defaults(func = gaze_from)
 
-    # create the parser for the "what" command
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "installed" command
+    #
+    #-------------------------------------------
     parser_installed = subparsers.add_parser('installed',
-                                             help='View all installed packages and corresponding version numbers (Not Working)')
+                                             help = 'View all installed packages and corresponding version numbers (Not Working)')
+
+    
+    installed_logging_opts = parser_installed.add_argument_group('Logging Options')
+
+
     parser_installed.add_argument('spell',
-                                  nargs='*',
-                                  help='Check to see whether a particular package is installed and if it is installed display its version number')
-    parser_installed.add_argument('--debug',
-                                  action='store_true',
-                                  help='Display System Info')
-    parser_installed.add_argument("--loglevel",
-                                  choices=["debug","info","warning",
-                                           "error","critical","DEBUG",
-                                           "INFO","WARNING","ERROR",
-                                           "CRITICAL"],
-                                  help="Set minimum logging level")
-    parser_installed.add_argument("-q", "--quiet",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_installed.add_argument("-v", "--verbosity",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_installed.set_defaults(func=gaze_installed)
+                                  nargs = '*',
+                                  help = 'Check to see whether a particular package is installed and if it is installed display its version number')
+    installed_logging_opts.add_argument("-q", "--quiet",
+                                  action = "count",
+                                  default = 0,
+                                  help = quiet_help)
 
-    # create the parser for the "what" command
+    if enable_debugging_mode is True:
+        installed_logging_opts.add_argument("-v", "--verbosity",
+                                            action = "count",
+                                            default = 0,
+                                            help = verbose_help)
+        installed_logging_opts.add_argument("--loglevel",
+                                            choices = ["debug","info","warning",
+                                                     "error","critical","DEBUG",
+                                                     "INFO","WARNING","ERROR",
+                                                     "CRITICAL"],
+                                            help = loglevel_help)
+        installed_logging_opts.add_argument('--debug',
+                                            action = 'store_true',
+                                            help = debug_help)
+        
+    parser_installed.set_defaults(func = gaze_installed)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "section" command
+    #
+    #-------------------------------------------
     parser_section = subparsers.add_parser('section',
-                                           help='View a list of all sections in the software catalogue or display a list of packages from a specific section. (Not Working)')
+                                           help = 'View a list of all sections in the software catalogue or display a list of packages from a specific section. (Not Working)')
+
+    
+    section_logging_opts = parser_section.add_argument_group('Logging Options')
+
+
     parser_section.add_argument('section',
-                                nargs='?',
-                                help='Display System Info')
-    parser_section.add_argument('--debug',
-                                action='store_true',
-                                help='Display System Info')
-    parser_section.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_section.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_section.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_section.set_defaults(func=gaze_section)
+                                nargs = '?',
+                                help = 'Display System Info')
+    parser_section.add_argument('-g','--grimoire',
+                                nargs = '+',
+                                help = 'specify which grimoire(s) to look in.')
+    section_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                      help=quiet_help)
 
-    # create the parser for the "what" command
+    if enable_debugging_mode is True:
+        section_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        section_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                   "error","critical","DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        section_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_section.set_defaults(func = gaze_section)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "voyeur" command
+    #
+    #-------------------------------------------
     parser_voyeur = subparsers.add_parser('voyeur',
-                                          help='start looking at what cast is compiling at the moment and outputs its compiler messages. A spell can be optionally specified, or a delay after which to abort when no casts could be found. (Not Working)')
+                                          help = 'start looking at what cast is compiling at the moment and outputs its compiler messages. A spell can be optionally specified, or a delay after which to abort when no casts could be found. (Not Working)')
+
+    
+    voyeur_logging_opts = parser_voyeur.add_argument_group('Logging Options')
+
+
     parser_voyeur.add_argument('spell',
-                               nargs='?',
-                               help='Display System Info')
-    parser_voyeur.add_argument('--debug',
-                               action='store_true',
-                               help='Display System Info')
-    parser_voyeur.add_argument("--loglevel",
-                               choices=["debug","info","warning",
-                                        "error","critical","DEBUG",
-                                        "INFO","WARNING","ERROR",
-                                        "CRITICAL"],
-                               help="Set minimum logging level")
-    parser_voyeur.add_argument("-q", "--quiet",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_voyeur.add_argument("-v", "--verbosity",
-                               action="count",
-                               default=0,
-                               help="increase output verbosity")
-    parser_voyeur.set_defaults(func=gaze_voyeur)
+                               nargs = '?',
+                               help = 'Display System Info')
+    voyeur_logging_opts.add_argument("-q", "--quiet",
+                               action = "count",
+                               default = 0,
+                                     help = quiet_help)
 
-    # create the parser for the "what" command
-    parser_DEPENDS = subparsers.add_parser('DEPENDS',
-                                           help='Show DEPENDS of the spell (Not Working)')
-    parser_DEPENDS.add_argument('spell',
-                                nargs=1,
-                                help='Display System Info')
-    parser_DEPENDS.add_argument('--debug',
-                                action='store_true',
-                                help='Display System Info')
-    parser_DEPENDS.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_DEPENDS.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_DEPENDS.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_DEPENDS.set_defaults(func=gaze_file,
-                                filename='DEPENDS')
+    if enable_debugging_mode is True:
+        voyeur_logging_opts.add_argument("-v", "--verbosity",
+                                         action = "count",
+                                         default = 0,
+                                         help = verbose_help)
+        voyeur_logging_opts.add_argument("--loglevel",
+                                         choices = ["debug","info","warning",
+                                                  "error","critical","DEBUG",
+                                                  "INFO","WARNING","ERROR",
+                                                  "CRITICAL"],
+                                         help = loglevel_help)
+        voyeur_logging_opts.add_argument('--debug',
+                                         action = 'store_true',
+                                         help = debug_help)
+        
+    parser_voyeur.set_defaults(func = gaze_voyeur)
 
-    # create the parser for the "what" command
-    parser_HISTORY = subparsers.add_parser('HISTORY',
-                                           help='Shom HISTORY of the spell (Not Working)')
-    parser_HISTORY.add_argument('spell',
-                                nargs=1,
-                                help='Spell')
-    parser_HISTORY.add_argument('--debug',
-                                action='store_true',
-                                help='Display System Info')
-    parser_HISTORY.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_HISTORY.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_HISTORY.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_HISTORY.set_defaults(func=gaze_file,
-                                filename='HISTORY')
 
-    # create the parser for the "what" command
+    #-------------------------------------------
+    #
+    # create the parser for the "history" command
+    #
+    #-------------------------------------------
     parser_history = subparsers.add_parser('history',
-                                           help='Show history for a spell (alias for gaze HISTORY). (Not Working)')
+                                           help = 'Show history for a spell (alias for gaze HISTORY). (Not Working)')
+
+    
+    history_logging_opts = parser_history.add_argument_group('Logging Options')
+
+
     parser_history.add_argument('spell',
-                                nargs=1,
-                                help='Display System Info')
-    parser_history.add_argument('--debug',
-                                action='store_true',
-                                help='Display System Info')
-    parser_history.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_history.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_history.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_history.set_defaults(func=gaze_file,
-                                filename='HISTORY')
+                                nargs = 1,
+                                help = 'Display System Info')
+    parser_history.add_argument('-g','--grimoire',
+                                nargs = '+',
+                                help = 'specify which grimoire(s) to look in.')
+    history_logging_opts.add_argument("-q", "--quiet",
+                                      action = "count",
+                                      default = 0,
+                                      help = quiet_help)
 
-    # create the parser for the "what" command
+    if enable_debugging_mode is True:
+        history_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        history_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                     "error","critical","DEBUG",
+                                                     "INFO","WARNING","ERROR",
+                                                     "CRITICAL"],
+                                          help = loglevel_help)
+        history_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = debug_help)
+        
+    parser_history.set_defaults(func = gaze_file,
+                                filename = 'HISTORY')
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "checkmd5s" command
+    #
+    #-------------------------------------------
     parser_checkmd5s = subparsers.add_parser('checkmd5s',
-                                             help='Computes the md5sum on spell sources based on passed spell(s), section(s) or entire grimoire(s) if left blank. (Not Working)')
-    parser_checkmd5s.add_argument('spell',
-                                  nargs='*',
-                                  help='Display System Info')
-    parser_checkmd5s.add_argument('--debug',
-                                  action='store_true',
-                                  help='Display System Info')
-    parser_checkmd5s.add_argument("--loglevel",
-                                  choices=["debug","info","warning",
-                                           "error","critical","DEBUG",
-                                           "INFO","WARNING","ERROR",
-                                           "CRITICAL"],
-                                  help="Set minimum logging level")
-    parser_checkmd5s.add_argument("-q", "--quiet",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_checkmd5s.add_argument("-v", "--verbosity",
-                                  action="count",
-                                  default=0,
-                                  help="increase output verbosity")
-    parser_checkmd5s.set_defaults(func=gaze_checksum,
-                                  filename='checksum')
+                                             help = 'Computes the md5sum on spell sources based on passed spell(s), section(s) or entire grimoire(s) if left blank. (Not Working)')
 
-    # create the parser for the "what" command
+    
+    checkmd5_logging_opts = parser_checkmd5s.add_argument_group('Logging Parser')
+
+
+    parser_checkmd5s.add_argument('spell',
+                                  nargs = '*',
+                                  help = 'Display System Info')
+    parser_checkmd5s.add_argument('-g','--grimoire',
+                                  nargs = '+',
+                                  help = 'specify which grimoire(s) to look in.')
+    checkmd5_logging_opts.add_argument("-q", "--quiet",
+                                       action = "count",
+                                       default = 0,
+                                       help = quiet_help)
+
+    if enable_debugging_mode is True:
+        checkmd5_logging_opts.add_argument("-v", "--verbosity",
+                                           action = "count",
+                                           default = 0,
+                                           help = verbose_help)
+        checkmd5_logging_opts.add_argument("--loglevel",
+                                           choices = ["debug","info","warning",
+                                                    "error","critical","DEBUG",
+                                                    "INFO","WARNING","ERROR",
+                                                    "CRITICAL"],
+                                           help = loglevel_help)
+        checkmd5_logging_opts.add_argument('--debug',
+                                           action = 'store_true',
+                                           help = debug_help)
+
+    parser_checkmd5s.set_defaults(func = gaze_checksum,
+                                  filename = 'checksum')
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "depends" command
+    #
+    #-------------------------------------------
     parser_depends = subparsers.add_parser('depends',
-                                           help='shows the spells that explicitly or recursively depend on this installed spell.  Only enabled dependencies are shown. (Not Working)')
+                                           help = 'shows the spells that explicitly or recursively depend on this installed spell.  Only enabled dependencies are shown. (Not Working)')
+
+    
+    depends_logging_opts = parser_depends.add_argument_group('Logging Options')
+
+
     parser_depends.add_argument('spell',
-                                nargs=1,
-                                help='Display System Info')
+                                nargs = 1,
+                                help = 'Display System Info')
     parser_depends.add_argument('level',
-                                nargs='?',
+                                nargs = '?',
                                 help='Up to level $level if specified')
     parser_depends.add_argument('--fast',
-                                action='store_true',
-                                help='Limit output, but runs much faster.')
+                                action = 'store_true',
+                                help = 'Limit output, but runs much faster.')
     parser_depends.add_argument('--required',
-                                action='store_true',
-                                help='Show only the required dependencies and skip the runtime dependencies.')
-    parser_depends.add_argument('--debug',
-                                action='store_true',
-                                help='Display System Info')
-    parser_depends.add_argument("--loglevel",
-                                choices=["debug","info","warning",
-                                         "error","critical","DEBUG",
-                                         "INFO","WARNING","ERROR",
-                                         "CRITICAL"],
-                                help="Set minimum logging level")
-    parser_depends.add_argument("-q", "--quiet",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_depends.add_argument("-v", "--verbosity",
-                                action="count",
-                                default=0,
-                                help="increase output verbosity")
-    parser_depends.set_defaults(func=gaze_depends)
+                                action = 'store_true',
+                                help = 'Show only the required dependencies and skip the runtime dependencies.')
+    depends_logging_opts.add_argument("-q", "--quiet",
+                                action = "count",
+                                default = 0,
+                                      help = quiet_help)
 
-    # create the parser for the "what" command
+    if enable_debugging_mode is True:
+        depends_logging_opts.add_argument("-v", "--verbosity",
+                                          action = "count",
+                                          default = 0,
+                                          help = verbose_help)
+        depends_logging_opts.add_argument("--loglevel",
+                                          choices = ["debug","info","warning",
+                                                   "error","critical","DEBUG",
+                                                   "INFO","WARNING","ERROR",
+                                                   "CRITICAL"],
+                                          help = loglevel_help)
+        depends_logging_opts.add_argument('--debug',
+                                          action = 'store_true',
+                                          help = quiet_help)
+        
+    parser_depends.set_defaults(func = gaze_depends)
+
+
+    #-------------------------------------------
+    #
+    # create the parser for the "dependencies" command
+    #
+    #-------------------------------------------
     parser_dependencies = subparsers.add_parser('dependencies',
-                                                help='shows the spells that spell explicitly or recursively depends on. (Not Working)')
+                                                help = 'shows the spells that spell explicitly or recursively depends on. (Not Working)')
+
+
+    dependencies_logging_opts = parser_dependencies.add_argument_group('Logging Options')
+
+
     parser_dependencies.add_argument('spell',
-                                     nargs=1,
-                                     help='Display System Info')
+                                     nargs = 1,
+                                     help = 'Display System Info')
     parser_dependencies.add_argument('level',
-                                     nargs='?',
-                                     help='Up to level $level if specified.')
+                                     nargs = '?',
+                                     help = 'Up to level $level if specified.')
     parser_dependencies.add_argument('-c',
-                                     action='store_true',
-                                     help='skips trees that have already been shown')
+                                     action = 'store_true',
+                                     help = 'skips trees that have already been shown')
     parser_dependencies.add_argument('--no-optionals',
-                                     action='store_true',
-                                     help='skips optional dependencies.')
-    parser_dependencies.add_argument('--debug',
-                                     action='store_true',
-                                     help='Display System Info')
-    parser_dependencies.add_argument("--loglevel",
-                                     choices=["debug","info","warning",
-                                              "error","critical","DEBUG",
-                                              "INFO","WARNING","ERROR",
-                                              "CRITICAL"],
-                                     help="Set minimum logging level")
-    parser_dependencies.add_argument("-q", "--quiet",
-                                     action="count",
-                                     default=0,
-                                     help="increase output verbosity")
-    parser_dependencies.add_argument("-v", "--verbosity",
-                                     action="count",
-                                     default=0,
-                                     help="increase output verbosity")
-    parser_dependencies.set_defaults(func=gaze_dependencies)
+                                     action = 'store_true',
+                                     help = 'skips optional dependencies.')
+    dependencies_logging_opts.add_argument("-q", "--quiet",
+                                     action = "count",
+                                     default = 0,
+                                           help = quiet_help)
+    
+    if enable_debugging_mode is True:
+        dependencies_logging_opts.add_argument("-v", "--verbosity",
+                                               action = "count",
+                                               default = 0,
+                                               help = verbose_help)
+        dependencies_logging_opts.add_argument("--loglevel",
+                                               choices = ["debug","info","warning",
+                                                        "error","critical","DEBUG",
+                                                        "INFO","WARNING","ERROR",
+                                                        "CRITICAL"],
+                                               help = loglevel_help)
+        dependencies_logging_opts.add_argument('--debug',
+                                               action = 'store_true',
+                                               help = debug_help)
 
-    # create the parser for the "what" command
+    parser_dependencies.set_defaults(func = gaze_dependencies)
+
+    
+    #-------------------------------------------
+    #
+    # create the parser for the "time" command
+    #
+    #-------------------------------------------
     parser_time = subparsers.add_parser('time',
-                                        help='Shows the time the spell(s) needed to get cast. By default the last casting time is shown, alternatively the median, mean or weighted mean can be shown.  If more then one spell is specified, also a total time is shown. (Not Working)')
+                                        help = 'Shows the time the spell(s) needed to get cast. By default the last casting time is shown, alternatively the median, mean or weighted mean can be shown.  If more then one spell is specified, also a total time is shown. (Not Working)')
+    time_logging_opts = parser_time.add_argument_group('Logging Options')
     parser_time.add_argument('spell',
-                             nargs='+',
-                             help='Display System Info')
+                             nargs = '+',
+                             help = 'Display System Info')
+    parser_time.add_argument('-g','--grimoire',
+                             nargs = '+',
+                             help = 'specify which grimoire(s) to look in.')
     parser_time.add_argument('--last',
-                             action='store_true',
-                             help='Display System Info')
+                             action = 'store_true',
+                             help = 'Display System Info')
     parser_time.add_argument('--medium',
-                             action='store_true',
-                             help='Display System Info')
+                             action = 'store_true',
+                             help = 'Display System Info')
     parser_time.add_argument('--mean',
-                             action='store_true',
-                             help='Display System Info')
+                             action = 'store_true',
+                             help = 'Display System Info')
     parser_time.add_argument('--weight-last',
-                             action='store_true',
-                             help='Give more weight to the last casting time.')
+                             action = 'store_true',
+                             help = 'Give more weight to the last casting time.')
     parser_time.add_argument('--full',
-                             action='store_true',
-                             help='Display System Info')
-    parser_time.add_argument('--debug',
-                             action='store_true',
-                             help='Display System Info')
-    parser_time.add_argument("--loglevel",
-                             choices=["debug","info","warning",
-                                      "error","critical","DEBUG",
-                                      "INFO","WARNING","ERROR",
-                                      "CRITICAL"],
-                             help="Set minimum logging level")
-    parser_time.add_argument("-q", "--quiet",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_time.add_argument("-v", "--verbosity",
-                             action="count",
-                             default=0,
-                             help="increase output verbosity")
-    parser_time.set_defaults(func=gaze_time,
-                             system=False)
+                             action = 'store_true',
+                             help = 'Display System Info')
+    time_logging_opts.add_argument("-q", "--quiet",
+                             action = "count",
+                             default = 0,
+                             help = quiet_help)
+    if enable_debugging_mode is True:
+        time_logging_opts.add_argument("-v", "--verbosity",
+                                       action = "count",
+                                       default = 0,
+                                       help = verbose_help)
+        time_logging_opts.add_argument("--loglevel",
+                                       choices = ["debug","info","warning",
+                                                "error","critical","DEBUG",
+                                                "INFO","WARNING","ERROR",
+                                                "CRITICAL"],
+                                       help = loglevel_help)
+        time_logging_opts.add_argument('--debug',
+                                       action = 'store_true',
+                                       help = debug_help)
+        
+    parser_time.set_defaults(func = gaze_time,
+                             system = False)
 
-    # create the parser for the "what" command
-    parser_time_system = subparsers.add_parser('time-system', help='Shows the time the whole system needed to get cast. (Not Working)')
+    #-------------------------------------------
+    #
+    # create the parser for the "time-system" command
+    #
+    #-------------------------------------------
+    parser_time_system = subparsers.add_parser('time-system',
+                                               help = 'Shows the time the whole system needed to get cast. (Not Working)')
+
+
+    time_system_logging_opts = parser_time_system.add_argument_group('Logging Options')
+
+
     parser_time_system.add_argument('--no-orphans',
-                             action='store_true',
-                             help='Skip orphaned spells.')
+                             action = 'store_true',
+                             help = 'Skip orphaned spells.')
     parser_time_system.add_argument('--last',
-                             action='store_true',
-                             help='Display System Info')
+                             action = 'store_true',
+                             help = 'Display System Info')
     parser_time_system.add_argument('--medium',
-                             action='store_true',
-                             help='Display System Info')
+                             action = 'store_true',
+                             help = 'Display System Info')
     parser_time_system.add_argument('--mean',
-                             action='store_true',
-                             help='Display System Info')
+                             action = 'store_true',
+                             help = 'Display System Info')
     parser_time_system.add_argument('--weight-last',
-                             action='store_true',
-                             help='Display System Info')
+                             action = 'store_true',
+                             help = 'Display System Info')
     parser_time_system.add_argument('--full',
-                             action='store_true',
-                             help='Display System Info')
-    parser_time_system.add_argument('--debug',
-                             action='store_true',
-                             help='Display System Info')
-    parser_time_system.add_argument("--loglevel",
-                                    choices=["debug","info","warning",
-                                             "error","critical","DEBUG",
-                                             "INFO","WARNING","ERROR",
-                                             "CRITICAL"],
-                                    help="Set minimum logging level")
-    parser_time_system.add_argument("-q", "--quiet",
-                                    action="count",
-                                    default=0,
-                                    help="increase output verbosity")
-    parser_time_system.add_argument("-v", "--verbosity",
-                                    action="count",
-                                    default=0,
-                                    help="increase output verbosity")
-    parser_time_system.set_defaults(func=gaze_time,
-                                    system=True)
+                             action = 'store_true',
+                             help = 'Display System Info')
+    time_system_logging_opts.add_argument("-q", "--quiet",
+                                    action = "count",
+                                    default = 0,
+                                    help = quiet_help)
+    if enable_debugging_mode is True:
+        time_system_logging_opts.add_argument("-v", "--verbosity",
+                                              action = "count",
+                                              default = 0,
+                                              help = verbose_help)
+        time_system_logging_opts.add_argument("--loglevel",
+                                              choices = ["debug","info","warning",
+                                                       "error","critical","DEBUG",
+                                                       "INFO","WARNING","ERROR",
+                                                       "CRITICAL"],
+                                              help = loglevel_help)
+        time_system_logging_opts.add_argument('--debug',
+                                              action = 'store_true',
+                                              help = debug_help)
+        
+    parser_time_system.set_defaults(func = gaze_time,
+                                    system = True)
 
+     # Parser Groups
+    logging_opts = parser.add_argument_group('Logging Options')
+
+    # Parser Arguments
+    parser.add_argument("filename",
+                        choices = [ 'BUILD',
+                                    'CONFIGURE',
+                                    'CONFLICTS',
+                                    'DETAILS',
+                                    'DEPENDS',
+                                    'DOWNLOAD',
+                                    'FINAL',
+                                    'HISTORY',
+                                    'INSTALL',
+                                    'INSTALL_EXTRAS',
+                                    'PATCH',
+                                    'POST_BUILD',
+                                    'POST_INSTALL',
+                                    'POST_REMOVE',
+                                    'POST_RESURRECT',
+                                    'PRE_BUILD',
+                                    'PRE_INSTALL',
+                                    'PRE_REMOVE',
+                                    'PRE_RESURRECT',
+                                    'PRE_SUB_DEPENDS',
+                                    'PREPARE',
+                                    'PROVIDES',
+                                    'SECURITY',
+                                    'SUB_DEPENDS',
+                                    'TRANSFER',
+                                    'TRIGGER_CHECK',
+                                    'TRIGGERS',
+                                    'UP_TRIGGERS'
+                        ],
+                        help = "Show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the above spell scripts.")
+    parser.add_argument('-g','--grimoire',
+                        nargs = '*',
+                        help = 'Specify which grimoire(s) to look in.')
+    logging_opts.add_argument("-q", "--quiet",
+                              action = "count",
+                              default = 0,
+                              help = quiet_help)
+
+    if enable_debugging_mode is True:
+        logging_opts.add_argument("-v", "--verbosity",
+                                  action = "count",
+                                  default = 0,
+                                  help = verbose_help)
+        logging_opts.add_argument("--loglevel",
+                                  choices = ["debug","info","warning",
+                                           "error","critical",
+                                           "DEBUG","INFO","WARNING",
+                                           "ERROR","CRITICAL"],
+                                  help = loglevel_help)
+        logging_opts.add_argument('--debug',
+                                  action = 'store_true',
+                                  help = debug_help)
+
+    # With version, help description must be before version declaration
+    parser.add_argument("-V", "--version",
+                        action = "version",
+                        help = "Print version information and exit",
+                        version = "%(prog)s " + __version__)
+    parser.set_defaults(func = False,
+                        debug = False,
+                        verbosity = 0,
+                        loglevel = 'INFO')
+
+    
     # Store all the arguments in a variable
     args = parser.parse_args()
 
+
+    
+    # Ensure we have root access
     if os.geteuid() != 0:
         # os.execvp() replaces the running process, rather than launching a child
         # process, so there's no need to exit afterwards. The extra "sudo" in the
@@ -2157,6 +2739,7 @@ def real_main(args):
     # Now we are definitely running as root
 
     # Parse the config files
+    print(args)
     config = libconfig.main_configure(args)
 
     logger.debug2("Configuration set")
@@ -2165,10 +2748,12 @@ def real_main(args):
 
     # "application" code
     # Run the specified subcommand as per args
-    if args.func:
+    if args.filename:
+        gaze_file(args)
+    elif args.func:
         args.func(args)
     
-#    logging.verifydebuglevels()
+
     logger.debug("End Function")
     return 0
 
@@ -2198,7 +2783,7 @@ def real_main(args):
 # Return: None
 #
 #-------------------------------------------------------------------------------
-def main(args=None):
+def main(args = None):
         """Run the main command-line interface for dionysius. Includes top-level
     exception handlers that print friendly error messages.
         """

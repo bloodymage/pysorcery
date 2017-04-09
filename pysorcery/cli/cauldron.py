@@ -30,7 +30,6 @@
 #-------------------------------------------------------------------------------
 
 
-
 #-------------------------------------------------------------------------------
 #
 # Libraries
@@ -40,19 +39,17 @@
 # System Libraries
 import sys
 import os
-import argparse
 import copy
 import subprocess
 
 # Other Libraries
-
+import distro
 
 # Application Libraries
-# System Library Overrides
+# Application Overrides
+from pysorcery.lib import argparse
 from pysorcery.lib import logging
-from pysorcery.lib import distro
 # Other Application Libraries
-import pysorcery
 from pysorcery import __version__
 from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
@@ -61,7 +58,7 @@ from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
 
 # Other Optional Libraries
-if distro.distro_id in distro.distro_dict['deb']:
+if pysorcery.distro_id in pysorcery.distro_dict['deb']:
     import apt
 
 
@@ -73,6 +70,7 @@ if distro.distro_id in distro.distro_dict['deb']:
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
+
 
 #-------------------------------------------------------------------------------
 #
@@ -91,29 +89,26 @@ logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #
-# Function scribe_add
+# Function gaze_what
 #
 #
 #
 #-------------------------------------------------------------------------------
-def scribe_add(args):
+def gaze_depends(args):
     logger.debug("Begin Function")
 
-
-    grimoire = libgrimoire.Grimoire(args)
-
-    grimoire.add()
+    
     logger.debug("End Function")
     return
 
 #-------------------------------------------------------------------------------
 #
-# Function scribe_remove
+# Functions
 #
 #
 #
 #-------------------------------------------------------------------------------
-def scribe_remove(args):
+def gaze_dependencies(args):
     logger.debug("Begin Function")
 
     logger.debug("End Function")
@@ -126,11 +121,8 @@ def scribe_remove(args):
 #
 #
 #-------------------------------------------------------------------------------
-def scribe_update(args):
+def gaze_time(args):
     logger.debug("Begin Function")
-
-    codex=libcodex.Codex()
-    codex.update()
 
     
     logger.debug("End Function")
@@ -169,83 +161,13 @@ def real_main(args):
     
     subparsers = parser.add_subparsers(help='Sub commands')
 
-    # create the parser for the "what" command
-    parser_add = subparsers.add_parser('add',
-                                        help='Display spell description')
-    parser_add.add_argument('grimoire',
-                             nargs=1,
-                             help='Display System Info')
-    parser_add.add_argument('url',
-                             nargs='?',
-                             help='Display System Info')
-    parser_add.add_argument('--debug',
+    # create the parser for the "alien" command
+    parser_what = subparsers.add_parser('alien', help='Find and Display all files not tracked by the Sorcery Package Management System (Not Working)')
+    parser_what.add_argument('--debug',
                              action='store_true',
-                             help='Enable debugging information')
-    parser_add.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_add.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="Decrease output verbosity")
-    parser_add.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="Increase output verbosity")
-    parser_add.set_defaults(func=scribe_add)
+                             help='Display System Info')
+    parser_what.set_defaults(func=gaze_alien)
 
-    # create the parser for the "remove" command
-    parser_remove = subparsers.add_parser('remove',
-                                        help='Display spell description')
-    parser_remove.add_argument('grimoire',
-                             nargs=1,
-                             help='Display System Info')
-    parser_remove.add_argument('--debug',
-                             action='store_true',
-                             help='Enable debugging information')
-    parser_remove.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_remove.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="Decrease output verbosity")
-    parser_remove.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="Increase output verbosity")
-    parser_remove.set_defaults(func=scribe_remove)
-
-    # create the parser for the "update" command
-    parser_update = subparsers.add_parser('update',
-                                        help='Update repositories')
-    parser_update.add_argument('grimoire',
-                             nargs='*',
-                             help='Grimoire to update')
-    parser_update.add_argument('--debug',
-                             action='store_true',
-                             help='Enable debugging information')
-    parser_update.add_argument("--loglevel",
-                                 choices=["debug","info","warning",
-                                          "error","critical","DEBUG",
-                                          "INFO","WARNING","ERROR",
-                                          "CRITICAL"],
-                                 help="Set minimum logging level")
-    parser_update.add_argument("-q", "--quiet",
-                                 action="count",
-                                 default=0,
-                                 help="Decrease output verbosity")
-    parser_update.add_argument("-v", "--verbosity",
-                                 action="count",
-                                 default=0,
-                                 help="Increase output verbosity")
-    parser_update.set_defaults(func=scribe_update)
 
     args = parser.parse_args()
 

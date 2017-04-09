@@ -26,15 +26,8 @@
 #
 #
 #
-# This file is a flat file prototype.  There are several things I flat out do not
-# know how to do.  This allows me to try out the parts I do know.
 #
 #-------------------------------------------------------------------------------
-
-# added so distributors can consistently specify a private module location
-#private_module_path = "/usr/share/weather-util"
-#if private_module_path:
-#    sys.path.insert(1, private_module_path)
 
 
 #-------------------------------------------------------------------------------
@@ -46,21 +39,28 @@
 # System Libraries
 import sys
 import os
-import argparse
 import copy
 import subprocess
 
 # Other Libraries
-import distro
+
 
 # Application Libraries
+# Application Overrides
+from pysorcery.lib import argparse
+from pysorcery.lib import logging
+# Other Application Libraries
+import pysorcery
 from pysorcery import __version__
 from pysorcery.lib import libtext
-from pysorcery.lib import logging
 from pysorcery.lib import libconfig
 from pysorcery.lib import libspell
 from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
+
+# Other Optional Libraries
+if pysorcery.distro_id in pysorcery.distro_dict['deb']:
+    import apt
 
 #-------------------------------------------------------------------------------
 #
@@ -71,9 +71,6 @@ from pysorcery.lib import libcodex
 # create logger
 logger = logging.getLogger(__name__)
 
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]
 
 #-------------------------------------------------------------------------------
 #
