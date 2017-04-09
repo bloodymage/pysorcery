@@ -159,6 +159,8 @@ def gaze_orphans(args):
 def gaze_activity(args):
     logger.debug("Begin Function")
 
+    activity = libsystem.ActivitiesFile()
+    activity.print_activity()
     
     logger.debug("End Function")
     return

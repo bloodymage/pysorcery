@@ -75,48 +75,16 @@ logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #
-# Class BaseFiles
+# Class BaseFile
 # 
 #
 #-------------------------------------------------------------------------------
-class BaseFiles():
+class BaseFile():
     def __init__(self,filename):
         logger.debug("Begin Function")
         self.filename = filename
         logger.debug("End Function")
         return
-
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        install_log_dir = '/var/log/sorcery/install'
-        install_files = []
-        for root, dirs, files  in os.walk(install_log_dir):
-            for i in files:
-                for line in open(install_log_dir + '/'+ i):
-                    install_files.append(line)
-        
-        logger.debug("End Function")
-        return install_files
-
-    def list_system_files(self):
-        logger.debug("Begin Function")
-
-        # List of directories to check        
-        sys_dirs = [ '/bin', '/boot', '/etc', '/lib', '/lib64',
-                     '/opt', '/sbin', '/share', '/usr','/var' ]
-
-        sys_files = []
-        for sys_dir in sys_dirs:
-            for root, dirs, files in os.walk(sys_dir):
-                for i in dirs:
-                    for j in files:
-                        system_file = str(os.path.join(root,i,j))
-                        sys_files.append(system_file)
-        
-        logger.debug("End Function")
-        return sys_files
-
         
     def print_from(self):
         logger.debug("Begin Function")
@@ -132,29 +100,32 @@ class BaseFiles():
         logger.debug("End Function")
         return
 
+    def read(self):
+        logger.debug("Begin Function")
+        line_list = []
+        for lines in open(self.filename):
+            line_list.append(lines)
+            
+        logger.debug("End Function")
+        return line_list
+
+    def write(self):
+        logger.debug("Begin Function")
+        self.description="Ooops!"
+        logger.debug("Begin Function")
+        return
+
 #-------------------------------------------------------------------------------
 #
 # Class BuildFile
 # 
 #
 #-------------------------------------------------------------------------------
-class BuildFile():
+class BuildFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("Begin Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -163,23 +134,11 @@ class BuildFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class ConfigureFile():
+class ConfigureFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("Begin Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -188,23 +147,11 @@ class ConfigureFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class ConflictsFile():
+class ConflictsFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("Begin Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -213,25 +160,12 @@ class ConflictsFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class DetailsFile():
+class DetailsFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
 
 #-------------------------------------------------------------------------------
 #
@@ -239,23 +173,11 @@ class DetailsFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class DependsFile():
+class DependsFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -264,23 +186,11 @@ class DependsFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class DownloadFile():
+class DownloadFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("Begin Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -289,23 +199,11 @@ class DownloadFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class FinalFile():
+class FinalFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("Begin Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -314,23 +212,11 @@ class FinalFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class HistoryFile():
+class HistoryFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -339,23 +225,11 @@ class HistoryFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class InstallFile():
+class InstallFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -364,23 +238,11 @@ class InstallFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class InstallExtrasFile():
+class InstallExtrasFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -389,23 +251,11 @@ class InstallExtrasFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PatchFile():
+class PatchFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -414,23 +264,11 @@ class PatchFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PostBuildFile():
+class PostBuildFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -439,23 +277,11 @@ class PostBuildFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PostInstallFile():
+class PostInstallFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -464,23 +290,11 @@ class PostInstallFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PostRemoveFile():
+class PostRemoveFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -489,23 +303,11 @@ class PostRemoveFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PostResurrectFile():
+class PostResurrectFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -514,23 +316,11 @@ class PostResurrectFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PreBuildFile():
+class PreBuildFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -539,20 +329,11 @@ class PreBuildFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PreInstallFile():
+class PreInstallFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -561,23 +342,11 @@ class PreInstallFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PreRemoveFile():
+class PreRemoveFile(BaseFile):
     def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -586,20 +355,11 @@ class PreRemoveFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PreResurrectFile():
+class PreResurrectFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -608,20 +368,11 @@ class PreResurrectFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PreSubDependsFile():
+class PreSubDependsFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -630,22 +381,10 @@ class PreSubDependsFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class PrepareFile():
+class PrepareFile(BaseFile):
     def __init__(self,name):
         logger.debug("Begin Function")
         self.name = name
-        logger.debug("End Function")
-        return
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
         logger.debug("End Function")
         return
 
@@ -655,21 +394,13 @@ class PrepareFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class ProvidesFile():
+class ProvidesFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
 
 #-------------------------------------------------------------------------------
 #
@@ -677,20 +408,11 @@ class ProvidesFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class SecurityFile():
+class SecurityFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -699,21 +421,13 @@ class SecurityFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class SubDependsFile():
+class SubDependsFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
 
 #-------------------------------------------------------------------------------
 #
@@ -721,20 +435,11 @@ class SubDependsFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class TransferFile():
+class TransferFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -743,21 +448,13 @@ class TransferFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class TriggerCheckFile():
+class TriggerCheckFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
 
 #-------------------------------------------------------------------------------
 #
@@ -765,21 +462,13 @@ class TriggerCheckFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class TriggersFile():
+class TriggersFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
 
 #-------------------------------------------------------------------------------
 #
@@ -787,20 +476,11 @@ class TriggersFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class UpTriggersFile():
+class UpTriggersFile(BaseFile):
     def __init__(self,name):
-        self.name = name
-
-    def read(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def write(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
+        logger.debug('Begin Function')
+        BaseFile.__init__(self,filename)
+        logger.demug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -809,10 +489,10 @@ class UpTriggersFile():
 # 
 #
 #-------------------------------------------------------------------------------
-class DebianFiles(BaseFiles):
+class DebianFiles(BaseFile):
     def __init__(self,filename):
         logger.debug("Begin Function")
-        BaseFiles.__init__(self,filename)
+        BaseFile.__init__(self,filename)
         logger.debug("End Function")
         return
 
@@ -828,13 +508,13 @@ class DebianFiles(BaseFiles):
 # 
 #
 #-------------------------------------------------------------------------------
-class Files(DebianFiles,BaseFiles):
+class Files(DebianFiles,BaseFile):
     def __init__(self,filename):
         logger.debug("Begin Function")
         if distro.distro_id in distro.distro_dict['deb']:
             DebianFiles.__init__(self,filename)
         else:
-            BaseFiles.__init__(self,filename)
+            BaseFile.__init__(self,filename)
 
         logger.debug("End Function")
         return
@@ -844,9 +524,33 @@ class Files(DebianFiles,BaseFiles):
         if distro.distro_id in distro.distro_dict['deb']:
             DebianFiles.print_from(self)
         else:
-            BaseFiles.print_from(self)
+            BaseFile.print_from(self)
 
         logger.debug("End Function")
+        return
+
+class ActivitiesFile(BaseFile):
+    def __init__(self):
+        if distro.distro_id in distro.distro_dict['deb']:
+            filename = '/var/log/apt/history.log'
+        elif distro.distro_id in distro.distro_dict['smgl']:
+            filename = '/var/log/sorcery/activity'
+        else:
+            logger.error('Fuck')
+
+        BaseFile.__init__(self,filename)
+        
+    def print_activity(self):
+        logger.debug('Begin Function')
+        
+        f = BaseFile(self.filename)
+        
+        history = f.read()
+
+        for i in history:
+            logger.info1(i)
+
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -857,8 +561,10 @@ class Files(DebianFiles,BaseFiles):
 #-------------------------------------------------------------------------------
 class BaseDirectories():
     def __init__(self,dirname):
+        logger.debug('Begin Function')
         self.dirname = dirname
 
+        logger.debug('End Function')
         return
 
     def print_name(self):
@@ -905,6 +611,104 @@ class Directories(DebianDirectories,BaseDirectories):
 # 
 #
 #-------------------------------------------------------------------------------
+class BaseFileList():
+    def __init__(self,dirname):
+        logger.debug("Begin Function")
+
+        logger.debug("End Function")
+        return
+
+    def list_installed_files(self):
+        logger.debug("Begin Function")
+
+        install_log_dir = '/var/log/sorcery/install'
+        install_files = []
+        for root, dirs, files  in os.walk(install_log_dir):
+            for i in files:
+                install_log = install_log_dir + '/'+ i
+                f = Files(install_log)
+                install_files = install_files + f.read()
+        
+        logger.debug("End Function")
+        return install_files
+
+    def list_system_files(self):
+        logger.debug("Begin Function")
+
+        # List of directories to check        
+        sys_dirs = [ '/bin', '/boot', '/etc', '/lib', '/lib64',
+                     '/opt', '/sbin', '/share', '/usr','/var' ]
+
+        sys_files = []
+        for sys_dir in sys_dirs:
+            for root, dirs, files in os.walk(sys_dir):
+                for i in dirs:
+                    for j in files:
+                        system_file = str(os.path.join(root,i,j))
+                        sys_files.append(system_file)
+        
+        logger.debug("End Function")
+        return sys_files
+
+#-------------------------------------------------------------------------------
+#
+# Class Alien
+# 
+#
+#-------------------------------------------------------------------------------
+class DebianFileList(BaseFileList):
+    def __init__(self,dirname):
+        logger.debug("Begin Function")
+        if distro.distro_id in distro.distro_dict['deb']:
+            DebianDirectories.__init__(self)
+        else:
+            BaseDirectories.__init__(self)
+
+        logger.debug("End Function")
+        return
+
+    def list_installed_files(self):
+        logger.debug("Begin Function")
+
+        install_files = [ 'Fuck' ]
+        
+        logger.debug("End Function")
+        return install_files
+
+#-------------------------------------------------------------------------------
+#
+# Class Alien
+# 
+#
+#-------------------------------------------------------------------------------
+class FileList(DebianFileList,BaseFileList):
+    def __init__(self,dirname):
+        logger.debug("Begin Function")
+        if distro.distro_id in distro.distro_dict['deb']:
+            DebianFileList.__init__(self)
+        else:
+            BaseFileList.__init__(self)
+
+        logger.debug("End Function")
+        return
+
+    def list_installed_files(self):
+        logger.debug("Begin Function")
+
+        if distro.distro_id in distro.distro_dict['deb']:
+            installed_files = DebianFileList.list_installed_files(self)
+        else:
+            installed_files = BaseFileList.list_installed_files(self)
+        
+        logger.debug("End Function")
+        return installed_files
+
+#-------------------------------------------------------------------------------
+#
+# Class Alien
+# 
+#
+#-------------------------------------------------------------------------------
 class Alien():
     def __init__(self):
         logger.debug("Begin Function")
@@ -928,11 +732,11 @@ class Alien():
             # 1. Find Install Log Files
             # 2. Gather list of installed files
             logger.info("Discovering installed files...")
-            installed_files = Files.list_installed_files(self)
+            installed_files = FileList.list_installed_files(self)
             
             # 3. Find all system files
             logger.info("Discovering ambient files...")
-            system_files = Files.list_system_files(self)
+            system_files = FileList.list_system_files(self)
             
             # 4. Print files from step 3 - files from 2            
             alien_files = list(set(system_files) - set(installed_files))
@@ -954,8 +758,8 @@ class Alien():
 # 
 #
 #-------------------------------------------------------------------------------
-class SourceFile():
-    def __init__(self,name,url):
+class SourceFile(BaseFile):
+    def __init__(self,name):
         logger.debug("Begin Function")
         self.name = name
         self.url = url
