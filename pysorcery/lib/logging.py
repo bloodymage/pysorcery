@@ -1,0 +1,447 @@
+#!/usr/bin/env python3
+#-------------------------------------------------------------------------------
+#
+# Original BASH version
+# Original version Copyright 2001 by Kyle Sallee
+# Additions/corrections Copyright 2002 by the Source Mage Team
+#
+# Python rewrite
+# Copyright 2017 Geoff S Derber
+#
+# This file is part of Sorcery.
+#
+#    Sorcery is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    Dionysius is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+#
+#
+#
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+#
+# Libraries
+#
+#
+#-------------------------------------------------------------------------------
+
+# System Libraries
+import logging
+from logging import *
+import copy
+
+# Other Libraries
+
+# Application Libraries
+import pysorcery
+from pysorcery.lib import libtext
+
+#-------------------------------------------------------------------------------
+#
+# Global Variables
+#
+#-------------------------------------------------------------------------------
+# Seethe Roadmap for version information
+__version__ = '0.1.1'
+
+DEBUG2 = 9
+DEBUG3 = 8
+DEBUG4 = 7
+DEBUG5 = 6
+DEBUG6 = 5
+DEBUG7 = 4
+DEBUG8 = 3
+DEBUG9 = 2
+DEBUG10 = 1
+
+INFO1 = 21
+INFO2 = 22
+INFO3 = 23
+INFO4 = 24
+INFO5 = 25
+INFO6 = 26
+INFO7 = 27
+INFO8 = 28
+INFO9 = 29
+
+logging.addLevelName(9, "DEBUG2")
+logging.addLevelName(8, "DEBUG3")
+logging.addLevelName(7, "DEBUG4")
+logging.addLevelName(6, "DEBUG5")
+logging.addLevelName(5, "DEBUG6")
+logging.addLevelName(4, "DEBUG7")
+logging.addLevelName(3, "DEBUG8")
+logging.addLevelName(2, "DEBUG9")
+logging.addLevelName(1, "DEBUG10")
+
+logging.addLevelName(21, "INFO1")
+logging.addLevelName(22, "INFO2")
+logging.addLevelName(23, "INFO3")
+logging.addLevelName(24, "INFO4")
+logging.addLevelName(25, "INFO5")
+logging.addLevelName(26, "INFO6")
+logging.addLevelName(27, "INFO7")
+logging.addLevelName(28, "INFO8")
+logging.addLevelName(29, "INFO9")
+
+#-------------------------------------------------------------------------------
+#
+# Classes part 1
+#
+# 
+#
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+#
+# Class LocalLogger
+#
+# 
+#
+#-------------------------------------------------------------------------------
+class LocalLogger(logging.Logger):
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug2(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(9):
+            self._log(9, message, args, **kws)
+
+    #----------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug3(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(8):
+            self._log(8, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug4(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(7):
+            self._log(7, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug5(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(6):
+            self._log(6, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug6(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(5):
+            self._log(5, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug7(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(4):
+            self._log(4, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug8(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(3):
+            self._log(3, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug9(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(2):
+            self._log(2, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def debug10(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(1):
+            self._log(1, message, args, **kws)
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info1(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(21):
+            self._log(21, message, args, **kws)
+
+    #----------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info2(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(22):
+            self._log(22, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info3(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(23):
+            self._log(23, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info4(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(24):
+            self._log(24, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info5(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(25):
+            self._log(25, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info6(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(26):
+            self._log(26, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info7(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(27):
+            self._log(27, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info8(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(28):
+            self._log(28, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # info#
+    #
+    #-------------------------------------------------------------------------------
+    def info9(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(29):
+            self._log(29, message, args, **kws)
+
+#-------------------------------------------------------------------------------
+#
+# Class ColorizingStreamHandler
+#
+# 
+#
+#-------------------------------------------------------------------------------
+class ConsoleLvlFormatter(logging.Formatter):
+    def __init__(self, fmt="%(levelno)s: %(message)s"):
+        logging.Formatter.__init__(self, fmt)
+        self.dbg_fmt  = "%(name)s:%(funcName)s:%(lineno)d - %(levelname)s - %(message)s"
+        self.info_fmt = "%(message)s"
+        self.warn_fmt  = "%(message)s"
+        self.err_fmt  = "%(message)s"
+        self.crit_fmt  = "%(message)s"
+
+
+
+    def format(self, record):        
+
+        # Save the original format configured by the user
+        # when the logger formatter was instantiated
+        format_orig = self._style._fmt
+
+        # Replace the original format with one customized by logging level
+        if record.levelno <= logging.DEBUG:
+            self._style._fmt = self.dbg_fmt
+
+        elif record.levelno >= logging.INFO and record.levelno < logging.WARNING:
+            self._style._fmt = self.info_fmt
+
+        elif record.levelno == logging.WARNING:
+            self._style._fmt = self.warn_fmt
+
+        elif record.levelno == logging.ERROR:
+            self._style._fmt = self.err_fmt
+
+        elif record.levelno == logging.CRITICAL:
+            self._style._fmt = self.crit_fmt
+
+
+        # Call the original formatter class to do the grunt work
+        result = logging.Formatter.format(self, record)
+
+        # Restore the original format configured by the user
+        self._style._fmt = format_orig
+
+        return result
+
+#-------------------------------------------------------------------------------
+#
+# Class ColorizingStreamHandler
+#
+# 
+#
+#-------------------------------------------------------------------------------
+class ColorizingStreamHandler(logging.StreamHandler,libtext.ConsoleText):
+    def __init__(self, *args, **kwargs):
+        self._colors = {DEBUG10: "green",
+                        DEBUG9: "green",
+                        DEBUG8: "green",
+                        DEBUG7: "green",
+                        DEBUG6: "green",
+                        DEBUG5: "green",
+                        DEBUG4: "green",
+                        DEBUG3: "green",
+                        DEBUG2: "green",
+                        logging.DEBUG: "green",
+                        logging.INFO: "white",
+                        INFO1: "white",
+                        INFO2: "white",
+                        INFO3: "white",
+                        INFO4: "white",
+                        INFO5: "white",
+                        INFO6: "white",
+                        INFO7: "white",
+                        INFO8: "white",
+                        INFO9: "white",
+                        logging.WARNING: "yellow",
+                        logging.ERROR: "red",
+                        logging.CRITICAL: "magenta"}
+        super(ColorizingStreamHandler, self).__init__(*args, **kwargs)
+
+    @property
+    def is_tty(self):
+        isatty = getattr(self.stream, 'isatty', None)
+        return isatty and isatty()
+
+    def emit(self, record):
+        try:
+            message = self.format(record)
+            stream = self.stream
+            if not self.is_tty:
+                stream.write(message)
+            else:
+                colortext = libtext.ConsoleText()
+                message = colortext.colorize(message, "none", self._colors[record.levelno],"black")
+                stream.write(message)
+            stream.write(getattr(self, 'terminator', '\n'))
+            self.flush()
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            self.handleError(record)
+
+    def setLevelColor(self, logging_level, escaped_ansi_code):
+        self._colors[logging_level] = escaped_ansi_code
+
+
+local_manager = copy.copy(logging.Logger.manager)
+local_manager.loggerClass = LocalLogger
+
+
+#-------------------------------------------------------------------------------
+#
+# func getLogger
+#
+# Local implementation of 'logging.getLogger'
+# This ensures we have the added logging names, debug2..debug10
+#
+#-------------------------------------------------------------------------------
+def getLogger(name=None):  # noqa
+    if name:
+        return local_manager.getLogger(name)
+    else:
+        return logging.Logger.root
+
+
+#-------------------------------------------------------------------------------
+#
+# func verifydebuglevels
+#
+# Remove before final
+#
+# This is for testing to ensure all debug levels display as expected.
+#
+#-------------------------------------------------------------------------------
+def verifydebuglevels():
+    logger.debug10("Holy Mothermof Fuck")
+    logger.debug9("Holy Fuck")
+    logger.debug8("Fubar")
+    logger.debug7("snafu")
+    logger.debug6("fuck")
+    logger.debug5("holy shit")
+    logger.debug4("shit")
+    logger.debug3("damn")
+    logger.debug2("crap")
+    logger.debug("Debug Msg")
+    logger.info("Info Msg")
+    logger.warn("Warn Msg")
+    logger.error("Error Msg")
+    logger.critical("Crit Msg")
+    return 0
+

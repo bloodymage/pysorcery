@@ -134,6 +134,11 @@ def gaze_alien(args):
 def gaze_orphans(args):
     logger.debug("Begin Function")
 
+    orphans = libspell.SpellList()
+
+    orphan_list = orphans.list_orphans()
+
+    orphans.print_list(orphan_list)
     
     logger.debug("End Function")
     return
@@ -172,10 +177,10 @@ def gaze_activity(args):
 def gaze_install_queue(args):
     logger.debug("Begin Function")
 
-    queue = libspell.SpellQueue()
-    queue.inst_queue()
+    queue = libspell.SpellList()
+    queue.list_install_queue()
 
-    queue.print_queue()
+    queue.print_list()
     
     logger.debug("End Function")
     return
@@ -2658,37 +2663,37 @@ def real_main(args):
     logging_opts = parser.add_argument_group('Logging Options')
 
     # Parser Arguments
-    parser.add_argument("filename",
-                        choices = [ 'BUILD',
-                                    'CONFIGURE',
-                                    'CONFLICTS',
-                                    'DETAILS',
-                                    'DEPENDS',
-                                    'DOWNLOAD',
-                                    'FINAL',
-                                    'HISTORY',
-                                    'INSTALL',
-                                    'INSTALL_EXTRAS',
-                                    'PATCH',
-                                    'POST_BUILD',
-                                    'POST_INSTALL',
-                                    'POST_REMOVE',
-                                    'POST_RESURRECT',
-                                    'PRE_BUILD',
-                                    'PRE_INSTALL',
-                                    'PRE_REMOVE',
-                                    'PRE_RESURRECT',
-                                    'PRE_SUB_DEPENDS',
-                                    'PREPARE',
-                                    'PROVIDES',
-                                    'SECURITY',
-                                    'SUB_DEPENDS',
-                                    'TRANSFER',
-                                    'TRIGGER_CHECK',
-                                    'TRIGGERS',
-                                    'UP_TRIGGERS'
-                        ],
-                        help = "Show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the above spell scripts.")
+    #parser.add_argument("filename",
+    #                    choices = [ 'BUILD',
+    #                                'CONFIGURE',
+    #                                'CONFLICTS',
+    #                                'DETAILS',
+    #                                'DEPENDS',
+    #                                'DOWNLOAD',
+    #                                'FINAL',
+    #                                'HISTORY',
+    #                                'INSTALL',
+    #                                'INSTALL_EXTRAS',
+    #                                'PATCH',
+    #                                'POST_BUILD',
+    #                                'POST_INSTALL',
+    #                                'POST_REMOVE',
+    #                                'POST_RESURRECT',
+    #                                'PRE_BUILD',
+    #                                'PRE_INSTALL',
+    #                                'PRE_REMOVE',
+    #                                'PRE_RESURRECT',
+    #                                'PRE_SUB_DEPENDS',
+    #                                'PREPARE',
+    #                                'PROVIDES',
+    #                                'SECURITY',
+    #                                'SUB_DEPENDS',
+    #                                'TRANSFER',
+    #                                'TRIGGER_CHECK',
+    #                                'TRIGGERS',
+    #                                'UP_TRIGGERS'
+    #                    ],
+    #                    help = "Show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the above spell scripts.")
     parser.add_argument('-g','--grimoire',
                         nargs = '*',
                         help = 'Specify which grimoire(s) to look in.')
@@ -2739,7 +2744,6 @@ def real_main(args):
     # Now we are definitely running as root
 
     # Parse the config files
-    print(args)
     config = libconfig.main_configure(args)
 
     logger.debug2("Configuration set")
@@ -2748,10 +2752,7 @@ def real_main(args):
 
     # "application" code
     # Run the specified subcommand as per args
-    if args.filename:
-        gaze_file(args)
-    elif args.func:
-        args.func(args)
+    args.func(args)
     
 
     logger.debug("End Function")
