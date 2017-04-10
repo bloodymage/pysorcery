@@ -61,12 +61,13 @@ from pysorcery.lib import logging
 # Other Application Libraries
 import pysorcery
 from pysorcery import __version__, enable_debugging_mode
-from pysorcery.lib import libtext
-from pysorcery.lib import libconfig
-from pysorcery.lib import libsystem
-from pysorcery.lib import libspell
-from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
+from pysorcery.lib import libconfig
+from pysorcery.lib import libfiles
+from pysorcery.lib import libgrimoire
+from pysorcery.lib import libspell
+from pysorcery.lib import libsystem
+from pysorcery.lib import libtext
 
 # Other Optional Libraries
 #if distro.distro_id in distro.distro_dict['deb']:
@@ -108,6 +109,9 @@ colortext = libtext.ConsoleText()
 # Output: Prints list of alien files
 # Return: None
 #
+# Status: Works on Ubuntu
+#         Works, but buggy on SourceMage
+#
 #-------------------------------------------------------------------------------
 def gaze_alien(args):
     logger.debug("Begin Function")
@@ -129,6 +133,8 @@ def gaze_alien(args):
 # Input:  args
 # Output:
 # Return: None
+#
+# Status: Works on ubuntu
 #
 #-------------------------------------------------------------------------------
 def gaze_orphans(args):
@@ -155,11 +161,16 @@ def gaze_orphans(args):
 # Output:
 # Return: None
 #
+# Status: Works on Ubuntu
+#         Works on Source Mage
+#
+#         Printing could display better
+#
 #-------------------------------------------------------------------------------
 def gaze_activity(args):
     logger.debug("Begin Function")
 
-    activity = libsystem.ActivitiesFile()
+    activity = libfiles.ActivityLog()
     activity.print_activity()
     
     logger.debug("End Function")
@@ -728,7 +739,7 @@ def gaze_older(args):
 def gaze_from(args):
     logger.debug("Begin Function")
 
-    spell = libsystem.Files(args.filename[0])
+    spell = libfiles.Files(args.filename[0])
 
     spell.print_from()
     
