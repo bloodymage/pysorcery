@@ -125,7 +125,7 @@ class DebianCodex(BaseCodex):
                         repo_sub = item.split('=')[1]
 
                     if len(repo_main) > 0 and len(repo_sub) > 0:
-                        repo = repo_main + ' / ' + repo_sub
+                        repo = repo_main + ' : ' + repo_sub
                         if repo not in repo_list:
                             repo_list.append(repo)
 
@@ -169,7 +169,7 @@ class Codex(DebianCodex, BaseCodex):
     def print_grimoires(self):
         grimoires = Codex.list_grimoires(self)
         for grimoire in grimoires:
-            logger.info(grimoire)
+            logger.info(grimoire.split('/')[-1])
 
         return
 
