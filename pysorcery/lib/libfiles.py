@@ -41,8 +41,19 @@ import os
 import argparse
 import copy
 import subprocess
+import tarfile
+import zipfile
+import zlib
+import lzma
+import gzip
+import bz2
+
 
 # Other Libraries
+# Only Load if module rarfile available.
+# If not, error, ask if user wants to install
+# import rarfile
+
 
 # Application Libraries
 # System Library Overrides
@@ -53,6 +64,7 @@ import pysorcery
 from pysorcery import __version__
 from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
+
 
 # Other Optional Libraries
 if distro.distro_id in distro.distro_dict['deb']:
@@ -85,7 +97,32 @@ class BaseFile():
         self.filename = filename
         logger.debug("End Function")
         return
-        
+
+    #---------
+    #
+    # Function pne
+    #
+    # Path Name Extention
+    #
+    # input:
+    # output:
+    # return:
+    #
+    #----
+    def pne(self):
+        """
+        Guess the extension of given filename.
+        """
+        # Add extra extensions where desired.
+        DOUBLE_EXTENSIONS = ['tar.gz','tar.bz2','tar.xz']
+
+        path, filename=os.path.split(self.name)
+        root,ext = os.path.splitext(filename)
+        if any([filename.endswith(x) for x in DOUBLE_EXTENSIONS]):
+            root, first_ext = os.path.splitext(root)
+            ext = first_ext + ext
+        return path, root, ext
+
     def print_from(self):
         logger.debug("Begin Function")
         
@@ -103,8 +140,9 @@ class BaseFile():
     def read(self):
         logger.debug("Begin Function")
         line_list = []
-        for lines in open(self.filename):
-            line_list.append(lines)
+        
+        for line in open(self.filename):
+            line_list.append(line[:-1])
             
         logger.debug("End Function")
         return line_list
@@ -709,6 +747,70 @@ class FileList(DebianFileList,BaseFileList):
         logger.debug("End Function")
         return installed_files
 
+#-------------------------------------------------------------------------------
+#
+# Class ZipFile
+#
+#-------------------------------------------------------------------------------
+class CZipFile(BaseFile):
+    def extract(self):
+        logger.debug("Begin Function")
+        logger.debug("Xfile: "+ str(self.name))
+
+        file_dir, basename, ext = CompressedFile.pne(self)
+
+        logger.debug("File_dir: " + str(file_dir))
+        logger.debug("File name: " + str(basename))
+        logger.debug("Extention: " + str(ext))
+    
+        try:
+            zip_file = zipfile.ZipFile(self.name)
+            for name in zip_file.namelist():
+                zip_file.extractall(basename)
+            logger.info("Extracted file: " + str(self.name))
+        except zipfile.BadZipFile:
+            logger.error("Unk Extraction Error")
+            pass
+        except IOError:
+            logger.error("IO Error")
+            pass
+        except:
+            logger.error("Unknown Error")
+            
+        return 0
+
+
+#-------------------------------------------------------------------------------
+#
+# Class TarFile
+#
+#-------------------------------------------------------------------------------
+class CTarFile(BaseFile):
+    def extract(self):
+        logger.debug("Begin Function")
+        logger.debug("Xfile: " + str(self.name))
+
+        file_dir, basename, ext = CompressedFile.pne(self)
+
+        logger.debug("File_dir: " + str(file_dir))
+        logger.debug("File name: " + str(basename))
+        logger.debug("Extention: " + str(ext))
+    
+        try:
+            tar_file = tarfile.open(self.name)
+            for name in tar_file.getnames():
+                tar_file.extractall(basename)
+            logger.info("Extracted file: " + str(self.name))
+        except zipfile.BadZipFile:
+            logger.error("Unk Extraction Error")
+            pass
+        except IOError:
+            logger.error("IO Error")
+            pass
+        except:
+            logger.error("Unknown Error")
+            
+        return 0
 
 #-------------------------------------------------------------------------------
 #
@@ -716,7 +818,7 @@ class FileList(DebianFileList,BaseFileList):
 # 
 #
 #-------------------------------------------------------------------------------
-class SourceFile(BaseFile):
+class SourceFile(CZipFile,CTarFile):
     def __init__(self,name):
         logger.debug("Begin Function")
         self.name = name
@@ -732,7 +834,31 @@ class SourceFile(BaseFile):
 
     def unpack(self):
         logger.debug("Begin Function")
-        self.description="Ooops!"
+
+        if xfile.endswith('tar') or xfile.endswith('tar.gz') or xfile.endswith('tar.bz2') or xfile.endswith('tar.xz') or xfile.endswith('tgz') or xfile.endswith('tbz2'):
+            if tarfile.is_tarfile(self.name):
+                cfile = CTarFile(xfile)
+        elif xfile.endswith('zip') and zipfile.is_zipfile(self.name):
+            cfile = CZipFile(xfile)
+        #    elif xfile.endswith('gz'):
+        #        extract_gzipfile(xfile)
+        #    elif xfile.endswith('bz2'):
+        #        extract_bzipfile(xfile)
+        #    elif xfile.endswith('lzma') or xfile.endswith('xz'):
+        #        extract_lzmafile(xfile)
+        #    elif xfile.endswith('.Z'):
+        #        extract_zlibfile(xfile)
+        #    elif xfile.endswith('7z'):
+        #        extract_7zfile(xfile)
+        #    elif xfile.endswith('rar'):
+        #        extract_rarfile(xfile)
+        #    elif xfile.endswith('exe'):
+        #       extract_exefile(xfile)
+        else:
+            logger.error("Not Extracting: " + str(self.name))
+
+        cfile.extract()
+
         logger.debug("End Function")
         return
 

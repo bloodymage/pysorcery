@@ -124,35 +124,3 @@ class Alien():
             
         logger.debug("End Function")
         return
-
-#-------------------------------------------------------------------------------
-#
-# Class SourceFile
-# 
-#
-#-------------------------------------------------------------------------------
-class SourceFile(BaseFile):
-    def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        self.url = url
-        logger.debug("End Function")
-        return
-
-    def download(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def unpack(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
-    def verify(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return

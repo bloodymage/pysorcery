@@ -40,6 +40,8 @@
 # System Libraries
 import sys
 import os
+import copy
+import subprocess
 
 # Other Libraries
 
@@ -52,7 +54,7 @@ from pysorcery.lib import logging
 
 # Other Application Libraries
 import pysorcery
-from pysorcery import __version__, enable_debugging_mode
+from pysorcery import __version__
 from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
 from pysorcery.lib import libspell
@@ -99,7 +101,6 @@ def scribe_add(args):
     grimoire = libgrimoire.Grimoire(args)
 
     grimoire.add()
-
     logger.debug("End Function")
     return
 
@@ -143,125 +144,106 @@ def scribe_update(args):
 def real_main(args):    
     logger.debug("Entered Function")
 
-    # Common Help Descriptions:
-    quiet_help = 'Decrease output'
-    verbose_help = 'Increase output'
-    loglevel_help = 'Specify output level'
-    debug_help = 'Maximize output level'
-
     # Parse Command Line Arguments
 
     parser = argparse.ArgumentParser(description="Query / View Sorcery package management information")
-    parser.add_argument('-q','--quiet',
-                        action = 'count',
-                        default = 0,
-                        help = quiet_help)
-    if enable_debugging_mode is True:
-        parser.add_argument("-v", "--verbosity",
-                            action = "count",
-                            default = 0,
-                            help = verbose_help)
-        parser.add_argument("--loglevel",
-                            choices = ["debug","info","warning",
-                                       "error","critical","DEBUG",
-                                       "INFO","WARNING","ERROR",
-                                       "CRITICAL"],
-                            help = loglevel_help)
-        parser.add_argument("--debug",
-                            action = "store_true",
-                            help = debug_help)
-        
+    parser.add_argument("--config",
+                        nargs=1,
+                    help="Use specified config file")
+    parser.add_argument("-v", "--verbosity",
+                        action="count",
+                        default=0,
+                    help="increase output verbosity")
+    parser.add_argument("--loglevel",
+                        help="Set minimum logging level",
+                        choices=["debug","info","warning","error","critical","DEBUG","INFO","WARNING","ERROR","CRITICAL"])
     parser.add_argument("-V", "--version",
-                        action = "version",
-                        help = "Print version information and exit",
-                        version = "%(prog)s " + __version__)
+                        help="Print version information and exit",
+                        action="version",
+                        version="%(prog)s " + __version__)
+    parser.add_argument("--debug",
+                        help="Enable Debugging",
+                        action="store_true")
     
-    subparsers = parser.add_subparsers(title = 'commands',
-                                       metavar = 'Command',
-                                       help = 'Description')
+    subparsers = parser.add_subparsers(help='Sub commands')
 
     # create the parser for the "what" command
     parser_add = subparsers.add_parser('add',
-                                        help = 'Display spell description')
+                                        help='Display spell description')
     parser_add.add_argument('grimoire',
-                             nargs = 1,
-                             help = 'Display System Info')
+                             nargs=1,
+                             help='Display System Info')
     parser_add.add_argument('url',
-                            nargs = '?',
-                            help = 'Display System Info')
-    parser_add.add_argument("-q", "--quiet",
-                            action = "count",
-                            default = 0,
-                            help = quiet_help)
-    if enable_debugging_mode is True:
-        parser_add.add_argument("-v", "--verbosity",
-                                action = "count",
-                                default = 0,
-                                help = verbose_help)
-        parser_add.add_argument("--loglevel",
-                                choices = ["debug","info","warning",
-                                           "error","critical","DEBUG",
-                                           "INFO","WARNING","ERROR",
-                                           "CRITICAL"],
-                                 help = loglevel_help)
+                             nargs='?',
+                             help='Display System Info')
     parser_add.add_argument('--debug',
-                             action = 'store_true',
-                             help = debug_help)
-    parser_add.set_defaults(func = scribe_add)
+                             action='store_true',
+                             help='Enable debugging information')
+    parser_add.add_argument("--loglevel",
+                                 choices=["debug","info","warning",
+                                          "error","critical","DEBUG",
+                                          "INFO","WARNING","ERROR",
+                                          "CRITICAL"],
+                                 help="Set minimum logging level")
+    parser_add.add_argument("-q", "--quiet",
+                                 action="count",
+                                 default=0,
+                                 help="Decrease output verbosity")
+    parser_add.add_argument("-v", "--verbosity",
+                                 action="count",
+                                 default=0,
+                                 help="Increase output verbosity")
+    parser_add.set_defaults(func=scribe_add)
 
     # create the parser for the "remove" command
     parser_remove = subparsers.add_parser('remove',
-                                          help = 'Display spell description')
+                                        help='Display spell description')
     parser_remove.add_argument('grimoire',
-                               nargs = 1,
-                               help = 'Display System Info')
+                             nargs=1,
+                             help='Display System Info')
+    parser_remove.add_argument('--debug',
+                             action='store_true',
+                             help='Enable debugging information')
+    parser_remove.add_argument("--loglevel",
+                                 choices=["debug","info","warning",
+                                          "error","critical","DEBUG",
+                                          "INFO","WARNING","ERROR",
+                                          "CRITICAL"],
+                                 help="Set minimum logging level")
     parser_remove.add_argument("-q", "--quiet",
-                               action = "count",
-                               default = 0,
-                               help = quiet_help)
-    if enable_debugging_mode is True:
-        parser_remove.add_argument("-v", "--verbosity",
-                                   action = "count",
-                                   default = 0,
-                                   help = verbose_help)
-        parser_remove.add_argument("--loglevel",
-                                   choices = ["debug","info","warning",
-                                              "error","critical","DEBUG",
-                                              "INFO","WARNING","ERROR",
-                                              "CRITICAL"],
-                                   help = loglevel_help)
-        parser_remove.add_argument('--debug',
-                                   action = 'store_true',
-                                   help = debug_help)
-    
-    parser_remove.set_defaults(func = scribe_remove)
+                                 action="count",
+                                 default=0,
+                                 help="Decrease output verbosity")
+    parser_remove.add_argument("-v", "--verbosity",
+                                 action="count",
+                                 default=0,
+                                 help="Increase output verbosity")
+    parser_remove.set_defaults(func=scribe_remove)
 
     # create the parser for the "update" command
     parser_update = subparsers.add_parser('update',
-                                          help = 'Update repositories')
+                                        help='Update repositories')
     parser_update.add_argument('grimoire',
-                               nargs = '*',
-                               help = 'Grimoire to update')
+                             nargs='*',
+                             help='Grimoire to update')
+    parser_update.add_argument('--debug',
+                             action='store_true',
+                             help='Enable debugging information')
+    parser_update.add_argument("--loglevel",
+                                 choices=["debug","info","warning",
+                                          "error","critical","DEBUG",
+                                          "INFO","WARNING","ERROR",
+                                          "CRITICAL"],
+                                 help="Set minimum logging level")
     parser_update.add_argument("-q", "--quiet",
-                                 action = "count",
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode is True:
-        parser_update.add_argument("-v", "--verbosity",
-                                   action = "count",
-                                   default = 0,
-                                   help = verbose_help)
-        parser_update.add_argument("--loglevel",
-                                   choices = ["debug","info","warning",
-                                              "error","critical","DEBUG",
-                                              "INFO","WARNING","ERROR",
-                                              "CRITICAL"],
-                                   help = loglevel_help)
-        parser_update.add_argument('--debug',
-                                   action = 'store_true',
-                                   help = debug_help)
-    parser_update.set_defaults(func = scribe_update)
+                                 action="count",
+                                 default=0,
+                                 help="Decrease output verbosity")
+    parser_update.add_argument("-v", "--verbosity",
+                                 action="count",
+                                 default=0,
+                                 help="Increase output verbosity")
+    parser_update.set_defaults(func=scribe_update)
 
     args = parser.parse_args()
 
@@ -281,6 +263,7 @@ def real_main(args):
     # "application" code
     args.func(args)
     
+#    logging.verifydebuglevels()
     logger.debug("End Function")
     return 0
 

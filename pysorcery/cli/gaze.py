@@ -64,6 +64,7 @@ from pysorcery import __version__, enable_debugging_mode
 from pysorcery.lib import libcodex
 from pysorcery.lib import libconfig
 from pysorcery.lib import libfiles
+from pysorcery.lib import libgaze
 from pysorcery.lib import libgrimoire
 from pysorcery.lib import libspell
 from pysorcery.lib import libsystem
@@ -191,9 +192,9 @@ def gaze_install_queue(args):
     logger.debug("Begin Function")
 
     queue = libspell.SpellList()
-    queue.list_install_queue()
+    install_queue = queue.list_install_queue()
 
-    queue.print_list()
+    queue.print_list(install_queue)
     
     logger.debug("End Function")
     return
@@ -212,6 +213,10 @@ def gaze_install_queue(args):
 def gaze_remove_queue(args):
     logger.debug("Begin Function")
 
+    queue = libspell.SpellList()
+    remove_queue = queue.list_remove_queue()
+
+    queue.print_list(remove_queue)
     
     logger.debug("End Function")
     return
@@ -230,7 +235,12 @@ def gaze_remove_queue(args):
 #-------------------------------------------------------------------------------
 def gaze_show_held(args):
     logger.debug("Begin Function")
-    
+
+    queue = libspell.SpellList()
+    held_list = queue.list_held()
+
+    queue.print_list(held_list)
+
     logger.debug("End Function")
     return
 
@@ -249,7 +259,11 @@ def gaze_show_held(args):
 def gaze_show_exiled(args):
     logger.debug("Begin Function")
 
-    
+    queue = libspell.SpellList()
+    exiled_list = queue.list_exiled()
+
+    queue.print_list(exiled_list)
+
     logger.debug("End Function")
     return
 
@@ -267,7 +281,11 @@ def gaze_show_exiled(args):
 def gaze_provides(args):
     logger.debug("Begin Function")
 
-    
+    queue = libspell.SpellList()
+    provides_list = queue.list_provides(args.feature)
+
+    queue.print_list(provides_list)
+
     logger.debug("End Function")
     return
 
@@ -315,6 +333,18 @@ def gaze_what(args):
 def gaze_short(args):
     logger.debug("Begin Function")
 
+    for i in args.spell:
+        logger.debug2("Loop iteration: " + i)
+        
+        spell = libspell.Spell(i)
+
+        logger.debug3("Spell: " + str(spell))
+        
+        message = colortext.colorize(spell.name, "bold","white","black")
+        logger.info(message)
+
+        message = colortext.colorize(spell.description, "none","white","black")
+        logger.info1(message)
     
     logger.debug("End Function")
     return
@@ -389,6 +419,18 @@ def gaze_url(args):
 def gaze_sources(args):
     logger.debug("Begin Function")
 
+    for i in args.spell:
+        logger.debug2("Loop iteration: " + i)
+        
+        spell = libspell.Spell(i)
+
+        logger.debug3("Spell: " + str(spell))
+        
+        message = colortext.colorize(spell.name, "bold","white","black")
+        logger.info(message)
+
+        message = colortext.colorize(spell.description, "none","white","black")
+        logger.info1(message)
     
     logger.debug("End Function")
     return
@@ -407,6 +449,18 @@ def gaze_sources(args):
 def gaze_source_urls(args):
     logger.debug("Begin Function")
 
+    for i in args.spell:
+        logger.debug2("Loop iteration: " + i)
+        
+        spell = libspell.Spell(i)
+
+        logger.debug3("Spell: " + str(spell))
+        
+        message = colortext.colorize(spell.name, "bold","white","black")
+        logger.info(message)
+
+        message = colortext.colorize(spell.description, "none","white","black")
+        logger.info1(message)
     
     logger.debug("End Function")
     return
@@ -426,6 +480,18 @@ def gaze_source_urls(args):
 def gaze_maintainer(args):
     logger.debug("Begin Function")
 
+    for i in args.spell:
+        logger.debug2("Loop iteration: " + i)
+        
+        spell = libspell.Spell(i)
+
+        logger.debug3("Spell: " + str(spell))
+        
+        message = colortext.colorize(spell.name, "bold","white","black")
+        logger.info(message)
+
+        message = colortext.colorize(spell.description, "none","white","black")
+        logger.info1(message)
     
     logger.debug("End Function")
     return
@@ -445,7 +511,16 @@ def gaze_maintainer(args):
 #-------------------------------------------------------------------------------
 def gaze_compile(args):
     logger.debug("Begin Function")
+        
+    spell = libspell.Spell(i)
+    
+    logger.debug3("Spell: " + str(spell))
+        
+    message = colortext.colorize(spell.name, "bold","white","black")
+    logger.info(message)
 
+    message = colortext.colorize(spell.description, "none","white","black")
+    logger.info1(message)
     
     logger.debug("End Function")
     return
@@ -471,8 +546,17 @@ def gaze_compile(args):
 #-------------------------------------------------------------------------------
 def gaze_install(args):
     logger.debug("Begin Function")
+        
+    spell = libspell.Spell(i)
 
-    
+    logger.debug3("Spell: " + str(spell))
+        
+    message = colortext.colorize(spell.name, "bold","white","black")
+    logger.info(message)
+
+    message = colortext.colorize(spell.description, "none","white","black")
+    logger.info1(message)
+
     logger.debug("End Function")
     return
 
@@ -519,7 +603,17 @@ def gaze_version(args):
 #-------------------------------------------------------------------------------
 def gaze_license(args):
     logger.debug("Begin Function")
+        
+    spell = libspell.Spell(i)
+
+    logger.debug3("Spell: " + str(spell))
     
+    message = colortext.colorize(spell.name, "bold","white","black")
+    logger.info(message)
+
+    message = colortext.colorize(spell.description, "none","white","black")
+    logger.info1(message)
+
     logger.debug("End Function")
     return
 
@@ -544,7 +638,17 @@ def gaze_license(args):
 #-------------------------------------------------------------------------------
 def gaze_checksum(args):
     logger.debug("Begin Function")
-    
+            
+    spell = libspell.Spell(i)
+
+    logger.debug3("Spell: " + str(spell))
+        
+    message = colortext.colorize(spell.name, "bold","white","black")
+    logger.info(message)
+
+    message = colortext.colorize(spell.description, "none","white","black")
+    logger.info1(message)
+
     logger.debug("End Function")
     return
 
@@ -562,8 +666,17 @@ def gaze_checksum(args):
 #-------------------------------------------------------------------------------
 def gaze_size(args):
     logger.debug("Begin Function")
+        
+    spell = libspell.Spell(i)
 
-    
+    logger.debug3("Spell: " + str(spell))
+        
+    message = colortext.colorize(spell.name, "bold","white","black")
+    logger.info(message)
+
+    message = colortext.colorize(spell.description, "none","white","black")
+    logger.info1(message)
+
     logger.debug("End Function")
     return
 
@@ -581,7 +694,16 @@ def gaze_size(args):
 def gaze_export(args):
     logger.debug("Begin Function")
 
-    
+    spell = libspell.Spell(i)
+
+    logger.debug3("Spell: " + str(spell))
+        
+    message = colortext.colorize(spell.name, "bold","white","black")
+    logger.info(message)
+
+    message = colortext.colorize(spell.description, "none","white","black")
+    logger.info1(message)
+
     logger.debug("End Function")
     return
 
@@ -605,7 +727,16 @@ def gaze_export(args):
 def gaze_import(args):
     logger.debug("Begin Function")
 
-    
+    spell = libspell.Spell(i)
+
+    logger.debug3("Spell: " + str(spell))
+        
+    message = colortext.colorize(spell.name, "bold","white","black")
+    logger.info(message)
+
+    message = colortext.colorize(spell.description, "none","white","black")
+    logger.info1(message)
+
     logger.debug("End Function")
     return
 
@@ -630,6 +761,11 @@ def gaze_grimoire(args):
         grimoires = libcodex.Codex()
         grimoires.print_grimoires()
 
+    elif args.grimoire:
+        logger.info('Fix Me')
+
+    else:
+        libgaze.print_codex()          
     
     logger.debug("End Function")
     return

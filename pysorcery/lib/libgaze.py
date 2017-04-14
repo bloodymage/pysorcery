@@ -30,7 +30,6 @@
 #-------------------------------------------------------------------------------
 
 
-
 #-------------------------------------------------------------------------------
 #
 # Libraries
@@ -39,27 +38,19 @@
 #-------------------------------------------------------------------------------
 
 # System Libraries
-import sys
 import os
-
+import sys
 
 # Other Libraries
-
 
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
-
+from pysorcery.lib import libcodex
+from pysorcery.lib import libfiles
 from pysorcery.lib import libtext
-
-# Other Optional Libraries
-if distro.distro_id in distro.distro_dict['deb']:
-    import apt
-    import aptsources
-    import softwareproperties
 
 #-------------------------------------------------------------------------------
 #
@@ -70,96 +61,81 @@ if distro.distro_id in distro.distro_dict['deb']:
 # create logger
 logger = logging.getLogger(__name__)
 
-
 #-------------------------------------------------------------------------------
 #
-# Classes
-#
-# Spell
+# Function print_base_codex
 # 
 #
 #-------------------------------------------------------------------------------
-class BaseGrimoire():
-    def __init__(self,args):
-        self.name = args.grimoire
-        
-        self.url = "www.sm.org"
+def print_base_codex():
+    logger.debug('Begin Function')
 
-    def add(self):
-        logger.debug('Begin Function')
+    codex = libcodex.Codex()
 
+    grimoire_list = codex.list_grimoires()
 
-        logger.debug('End Function')
-        return
-
-
-#-------------------------------------------------------------------------------
-#
-# Class DebianGrimoire
-# 
-#
-#-------------------------------------------------------------------------------
-class DebianGrimoire(BaseGrimoire):
-    def __init__(self,args):
-        logger.debug('Begin Function')
-        BaseGrimoire.__init__(self,args)
-
-        if self.name[0].startswith('ppa://'):
-            self.url = self.name
-
-            # force new ppa file to be 644 (LP: #399709)
-            #os.umask(0o022)
-
-            # get the line
-            #line = args[0]
-            #print(line)
+    grimoire_dict = {}
+    for grimoire in grimoire_list:
+        grimoire_dict[grimoire] = ''
+        dir_list = os.scandir(grimoire)
+        section_list = []
+        for item in dir_list:
+            if item.is_dir():
+                if 'git' not in item.name:
+                    section_list.append(item.name)
+                    
+        section_dict = {}
+        for section in section_list:
+            section_dict[section] = []
             
-            # add it
-            #sp = SoftwareProperties(options=options)
-            #distro = aptsources.distro.get_distro()
-            #distro.get_sources(sp.sourceslist)
+        spell_list_file = libfiles.Files(grimoire + '/codex.index')
 
-        logger.debug('End Function')
-        return
+        spell_list = spell_list_file.read()
 
-    def list_spells(self):
-        logger.debug('Begin Function')
+        for item in spell_list:
+            spell, section = item.split(' ')
+            section_dict[section.split('/')[-1]].append(spell)
 
-        
-        logger.debug('End Function')
-        return
-    
-    def add(self):
-        logger.debug('Begin Function')
+        grimoire_dict[grimoire] = section_dict
 
-        print(self.url)
+        for key in grimoire_dict:
+            logger.info('-----------------------------')
+            logger.info('Grimoire: ' + key.split('/')[-1])
+            logger.info('-----------------------------')
+
+            for sec_key in grimoire_dict[key]:
+                logger.info('-----------------------------')
+                logger.info('Section: ' + key.split('/')[-1] + ' / ' + sec_key)
+                logger.info('-----------------------------')
+
+                for item in grimoire_dict[key][sec_key]:
+                    logger.info(item)
 
         logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
 #
-# Class DebianGrimoire
+# Function print_debian_codex
 # 
 #
 #-------------------------------------------------------------------------------
-class Grimoire(DebianGrimoire,BaseGrimoire):
-    def __init__(self,args):
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianGrimoire.__init__(self,args)
-        else:
-            BaseGrimoire.__init__(self,args)
+def print_debian_codex(self):
+    logger.debug('Begin Function')
 
-    def list_spells(self):
-        print("Spells")
-        return
+    logger.debug('End Function')
+    return
 
-    def add(self):
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianGrimoire.add(self)
-        elif distro.distro_id in distro.distro_dict['smgl']:
-            BaseGrimoire.add(self)
-        else:
-            # Add except?
-            logger.critical("We shouldn't be here")
+#-------------------------------------------------------------------------------
+#
+# Function print_codex
+# 
+#
+#-------------------------------------------------------------------------------
+def print_codex():
+    if distro.distro_id in distro.distro_dict['deb']:
+        print_debian_codex()
+    else:
+        print_base_codex()
 
+    return

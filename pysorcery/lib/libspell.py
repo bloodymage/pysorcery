@@ -96,6 +96,12 @@ class BaseSpell():
         self.description = "Ooops!"
         self.version = []
         self.url = "www"
+        self.source_files = {}
+
+        #url = "http://download.thinkbroadband.com/10MB.zip"
+
+        #file_name = url.split('/')[-1]
+
         self.section = "Section"
         logger.debug("End Function")
         return
@@ -225,17 +231,30 @@ class Spell(DebianSpell,BaseSpell):
             grimoire_list = ['Fix Me']
             m = 1
 
-        print_list = [ "Repository       ",
-                       "Section          ",
-                       "Package          ",
-                       "Repo version     ",
-                       "Installed version",
-                       "----------       ",
-                       "-------          ",
-                       "-------          ",
-                       "------------     ",
-                       "-----------------"
-                       ]
+        if distro.distro_id in distro.distro_dict['deb']:
+            print_list = [ "Repository       " ]
+        else:
+            print_list = [ "Grimoire         " ]
+            
+        print_list.append("Section          ")
+
+        if distro.distro_id in distro.distro_dict['deb']:
+            print_list.append("Package          ")
+        else:
+            print_list.append("Spell            ")
+
+        if distro.distro_id in distro.distro_dict['deb']:
+            print_list.append("Repo version     ")
+        else:
+            print_list.append("Grimoire Version ")
+
+        print_list.append("Installed version")
+        print_list.append("----------       ")
+        print_list.append("-------          ")
+        print_list.append("-------          ")
+        print_list.append("------------     ")
+        print_list.append("-----------------")
+
 
         for i in grimoire_list:
             print_list.append(i)
@@ -308,6 +327,39 @@ class BaseSpellList():
         logger.debug('End Function')
         return spell_list
 
+    def list_remove_queue(self):
+        logger.debug('Begin Function')
+
+        install_queue = [ 'a','b']
+
+        logger.debug('End Function')
+        return install_queue
+
+    def list_held(self):
+        logger.debug('Begin Function')
+
+        install_queue = [ 'a','b']
+
+        logger.debug('End Function')
+        return install_queue
+
+    def list_exiled(self):
+        logger.debug('Begin Function')
+
+        install_queue = [ 'a','b']
+
+        logger.debug('End Function')
+        return install_queue
+
+    def list_provides(self, feature):
+        logger.debug('Begin Function')
+
+        install_queue = [ 'a','b']
+
+        logger.debug('End Function')
+        return install_queue
+
+
 #-------------------------------------------------------------------------------
 #
 # Class DebianSpellQueue
@@ -332,7 +384,7 @@ class DebianSpellList(BaseSpellList):
         logger.debug("Begin Function")
 
         install_queue = [ 'Fuck' ]
-        subprocessor.run('apt-get','upgrade')
+#        subprocess.run('apt-get','upgrade')
         
         logger.debug("End Function")
         return install_queue
@@ -369,6 +421,7 @@ class DebianSpellList(BaseSpellList):
             
         logger.debug('End Function')
         return orphan_list
+
 
 
 #-------------------------------------------------------------------------------

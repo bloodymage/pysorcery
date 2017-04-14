@@ -4,17 +4,26 @@ This is a complete re-write of Sorcery used by Source Mage GNU/Linux.  The origi
 
 ## New Commands
 
+### pyarchive
+
+A Universal Compressed File manager.
+- Extracts
+- Compresses
+- List Contents
+- Test
+- Repack
+- Recompress
+- Diff
+- Search
+- Formats
+
+This is a bonus application.  Sorcery needed to do these various tasks internally.  I simply added a script that calls these functions directly.
+
 ### pyupstream (I need a new Name)
 
 This program checks upstream versions of software.
 
 Alt genurates a new grimoire (Repository) with the latest version on the software.  If using the '--debian' switch will check the version of software in the debian sid repository.
-
-### pyaegis
-
-Originally intended to be a stand-alone application.  I found my coding efforts had enough overlap that I added this to sorcery.
-
-This program works on hardening your system, setting up firewalls...
 
 ## The Commands
 
@@ -26,7 +35,6 @@ This program works on hardening your system, setting up firewalls...
     is part of the sorcery package management suite. It is a command-line
     tool for automatically retrieving, unpacking, compiling, installing,
     and tracking software installations.
-
 
 ### pycleanse
 

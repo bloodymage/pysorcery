@@ -49,6 +49,7 @@ from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
 import pysorcery
+from pysorcery.lib import libfiles
 from pysorcery.lib import libtext
 
 # Other Optional Libraries
@@ -84,9 +85,14 @@ class BaseCodex():
 
     def list_grimoires(self):
         logger.debug('Begin Function')
-        
-        grimoire_list = [ 'test', 'games' ]
 
+        grimoire_file = libfiles.Files('/etc/sorcery/local/grimoire')
+        unedited_grimoire_list = grimoire_file.read()
+
+        grimoire_list = []
+        for grimoire in unedited_grimoire_list:
+            grimoire_list.append(grimoire.split('=')[1])
+        
         logger.debug('End Function')
         return grimoire_list
 

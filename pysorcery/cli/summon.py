@@ -40,26 +40,27 @@
 # System Libraries
 import sys
 import os
-import argparse
 import copy
 import subprocess
 
 # Other Libraries
-import distro
+
 
 # Application Libraries
-from pysorcery import __version__
-from pysorcery.lib import libtext
+# System Library Overrides
+from pysorcery.lib import argparse
+from pysorcery.lib import distro
 from pysorcery.lib import logging
+
+# Other Application Libraries
+from pysorcery import __version__, enable_debugging_mode
+from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
 from pysorcery.lib import libspell
 from pysorcery.lib import libgrimoire
 from pysorcery.lib import libcodex
-
+from pysorcery.lib import libdownload
 # Other Optional Libraries
-if pysorcery.distro_id in pysorcery.distro_dict['deb']:
-    import apt
-
 
 #-------------------------------------------------------------------------------
 #
@@ -69,10 +70,6 @@ if pysorcery.distro_id in pysorcery.distro_dict['deb']:
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
-
-# Other Optional Libraries
-deb_distro_list=['Ubuntu']
-distro_id=distro.linux_distribution()[0]
 
 #-------------------------------------------------------------------------------
 #
@@ -91,22 +88,15 @@ distro_id=distro.linux_distribution()[0]
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_what
+# Function Error
 #
 #
 #
 #-------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-#
-# Functions
-#
-#
-#
-#-------------------------------------------------------------------------------
-def gaze_depends(args):
+def error(args):
     logger.debug("Begin Function")
 
+    logger.error('We Fucked Up')
     
     logger.debug("End Function")
     return
@@ -118,9 +108,12 @@ def gaze_depends(args):
 #
 #
 #-------------------------------------------------------------------------------
-def gaze_dependencies(args):
+def download_uri(args):
     logger.debug("Begin Function")
 
+    uri = libdownload.Uri(args.spell[0])
+    uri.download()
+    
     logger.debug("End Function")
     return
 
@@ -131,9 +124,11 @@ def gaze_dependencies(args):
 #
 #
 #-------------------------------------------------------------------------------
-def gaze_time(args):
+def summon(args):
     logger.debug("Begin Function")
 
+    for spell in args.spell:
+        logger.info1(spell)
     
     logger.debug("End Function")
     return
@@ -150,34 +145,61 @@ def real_main(args):
 
     # Parse Command Line Arguments
 
+    # Common Help Descriptions:
+    quiet_help = 'Decrease output'
+    verbose_help = 'Increase output'
+    loglevel_help = 'Specify output level'
+    debug_help = 'Maximize output level'
+
     parser = argparse.ArgumentParser(description="Query / View Sorcery package management information")
 
-    parser.add_argument("--config",
-                        nargs=1,
-                    help="Use specified config file")
-    parser.add_argument("-v", "--verbosity",
-                        action="count",
-                        default=0,
-                    help="increase output verbosity")
-    parser.add_argument("--loglevel",
-                        help="Set minimum logging level",
-                        choices=["debug","info","warning","error","critical","DEBUG","INFO","WARNING","ERROR","CRITICAL"])
-    parser.add_argument("-V", "--version",
-                        help="Print version information and exit",
-                        action="version",
-                        version="%(prog)s " + __version__)
-    parser.add_argument("--debug",
-                        help="Enable Debugging",
-                        action="store_true")
+    parser.add_argument('spell',
+                        nargs='+',
+                        help = 'Spell(s) to download')
+    parser.add_argument('-q','--quiet',
+                        action = 'count',
+                        default = 0,
+                        help = quiet_help)
+    if enable_debugging_mode is True:
+        parser.add_argument("-v", "--verbosity",
+                            action = "count",
+                            default = 0,
+                            help = verbose_help)
+        parser.add_argument("--loglevel",
+                            choices=["debug","info","warning",
+                                     "error","critical","DEBUG",
+                                     "INFO","WARNING","ERROR",
+                                     "CRITICAL"],
+                            help = loglevel_help)
+        parser.add_argument("-V", "--version",
+                            action="version",
+                            help="Print version information and exit",
+                            version="%(prog)s " + __version__)
+        parser.add_argument("--debug",
+                            action = "store_true",
+                            help = debug_help)
     
     args = parser.parse_args()
 
-    if os.geteuid() != 0:
+    uri_types = [ 'http://', 'ftp://', 'rsync://', 'git://' ]
+
+    if (len(args.spell) == 1 and
+        any ( x in args.spell[0] for x in uri_types )):
+        func = download_uri
+                        
+    elif os.geteuid() != 0:
         # os.execvp() replaces the running process, rather than launching a child
         # process, so there's no need to exit afterwards. The extra "sudo" in the
         # second parameter is required because Python doesn't automatically set $0
         # in the new process.
         os.execvp("sudo", ["sudo"] + sys.argv)
+
+        
+    elif os.geteuid() == 0:
+        func = summon
+        
+    else:
+        func = error
 
     config = libconfig.main_configure(args)
 
@@ -186,9 +208,8 @@ def real_main(args):
     logger.debug3("Arguments: " + str(args))
 
     # "application" code
-#    args.func(args)
-    
-#    logging.verifydebuglevels()
+    func(args)
+
     logger.debug("End Function")
     return 0
 
