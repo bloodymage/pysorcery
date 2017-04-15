@@ -52,9 +52,11 @@ from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
 import pysorcery
-from pysorcery.lib import libtext
 from pysorcery.lib import libcodex
+from pysorcery.lib import libfiles
 from pysorcery.lib import libmisc
+from pysorcery.lib import libmisc
+from pysorcery.lib import libtext
 
 # Other Optional Libraries
 if distro.distro_id in distro.distro_dict['deb']:
@@ -93,16 +95,47 @@ logger = logging.getLogger(__name__)
 class BaseSpell():
     def __init__(self,name):
         logger.debug("Begin Function")
-        self.description = "Ooops!"
-        self.version = []
-        self.url = "www"
-        self.source_files = {}
+        
+        self.name = name
 
-        #url = "http://download.thinkbroadband.com/10MB.zip"
+        logger.debug('End Function')
+        return
+    
+    def set_details(self):
+        logger.debug('Begin Function')
+        
+        codex = libcodex.Codex()
+        grimoire_list = codex.list_grimoires()
+
+        for i in grimoire_list:
+            spell_list_file = libfiles.Files(i + '/codex.index')
+            spell_list = spell_list_file.read()
+
+            for item in spell_list:
+                spell, section_dir = item.split(' ')
+
+                if self.name == spell:
+                    self.section_dir = section_dir
+                    break
+
+            if self.name == spell:
+                self.grimoire = i.split('/')[-1]
+                break
+
+        self.section = self.section_dir.split('/')[-1]
+        self.spell_directory = self.section_dir + '/' + self.name
+
+        details_file = libfiles.DetailsFile(self.spell_directory)
+        details = details_file.read()
+        
+        self.description = details['description']
+        self.version = details['version']
+        self.url = details['website']
+        
+        self.source_files = {}
 
         #file_name = url.split('/')[-1]
 
-        self.section = "Section"
         logger.debug("End Function")
         return
 
@@ -131,9 +164,7 @@ class DebianSpell(BaseSpell):
 
         versions = self.pkg.versions
 
-        self.version=[]
-        for i in versions:
-            self.version.append(versions[i].version)
+        self.version = versions[0].version
 
         self.architecture = versions[0].architecture
         self.description  = versions[0].description
@@ -146,9 +177,8 @@ class DebianSpell(BaseSpell):
         else:
             self.section = str(pkg_section)            
 
-
+        self.grimoire = 'Fix Me'            
         self.dependencies = versions[0].dependencies
-
         self.optional_dependencies = versions[0].suggests
         
         logger.debug("End Function")
@@ -210,11 +240,12 @@ class DebianSpell(BaseSpell):
 class Spell(DebianSpell,BaseSpell):
     def __init__(self,name):
         logger.debug("Begin Function")
-        self.name = name
         if distro.distro_id in distro.distro_dict['deb']:
             DebianSpell.__init__(self,name)
         else:
             BaseSpell.__init__(self,name)
+            BaseSpell.set_details(self)
+
 
         logger.debug("Begin Function")
         return
@@ -228,7 +259,7 @@ class Spell(DebianSpell,BaseSpell):
             
             m = len(grimoire_list)
         else:
-            grimoire_list = ['Fix Me']
+            grimoire_list = [ self.grimoire ]
             m = 1
 
         if distro.distro_id in distro.distro_dict['deb']:
@@ -257,10 +288,10 @@ class Spell(DebianSpell,BaseSpell):
 
 
         for i in grimoire_list:
-            print_list.append(i)
+            print_list.append(i.split('/')[-1])
             print_list.append(self.section)
             print_list.append(self.name)
-            print_list.append(self.version[0])
+            print_list.append(self.version)
             print_list.append('-')
 
         libmisc.column_print(print_list,cols=5,columnwise=False,gap=2)

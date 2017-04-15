@@ -50,7 +50,6 @@ from pysorcery.lib import logging
 # Other Application Libraries
 from pysorcery.lib import libcodex
 from pysorcery.lib import libfiles
-from pysorcery.lib import libgrimoire
 from pysorcery.lib import libtext
 
 #-------------------------------------------------------------------------------
@@ -72,25 +71,32 @@ def print_base_codex():
     logger.debug('Begin Function')
 
     codex = libcodex.Codex()
+
     grimoire_list = codex.list_grimoires()
 
     grimoire_dict = {}
-    for i in grimoire_list:
-        grimoire = libgrimoire.Grimoire(grim_dir = i)
-        section_list = grimoire.list_sections()
+    for grimoire in grimoire_list:
+        grimoire_dict[grimoire] = ''
+        dir_list = os.scandir(grimoire)
+        section_list = []
+        for item in dir_list:
+            if item.is_dir():
+                if 'git' not in item.name:
+                    section_list.append(item.name)
                     
         section_dict = {}
         for section in section_list:
             section_dict[section] = []
             
-        spell_list_file = libfiles.Files(i + '/codex.index')
+        spell_list_file = libfiles.Files(grimoire + '/codex.index')
+
         spell_list = spell_list_file.read()
 
         for item in spell_list:
             spell, section = item.split(' ')
             section_dict[section.split('/')[-1]].append(spell)
 
-        grimoire_dict[i] = section_dict
+        grimoire_dict[grimoire] = section_dict
 
         for key in grimoire_dict:
             logger.info('-----------------------------')

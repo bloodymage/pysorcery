@@ -163,7 +163,7 @@ class BuildFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ class ConfigureFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ class ConflictsFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -199,11 +199,62 @@ class ConflictsFile(BaseFile):
 #
 #-------------------------------------------------------------------------------
 class DetailsFile(BaseFile):
-    def __init__(self,name):
+    def __init__(self,spell_directory):
         logger.debug('Begin Function')
-        BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        
+        BaseFile.__init__(self,spell_directory + '/DETAILS')
+        
+        logger.debug('End Function')
         return
+
+    def read(self):
+        logger.debug('Begin Function')
+        
+        details_dict = {}
+
+        description_check = False
+        case_check = False
+        description = ''
+        for i in open(self.filename):
+            line = i[:-1]
+
+
+            if (line.startswith('#')):
+                logger.debug('Ignoring Line' + line)
+            elif ('cat' in line and
+                  'EOF' in line):
+                description_check = True
+            elif 'EOF' in line:
+                description_check = False
+            elif description_check is True:
+                if len(description) == 0:
+                    description = line
+                else:
+                    description += ' ' + line
+            elif ('case' in line and
+                  'in' in line):
+                case_check = True
+            elif 'esac' in line:
+                case_check = False
+            elif case_check is True:
+                logger.debug('Ignore Case')
+            elif '=' in line:
+
+                key, value = line.split('=')
+                if 'VERSION' in key:
+                    logger.debug('Line: ' + line)
+                    details_dict['version'] = value
+                elif 'WEB_SITE' in key:
+                    details_dict['website'] = value
+                elif key.startswith('SOURCE'):
+                    details_dict['source'] = value
+            else:
+                logger.debug('Line: ' + line)
+
+        details_dict['description'] = description
+
+        logger.debug('End Function')
+        return details_dict
 
 #-------------------------------------------------------------------------------
 #
@@ -212,10 +263,12 @@ class DetailsFile(BaseFile):
 #
 #-------------------------------------------------------------------------------
 class DependsFile(BaseFile):
-    def __init__(self,name):
+    def __init__(self,filename):
         logger.debug('Begin Function')
-        BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        
+        BaseFile.__init__(self,spell_directory + '/DEPENDS')
+        
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -228,7 +281,7 @@ class DownloadFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -241,7 +294,7 @@ class FinalFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -254,7 +307,7 @@ class HistoryFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -267,7 +320,7 @@ class InstallFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -280,7 +333,7 @@ class InstallExtrasFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -293,7 +346,7 @@ class PatchFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -306,7 +359,7 @@ class PostBuildFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -319,7 +372,7 @@ class PostInstallFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -332,7 +385,7 @@ class PostRemoveFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -345,7 +398,7 @@ class PostResurrectFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -358,7 +411,7 @@ class PreBuildFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -371,7 +424,7 @@ class PreInstallFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -384,7 +437,7 @@ class PreRemoveFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -397,7 +450,7 @@ class PreResurrectFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -410,7 +463,7 @@ class PreSubDependsFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -436,7 +489,7 @@ class ProvidesFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 
@@ -450,7 +503,7 @@ class SecurityFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -463,7 +516,7 @@ class SubDependsFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 
@@ -477,7 +530,7 @@ class TransferFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------
@@ -490,7 +543,7 @@ class TriggerCheckFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 
@@ -504,7 +557,7 @@ class TriggersFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 
@@ -518,7 +571,7 @@ class UpTriggersFile(BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
-        logger.demug('End Function')
+        logger.debug('End Function')
         return
 
 #-------------------------------------------------------------------------------

@@ -80,11 +80,25 @@ logger = logging.getLogger(__name__)
 #
 #-------------------------------------------------------------------------------
 class BaseGrimoire():
-    def __init__(self,args):
-        self.name = args.grimoire
-        
-        self.url = "www.sm.org"
+    def __init__(self,name=None,grim_dir=None):
+        logger.debug('Begin Function')
 
+        logger.debug2('Name: ' + str(name))
+        logger.debug2('Grimoire: ' + str(grim_dir))
+        
+        if grim_dir and not name:
+            name = grim_dir.split('/')[-1]
+
+        if name and not grim_dir:
+            grim_dir = '/var/lib/sorcery/codex' + name
+
+        self.name = name
+        self.grim_dir = grim_dir
+        self.url = 'http://codex.sourcemage.org/' + self.name + '.tar.bz2'
+
+        logger.debug('End Function')
+        return
+        
     def add(self):
         logger.debug('Begin Function')
 
@@ -92,6 +106,18 @@ class BaseGrimoire():
         logger.debug('End Function')
         return
 
+    def list_sections(self):
+        logger.debug('Begin Function')
+
+        dir_list = os.scandir(self.grim_dir)
+        section_list = []
+        for item in dir_list:
+            if item.is_dir():
+                if 'git' not in item.name:
+                    section_list.append(item.name)
+
+        logger.debug('End Function')
+        return section_list
 
 #-------------------------------------------------------------------------------
 #
@@ -100,9 +126,9 @@ class BaseGrimoire():
 #
 #-------------------------------------------------------------------------------
 class DebianGrimoire(BaseGrimoire):
-    def __init__(self,args):
+    def __init__(self,name = None, grim_dir = None):
         logger.debug('Begin Function')
-        BaseGrimoire.__init__(self,args)
+        BaseGrimoire.__init__(self,name, grim_dir)
 
         if self.name[0].startswith('ppa://'):
             self.url = self.name
@@ -128,6 +154,13 @@ class DebianGrimoire(BaseGrimoire):
         
         logger.debug('End Function')
         return
+
+    def list_sections(self):
+        logger.debug('Begin Function')
+
+        section_list = [ 'Fuck' ]
+        logger.debug('End Function')
+        return section_list
     
     def add(self):
         logger.debug('Begin Function')
@@ -144,12 +177,14 @@ class DebianGrimoire(BaseGrimoire):
 #
 #-------------------------------------------------------------------------------
 class Grimoire(DebianGrimoire,BaseGrimoire):
-    def __init__(self,args):
+    def __init__(self,name = None, grim_dir = None):
         if distro.distro_id in distro.distro_dict['deb']:
-            DebianGrimoire.__init__(self,args)
+            DebianGrimoire.__init__(self,name, grim_dir)
         else:
-            BaseGrimoire.__init__(self,args)
+            BaseGrimoire.__init__(self,name, grim_dir)
 
+        return
+    
     def list_spells(self):
         print("Spells")
         return
@@ -157,9 +192,19 @@ class Grimoire(DebianGrimoire,BaseGrimoire):
     def add(self):
         if distro.distro_id in distro.distro_dict['deb']:
             DebianGrimoire.add(self)
-        elif distro.distro_id in distro.distro_dict['smgl']:
+        else: # distro.distro_id in distro.distro_dict['smgl']:
             BaseGrimoire.add(self)
-        else:
+        #else:
             # Add except?
-            logger.critical("We shouldn't be here")
+            #logger.critical("We shouldn't be here")
 
+    def list_sections(self):
+        if distro.distro_id in distro.distro_dict['deb']:
+            section_list = DebianGrimoire.list_sections(self)
+        else: # distro.distro_id in distro.distro_dict['smgl']:
+            section_list = BaseGrimoire.list_sections(self)
+        #else:
+            # Add except?
+            #logger.critical("We shouldn't be here")
+
+        return section_list

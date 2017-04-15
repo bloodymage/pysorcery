@@ -19,6 +19,10 @@ A Universal Compressed File manager.
 
 This is a bonus application.  Sorcery needed to do these various tasks internally.  I simply added a script that calls these functions directly.
 
+### pyledger
+
+Incorporates ledger directly into sorcery
+
 ### pyupstream (I need a new Name)
 
 This program checks upstream versions of software.
