@@ -47,7 +47,6 @@ import os
 # System Overrides
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
 from pysorcery.lib import libtext
 
 # Other Optional Libraries
@@ -615,7 +614,7 @@ def main_configure(args):
 
     # Congigure Loggings
     configure_logging(args, config)
-    
+
+    logger.debug2("Return variable: Config:\n" + str(config))
     logger.debug("End Function")
-#    logger.debug2("Return variable: Config:\n" + str(config))
     return config

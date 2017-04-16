@@ -49,7 +49,6 @@ import subprocess
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
 from pysorcery import __version__
 from pysorcery.lib import libconfig
 from pysorcery.lib import libfiles
@@ -89,6 +88,15 @@ class Alien():
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def identify(self):
         logger.debug("Begin Function")
         

@@ -61,81 +61,16 @@ from pysorcery.lib import libtext
 # create logger
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------------
-#
-# Function print_base_codex
-# 
-#
-#-------------------------------------------------------------------------------
-def print_base_codex():
-    logger.debug('Begin Function')
-
-    codex = libcodex.Codex()
-
-    grimoire_list = codex.list_grimoires()
-
-    grimoire_dict = {}
-    for grimoire in grimoire_list:
-        grimoire_dict[grimoire] = ''
-        dir_list = os.scandir(grimoire)
-        section_list = []
-        for item in dir_list:
-            if item.is_dir():
-                if 'git' not in item.name:
-                    section_list.append(item.name)
-                    
-        section_dict = {}
-        for section in section_list:
-            section_dict[section] = []
-            
-        spell_list_file = libfiles.Files(grimoire + '/codex.index')
-
-        spell_list = spell_list_file.read()
-
-        for item in spell_list:
-            spell, section = item.split(' ')
-            section_dict[section.split('/')[-1]].append(spell)
-
-        grimoire_dict[grimoire] = section_dict
-
-        for key in grimoire_dict:
-            logger.info('-----------------------------')
-            logger.info('Grimoire: ' + key.split('/')[-1])
-            logger.info('-----------------------------')
-
-            for sec_key in grimoire_dict[key]:
-                logger.info('-----------------------------')
-                logger.info('Section: ' + key.split('/')[-1] + ' / ' + sec_key)
-                logger.info('-----------------------------')
-
-                for item in grimoire_dict[key][sec_key]:
-                    logger.info(item)
-
-        logger.debug('End Function')
-        return
 
 #-------------------------------------------------------------------------------
 #
-# Function print_debian_codex
-# 
+# Classes
 #
 #-------------------------------------------------------------------------------
-def print_debian_codex(self):
-    logger.debug('Begin Function')
 
-    logger.debug('End Function')
-    return
 
 #-------------------------------------------------------------------------------
 #
-# Function print_codex
-# 
+# Functions
 #
 #-------------------------------------------------------------------------------
-def print_codex():
-    if distro.distro_id in distro.distro_dict['deb']:
-        print_debian_codex()
-    else:
-        print_base_codex()
-
-    return

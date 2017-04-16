@@ -53,7 +53,7 @@ from pysorcery.lib import libtext
 # Global Variables
 #
 #-------------------------------------------------------------------------------
-__version__ = '0.1.1'
+__version__ = '0.0.1'
 enable_debugging_mode=True
 
 # Enable Logging

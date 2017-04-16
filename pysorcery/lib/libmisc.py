@@ -48,11 +48,9 @@ from pysorcery.lib import distro
 from pysorcery.lib import logging
 
 # Other Application Libraries
-import pysorcery
+
 
 # Other Optional Libraries
-if distro.distro_id in distro.distro_dict['deb']:
-    import apt
 
 
 #-------------------------------------------------------------------------------
@@ -85,9 +83,13 @@ logger = logging.getLogger(__name__)
 #
 # Function column_print
 #
-# Display installed spells that have no explicit dependencies on them
+# Prints input list in columns
 #
-# Input:  list_to_print
+# Input:
+#   list_to_print = List to Print
+#   cols          = The number of columns to use
+#   columnwise    = To print by row or column
+#   gap           = The gap between columns
 # Output:
 # Return: None
 #

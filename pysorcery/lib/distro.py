@@ -54,10 +54,10 @@ from distro import *
 #-------------------------------------------------------------------------------
 # Distro Definitions
 
-deb_distro_list=['Ubuntu','linuxmint','debian','Kali']
-smgl_distro_list=['Source Mage']
-yum_distro_list=['Red Hat', 'Fedora']
-pac_distro_list=['Arch']
+deb_distro_list = ['Ubuntu','linuxmint','debian','Kali']
+smgl_distro_list = ['Source Mage']
+yum_distro_list = ['Red Hat', 'Fedora']
+pac_distro_list = ['Arch']
 ebuild_distro_list = [ 'Gentoo' ]
 lunar_distro_list = [ 'Lunar' ]
 

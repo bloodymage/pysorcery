@@ -49,15 +49,15 @@ import copy
 import subprocess
 
 # Other Libraries
-import distro
+
 
 # Application Libraries
 # Application Overrides
 from pysorcery.lib import argparse
+from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
-from pysorcery import __version__
+from pysorcery import __version__, enable_debugging_mode
 from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
 from pysorcery.lib import libspell
@@ -227,19 +227,20 @@ def real_main(args):
                           action="count",
                           default=0,
                           help="Decrease output verbosity")
-    log_opts.add_argument("-v", "--verbosity",
-                          action="count",
-                          default=0,
-                          help="Increase output verbosity")
-    log_opts.add_argument("--loglevel",
-                          choices=["debug","info","warning",
-                                   "error","critical","DEBUG",
-                                   "INFO","WARNING","ERROR","CRITICAL"],
-                          help="Set minimum logging level")
-    log_opts.add_argument("--debug",
-                          action="store_true",
-                          help="Maximize logging information")
-
+    if enable_debugging_mode:
+        log_opts.add_argument("-v", "--verbosity",
+                              action="count",
+                              default=0,
+                              help="Increase output verbosity")
+        log_opts.add_argument("--loglevel",
+                              choices=["debug","info","warning",
+                                       "error","critical","DEBUG",
+                                       "INFO","WARNING","ERROR","CRITICAL"],
+                              help="Set minimum logging level")
+        log_opts.add_argument("--debug",
+                              action="store_true",
+                              help="Maximize logging information")
+    
     #
     parser.add_argument("--version",
                         action="version",
@@ -298,11 +299,12 @@ def main(args=None):
         """
 
         logger.debug("Begin Application")
-#        try:         
-#            real_main(args)
-        real_main(args)        
-#        except:
-#            logger.critical("You Fucked Up")
+        # real_main(args)
+        
+        try:         
+            real_main(args)
+        except:
+            logger.critical("You Fucked Up")
 
         logger.debug("End Application")
         return 0

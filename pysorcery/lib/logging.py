@@ -306,9 +306,17 @@ class ConsoleLvlFormatter(logging.Formatter):
         self.warn_fmt  = "%(message)s"
         self.err_fmt  = "%(message)s"
         self.crit_fmt  = "%(message)s"
+        return
 
-
-
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def format(self, record):        
 
         # Save the original format configured by the user
@@ -374,11 +382,29 @@ class ColorizingStreamHandler(logging.StreamHandler,libtext.ConsoleText):
                         logging.CRITICAL: "magenta"}
         super(ColorizingStreamHandler, self).__init__(*args, **kwargs)
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     @property
     def is_tty(self):
         isatty = getattr(self.stream, 'isatty', None)
         return isatty and isatty()
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def emit(self, record):
         try:
             message = self.format(record)
@@ -396,6 +422,15 @@ class ColorizingStreamHandler(logging.StreamHandler,libtext.ConsoleText):
         except:
             self.handleError(record)
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def setLevelColor(self, logging_level, escaped_ansi_code):
         self._colors[logging_level] = escaped_ansi_code
 

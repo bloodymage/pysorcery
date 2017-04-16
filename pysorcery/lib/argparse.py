@@ -50,10 +50,34 @@ from argparse import *
 #
 # Classes
 #
+# AliasedSubParserAction
+#
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+#
+# Class AliasedSubParserAction
+#
 #-------------------------------------------------------------------------------
 class AliasedSubParsersAction(argparse._SubParsersAction):
 
-    class _AliasedPseudoAction(argparse.Action):
+    #-------------------------------------------------------------------------------
+    #
+    # Class AliasedPseudoAction
+    #
+    #-------------------------------------------------------------------------------
+    class _AliasedPseudoAction(Action):
+        #---------------------------------------------------------------------------
+        #
+        # Function __init__
+        #
+        #
+        #
+        # Input:  ...
+        # Output: ...
+        # Return: ...
+        #
+        #-------------------------------------------------------------------------
         def __init__(self, name, aliases, help):
             dest = name
             if aliases:
@@ -61,6 +85,15 @@ class AliasedSubParsersAction(argparse._SubParsersAction):
             sup = super(AliasedSubParsersAction._AliasedPseudoAction, self)
             sup.__init__(option_strings=[], dest=dest, help=help) 
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function add_parser
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def add_parser(self, name, **kwargs):
         if 'aliases' in kwargs:
             aliases = kwargs['aliases']
@@ -101,7 +134,7 @@ class AliasedSubParsersAction(argparse._SubParsersAction):
 if __name__ == '__main__':
     # An example parser with subcommands.
     
-    parser = argparse.ArgumentParser()
+    parser = ArgumentParser()
     parser.register('action', 'parsers', AliasedSubParsersAction)
     parser.add_argument("--library", metavar="libfile", type=str,
         help="library database filename")

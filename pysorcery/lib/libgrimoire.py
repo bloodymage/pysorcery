@@ -51,8 +51,6 @@ import os
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
-
 from pysorcery.lib import libtext
 
 # Other Optional Libraries
@@ -98,7 +96,16 @@ class BaseGrimoire():
 
         logger.debug('End Function')
         return
-        
+
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def add(self):
         logger.debug('Begin Function')
 
@@ -106,6 +113,15 @@ class BaseGrimoire():
         logger.debug('End Function')
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_sections(self):
         logger.debug('Begin Function')
 
@@ -148,6 +164,15 @@ class DebianGrimoire(BaseGrimoire):
         logger.debug('End Function')
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_spells(self):
         logger.debug('Begin Function')
 
@@ -155,6 +180,15 @@ class DebianGrimoire(BaseGrimoire):
         logger.debug('End Function')
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_sections(self):
         logger.debug('Begin Function')
 
@@ -162,6 +196,15 @@ class DebianGrimoire(BaseGrimoire):
         logger.debug('End Function')
         return section_list
     
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def add(self):
         logger.debug('Begin Function')
 
@@ -185,10 +228,28 @@ class Grimoire(DebianGrimoire,BaseGrimoire):
 
         return
     
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_spells(self):
         print("Spells")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def add(self):
         if distro.distro_id in distro.distro_dict['deb']:
             DebianGrimoire.add(self)
@@ -198,6 +259,15 @@ class Grimoire(DebianGrimoire,BaseGrimoire):
             # Add except?
             #logger.critical("We shouldn't be here")
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_sections(self):
         if distro.distro_id in distro.distro_dict['deb']:
             section_list = DebianGrimoire.list_sections(self)
@@ -208,3 +278,4 @@ class Grimoire(DebianGrimoire,BaseGrimoire):
             #logger.critical("We shouldn't be here")
 
         return section_list
+

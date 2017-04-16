@@ -48,7 +48,6 @@ import subprocess
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
 from pysorcery.lib import libfiles
 from pysorcery.lib import libtext
 
@@ -75,7 +74,9 @@ if distro.distro_id in distro.distro_dict['deb']:
 #
 # Classes
 #
-# Spell
+# BaseCodex
+# DebianCodex
+# Codex
 # 
 #
 #-------------------------------------------------------------------------------
@@ -83,6 +84,13 @@ class BaseCodex():
     def __init__(self):
         self.description="Ooops!"
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # 
+    #
+    #-------------------------------------------------------------------------------
     def list_grimoires(self):
         logger.debug('Begin Function')
 
@@ -107,6 +115,13 @@ class DebianCodex(BaseCodex):
     def __init__(self):
         BaseCodex.__init__(self)
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # 
+    #
+    #-------------------------------------------------------------------------------
     def list_grimoires(self):
         var = subprocess.check_output(['apt-cache', 'policy'])
 
@@ -131,6 +146,13 @@ class DebianCodex(BaseCodex):
 
         return repo_list
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # 
+    #
+    #-------------------------------------------------------------------------------
     def update(self):
         logger.debug('Begin Function')
 
@@ -144,7 +166,8 @@ class DebianCodex(BaseCodex):
 #-------------------------------------------------------------------------------
 #
 # Class Codex
-# 
+#
+# This is the Codex API
 #
 #-------------------------------------------------------------------------------
 class Codex(DebianCodex, BaseCodex):
@@ -158,6 +181,13 @@ class Codex(DebianCodex, BaseCodex):
         logger.debug("End Function")
         return
         
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # 
+    #
+    #-------------------------------------------------------------------------------
     def list_grimoires(self):
         if distro.distro_id in distro.distro_dict['deb']:
             grimoire_list = DebianCodex.list_grimoires(self)
@@ -166,6 +196,13 @@ class Codex(DebianCodex, BaseCodex):
 
         return grimoire_list
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # 
+    #
+    #-------------------------------------------------------------------------------
     def print_grimoires(self):
         grimoires = Codex.list_grimoires(self)
         for grimoire in grimoires:
@@ -173,6 +210,13 @@ class Codex(DebianCodex, BaseCodex):
 
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # 
+    #
+    #-------------------------------------------------------------------------------
     def update(self):
         if distro.distro_id in distro.distro_dict['deb']:
             grimoire_list = DebianCodex.update(self)

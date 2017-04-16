@@ -60,15 +60,12 @@ import bz2
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
 from pysorcery import __version__
 from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
 
 
 # Other Optional Libraries
-if distro.distro_id in distro.distro_dict['deb']:
-    import apt
 
 #-------------------------------------------------------------------------------
 #
@@ -98,7 +95,7 @@ class BaseFile():
         logger.debug("End Function")
         return
 
-    #---------
+    #-------------------------------------------------------------------------------
     #
     # Function pne
     #
@@ -106,9 +103,9 @@ class BaseFile():
     #
     # input:
     # output:
-    # return:
+    # return: Path, Name, and Extention
     #
-    #----
+    #-------------------------------------------------------------------------------
     def pne(self):
         """
         Guess the extension of given filename.
@@ -123,12 +120,30 @@ class BaseFile():
             ext = first_ext + ext
         return path, root, ext
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_from(self):
         logger.debug("Begin Function")
         
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def remove(self):
         logger.debug("Begin Function")
 
@@ -137,6 +152,15 @@ class BaseFile():
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def read(self):
         logger.debug("Begin Function")
         line_list = []
@@ -147,6 +171,15 @@ class BaseFile():
         logger.debug("End Function")
         return line_list
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def write(self):
         logger.debug("Begin Function")
         self.description="Ooops!"
@@ -160,7 +193,7 @@ class BaseFile():
 #
 #-------------------------------------------------------------------------------
 class BuildFile(BaseFile):
-    def __init__(self,name):
+    def __init__(self,filename):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
         logger.debug('End Function')
@@ -173,7 +206,7 @@ class BuildFile(BaseFile):
 #
 #-------------------------------------------------------------------------------
 class ConfigureFile(BaseFile):
-    def __init__(self,name):
+    def __init__(self,filename):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
         logger.debug('End Function')
@@ -186,7 +219,7 @@ class ConfigureFile(BaseFile):
 #
 #-------------------------------------------------------------------------------
 class ConflictsFile(BaseFile):
-    def __init__(self,name):
+    def __init__(self,filename):
         logger.debug('Begin Function')
         BaseFile.__init__(self,filename)
         logger.debug('End Function')
@@ -207,6 +240,15 @@ class DetailsFile(BaseFile):
         logger.debug('End Function')
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def read(self):
         logger.debug('Begin Function')
         
@@ -248,6 +290,8 @@ class DetailsFile(BaseFile):
                     details_dict['website'] = value
                 elif key.startswith('SOURCE'):
                     details_dict['source'] = value
+                elif 'SHORT' in key:
+                    details_dict['short'] = value
             else:
                 logger.debug('Line: ' + line)
 
@@ -587,6 +631,15 @@ class DebianFiles(BaseFile):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_from(self):
         logger.debug("Begin Function")
         subprocess.run(["dpkg","-S",self.filename])
@@ -610,6 +663,15 @@ class ActivityLog(BaseFile):
 
         BaseFile.__init__(self,filename)
         
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_activity(self):
         logger.debug('Begin Function')
         
@@ -640,6 +702,15 @@ class Files(DebianFiles,BaseFile):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_from(self):
         logger.debug("Begin Function")
         if distro.distro_id in distro.distro_dict['deb']:
@@ -650,145 +721,16 @@ class Files(DebianFiles,BaseFile):
         logger.debug("End Function")
         return
 
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class BaseDirectories():
-    def __init__(self,dirname):
-        logger.debug('Begin Function')
-        self.dirname = dirname
 
-        logger.debug('End Function')
-        return
-
-    def print_name(self):
-        logger.debug("Begin Function")
-        logger.info(self.dirname)
-        logger.debug("End Function")
-        return
-
-
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class DebianDirectories(BaseDirectories):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        BaseDirectories.__init__(self,dirname)
-        logger.debug("End Function")
-        return
-
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class Directories(DebianDirectories,BaseDirectories):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianDirectories.__init__(self,dirname)
-        else:
-            BaseDirectories.__init__(self,dirname)
-
-        logger.debug("End Function")
-        return
-
-
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class BaseFileList():
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-
-        logger.debug("End Function")
-        return
-
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        install_log_dir = '/var/log/sorcery/install'
-        install_files = []
-        for root, dirs, files  in os.walk(install_log_dir):
-            for i in files:
-                install_log = install_log_dir + '/'+ i
-                f = Files(install_log)
-                install_files = install_files + f.read()
-        
-        logger.debug("End Function")
-        return install_files
-
-    def list_system_files(self):
-        logger.debug("Begin Function")
-
-        # List of directories to check        
-        sys_dirs = [ '/bin', '/boot', '/etc', '/lib', '/lib64',
-                     '/opt', '/sbin', '/share', '/usr','/var' ]
-
-        sys_files = []
-        for sys_dir in sys_dirs:
-            for root, dirs, files in os.walk(sys_dir):
-                for i in dirs:
-                    for j in files:
-                        system_file = str(os.path.join(root,i,j))
-                        sys_files.append(system_file)
-        
-        logger.debug("End Function")
-        return sys_files
-
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class DebianFileList(BaseFileList):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianDirectories.__init__(self)
-        else:
-            BaseDirectories.__init__(self)
-
-        logger.debug("End Function")
-        return
-
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        install_files = [ 'Fuck' ]
-        
-        logger.debug("End Function")
-        return install_files
-
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class FileList(DebianFileList,BaseFileList):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFileList.__init__(self)
-        else:
-            BaseFileList.__init__(self)
-
-        logger.debug("End Function")
-        return
-
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_installed_files(self):
         logger.debug("Begin Function")
 
@@ -802,10 +744,19 @@ class FileList(DebianFileList,BaseFileList):
 
 #-------------------------------------------------------------------------------
 #
-# Class ZipFile
+# Class CZipFile
 #
 #-------------------------------------------------------------------------------
 class CZipFile(BaseFile):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def extract(self):
         logger.debug("Begin Function")
         logger.debug("Xfile: "+ str(self.name))
@@ -839,6 +790,15 @@ class CZipFile(BaseFile):
 #
 #-------------------------------------------------------------------------------
 class CTarFile(BaseFile):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def extract(self):
         logger.debug("Begin Function")
         logger.debug("Xfile: " + str(self.name))
@@ -879,12 +839,30 @@ class SourceFile(CZipFile,CTarFile):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def download(self):
         logger.debug("Begin Function")
         self.description="Ooops!"
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def unpack(self):
         logger.debug("Begin Function")
 
@@ -915,6 +893,15 @@ class SourceFile(CZipFile,CTarFile):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def verify(self):
         logger.debug("Begin Function")
         self.description="Ooops!"
@@ -935,6 +922,15 @@ class BaseDirectories():
         logger.debug('End Function')
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_name(self):
         logger.debug("Begin Function")
         logger.info(self.dirname)
@@ -986,6 +982,15 @@ class BaseFileList():
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_installed_files(self):
         logger.debug("Begin Function")
 
@@ -1000,6 +1005,15 @@ class BaseFileList():
         logger.debug("End Function")
         return install_files
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_system_files(self):
         logger.debug("Begin Function")
 
@@ -1060,6 +1074,15 @@ class FileList(DebianFileList,BaseFileList):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_installed_files(self):
         logger.debug("Begin Function")
 

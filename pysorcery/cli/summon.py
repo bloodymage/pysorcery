@@ -111,7 +111,7 @@ def error(args):
 def download_uri(args):
     logger.debug("Begin Function")
 
-    uri = libdownload.Uri(args.spell[0])
+    uri = libdownload.URI(args.spell[0])
     uri.download()
     
     logger.debug("End Function")

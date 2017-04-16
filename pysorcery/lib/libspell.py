@@ -74,7 +74,6 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
-# DetailsFile
 #
 # BaseSpell
 # DebianSpell
@@ -101,6 +100,15 @@ class BaseSpell():
         logger.debug('End Function')
         return
     
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def set_details(self):
         logger.debug('Begin Function')
         
@@ -131,6 +139,7 @@ class BaseSpell():
         self.description = details['description']
         self.version = details['version']
         self.url = details['website']
+        self.short = details['short']
         
         self.source_files = {}
 
@@ -139,6 +148,15 @@ class BaseSpell():
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def install(self,args):
         logger.debug("Begin Function")
         print("Installing: " + self.name)
@@ -169,6 +187,7 @@ class DebianSpell(BaseSpell):
         self.architecture = versions[0].architecture
         self.description  = versions[0].description
         self.url = versions[0].homepage
+        self.short = self.description
 
         pkg_section = versions[0].section
 
@@ -184,6 +203,15 @@ class DebianSpell(BaseSpell):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def install(self, args):
         logger.debug("Begin Function")
 
@@ -199,6 +227,15 @@ class DebianSpell(BaseSpell):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def remove(self, args):
         logger.debug("Begin Function")
 
@@ -250,6 +287,15 @@ class Spell(DebianSpell,BaseSpell):
         logger.debug("Begin Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_version(self,multi=False):
         logger.debug("Begin Function")
         
@@ -299,6 +345,15 @@ class Spell(DebianSpell,BaseSpell):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def install(self,args):
         logger.debug("Begin Function")
         if distro.distro_id in distro.distro_dict['deb']:
@@ -309,6 +364,15 @@ class Spell(DebianSpell,BaseSpell):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def remove(self,args):
         logger.debug("Begin Function")
         if distro.distro_id in distro.distro_dict['deb']:
@@ -333,55 +397,70 @@ class BaseSpellList():
         logger.debug("End Function")
         return
 
-    def list_installed_queue(self):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_queue(self,which_queue):
         logger.debug("Begin Function")
-        install_queue =["Fuck"]
+        queue_file = libfiles.Files('/var/log/sorcery/queue/' + which_queue)
+
+        queue = queue_file.read()
+
         logger.debug("End Function")
-        return install_queue
+        return queue
     
-    def list_installed(self):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_installed(self,status=None):
         logger.debug("Begin Function")
 
         spell_list = []
-        
+
         for line in open('/var/state/sorcery/packages'):
             spell = line.split(':')
 
             name = spell[0]
             date = spell[1]
+            spellstatus = spell[2]
             version = spell[3]
 
-            spell_list.append(name)
-            spell_list.append(date)
-            spell_list.append(version)
+            if not status and spellstatus != 'exiled':
+                spell_list.append(name)
+                spell_list.append(date)
+                spell_list.append(version)
+            elif status == spellstatus:
+                spell_list.append(name)
+                spell_list.append(date)
+                spell_list.append(version)
+            else:
+                logger.error('We fucked up')
 
         logger.debug('End Function')
         return spell_list
 
-    def list_remove_queue(self):
-        logger.debug('Begin Function')
 
-        install_queue = [ 'a','b']
-
-        logger.debug('End Function')
-        return install_queue
-
-    def list_held(self):
-        logger.debug('Begin Function')
-
-        install_queue = [ 'a','b']
-
-        logger.debug('End Function')
-        return install_queue
-
-    def list_exiled(self):
-        logger.debug('Begin Function')
-
-        install_queue = [ 'a','b']
-
-        logger.debug('End Function')
-        return install_queue
-
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_provides(self, feature):
         logger.debug('Begin Function')
 
@@ -411,16 +490,34 @@ class DebianSpellList(BaseSpellList):
         logger.debug("End Function")
         return
         
-    def list_install_queue(self):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_queue(self,which_queue):
         logger.debug("Begin Function")
 
-        install_queue = [ 'Fuck' ]
+        queue = [ 'Fuck' ]
 #        subprocess.run('apt-get','upgrade')
         
         logger.debug("End Function")
-        return install_queue
+        return queue
     
-    def list_installed(self):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_installed(self,status=None):
         logger.debug("Begin Function")
         var = subprocess.check_output(['apt', 'list','--installed'])
 
@@ -439,6 +536,15 @@ class DebianSpellList(BaseSpellList):
         logger.debug("End Function")
         return spell_list        
         
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_orphans(self):
         logger.debug('Begin Function')
 
@@ -474,26 +580,53 @@ class SpellList(DebianSpellList,BaseSpellList):
         logger.debug("End Function")
         return
 
-    def list_install_queue(self):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_queue(self,which_queue):
         logger.debug("Begin Function")
         if distro.distro_id in distro.distro_dict['deb']:
-            install_queue = DebianSpellList.list_install_queue(self)
+            queue = DebianSpellList.list_queue(self,which_queue)
         else:
-            install_queue = BaseSpellList.list_install_queue(self)
+            queue = BaseSpellList.list_queue(self,which_queue)
 
         logger.debug("End Function")
-        return install_queue
+        return queue
 
-    def list_installed(self):
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_installed(self,status=None):
         logger.debug("Begin Function")
         if distro.distro_id in distro.distro_dict['deb']:
-            installed_spells = DebianSpellList.list_installed(self)
+            installed_spells = DebianSpellList.list_installed(self,status)
         else:
-            installed_spells = BaseSpellList.list_installed(self)
+            installed_spells = BaseSpellList.list_installed(self,status)
 
         logger.debug("End Function")
         return installed_spells
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def list_orphans(self):
         logger.debug('Begin Function')
         if distro.distro_id in distro.distro_dict['deb']:
@@ -503,6 +636,15 @@ class SpellList(DebianSpellList,BaseSpellList):
 
         return orphan_list
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_list(self, print_list):
         logger.debug("Begin Function")
 
@@ -512,6 +654,15 @@ class SpellList(DebianSpellList,BaseSpellList):
         logger.debug("End Function")
         return
 
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
     def print_installed(self):
         logger.debug("Begin Function")
 

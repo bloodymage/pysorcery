@@ -39,24 +39,13 @@
 
 # System Libraries
 import sys
-import os
-import argparse
-import copy
-import subprocess
 
 # Other Libraries
-import distro
 
 # Application Libraries
 from pysorcery.lib import logging
-from pysorcery.lib import libtext
-from pysorcery.lib import libspell
-from pysorcery.lib import libgrimoire
-from pysorcery.lib import libcodex
 
 # Other Optional Libraries
-if pysorcery.distro_id in pysorcery.distro_dict['deb']:
-    import apt
 
 
 #-------------------------------------------------------------------------------

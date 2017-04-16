@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 #-------------------------------------------------------------------------------
 #
 # Original BASH version
@@ -52,6 +52,7 @@ import subprocess
 
 # Other Libraries
 
+
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib import argparse
@@ -70,9 +71,6 @@ from pysorcery.lib import libspell
 from pysorcery.lib import libsystem
 from pysorcery.lib import libtext
 
-# Other Optional Libraries
-#if distro.distro_id in distro.distro_dict['deb']:
-#    import apt
 
 #-------------------------------------------------------------------------------
 #
@@ -89,7 +87,7 @@ colortext = libtext.ConsoleText()
 # Classes
 #
 #-------------------------------------------------------------------------------
-            
+
 #-------------------------------------------------------------------------------
 #
 # Functions
@@ -115,14 +113,14 @@ colortext = libtext.ConsoleText()
 #
 #-------------------------------------------------------------------------------
 def gaze_alien(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     # create 'alien' object
     alien = libsystem.Alien()
 
     alien.identify()
-    
-    logger.debug("End Function")
+
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -132,22 +130,23 @@ def gaze_alien(args):
 # Display installed spells that have no explicit dependencies on them
 #
 # Input:  args
-# Output:
+# Output: Prints a list of orphaned files
 # Return: None
 #
 # Status: Works on ubuntu
 #
 #-------------------------------------------------------------------------------
 def gaze_orphans(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
+    #
     orphans = libspell.SpellList()
 
     orphan_list = orphans.list_orphans()
 
     orphans.print_list(orphan_list)
-    
-    logger.debug("End Function")
+
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -159,22 +158,20 @@ def gaze_orphans(args):
 # such as casts, summons etc.)
 #
 # Input:  args
-# Output:
+# Output: Prints the activity log to the console
 # Return: None
 #
 # Status: Works on Ubuntu
 #         Works on Source Mage
 #
-#         Printing could display better
-#
 #-------------------------------------------------------------------------------
 def gaze_activity(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     activity = libfiles.ActivityLog()
     activity.print_activity()
-    
-    logger.debug("End Function")
+
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -183,89 +180,26 @@ def gaze_activity(args):
 #
 # Shows the queue of spells waiting to be installed
 #
-# Input:  args
-# Output:
-# Return: None
-#
-#-------------------------------------------------------------------------------
-def gaze_install_queue(args):
-    logger.debug("Begin Function")
-
-    queue = libspell.SpellList()
-    install_queue = queue.list_install_queue()
-
-    queue.print_list(install_queue)
-    
-    logger.debug("End Function")
-    return
-
-#-------------------------------------------------------------------------------
-#
-# Function gaze_remove_queue
-#
 # Shows the queue of spells waiting to be removed
 #
 # Input:  args
-# Output:
+# Output: Prints the install queue
 # Return: None
 #
+# Status: Works on Source Mage
+#
 #-------------------------------------------------------------------------------
-def gaze_remove_queue(args):
-    logger.debug("Begin Function")
+def gaze_queue(args):
+    logger.debug('Begin Function')
 
     queue = libspell.SpellList()
-    remove_queue = queue.list_remove_queue()
+    spell_queue = queue.list_queue(args.queue)
 
-    queue.print_list(remove_queue)
+    queue.print_list(spell_queue)
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
-#
-# Function gaze_show_held
-#
-# shows all spells currently held
-# (which means they are not to be updated)
-#
-# Input:  args
-# Output:
-# Return: None
-#
-#-------------------------------------------------------------------------------
-def gaze_show_held(args):
-    logger.debug("Begin Function")
-
-    queue = libspell.SpellList()
-    held_list = queue.list_held()
-
-    queue.print_list(held_list)
-
-    logger.debug("End Function")
-    return
-
-#-------------------------------------------------------------------------------
-#
-# Function gaze_exiled
-#
-# shows all spells currently exiled
-# (which means they are not to be cast in any way)
-#
-# Input:  args
-# Output:
-# Return: None
-#
-#-------------------------------------------------------------------------------
-def gaze_show_exiled(args):
-    logger.debug("Begin Function")
-
-    queue = libspell.SpellList()
-    exiled_list = queue.list_exiled()
-
-    queue.print_list(exiled_list)
-
-    logger.debug("End Function")
-    return
 
 #-------------------------------------------------------------------------------
 #
@@ -277,16 +211,18 @@ def gaze_show_exiled(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_provides(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     queue = libspell.SpellList()
     provides_list = queue.list_provides(args.feature)
 
     queue.print_list(provides_list)
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -299,24 +235,27 @@ def gaze_provides(args):
 # Output:
 # Return: None
 #
+# Status: Working for Source Mage
+#         Working for Ubuntu
+#
 #-------------------------------------------------------------------------------
 def gaze_what(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
-        logger.debug2("Loop iteration: " + i)
+        logger.debug2('Loop iteration: ' + i)
         
         spell = libspell.Spell(i)
 
-        logger.debug3("Spell: " + str(spell))
+        logger.debug3('Spell: ' + str(spell))
         
-        message = colortext.colorize(spell.name, "bold","white","black")
+        message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
 
-        message = colortext.colorize(spell.description, "none","white","black")
+        message = colortext.colorize(spell.description, 'none','white','black')
         logger.info1(message)
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -329,24 +268,27 @@ def gaze_what(args):
 # Output:
 # Return: None
 #
+# Status: Working for Source Mage
+#         Working for Ubuntu
+#
 #-------------------------------------------------------------------------------
 def gaze_short(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
-        logger.debug2("Loop iteration: " + i)
+        logger.debug2('Loop iteration: ' + i)
         
         spell = libspell.Spell(i)
 
-        logger.debug3("Spell: " + str(spell))
+        logger.debug3('Spell: ' + str(spell))
         
-        message = colortext.colorize(spell.name, "bold","white","black")
+        message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
 
-        message = colortext.colorize(spell.description, "none","white","black")
+        message = colortext.colorize(spell.short, 'none','white','black')
         logger.info1(message)
-    
-    logger.debug("End Function")
+
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -360,9 +302,12 @@ def gaze_short(args):
 # Output:
 # Return: None
 #
+# Status: Working for Source Mage
+#         Working for Ubuntu
+#
 #-------------------------------------------------------------------------------
 def gaze_where(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
         spell = libspell.Spell(i)
@@ -370,12 +315,12 @@ def gaze_where(args):
         logger.debug(spell)
         
         colortext = libtext.ConsoleText()
-        name = colortext.colorize(str(spell.name), "bold","white","black")
-        section = colortext.colorize(str(spell.section), "none","white","black")
-        logger.info(name + ": ")
+        name = colortext.colorize(str(spell.name), 'bold','white','black')
+        section = colortext.colorize(str(spell.section), 'none','white','black')
+        logger.info(name + ': ')
         logger.info1(section)
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -388,21 +333,24 @@ def gaze_where(args):
 # Output:
 # Return: None
 #
+# Status: Working for Source Mage
+#         Working for Ubuntu
+#
 #-------------------------------------------------------------------------------
 def gaze_url(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
         spell = libspell.Spell(i)
 
         logger.debug(spell)
         
-        name = colortext.colorize(spell.name, "bold","white","black")
-        url = colortext.colorize(spell.url, "none","white","black")
-        logger.info(name + ": ")
+        name = colortext.colorize(spell.name, 'bold','white','black')
+        url = colortext.colorize(spell.url, 'none','white','black')
+        logger.info(name + ': ')
         logger.info1(url)
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -415,24 +363,26 @@ def gaze_url(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_sources(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
-        logger.debug2("Loop iteration: " + i)
+        logger.debug2('Loop iteration: ' + i)
         
         spell = libspell.Spell(i)
 
-        logger.debug3("Spell: " + str(spell))
+        logger.debug3('Spell: ' + str(spell))
         
-        message = colortext.colorize(spell.name, "bold","white","black")
+        message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
 
-        message = colortext.colorize(spell.description, "none","white","black")
+        message = colortext.colorize(spell.description, 'none','white','black')
         logger.info1(message)
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -445,24 +395,26 @@ def gaze_sources(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_source_urls(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
-        logger.debug2("Loop iteration: " + i)
+        logger.debug2('Loop iteration: ' + i)
         
         spell = libspell.Spell(i)
 
-        logger.debug3("Spell: " + str(spell))
+        logger.debug3('Spell: ' + str(spell))
         
-        message = colortext.colorize(spell.name, "bold","white","black")
+        message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
 
-        message = colortext.colorize(spell.description, "none","white","black")
+        message = colortext.colorize(spell.description, 'none','white','black')
         logger.info1(message)
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -476,24 +428,26 @@ def gaze_source_urls(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_maintainer(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
-        logger.debug2("Loop iteration: " + i)
+        logger.debug2('Loop iteration: ' + i)
         
         spell = libspell.Spell(i)
 
-        logger.debug3("Spell: " + str(spell))
+        logger.debug3('Spell: ' + str(spell))
         
-        message = colortext.colorize(spell.name, "bold","white","black")
+        message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
 
-        message = colortext.colorize(spell.description, "none","white","black")
+        message = colortext.colorize(spell.description, 'none','white','black')
         logger.info1(message)
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -508,56 +462,23 @@ def gaze_maintainer(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
-def gaze_compile(args):
-    logger.debug("Begin Function")
+def gaze_log(args):
+    logger.debug('Begin Function')
         
     spell = libspell.Spell(i)
     
-    logger.debug3("Spell: " + str(spell))
+    logger.debug3('Spell: ' + str(spell))
         
-    message = colortext.colorize(spell.name, "bold","white","black")
+    message = colortext.colorize(spell.name, 'bold','white','black')
     logger.info(message)
 
-    message = colortext.colorize(spell.description, "none","white","black")
+    message = colortext.colorize(spell.description, 'none','white','black')
     logger.info1(message)
     
-    logger.debug("End Function")
-    return
-
-#-------------------------------------------------------------------------------
-#
-# Function gaze_install
-#
-# Used to determine what files were installed by a spell and where
-# those files are located, excludes sorcery state files.
-# If no optional version was given, try the installed version.
-#
-# If install-full
-#   Like gaze install spell, but shows sorcery state files.
-#
-# If install-spell
-#   Like gaze install spell, but excludes sorcery log files.
-#
-# Input:  args
-# Output:
-# Return: None
-#
-#-------------------------------------------------------------------------------
-def gaze_install(args):
-    logger.debug("Begin Function")
-        
-    spell = libspell.Spell(i)
-
-    logger.debug3("Spell: " + str(spell))
-        
-    message = colortext.colorize(spell.name, "bold","white","black")
-    logger.info(message)
-
-    message = colortext.colorize(spell.description, "none","white","black")
-    logger.info1(message)
-
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -575,9 +496,12 @@ def gaze_install(args):
 # Output:
 # Return: None
 #
+# Status: Works on Source Mage
+#         Works on Ubuntu
+#
 #-------------------------------------------------------------------------------
 def gaze_version(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     for i in args.spell:
         spell = libspell.Spell(i)
@@ -586,7 +510,7 @@ def gaze_version(args):
 
         spell.print_version(args.multi)
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -600,21 +524,23 @@ def gaze_version(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_license(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
         
     spell = libspell.Spell(i)
 
-    logger.debug3("Spell: " + str(spell))
+    logger.debug3('Spell: ' + str(spell))
     
-    message = colortext.colorize(spell.name, "bold","white","black")
+    message = colortext.colorize(spell.name, 'bold','white','black')
     logger.info(message)
 
-    message = colortext.colorize(spell.description, "none","white","black")
+    message = colortext.colorize(spell.description, 'none','white','black')
     logger.info1(message)
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -635,21 +561,23 @@ def gaze_license(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_checksum(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
             
     spell = libspell.Spell(i)
 
-    logger.debug3("Spell: " + str(spell))
+    logger.debug3('Spell: ' + str(spell))
         
-    message = colortext.colorize(spell.name, "bold","white","black")
+    message = colortext.colorize(spell.name, 'bold','white','black')
     logger.info(message)
 
-    message = colortext.colorize(spell.description, "none","white","black")
+    message = colortext.colorize(spell.description, 'none','white','black')
     logger.info1(message)
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -663,21 +591,23 @@ def gaze_checksum(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_size(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
         
     spell = libspell.Spell(i)
 
-    logger.debug3("Spell: " + str(spell))
+    logger.debug3('Spell: ' + str(spell))
         
-    message = colortext.colorize(spell.name, "bold","white","black")
+    message = colortext.colorize(spell.name, 'bold','white','black')
     logger.info(message)
 
-    message = colortext.colorize(spell.description, "none","white","black")
+    message = colortext.colorize(spell.description, 'none','white','black')
     logger.info1(message)
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -690,21 +620,23 @@ def gaze_size(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_export(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     spell = libspell.Spell(i)
 
-    logger.debug3("Spell: " + str(spell))
+    logger.debug3('Spell: ' + str(spell))
         
-    message = colortext.colorize(spell.name, "bold","white","black")
+    message = colortext.colorize(spell.name, 'bold','white','black')
     logger.info(message)
 
-    message = colortext.colorize(spell.description, "none","white","black")
+    message = colortext.colorize(spell.description, 'none','white','black')
     logger.info1(message)
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -723,21 +655,23 @@ def gaze_export(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_import(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     spell = libspell.Spell(i)
 
-    logger.debug3("Spell: " + str(spell))
+    logger.debug3('Spell: ' + str(spell))
         
-    message = colortext.colorize(spell.name, "bold","white","black")
+    message = colortext.colorize(spell.name, 'bold','white','black')
     logger.info(message)
 
-    message = colortext.colorize(spell.description, "none","white","black")
+    message = colortext.colorize(spell.description, 'none','white','black')
     logger.info1(message)
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -753,9 +687,11 @@ def gaze_import(args):
 # Output:
 # Return: None
 #
+# Status: Works on Source Mage
+#
 #-------------------------------------------------------------------------------
 def gaze_grimoire(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     if args.multi:
         grimoires = libcodex.Codex()
@@ -767,7 +703,7 @@ def gaze_grimoire(args):
     else:
         libgaze.print_codex()          
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -782,18 +718,20 @@ def gaze_grimoire(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_html(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
 #
 # Function gaze_search
 #
-# search [-name|-short] "phrase"
+# search [-name|-short] 'phrase'
 #
 # When omitting -name and -short searches spells name, short description and
 # long description for.
@@ -809,12 +747,14 @@ def gaze_html(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_search(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -829,14 +769,16 @@ def gaze_search(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_newer(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     
 
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -850,11 +792,13 @@ def gaze_newer(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_older(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -871,15 +815,17 @@ def gaze_older(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_from(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     spell = libfiles.Files(args.filename[0])
 
     spell.print_from()
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -890,13 +836,21 @@ def gaze_from(args):
 # to see whether a particular package is installed and if it is
 # installed display its version number
 #
+# shows all spells currently held
+# (which means they are not to be updated)
+#
+# shows all spells currently exiled
+# (which means they are not to be cast in any way)
+#
 # Input:  args
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_installed(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     if args.spell:
         for i in args.spell:
@@ -904,10 +858,15 @@ def gaze_installed(args):
             spell.print_version()
 
     else:
-        installed_spells = libspell.InstalledSpells()
-        installed_spells.print_installed()
+        spells = libspell.SpellList()
+        if args.spellstatus:
+            spell_list = spells.list_installed(args.spellstatus)
+        else:
+            spell_list = spells.list_installed()
+
+        spells.print_list(spell_list)
         
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -921,12 +880,14 @@ def gaze_installed(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_section(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -941,12 +902,14 @@ def gaze_section(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_voyeur(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -966,11 +929,13 @@ def gaze_voyeur(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_file(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -983,12 +948,14 @@ def gaze_file(args):
 # Output: 
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_history(args):
-    logger.debug("Begin Function")
-
+    logger.debug('Begin Function')
     
-    logger.debug("End Function")
+    
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -999,7 +966,8 @@ def gaze_history(args):
 # installed spell.  Up to level $level if specified. Only enabled
 # dependencies are shown.
 #
-# If --fast is specified more limited output is produced, but it runs much faster.
+# If --fast is specified more limited output is produced, but it run
+#s much faster.
 # If --required is specified only the required dependencies are shown and the
 # runtime ones are skipped.
 #
@@ -1007,12 +975,14 @@ def gaze_history(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_depends(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -1027,11 +997,13 @@ def gaze_depends(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_dependencies(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -1053,12 +1025,14 @@ def gaze_dependencies(args):
 # Output:
 # Return: None
 #
+# Status: Not implimented
+#
 #-------------------------------------------------------------------------------
 def gaze_time(args):
-    logger.debug("Begin Function")
+    logger.debug('Begin Function')
 
     
-    logger.debug("End Function")
+    logger.debug('End Function')
     return
 
 #-------------------------------------------------------------------------------
@@ -1079,6 +1053,17 @@ def real_main(args):
     verbose_help = 'Increase output'
     loglevel_help = 'Specify output level'
     debug_help = 'Maximize output level'
+    loglevel_choices = [ 'debug',
+                         'info',
+                         'warning',
+                         'error',
+                         'critical',
+                         'DEBUG',
+                         'INFO',
+                         'WARNING',
+                         'ERROR',
+                         'CRITICAL'
+    ]
 
     # Parse Command Line Arguments
     parser = argparse.ArgumentParser(description = 'Query / View Sorcery package management information')
@@ -1095,10 +1080,10 @@ def real_main(args):
 
     #------------------------------------------
     #
-    # Create the parser for the "alien" command
+    # Create the parser for the 'alien' command
     #
     #-------------------------------------------
-    alien_help = "Find and Display all files not tracked by the Sorcery Package Management System " + colortext.colorize('(Functionally Working, buggy)', 'bold', 'yellow', 'black') + "."
+    alien_help = 'Find and Display all files not tracked by the Sorcery Package Management System.'
     parser_alien = subparsers.add_parser('alien',
                                          aliases = ('aliens',),
                                          help = alien_help)
@@ -1107,21 +1092,18 @@ def real_main(args):
     alien_logging_opts = parser_alien.add_argument_group('Logging Options')
 
     # Parser Arguments
-    alien_logging_opts.add_argument("-q", "--quiet",
-                                    action = "count",
+    alien_logging_opts.add_argument('-q', '--quiet',
+                                    action = 'count',
                                     default = 0,
                                     help= quiet_help)
 
     if enable_debugging_mode is True:
-        alien_logging_opts.add_argument("-v", "--verbosity",
-                                        action = "count",
+        alien_logging_opts.add_argument('-v', '--verbosity',
+                                        action = 'count',
                                         default = 0,
                                         help = verbose_help)
-        alien_logging_opts.add_argument("--loglevel",
-                                        choices = ["debug","info","warning",
-                                                 "error","critical",
-                                                 "DEBUG","INFO","WARNING",
-                                                 "ERROR","CRITICAL"],
+        alien_logging_opts.add_argument('--loglevel',
+                                        choices = loglevel_choices,
                                         help = loglevel_help)
         alien_logging_opts.add_argument('--debug',
                                         action = 'store_true',
@@ -1131,28 +1113,25 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "orphans" command
+    # create the parser for the 'orphans' command
     #
     #-------------------------------------------
-    orphans_help = "Display installed spells that do not have any explicit dependencies on them " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
+    orphans_help = 'Display installed spells that do not have any explicit dependencies on them.'
     parser_orphans = subparsers.add_parser('orphans',
                                            help = orphans_help)
     orphans_logging_opts = parser_orphans.add_argument_group('Logging Option')
-    orphans_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    orphans_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                       help = quiet_help)
 
     if enable_debugging_mode is True:
-        orphans_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        orphans_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        orphans_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                   "error","critical", "DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        orphans_logging_opts.add_argument('--loglevel',
+                                          choices = loglevel_choices,
                                           help = loglevel_help)
         orphans_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -1161,26 +1140,23 @@ def real_main(args):
     parser_orphans.set_defaults(func = gaze_orphans)
 
     
-    # create the parser for the "activity" command
-    activity_help = "Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.) " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
+    # create the parser for the 'activity' command
+    activity_help = 'Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.).'
     parser_activity = subparsers.add_parser('activity',
                                             help = activity_help)
     activity_logging_opts = parser_activity.add_argument_group('Logging Options')
-    activity_logging_opts.add_argument("-q", "--quiet",
-                                       action = "count",
+    activity_logging_opts.add_argument('-q', '--quiet',
+                                       action = 'count',
                                        default = 0,
                                        help = quiet_help)
 
     if enable_debugging_mode is True:
-        activity_logging_opts.add_argument("-v", "--verbosity",
-                                           action = "count",
+        activity_logging_opts.add_argument('-v', '--verbosity',
+                                           action = 'count',
                                            default = 0,
                                            help = verbose_help)
-        activity_logging_opts.add_argument("--loglevel",
-                                           choices = ["debug","info","warning",
-                                                    "error","critical", "DEBUG",
-                                                    "INFO","WARNING",
-                                                    "ERROR","CRITICAL"],
+        activity_logging_opts.add_argument('--loglevel',
+                                           choices = loglevel_choices,
                                            help = loglevel_help)
         activity_logging_opts.add_argument('--debug',
                                            action = 'store_true',
@@ -1190,73 +1166,75 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "install-queue" command
+    # create the parser for the 'install-queue' command
     #
     #-------------------------------------------
-    install_help = "Show spells waiting to be installed " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
+    install_help = 'Show spells waiting to be installed.'
     parser_install_queue = subparsers.add_parser('install-queue',
                                                  help = install_help)
     inst_queue_logging_opts = parser_install_queue.add_argument_group('Logging Options')
-    inst_queue_logging_opts.add_argument("-q", "--quiet",
-                                         action = "count",
+    inst_queue_logging_opts.add_argument('-q', '--quiet',
+                                         action = 'count',
                                          default = 0,
                                          help = quiet_help)
 
     if enable_debugging_mode is True:
-        inst_queue_logging_opts.add_argument("-v", "--verbosity",
-                                             action = "count",
+        inst_queue_logging_opts.add_argument('-v', '--verbosity',
+                                             action = 'count',
                                              default = 0,
                                              help = verbose_help)
-        inst_queue_logging_opts.add_argument("--loglevel",
-                                             choices = ["debug","info","warning",
-                                                      "error","critical","DEBUG",
-                                                      "INFO","WARNING","ERROR",
-                                                      "CRITICAL"],
+        inst_queue_logging_opts.add_argument('--loglevel',
+                                             choices = ['debug','info','warning',
+                                                      'error','critical','DEBUG',
+                                                      'INFO','WARNING','ERROR',
+                                                      'CRITICAL'],
                                              help = loglevel_help)
         inst_queue_logging_opts.add_argument('--debug',
                                              action = 'store_true',
                                              help = debug_help)
 
-    parser_install_queue.set_defaults(func = gaze_install_queue)
+    parser_install_queue.set_defaults(func = gaze_queue,
+                                      queue = 'install')
 
     #-------------------------------------------
     #
-    # create the parser for the "remove-queue" command
+    # create the parser for the 'remove-queue' command
     #
     #-------------------------------------------
-    remove_help = "Show spells to be removed  " + colortext.colorize('(Not Working)', 'bold', 'red', 'black') + "."
+    remove_help = 'Show spells to be removed.'
     parser_remove_queue = subparsers.add_parser('remove-queue',
                                                 help = remove_help)
 
     remove_queue_logging_opts = parser_remove_queue.add_argument_group('Logging Options')
-    remove_queue_logging_opts.add_argument("-q", "--quiet",
-                                     action = "count",
+    remove_queue_logging_opts.add_argument('-q', '--quiet',
+                                     action = 'count',
                                      default = 0,
                                      help = quiet_help)
 
     if enable_debugging_mode is True:
-        remove_queue_logging_opts.add_argument("-v", "--verbosity",
-                                               action = "count",
+        remove_queue_logging_opts.add_argument('-v', '--verbosity',
+                                               action = 'count',
                                                default = 0,
                                                help = verbose_help)
-        remove_queue_logging_opts.add_argument("--loglevel",
-                                               choices = ["debug","info","warning",
-                                                        "error","critical","DEBUG",
-                                                        "INFO","WARNING","ERROR",
-                                                        "CRITICAL"],
+        remove_queue_logging_opts.add_argument('--loglevel',
+                                               choices = ['debug','info','warning',
+                                                        'error','critical','DEBUG',
+                                                        'INFO','WARNING','ERROR',
+                                                        'CRITICAL'],
                                                help = loglevel_help)
         remove_queue_logging_opts.add_argument('--debug',
                                                action = 'store_true',
                                                help = debug_help)
 
-    parser_remove_queue.set_defaults(func = gaze_remove_queue)
+    parser_remove_queue.set_defaults(func = gaze_queue,
+                                     queue = 'remove')
 
     #-------------------------------------------
     #
-    # create the parser for the "show-held" command
+    # create the parser for the 'show-held' command
     #
     #-------------------------------------------
-    show_held_help = 'Shows all spells currently held (which means they are not to be updated). (Not Working)'
+    show_held_help = 'Shows all spells currently held (which means they are not to be updated).'
     parser_show_held = subparsers.add_parser('show-held',
                                              help = show_held_help)
 
@@ -1264,64 +1242,68 @@ def real_main(args):
     show_held_logging_opts = parser_show_held.add_argument_group('Logging Options')
 
 
-    show_held_logging_opts.add_argument("-q", "--quiet",
-                                        action = "count",
+    show_held_logging_opts.add_argument('-q', '--quiet',
+                                        action = 'count',
                                         default = 0,
                                         help = quiet_help)
 
     if enable_debugging_mode is True:
-        show_held_logging_opts.add_argument("-v", "--verbosity",
-                                            action = "count",
+        show_held_logging_opts.add_argument('-v', '--verbosity',
+                                            action = 'count',
                                             default = 0,
                                             help = verbose_help)
-        show_held_logging_opts.add_argument("--loglevel",
-                                            choices = ["debug","info","warning",
-                                                     "error","critical","DEBUG",
-                                                     "INFO","WARNING","ERROR",
-                                                     "CRITICAL"],
+        show_held_logging_opts.add_argument('--loglevel',
+                                            choices = ['debug','info','warning',
+                                                     'error','critical','DEBUG',
+                                                     'INFO','WARNING','ERROR',
+                                                     'CRITICAL'],
                                             help = loglevel_help)
         show_held_logging_opts.add_argument('--debug',
                                             action = 'store_true',
                                             help = debug_help)
         
-    parser_show_held.set_defaults(func = gaze_show_held)
+    parser_show_held.set_defaults(func = gaze_installed,
+                                  spellstatus = 'held',
+                                  spell = False)
 
 
     #-------------------------------------------
     #
-    # create the parser for the "show-exiled" command
+    # create the parser for the 'show-exiled' command
     #
     #-------------------------------------------
-    show_exiled_help = 'Shows all spells currently exiled (which means they are not to be cast in any way). (Not Working)'
+    show_exiled_help = 'Shows all spells currently exiled (which means they are not to be cast in any way).'
     parser_show_exiled = subparsers.add_parser('show-exiled',
                                                help = show_exiled_help)
     show_exiled_logging_opts = parser_show_exiled.add_argument_group('Logging Options')
-    show_exiled_logging_opts.add_argument("-q", "--quiet",
-                                  action = "count",
+    show_exiled_logging_opts.add_argument('-q', '--quiet',
+                                  action = 'count',
                                   default = 0,
                                   help = quiet_help)
 
     if enable_debugging_mode is True:
-        show_exiled_logging_opts.add_argument("-v", "--verbosity",
-                                              action = "count",
+        show_exiled_logging_opts.add_argument('-v', '--verbosity',
+                                              action = 'count',
                                               default = 0,
                                               help = verbose_help)
-        show_exiled_logging_opts.add_argument("--loglevel",
-                                              choices = ["debug","info","warning",
-                                                       "error","critical","DEBUG",
-                                                       "INFO","WARNING","ERROR",
-                                                       "CRITICAL"],
+        show_exiled_logging_opts.add_argument('--loglevel',
+                                              choices = ['debug','info','warning',
+                                                       'error','critical','DEBUG',
+                                                       'INFO','WARNING','ERROR',
+                                                       'CRITICAL'],
                                               help = loglevel_help)
         show_exiled_logging_opts.add_argument('--debug',
                                               action = 'store_true',
                                               help = debug_help)
 
-    parser_show_exiled.set_defaults(func = gaze_show_exiled)
+    parser_show_exiled.set_defaults(func = gaze_installed,
+                                    spellstatus = 'exiled',
+                                    spell = False)
 
 
     #-------------------------------------------
     #
-    # create the parser for the "provides" command
+    # create the parser for the 'provides' command
     #
     #-------------------------------------------
     parser_provides = subparsers.add_parser('provides',
@@ -1330,21 +1312,21 @@ def real_main(args):
     parser_provides.add_argument('feature',
                              nargs = 1,
                              help = 'Feature')
-    provides_logging_opts.add_argument("-q", "--quiet",
-                                 action = "count",
+    provides_logging_opts.add_argument('-q', '--quiet',
+                                 action = 'count',
                                  default = 0,
                                  help = quiet_help)
     
     if enable_debugging_mode is True:
-        provides_logging_opts.add_argument("-v", "--verbosity",
-                                           action = "count",
+        provides_logging_opts.add_argument('-v', '--verbosity',
+                                           action = 'count',
                                            default = 0,
                                            help = verbose_help)
-        provides_logging_opts.add_argument("--loglevel",
-                                           choices = ["debug","info","warning",
-                                                    "error","critical","DEBUG",
-                                                    "INFO","WARNING","ERROR",
-                                                    "CRITICAL"],
+        provides_logging_opts.add_argument('--loglevel',
+                                           choices = ['debug','info','warning',
+                                                    'error','critical','DEBUG',
+                                                    'INFO','WARNING','ERROR',
+                                                    'CRITICAL'],
                                            help = loglevel_help)
         provides_logging_opts.add_argument('--debug',
                                            action = 'store_true',
@@ -1355,11 +1337,11 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "what" command
+    # create the parser for the 'what' command
     #
     #-------------------------------------------
     parser_what = subparsers.add_parser('what',
-                                        help = 'Display spell description')
+                                        help = 'Display spell description.')
     what_logging_opts = parser_what.add_argument_group('Logging Options')
     parser_what.add_argument('spell',
                              nargs = '+',
@@ -1367,21 +1349,21 @@ def real_main(args):
     parser_what.add_argument('-g','--grimoire',
                              nargs = '+',
                              help = 'specify which grimoire(s) to look in.')
-    what_logging_opts.add_argument("-q", "--quiet",
-                                   action = "count",
+    what_logging_opts.add_argument('-q', '--quiet',
+                                   action = 'count',
                                    default = 0,
                                    help = quiet_help)
 
     if enable_debugging_mode is True:
-        what_logging_opts.add_argument("-v", "--verbosity",
-                                       action = "count",
+        what_logging_opts.add_argument('-v', '--verbosity',
+                                       action = 'count',
                                        default = 0,
                                        help = verbose_help)
-        what_logging_opts.add_argument("--loglevel",
-                                       choices = ["debug","info","warning",
-                                                "error","critical","DEBUG",
-                                                "INFO","WARNING","ERROR",
-                                                "CRITICAL"],
+        what_logging_opts.add_argument('--loglevel',
+                                       choices = ['debug','info','warning',
+                                                'error','critical','DEBUG',
+                                                'INFO','WARNING','ERROR',
+                                                'CRITICAL'],
                                        help = loglevel_help)
         what_logging_opts.add_argument('--debug',
                                        action = 'store_true',
@@ -1392,32 +1374,32 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "short" command
+    # create the parser for the 'short' command
     #
     #-------------------------------------------
     parser_short = subparsers.add_parser('short',
-                                         help = 'Display spell short description (Not Working)')
+                                         help = 'Display spell short description.')
     parser_short.add_argument('spell',
                               nargs = '+',
                               help='Display System Info')
     parser_short.add_argument('-g','--grimoire',
                               nargs = '+',
                               help = 'Specify which grimoire(s) to look in.')
-    parser_short.add_argument("-q", "--quiet",
-                              action = "count",
+    parser_short.add_argument('-q', '--quiet',
+                              action = 'count',
                               default = 0,
                               help = quiet_help)
     
     if enable_debugging_mode is True:
-        parser_short.add_argument("-v", "--verbosity",
-                                  action = "count",
+        parser_short.add_argument('-v', '--verbosity',
+                                  action = 'count',
                                   default = 0,
                                   help = verbose_help)
-        parser_short.add_argument("--loglevel",
-                                  choices = ["debug","info","warning",
-                                           "error","critical","DEBUG",
-                                           "INFO","WARNING","ERROR",
-                                           "CRITICAL"],
+        parser_short.add_argument('--loglevel',
+                                  choices = ['debug','info','warning',
+                                           'error','critical','DEBUG',
+                                           'INFO','WARNING','ERROR',
+                                           'CRITICAL'],
                                   help = loglevel_help)
         parser_short.add_argument('--debug',
                                   action = 'store_true',
@@ -1428,7 +1410,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "where" command
+    # create the parser for the 'where' command
     #
     #-------------------------------------------
     parser_where = subparsers.add_parser('where',
@@ -1447,21 +1429,21 @@ def real_main(args):
     parser_where.add_argument('-g','--grimoire',
                               nargs = '+',
                               help = 'specify which grimoire(s) to look in.')
-    where_logging_opts.add_argument("-q", "--quiety",
-                              action = "count",
+    where_logging_opts.add_argument('-q', '--quiety',
+                              action = 'count',
                               default = 0,
                               help = quiet_help)
 
     if enable_debugging_mode is True:
-        where_logging_opts.add_argument("-v", "--verbosity",
-                                        action = "count",
+        where_logging_opts.add_argument('-v', '--verbosity',
+                                        action = 'count',
                                         default = 0,
                                         help = verbose_help)
-        where_logging_opts.add_argument("--loglevel",
-                                        choices = ["debug","info","warning",
-                                                 "error","critical","DEBUG",
-                                                 "INFO","WARNING","ERROR",
-                                                 "CRITICAL"],
+        where_logging_opts.add_argument('--loglevel',
+                                        choices = ['debug','info','warning',
+                                                 'error','critical','DEBUG',
+                                                 'INFO','WARNING','ERROR',
+                                                 'CRITICAL'],
                                         help = loglevel_help)
         where_logging_opts.add_argument('--debug',
                                         action = 'store_true',
@@ -1472,7 +1454,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "url" command
+    # create the parser for the 'url' command
     #
     #-------------------------------------------
     parser_url = subparsers.add_parser('url',
@@ -1489,21 +1471,21 @@ def real_main(args):
     parser_url.add_argument('-g','--grimoire',
                             nargs = '+',
                             help = 'Specify which grimoire(s) to look in.')
-    url_logging_opts.add_argument("-q", "--quiet",
-                                  action = "count",
+    url_logging_opts.add_argument('-q', '--quiet',
+                                  action = 'count',
                                   default = 0,
                                   help = quiet_help)
 
     if enable_debugging_mode is True:
-        url_logging_opts.add_argument("-v", "--verbosity",
-                                      action = "count",
+        url_logging_opts.add_argument('-v', '--verbosity',
+                                      action = 'count',
                                       default = 0,
                                       help = verbose_help)
-        url_logging_opts.add_argument("--loglevel",
-                                      choices = ["debug","info","warning",
-                                               "error","critical","DEBUG",
-                                               "INFO","WARNING","ERROR",
-                                               "CRITICAL"],
+        url_logging_opts.add_argument('--loglevel',
+                                      choices = ['debug','info','warning',
+                                               'error','critical','DEBUG',
+                                               'INFO','WARNING','ERROR',
+                                               'CRITICAL'],
                                       help = loglevel_help)
         url_logging_opts.add_argument('--debug',
                                       action = 'store_true',
@@ -1514,7 +1496,7 @@ def real_main(args):
     
     #-------------------------------------------
     #
-    # create the parser for the "sources" command
+    # create the parser for the 'sources' command
     #
     #-------------------------------------------
     parser_sources = subparsers.add_parser('sources',
@@ -1530,21 +1512,21 @@ def real_main(args):
     parser_sources.add_argument('-g','--grimoire',
                                 nargs = '+',
                                 help = 'specify which grimoire(s) to look in.')
-    sources_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    sources_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                       help = quiet_help)
     
     if enable_debugging_mode is True:
-        sources_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        sources_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        sources_logging_opts.add_argument("--loglevel",
-                                          choices=["debug","info","warning",
-                                                   "error","critical","DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        sources_logging_opts.add_argument('--loglevel',
+                                          choices=['debug','info','warning',
+                                                   'error','critical','DEBUG',
+                                                   'INFO','WARNING','ERROR',
+                                                   'CRITICAL'],
                                           help = loglevel_help)
         sources_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -1555,7 +1537,7 @@ def real_main(args):
 
         #-------------------------------------------
         #
-        # create the parser for the "source_urls" command
+        # create the parser for the 'source_urls' command
         #
         #-------------------------------------------
     parser_source_url = subparsers.add_parser('source_urls',
@@ -1571,21 +1553,21 @@ def real_main(args):
     parser_source_url.add_argument('-g','--grimoire',
                                    nargs = '+',
                                    help = 'specify which grimoire(s) to look in.')
-    source_url_logging_opts.add_argument("-q", "--quiet",
-                                         action = "count",
+    source_url_logging_opts.add_argument('-q', '--quiet',
+                                         action = 'count',
                                          default = 0,
                                          help = quiet_help)
 
     if enable_debugging_mode is True:
-        source_url_logging_opts.add_argument("-v", "--verbosity",
-                                             action = "count",
+        source_url_logging_opts.add_argument('-v', '--verbosity',
+                                             action = 'count',
                                              default = 0,
                                              help = verbose_help)
-        source_url_logging_opts.add_argument("--loglevel",
-                                             choices = ["debug","info","warning",
-                                                      "error","critical","DEBUG",
-                                                      "INFO","WARNING","ERROR",
-                                                      "CRITICAL"],
+        source_url_logging_opts.add_argument('--loglevel',
+                                             choices = ['debug','info','warning',
+                                                      'error','critical','DEBUG',
+                                                      'INFO','WARNING','ERROR',
+                                                      'CRITICAL'],
                                              help = loglevel_help)
         source_url_logging_opts.add_argument('--debug',
                                              action = 'store_true',
@@ -1596,7 +1578,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "maintainer" command
+    # create the parser for the 'maintainer' command
     #
     #-------------------------------------------
     parser_maintainer = subparsers.add_parser('maintainer',
@@ -1612,21 +1594,21 @@ def real_main(args):
     parser_maintainer.add_argument('-g','--grimoire',
                                    nargs = '+',
                                    help = 'specify which grimoire(s) to look in.')
-    maintainer_logging_opts.add_argument("-q", "--quiet",
-                                         action = "count",
+    maintainer_logging_opts.add_argument('-q', '--quiet',
+                                         action = 'count',
                                          default = 0,
                                          help = quiet_help)
 
     if enable_debugging_mode is True:
-        maintainer_logging_opts.add_argument("-v", "--verbosity",
-                                             action = "count",
+        maintainer_logging_opts.add_argument('-v', '--verbosity',
+                                             action = 'count',
                                              default = 0,
                                              help = verbose_help)
-        maintainer_logging_opts.add_argument("--loglevel",
-                                             choices = ["debug","info","warning",
-                                                      "error","critical","DEBUG",
-                                                      "INFO","WARNING","ERROR",
-                                                      "CRITICAL"],
+        maintainer_logging_opts.add_argument('--loglevel',
+                                             choices = ['debug','info','warning',
+                                                      'error','critical','DEBUG',
+                                                      'INFO','WARNING','ERROR',
+                                                      'CRITICAL'],
                                              help = loglevel_help)
         maintainer_logging_opts.add_argument('--debug',
                                              action = 'store_true',
@@ -1637,7 +1619,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "compile" command
+    # create the parser for the 'compile' command
     #
     #-------------------------------------------
     parser_compile = subparsers.add_parser('compile',
@@ -1653,33 +1635,34 @@ def real_main(args):
     parser_compile.add_argument('version',
                                 nargs = '?',
                                 help = 'Specifies which Version of spell to view.')
-    compile_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    compile_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                       help = quiet_help)
 
 
     if enable_debugging_mode is True:
-        compile_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        compile_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        compile_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                   "error","critical","DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        compile_logging_opts.add_argument('--loglevel',
+                                          choices = ['debug','info','warning',
+                                                   'error','critical','DEBUG',
+                                                   'INFO','WARNING','ERROR',
+                                                   'CRITICAL'],
                                           help = loglevel_help)
         compile_logging_opts.add_argument('--debug',
                                           action = 'store_true',
                                           help = debug_help)
         
-    parser_compile.set_defaults(func = gaze_compile)
+    parser_compile.set_defaults(func = gaze_log,
+                                log = 'compile')
 
 
     #-------------------------------------------
     #
-    # create the parser for the "install" command
+    # create the parser for the 'install' command
     #
     #-------------------------------------------
     parser_install = subparsers.add_parser('install',
@@ -1695,33 +1678,33 @@ def real_main(args):
     parser_install.add_argument('version',
                                 nargs = 1,
                                 help = 'Specifies which version of spell to view')
-    install_logging_opts.add_argument("-q", "--quiet",
-                                action = "count",
+    install_logging_opts.add_argument('-q', '--quiet',
+                                action = 'count',
                                 default = 0,
                                 help = quiet_help)
 
     if enable_debugging_mode is True:
-        install_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        install_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)        
-        install_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                   "error","critical","DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        install_logging_opts.add_argument('--loglevel',
+                                          choices = ['debug','info','warning',
+                                                     'error','critical','DEBUG',
+                                                     'INFO','WARNING','ERROR',
+                                                     'CRITICAL'],
                                           help = loglevel_help)
         install_logging_opts.add_argument('--debug',
                                           action = 'store_true',
                                           help = debug_help)
         
-    parser_install.set_defaults(func = gaze_install,
-                                install_display = False)
+    parser_install.set_defaults(func = gaze_log,
+                                log = 'install')
 
 
     #-------------------------------------------
     #
-    # create the parser for the "install-full" command
+    # create the parser for the 'install-full' command
     #
     #-------------------------------------------
     parser_install_full = subparsers.add_parser('install-full',
@@ -1737,33 +1720,33 @@ def real_main(args):
     parser_install_full.add_argument('version',
                                      nargs = 1,
                                      help = 'Specifies which version of the spell to view.')
-    install_full_logging_opts.add_argument("-q", "--quiet",
-                                     action = "count",
+    install_full_logging_opts.add_argument('-q', '--quiet',
+                                     action = 'count',
                                      default = 0,
                                            help = quiet_help)
 
     if enable_debugging_mode is True:
-        install_full_logging_opts.add_argument("-v", "--verbosity",
-                                               action = "count",
+        install_full_logging_opts.add_argument('-v', '--verbosity',
+                                               action = 'count',
                                                default = 0,
                                                help = verbose_help)
-        install_full_logging_opts.add_argument("--loglevel",
-                                               choices = ["debug","info","warning",
-                                                        "error","critical","DEBUG",
-                                                        "INFO","WARNING","ERROR",
-                                                        "CRITICAL"],
+        install_full_logging_opts.add_argument('--loglevel',
+                                               choices = ['debug','info','warning',
+                                                        'error','critical','DEBUG',
+                                                        'INFO','WARNING','ERROR',
+                                                        'CRITICAL'],
                                                help = loglevel_help)
         install_full_logging_opts.add_argument('--debug',
                                                action = 'store_true',
                                                help = debug_help)
         
-    parser_install_full.set_defaults(func = gaze_install,
-                                     install_display = 'Full')
+    parser_install_full.set_defaults(func = gaze_log,
+                                     log = 'install_full')
 
 
     #-------------------------------------------
     #
-    # create the parser for the "install-spell" command
+    # create the parser for the 'install-spell' command
     #
     #-------------------------------------------
     parser_install_spell = subparsers.add_parser('install-spell',
@@ -1779,33 +1762,33 @@ def real_main(args):
     parser_install_spell.add_argument('version',
                                       nargs = 1,
                                       help = 'Specifies which version of the spell to view')
-    install_spell_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    install_spell_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                             help = quiet_help)
 
     if enable_debugging_mode is True:
-        install_spell_logging_opts.add_argument("-v", "--verbosity",
-                                                action = "count",
+        install_spell_logging_opts.add_argument('-v', '--verbosity',
+                                                action = 'count',
                                                 default = 0,
                                                 help = verbose_help)
-        install_spell_logging_opts.add_argument("--loglevel",
-                                                choices = ["debug","info","warning",
-                                                         "error","critical","DEBUG",
-                                                         "INFO","WARNING","ERROR",
-                                                         "CRITICAL"],
+        install_spell_logging_opts.add_argument('--loglevel',
+                                                choices = ['debug','info','warning',
+                                                         'error','critical','DEBUG',
+                                                         'INFO','WARNING','ERROR',
+                                                         'CRITICAL'],
                                                 help = loglevel_help)
         install_spell_logging_opts.add_argument('--debug',
                                                 action = 'store_true',
                                                 help = debug_help)
         
-    parser_install_spell.set_defaults(func = gaze_install,
-                                      install_display = 'Spell')
+    parser_install_spell.set_defaults(func = gaze_log,
+                                      log = 'install_spell')
 
 
     #-------------------------------------------
     #
-    # create the parser for the "version" command
+    # create the parser for the 'version' command
     #
     #-------------------------------------------
     parser_version = subparsers.add_parser('version',
@@ -1821,21 +1804,21 @@ def real_main(args):
     parser_version.add_argument('-g','--grimoire',
                                 nargs = '+',
                                 help = 'specify which grimoire(s) to look in.')
-    version_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    version_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                       help = quiet_help)
 
     if enable_debugging_mode is True:
-        version_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        version_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        version_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                   "error","critical","DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        version_logging_opts.add_argument('--loglevel',
+                                          choices = ['debug','info','warning',
+                                                   'error','critical','DEBUG',
+                                                   'INFO','WARNING','ERROR',
+                                                   'CRITICAL'],
                                           help = loglevel_help)
         version_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -1847,7 +1830,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "versions" command
+    # create the parser for the 'versions' command
     #
     #-------------------------------------------
     parser_versions = subparsers.add_parser('versions',
@@ -1860,21 +1843,21 @@ def real_main(args):
     parser_versions.add_argument('spell',
                                  nargs = 1,
                                  help = 'Display System Info')
-    versions_logging_opts.add_argument("-q", "--quiet",
-                                 action = "count",
+    versions_logging_opts.add_argument('-q', '--quiet',
+                                 action = 'count',
                                  default = 0,
                                        help = quiet_help)
 
     if enable_debugging_mode is True:
-        versions_logging_opts.add_argument("-v", "--verbosity",
-                                           action = "count",
+        versions_logging_opts.add_argument('-v', '--verbosity',
+                                           action = 'count',
                                            default = 0,
                                            help = verbose_help)
-        versions_logging_opts.add_argument("--loglevel",
-                                           choices = ["debug","info","warning",
-                                                    "error","critical","DEBUG",
-                                                    "INFO","WARNING","ERROR",
-                                                    "CRITICAL"],
+        versions_logging_opts.add_argument('--loglevel',
+                                           choices = ['debug','info','warning',
+                                                    'error','critical','DEBUG',
+                                                    'INFO','WARNING','ERROR',
+                                                    'CRITICAL'],
                                            help = loglevel_help)
         versions_logging_opts.add_argument('--debug',
                                            action = 'store_true',
@@ -1886,7 +1869,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "license" command
+    # create the parser for the 'license' command
     #
     #-------------------------------------------
     parser_license = subparsers.add_parser('license',
@@ -1902,21 +1885,21 @@ def real_main(args):
     parser_license.add_argument('-g','--grimoire',
                                 nargs = '+',
                                 help = 'specify which grimoire(s) to look in.')
-    license_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    license_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                       help = debug_help)
 
     if enable_debugging_mode is True:
-        license_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        license_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        license_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                   "error","critical","DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        license_logging_opts.add_argument('--loglevel',
+                                          choices = ['debug','info','warning',
+                                                   'error','critical','DEBUG',
+                                                   'INFO','WARNING','ERROR',
+                                                   'CRITICAL'],
                                           help = loglevel_help)
         license_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -1927,7 +1910,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "versions" command
+    # create the parser for the 'versions' command
     #
     #-------------------------------------------
     parser_sum = subparsers.add_parser('sum',
@@ -1940,21 +1923,21 @@ def real_main(args):
     parser_sum.add_argument('spell',
                             nargs = '?',
                             help = 'Display System Info')
-    sum_logging_opts.add_argument("-q", "--quiet",
-                            action = "count",
+    sum_logging_opts.add_argument('-q', '--quiet',
+                            action = 'count',
                             default = 0,
                                   help = quiet_help)
 
     if enable_debugging_mode is True:
-        sum_logging_opts.add_argument("-v", "--verbosity",
-                                      action = "count",
+        sum_logging_opts.add_argument('-v', '--verbosity',
+                                      action = 'count',
                                       default = 0,
                                       help = verbose_help)
-        sum_logging_opts.add_argument("--loglevel",
-                                      choices = ["debug","info","warning",
-                                               "error","critical","DEBUG",
-                                               "INFO","WARNING","ERROR",
-                                               "CRITICAL"],
+        sum_logging_opts.add_argument('--loglevel',
+                                      choices = ['debug','info','warning',
+                                               'error','critical','DEBUG',
+                                               'INFO','WARNING','ERROR',
+                                               'CRITICAL'],
                                       help = loglevel_help)
         sum_logging_opts.add_argument('--debug',
                                       action = 'store_true',
@@ -1966,7 +1949,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "md5sum" command
+    # create the parser for the 'md5sum' command
     #
     #-------------------------------------------
     parser_md5sum = subparsers.add_parser('md5sum',
@@ -1979,21 +1962,21 @@ def real_main(args):
     parser_md5sum.add_argument('spell',
                                nargs = '?',
                                help = 'Display System Info')
-    md5sum_logging_opts.add_argument("-q", "--quiet",
-                               action = "count",
+    md5sum_logging_opts.add_argument('-q', '--quiet',
+                               action = 'count',
                                default = 0,
                                      help = quiet_help)
 
     if enable_debugging_mode is True:
-        md5sum_logging_opts.add_argument("-v", "--verbosity",
-                                         action = "count",
+        md5sum_logging_opts.add_argument('-v', '--verbosity',
+                                         action = 'count',
                                          default = 0,
                                          help = verbose_help)
-        md5sum_logging_opts.add_argument("--loglevel",
-                                         choices = ["debug","info","warning",
-                                                  "error","critical","DEBUG",
-                                                  "INFO","WARNING","ERROR",
-                                                  "CRITICAL"],
+        md5sum_logging_opts.add_argument('--loglevel',
+                                         choices = ['debug','info','warning',
+                                                  'error','critical','DEBUG',
+                                                  'INFO','WARNING','ERROR',
+                                                  'CRITICAL'],
                                          help = loglevel_help)
         md5sum_logging_opts.add_argument('--debug',
                                          action = 'store_true',
@@ -2005,7 +1988,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "size" command
+    # create the parser for the 'size' command
     #
     #-------------------------------------------
     parser_size = subparsers.add_parser('size',
@@ -2021,21 +2004,21 @@ def real_main(args):
     parser_size.add_argument('-a','-all','--all',
                              action = 'store_true',
                              help = 'Display sizes of all the spells. In addition, this will print the largest spell.')
-    size_logging_opts.add_argument("-q", "--quiet",
-                             action = "count",
+    size_logging_opts.add_argument('-q', '--quiet',
+                             action = 'count',
                              default = 0,
                                    help = quiet_help)
 
     if enable_debugging_mode is True:
-        size_logging_opts.add_argument("-v", "--verbosity",
-                                       action = "count",
+        size_logging_opts.add_argument('-v', '--verbosity',
+                                       action = 'count',
                                        default = 0,
                                        help = verbose_help)
-        size_logging_opts.add_argument("--loglevel",
-                                       choices = ["debug","info","warning",
-                                                  "error","critical","DEBUG",
-                                                  "INFO","WARNING","ERROR",
-                                                  "CRITICAL"],
+        size_logging_opts.add_argument('--loglevel',
+                                       choices = ['debug','info','warning',
+                                                  'error','critical','DEBUG',
+                                                  'INFO','WARNING','ERROR',
+                                                  'CRITICAL'],
                                        help = loglevel_help)
         size_logging_opts.add_argument('--debug',
                                        action = 'store_true',
@@ -2046,7 +2029,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "export" command
+    # create the parser for the 'export' command
     #
     #-------------------------------------------
     parser_export = subparsers.add_parser('export',
@@ -2056,21 +2039,21 @@ def real_main(args):
     export_logging_opts = parser_export.add_argument_group('Logging Options')
 
 
-    export_logging_opts.add_argument("-q", "--quiet",
-                                     action = "count",
+    export_logging_opts.add_argument('-q', '--quiet',
+                                     action = 'count',
                                      default = 0,
                                      help = quiet_help)
 
     if enable_debugging_mode is True:
-        export_logging_opts.add_argument("-v", "--verbosity",
-                                         action = "count",
+        export_logging_opts.add_argument('-v', '--verbosity',
+                                         action = 'count',
                                          default = 0,
                                          help = verbose_help)
-        export_logging_opts.add_argument("--loglevel",
-                                         choices = ["debug","info","warning",
-                                                    "error","critical","DEBUG",
-                                                    "INFO","WARNING","ERROR",
-                                                    "CRITICAL"],
+        export_logging_opts.add_argument('--loglevel',
+                                         choices = ['debug','info','warning',
+                                                    'error','critical','DEBUG',
+                                                    'INFO','WARNING','ERROR',
+                                                    'CRITICAL'],
                                          help = loglevel_help)
         export_logging_opts.add_argument('--debug',
                                          action = 'store_true',
@@ -2081,11 +2064,11 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "import" command
+    # create the parser for the 'import' command
     #
     #-------------------------------------------
     parser_import = subparsers.add_parser('import',
-                                          help = 'restore the snapshot from a previous "gaze export" command (see above). (Not Working)')
+                                          help = "restore the snapshot from a previous 'gaze export' command (see above). (Not Working)")
 
 
     import_logging_opts = parser_import.add_argument_group('Logging Options')
@@ -2097,21 +2080,21 @@ def real_main(args):
     parser_import.add_argument('--depreciated',
                                action = 'store_true',
                                help = 'Use the old behaviour.  An old cache is expected. There is no significant problem if an old cache is restored with the new importer. A few files will be ignored - only the files that the new exporter saves are considered - and the queuing logic wille be slighty more agressive.')
-    import_logging_opts.add_argument("-q", "--quiet",
-                                     action = "count",
+    import_logging_opts.add_argument('-q', '--quiet',
+                                     action = 'count',
                                      default = 0,
                                      help = quiet_help)
     
     if enable_debugging_mode is True:
-        import_logging_opts.add_argument("-v", "--verbosity",
-                                         action = "count",
+        import_logging_opts.add_argument('-v', '--verbosity',
+                                         action = 'count',
                                          default = 0,
                                          help = verbose_help)
-        import_logging_opts.add_argument("--loglevel",
-                                         choices = ["debug","info","warning",
-                                                  "error","critical","DEBUG",
-                                                  "INFO","WARNING","ERROR",
-                                                  "CRITICAL"],
+        import_logging_opts.add_argument('--loglevel',
+                                         choices = ['debug','info','warning',
+                                                  'error','critical','DEBUG',
+                                                  'INFO','WARNING','ERROR',
+                                                  'CRITICAL'],
                                          help = loglevel_help)
         import_logging_opts.add_argument('--debug',
                                          action = 'store_true',
@@ -2122,7 +2105,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "grimoire" command
+    # create the parser for the 'grimoire' command
     #
     #-------------------------------------------
     parser_grimoire = subparsers.add_parser('grimoire',
@@ -2131,25 +2114,25 @@ def real_main(args):
     
     grimoire_logging_opts = parser_grimoire.add_argument_group('Logging Options')
 
-
+    
     parser_grimoire.add_argument('grimoire',
                                  nargs = '*',
                                  help = 'Specify grimoire to view')
-    grimoire_logging_opts.add_argument("-q", "--quiet",
-                                 action = "count",
+    grimoire_logging_opts.add_argument('-q', '--quiet',
+                                 action = 'count',
                                  default = 0,
                                        help = quiet_help)
     
     if enable_debugging_mode is True:
-        grimoire_logging_opts.add_argument("-v", "--verbosity",
-                                           action = "count",
+        grimoire_logging_opts.add_argument('-v', '--verbosity',
+                                           action = 'count',
                                            default = 0,
                                            help = verbose_help)
-        grimoire_logging_opts.add_argument("--loglevel",
-                                           choices = ["debug","info","warning",
-                                                    "error","critical","DEBUG",
-                                                    "INFO","WARNING","ERROR",
-                                                    "CRITICAL"],
+        grimoire_logging_opts.add_argument('--loglevel',
+                                           choices = ['debug','info','warning',
+                                                    'error','critical','DEBUG',
+                                                    'INFO','WARNING','ERROR',
+                                                    'CRITICAL'],
                                            help = loglevel_help)
         grimoire_logging_opts.add_argument('--debug',
                                            action = 'store_true',
@@ -2160,7 +2143,7 @@ def real_main(args):
                                  display_format = 'console')
 
 
-    # create the parser for the "grimoires" command
+    # create the parser for the 'grimoires' command
     parser_grimoires = subparsers.add_parser('grimoires',
                                              help = 'Display installed grimoires by name only. (Not Working)')
 
@@ -2168,21 +2151,21 @@ def real_main(args):
     grimoires_logging_opts = parser_grimoires.add_argument_group('Logging Options')
 
 
-    grimoires_logging_opts.add_argument("-q", "--quiet",
-                                        action = "count",
+    grimoires_logging_opts.add_argument('-q', '--quiet',
+                                        action = 'count',
                                         default = 0,
                                         help = quiet_help)
     
     if enable_debugging_mode is True:
-        grimoires_logging_opts.add_argument("-v", "--verbosity",
-                                            action = "count",
+        grimoires_logging_opts.add_argument('-v', '--verbosity',
+                                            action = 'count',
                                             default = 0,
                                             help = verbose_help)
-        grimoires_logging_opts.add_argument("--loglevel",
-                                            choices = ["debug","info","warning",
-                                                     "error","critical","DEBUG",
-                                                     "INFO","WARNING","ERROR",
-                                                     "CRITICAL"],
+        grimoires_logging_opts.add_argument('--loglevel',
+                                            choices = ['debug','info','warning',
+                                                     'error','critical','DEBUG',
+                                                     'INFO','WARNING','ERROR',
+                                                     'CRITICAL'],
                                             help = loglevel_help)
         grimoires_logging_opts.add_argument('--debug',
                                             action = 'store_true',
@@ -2195,7 +2178,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "html" command
+    # create the parser for the 'html' command
     #
     #-------------------------------------------
     parser_html = subparsers.add_parser('html',
@@ -2211,21 +2194,21 @@ def real_main(args):
     parser_html.add_argument('-s','--source',
                              action = 'store_true',
                              help = 'Displays links to the source files.')
-    html_logging_opts.add_argument("-q", "--quiet",
-                             action = "count",
+    html_logging_opts.add_argument('-q', '--quiet',
+                             action = 'count',
                              default = 0,
                                    help = quiet_help)
     
     if enable_debugging_mode is True:
-        html_logging_opts.add_argument("-v", "--verbosity",
-                                       action = "count",
+        html_logging_opts.add_argument('-v', '--verbosity',
+                                       action = 'count',
                                        default = 0,
                                        help = verbose_help)
-        html_logging_opts.add_argument("--loglevel",
-                                       choices = ["debug","info","warning",
-                                                "error","critical","DEBUG",
-                                                "INFO","WARNING","ERROR",
-                                                "CRITICAL"],
+        html_logging_opts.add_argument('--loglevel',
+                                       choices = ['debug','info','warning',
+                                                'error','critical','DEBUG',
+                                                'INFO','WARNING','ERROR',
+                                                'CRITICAL'],
                                        help = loglevel_help)
         html_logging_opts.add_argument('--debug',
                                        action = 'store_true',
@@ -2238,7 +2221,7 @@ def real_main(args):
     
     #-------------------------------------------
     #
-    # create the parser for the "search" command
+    # create the parser for the 'search' command
     #
     #-------------------------------------------
     parser_search = subparsers.add_parser('search',
@@ -2263,21 +2246,21 @@ def real_main(args):
     parser_search.add_argument('-g','--grimoire',
                                nargs = '+',
                                help = 'specify which grimoire(s) to look in.')
-    search_logging_opts.add_argument("-q", "--quiet",
-                                     action = "count",
+    search_logging_opts.add_argument('-q', '--quiet',
+                                     action = 'count',
                                      default = 0,
                                      help = quiet_help)
 
     if enable_debugging_mode is True:
-        search_logging_opts.add_argument("-v", "--verbosity",
-                                         action = "count",
+        search_logging_opts.add_argument('-v', '--verbosity',
+                                         action = 'count',
                                          default = 0,
                                          help = verbose_help)
-        search_logging_opts.add_argument("--loglevel",
-                                         choices = ["debug","info","warning",
-                                                    "error","critical","DEBUG",
-                                                    "INFO","WARNING","ERROR",
-                                                    "CRITICAL"],
+        search_logging_opts.add_argument('--loglevel',
+                                         choices = ['debug','info','warning',
+                                                    'error','critical','DEBUG',
+                                                    'INFO','WARNING','ERROR',
+                                                    'CRITICAL'],
                                          help = loglevel_help)
         search_logging_opts.add_argument('--debug',
                                          action = 'store_true',
@@ -2288,11 +2271,11 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "newer" command
+    # create the parser for the 'newer' command
     #
     #-------------------------------------------
     parser_newer = subparsers.add_parser('newer',
-                                         help = "Print packages first submitted after a specified date. (Not Working)")
+                                         help = 'Print packages first submitted after a specified date. (Not Working)')
 
     
     newer_logging_opts = parser_newer.add_argument_group('Logging Options')
@@ -2305,21 +2288,21 @@ def real_main(args):
     parser_newer.add_argument('-g','--grimoire',
                               nargs = '+',
                               help = 'specify which grimoire(s) to look in.')
-    newer_logging_opts.add_argument("-q", "--quiet",
-                                    action = "count",
+    newer_logging_opts.add_argument('-q', '--quiet',
+                                    action = 'count',
                                     default = 0,
                                     help = quiet_help)
 
     if enable_debugging_mode is True:
-        newer_logging_opts.add_argument("-v", "--verbosity",
-                                        action = "count",
+        newer_logging_opts.add_argument('-v', '--verbosity',
+                                        action = 'count',
                                         default = 0,
                                         help = verbose_help)
-        newer_logging_opts.add_argument("--loglevel",
-                                        choices = ["debug","info","warning",
-                                                 "error","critical","DEBUG",
-                                                 "INFO","WARNING","ERROR",
-                                                 "CRITICAL"],
+        newer_logging_opts.add_argument('--loglevel',
+                                        choices = ['debug','info','warning',
+                                                 'error','critical','DEBUG',
+                                                 'INFO','WARNING','ERROR',
+                                                 'CRITICAL'],
                                         help = loglevel_help)
         newer_logging_opts.add_argument('--debug',
                                         action = 'store_true',
@@ -2330,7 +2313,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "older" command
+    # create the parser for the 'older' command
     #
     #-------------------------------------------
     parser_older = subparsers.add_parser('older',
@@ -2346,21 +2329,21 @@ def real_main(args):
     parser_older.add_argument('-g','--grimoire',
                                nargs = '+',
                                help = 'specify which grimoire(s) to look in.')
-    older_logging_opts.add_argument("-q", "--quiet",
-                                    action = "count",
+    older_logging_opts.add_argument('-q', '--quiet',
+                                    action = 'count',
                                     default = 0,
                                     help = quiet_help)
 
     if enable_debugging_mode is True:
-        older_logging_opts.add_argument("-v", "--verbosity",
-                                        action = "count",
+        older_logging_opts.add_argument('-v', '--verbosity',
+                                        action = 'count',
                                         default = 0,
                                         help = verbose_help)
-        older_logging_opts.add_argument("--loglevel",
-                                        choices = ["debug","info","warning",
-                                                 "error","critical","DEBUG",
-                                                 "INFO","WARNING","ERROR",
-                                                 "CRITICAL"],
+        older_logging_opts.add_argument('--loglevel',
+                                        choices = ['debug','info','warning',
+                                                 'error','critical','DEBUG',
+                                                 'INFO','WARNING','ERROR',
+                                                 'CRITICAL'],
                                         help = loglevel_help)
         older_logging_opts.add_argument('--debug',
                                         action = 'store_true',
@@ -2371,7 +2354,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "from" command
+    # create the parser for the 'from' command
     #
     #-------------------------------------------
     parser_from = subparsers.add_parser('from',
@@ -2387,20 +2370,20 @@ def real_main(args):
     parser_from.add_argument('-r','-regex','--regex',
                              action = 'store_true',
                              help = 'Matching using basic regular expressions against the whole paths in the lists of installed files.')
-    from_logging_opts.add_argument("-q", "--quiet",
-                             action = "count",
+    from_logging_opts.add_argument('-q', '--quiet',
+                             action = 'count',
                              default = 0,
                              help = quiet_help)
     if enable_debugging_mode is True:
-        from_logging_opts.add_argument("-v", "--verbosity",
-                                       action = "count",
+        from_logging_opts.add_argument('-v', '--verbosity',
+                                       action = 'count',
                                        default = 0,
                                        help = verbose_help)
-        from_logging_opts.add_argument("--loglevel",
-                                       choices = ["debug","info","warning",
-                                                "error","critical","DEBUG",
-                                                "INFO","WARNING","ERROR",
-                                                "CRITICAL"],
+        from_logging_opts.add_argument('--loglevel',
+                                       choices = ['debug','info','warning',
+                                                'error','critical','DEBUG',
+                                                'INFO','WARNING','ERROR',
+                                                'CRITICAL'],
                                        help = loglevel_help)
         from_logging_opts.add_argument('--debug',
                                        action = 'store_true',
@@ -2412,7 +2395,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "installed" command
+    # create the parser for the 'installed' command
     #
     #-------------------------------------------
     parser_installed = subparsers.add_parser('installed',
@@ -2425,32 +2408,32 @@ def real_main(args):
     parser_installed.add_argument('spell',
                                   nargs = '*',
                                   help = 'Check to see whether a particular package is installed and if it is installed display its version number')
-    installed_logging_opts.add_argument("-q", "--quiet",
-                                  action = "count",
+    installed_logging_opts.add_argument('-q', '--quiet',
+                                  action = 'count',
                                   default = 0,
                                   help = quiet_help)
 
     if enable_debugging_mode is True:
-        installed_logging_opts.add_argument("-v", "--verbosity",
-                                            action = "count",
+        installed_logging_opts.add_argument('-v', '--verbosity',
+                                            action = 'count',
                                             default = 0,
                                             help = verbose_help)
-        installed_logging_opts.add_argument("--loglevel",
-                                            choices = ["debug","info","warning",
-                                                     "error","critical","DEBUG",
-                                                     "INFO","WARNING","ERROR",
-                                                     "CRITICAL"],
+        installed_logging_opts.add_argument('--loglevel',
+                                            choices = ['debug','info','warning',
+                                                     'error','critical','DEBUG',
+                                                     'INFO','WARNING','ERROR',
+                                                     'CRITICAL'],
                                             help = loglevel_help)
         installed_logging_opts.add_argument('--debug',
                                             action = 'store_true',
                                             help = debug_help)
         
-    parser_installed.set_defaults(func = gaze_installed)
+    parser_installed.set_defaults(func = gaze_installed, spellstatus=None)
 
 
     #-------------------------------------------
     #
-    # create the parser for the "section" command
+    # create the parser for the 'section' command
     #
     #-------------------------------------------
     parser_section = subparsers.add_parser('section',
@@ -2466,21 +2449,21 @@ def real_main(args):
     parser_section.add_argument('-g','--grimoire',
                                 nargs = '+',
                                 help = 'specify which grimoire(s) to look in.')
-    section_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    section_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                       help=quiet_help)
 
     if enable_debugging_mode is True:
-        section_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        section_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        section_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                   "error","critical","DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        section_logging_opts.add_argument('--loglevel',
+                                          choices = ['debug','info','warning',
+                                                   'error','critical','DEBUG',
+                                                   'INFO','WARNING','ERROR',
+                                                   'CRITICAL'],
                                           help = loglevel_help)
         section_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -2491,7 +2474,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "voyeur" command
+    # create the parser for the 'voyeur' command
     #
     #-------------------------------------------
     parser_voyeur = subparsers.add_parser('voyeur',
@@ -2504,21 +2487,21 @@ def real_main(args):
     parser_voyeur.add_argument('spell',
                                nargs = '?',
                                help = 'Display System Info')
-    voyeur_logging_opts.add_argument("-q", "--quiet",
-                               action = "count",
+    voyeur_logging_opts.add_argument('-q', '--quiet',
+                               action = 'count',
                                default = 0,
                                      help = quiet_help)
 
     if enable_debugging_mode is True:
-        voyeur_logging_opts.add_argument("-v", "--verbosity",
-                                         action = "count",
+        voyeur_logging_opts.add_argument('-v', '--verbosity',
+                                         action = 'count',
                                          default = 0,
                                          help = verbose_help)
-        voyeur_logging_opts.add_argument("--loglevel",
-                                         choices = ["debug","info","warning",
-                                                  "error","critical","DEBUG",
-                                                  "INFO","WARNING","ERROR",
-                                                  "CRITICAL"],
+        voyeur_logging_opts.add_argument('--loglevel',
+                                         choices = ['debug','info','warning',
+                                                  'error','critical','DEBUG',
+                                                  'INFO','WARNING','ERROR',
+                                                  'CRITICAL'],
                                          help = loglevel_help)
         voyeur_logging_opts.add_argument('--debug',
                                          action = 'store_true',
@@ -2529,7 +2512,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "history" command
+    # create the parser for the 'history' command
     #
     #-------------------------------------------
     parser_history = subparsers.add_parser('history',
@@ -2545,21 +2528,21 @@ def real_main(args):
     parser_history.add_argument('-g','--grimoire',
                                 nargs = '+',
                                 help = 'specify which grimoire(s) to look in.')
-    history_logging_opts.add_argument("-q", "--quiet",
-                                      action = "count",
+    history_logging_opts.add_argument('-q', '--quiet',
+                                      action = 'count',
                                       default = 0,
                                       help = quiet_help)
 
     if enable_debugging_mode is True:
-        history_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        history_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        history_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                     "error","critical","DEBUG",
-                                                     "INFO","WARNING","ERROR",
-                                                     "CRITICAL"],
+        history_logging_opts.add_argument('--loglevel',
+                                          choices = ['debug','info','warning',
+                                                     'error','critical','DEBUG',
+                                                     'INFO','WARNING','ERROR',
+                                                     'CRITICAL'],
                                           help = loglevel_help)
         history_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -2571,7 +2554,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "checkmd5s" command
+    # create the parser for the 'checkmd5s' command
     #
     #-------------------------------------------
     parser_checkmd5s = subparsers.add_parser('checkmd5s',
@@ -2587,21 +2570,21 @@ def real_main(args):
     parser_checkmd5s.add_argument('-g','--grimoire',
                                   nargs = '+',
                                   help = 'specify which grimoire(s) to look in.')
-    checkmd5_logging_opts.add_argument("-q", "--quiet",
-                                       action = "count",
+    checkmd5_logging_opts.add_argument('-q', '--quiet',
+                                       action = 'count',
                                        default = 0,
                                        help = quiet_help)
 
     if enable_debugging_mode is True:
-        checkmd5_logging_opts.add_argument("-v", "--verbosity",
-                                           action = "count",
+        checkmd5_logging_opts.add_argument('-v', '--verbosity',
+                                           action = 'count',
                                            default = 0,
                                            help = verbose_help)
-        checkmd5_logging_opts.add_argument("--loglevel",
-                                           choices = ["debug","info","warning",
-                                                    "error","critical","DEBUG",
-                                                    "INFO","WARNING","ERROR",
-                                                    "CRITICAL"],
+        checkmd5_logging_opts.add_argument('--loglevel',
+                                           choices = ['debug','info','warning',
+                                                    'error','critical','DEBUG',
+                                                    'INFO','WARNING','ERROR',
+                                                    'CRITICAL'],
                                            help = loglevel_help)
         checkmd5_logging_opts.add_argument('--debug',
                                            action = 'store_true',
@@ -2613,7 +2596,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "depends" command
+    # create the parser for the 'depends' command
     #
     #-------------------------------------------
     parser_depends = subparsers.add_parser('depends',
@@ -2635,21 +2618,21 @@ def real_main(args):
     parser_depends.add_argument('--required',
                                 action = 'store_true',
                                 help = 'Show only the required dependencies and skip the runtime dependencies.')
-    depends_logging_opts.add_argument("-q", "--quiet",
-                                action = "count",
+    depends_logging_opts.add_argument('-q', '--quiet',
+                                action = 'count',
                                 default = 0,
                                       help = quiet_help)
 
     if enable_debugging_mode is True:
-        depends_logging_opts.add_argument("-v", "--verbosity",
-                                          action = "count",
+        depends_logging_opts.add_argument('-v', '--verbosity',
+                                          action = 'count',
                                           default = 0,
                                           help = verbose_help)
-        depends_logging_opts.add_argument("--loglevel",
-                                          choices = ["debug","info","warning",
-                                                   "error","critical","DEBUG",
-                                                   "INFO","WARNING","ERROR",
-                                                   "CRITICAL"],
+        depends_logging_opts.add_argument('--loglevel',
+                                          choices = ['debug','info','warning',
+                                                   'error','critical','DEBUG',
+                                                   'INFO','WARNING','ERROR',
+                                                   'CRITICAL'],
                                           help = loglevel_help)
         depends_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -2660,7 +2643,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "dependencies" command
+    # create the parser for the 'dependencies' command
     #
     #-------------------------------------------
     parser_dependencies = subparsers.add_parser('dependencies',
@@ -2682,21 +2665,21 @@ def real_main(args):
     parser_dependencies.add_argument('--no-optionals',
                                      action = 'store_true',
                                      help = 'skips optional dependencies.')
-    dependencies_logging_opts.add_argument("-q", "--quiet",
-                                     action = "count",
+    dependencies_logging_opts.add_argument('-q', '--quiet',
+                                     action = 'count',
                                      default = 0,
                                            help = quiet_help)
     
     if enable_debugging_mode is True:
-        dependencies_logging_opts.add_argument("-v", "--verbosity",
-                                               action = "count",
+        dependencies_logging_opts.add_argument('-v', '--verbosity',
+                                               action = 'count',
                                                default = 0,
                                                help = verbose_help)
-        dependencies_logging_opts.add_argument("--loglevel",
-                                               choices = ["debug","info","warning",
-                                                        "error","critical","DEBUG",
-                                                        "INFO","WARNING","ERROR",
-                                                        "CRITICAL"],
+        dependencies_logging_opts.add_argument('--loglevel',
+                                               choices = ['debug','info','warning',
+                                                        'error','critical','DEBUG',
+                                                        'INFO','WARNING','ERROR',
+                                                        'CRITICAL'],
                                                help = loglevel_help)
         dependencies_logging_opts.add_argument('--debug',
                                                action = 'store_true',
@@ -2707,7 +2690,7 @@ def real_main(args):
     
     #-------------------------------------------
     #
-    # create the parser for the "time" command
+    # create the parser for the 'time' command
     #
     #-------------------------------------------
     parser_time = subparsers.add_parser('time',
@@ -2734,20 +2717,20 @@ def real_main(args):
     parser_time.add_argument('--full',
                              action = 'store_true',
                              help = 'Display System Info')
-    time_logging_opts.add_argument("-q", "--quiet",
-                             action = "count",
+    time_logging_opts.add_argument('-q', '--quiet',
+                             action = 'count',
                              default = 0,
                              help = quiet_help)
     if enable_debugging_mode is True:
-        time_logging_opts.add_argument("-v", "--verbosity",
-                                       action = "count",
+        time_logging_opts.add_argument('-v', '--verbosity',
+                                       action = 'count',
                                        default = 0,
                                        help = verbose_help)
-        time_logging_opts.add_argument("--loglevel",
-                                       choices = ["debug","info","warning",
-                                                "error","critical","DEBUG",
-                                                "INFO","WARNING","ERROR",
-                                                "CRITICAL"],
+        time_logging_opts.add_argument('--loglevel',
+                                       choices = ['debug','info','warning',
+                                                'error','critical','DEBUG',
+                                                'INFO','WARNING','ERROR',
+                                                'CRITICAL'],
                                        help = loglevel_help)
         time_logging_opts.add_argument('--debug',
                                        action = 'store_true',
@@ -2758,7 +2741,7 @@ def real_main(args):
 
     #-------------------------------------------
     #
-    # create the parser for the "time-system" command
+    # create the parser for the 'time-system' command
     #
     #-------------------------------------------
     parser_time_system = subparsers.add_parser('time-system',
@@ -2786,20 +2769,20 @@ def real_main(args):
     parser_time_system.add_argument('--full',
                              action = 'store_true',
                              help = 'Display System Info')
-    time_system_logging_opts.add_argument("-q", "--quiet",
-                                    action = "count",
+    time_system_logging_opts.add_argument('-q', '--quiet',
+                                    action = 'count',
                                     default = 0,
                                     help = quiet_help)
     if enable_debugging_mode is True:
-        time_system_logging_opts.add_argument("-v", "--verbosity",
-                                              action = "count",
+        time_system_logging_opts.add_argument('-v', '--verbosity',
+                                              action = 'count',
                                               default = 0,
                                               help = verbose_help)
-        time_system_logging_opts.add_argument("--loglevel",
-                                              choices = ["debug","info","warning",
-                                                       "error","critical","DEBUG",
-                                                       "INFO","WARNING","ERROR",
-                                                       "CRITICAL"],
+        time_system_logging_opts.add_argument('--loglevel',
+                                              choices = ['debug','info','warning',
+                                                       'error','critical','DEBUG',
+                                                       'INFO','WARNING','ERROR',
+                                                       'CRITICAL'],
                                               help = loglevel_help)
         time_system_logging_opts.add_argument('--debug',
                                               action = 'store_true',
@@ -2812,7 +2795,7 @@ def real_main(args):
     logging_opts = parser.add_argument_group('Logging Options')
 
     # Parser Arguments
-    #parser.add_argument("filename",
+    #parser.add_argument('filename',
     #                    choices = [ 'BUILD',
     #                                'CONFIGURE',
     #                                'CONFLICTS',
@@ -2842,35 +2825,35 @@ def real_main(args):
     #                                'TRIGGERS',
     #                                'UP_TRIGGERS'
     #                    ],
-    #                    help = "Show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the above spell scripts.")
+    #                    help = 'Show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the above spell scripts.')
     parser.add_argument('-g','--grimoire',
                         nargs = '*',
                         help = 'Specify which grimoire(s) to look in.')
-    logging_opts.add_argument("-q", "--quiet",
-                              action = "count",
+    logging_opts.add_argument('-q', '--quiet',
+                              action = 'count',
                               default = 0,
                               help = quiet_help)
 
     if enable_debugging_mode is True:
-        logging_opts.add_argument("-v", "--verbosity",
-                                  action = "count",
+        logging_opts.add_argument('-v', '--verbosity',
+                                  action = 'count',
                                   default = 0,
                                   help = verbose_help)
-        logging_opts.add_argument("--loglevel",
-                                  choices = ["debug","info","warning",
-                                           "error","critical",
-                                           "DEBUG","INFO","WARNING",
-                                           "ERROR","CRITICAL"],
+        logging_opts.add_argument('--loglevel',
+                                  choices = ['debug','info','warning',
+                                           'error','critical',
+                                           'DEBUG','INFO','WARNING',
+                                           'ERROR','CRITICAL'],
                                   help = loglevel_help)
         logging_opts.add_argument('--debug',
                                   action = 'store_true',
                                   help = debug_help)
 
     # With version, help description must be before version declaration
-    parser.add_argument("-V", "--version",
-                        action = "version",
-                        help = "Print version information and exit",
-                        version = "%(prog)s " + __version__)
+    parser.add_argument('-V', '--version',
+                        action = 'version',
+                        help = 'Print version information and exit',
+                        version = '%(prog)s ' + __version__)
     parser.set_defaults(func = False,
                         debug = False,
                         verbosity = 0,
@@ -2885,26 +2868,26 @@ def real_main(args):
     # Ensure we have root access
     if os.geteuid() != 0:
         # os.execvp() replaces the running process, rather than launching a child
-        # process, so there's no need to exit afterwards. The extra "sudo" in the
+        # process, so there's no need to exit afterwards. The extra 'sudo' in the
         # second parameter is required because Python doesn't automatically set $0
         # in the new process.
-        os.execvp("sudo", ["sudo"] + sys.argv)
+        os.execvp('sudo', ['sudo'] + sys.argv)
 
     # Now we are definitely running as root
 
     # Parse the config files
     config = libconfig.main_configure(args)
 
-    logger.debug2("Configuration set")
-    logger.debug3("Configuration Settings: " + str(config))
-    logger.debug4("Arguments: " + str(args))
+    logger.debug2('Configuration set')
+    logger.debug3('Configuration Settings: ' + str(config))
+    logger.debug4('Arguments: ' + str(args))
 
-    # "application" code
+    # 'application' code
     # Run the specified subcommand as per args
     args.func(args)
     
 
-    logger.debug("End Function")
+    logger.debug('End Function')
     return 0
 
 
@@ -2920,11 +2903,6 @@ def real_main(args):
 #
 #
 # Reads configuration files in the following order:
-# 1. ~/.config/dionysius/dionysis.conf
-# 2. /etc/dionysius/dionysius.conf
-# 3. {python-dir}/dist-___/pydionysius/dionysius.conf
-#
-# Conf files are in yaml format
 #
 # Note: Any cli switches will override the settings in the config files
 #
@@ -2938,15 +2916,15 @@ def main(args = None):
     exception handlers that print friendly error messages.
         """
 
-        logger.debug("Begin Application")
-
-#        try:         
-#            real_main(args)
+        logger.debug('Begin Application')
         real_main(args)
-#        except:
-#            logger.critical("You Fucked Up")
 
-        logger.debug("End Application")
+        #try:         
+        #    real_main(args)
+        #except:
+        #    logger.critical('You Fucked Up')
+
+        logger.debug('End Application')
         return
 
 if __name__ == '__main__':
