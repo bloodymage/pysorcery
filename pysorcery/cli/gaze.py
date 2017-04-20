@@ -35,6 +35,9 @@
 # software catalogue. It can even take and retrieve snap shots of currently
 # installed packages for easy duplication.
 #
+#
+# Status:
+#
 #-------------------------------------------------------------------------------
 
 
@@ -48,7 +51,6 @@
 import sys
 import os
 import copy
-import subprocess
 
 # Other Libraries
 
@@ -60,7 +62,6 @@ from pysorcery.lib import distro
 from pysorcery.lib import logging
 
 # Other Application Libraries
-import pysorcery
 from pysorcery import __version__, enable_debugging_mode
 from pysorcery.lib import libcodex
 from pysorcery.lib import libconfig
@@ -80,6 +81,7 @@ from pysorcery.lib import libtext
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
+# Allow color text on console
 colortext = libtext.ConsoleText()
 
 #-------------------------------------------------------------------------------
@@ -92,8 +94,42 @@ colortext = libtext.ConsoleText()
 #
 # Functions
 #
-# gaze_alien
-# gaze_orphans
+# gaze_alien        - Works
+# gaze_orphans      - Works (Ubuntu)
+# gaze_activity     - Works
+# gaze_queue        - Works (Source Mage / Partial Ubntu)
+# gaze_provides     - Works (Source Mage)
+# gaze_what         - Works
+# gaze_short        - Works
+# gaze_where        - Works
+# gaze_url          - Works
+# gaze_sources      - Not Implemented
+# gaze_source_urls  - Not Implemented
+# gaze_maintainer   - Not Implemented
+# gaze_logs         - Not Implemented
+# gaze_version      - Works
+# gaze_checksum     - Not Implemented
+# gaze_license      - Not Implemented
+# gaze_checksum     - Not Implemented
+# gaze_size         - Not Implemented
+# gaze_expert       - Not Implemented
+# gaze_import       - Not Implemented
+# gaze_grimoire     - Works (Source Mage)
+# gaze_search       - Not Iwplemented
+# gaze_newer        - Not Implemented
+# gaze_older        - Not Implemented
+# gaze_from         - Works (Ubuntu)
+# gaze_installed    - Works (Source Mage)
+# gaze_section      - Not Implemented
+# gaze_voyeur       - Not Implemented
+# gaze_file         - Not Implemented
+# gaze_depends      - Not Implementod
+# gaze_dependencies - Not Implemented
+# gaze_time         - Not Implemented
+# real_main         - Works
+# main              - Works
+#
+# 22/72
 #
 #-------------------------------------------------------------------------------
 
@@ -105,11 +141,13 @@ colortext = libtext.ConsoleText()
 # sorcery package management system
 #
 # Input:  args
+#         args.quiet - Decrease Output Verbosity
 # Output: Prints list of alien files
 # Return: None
 #
-# Status: Works on Ubuntu
-#         Works, but buggy on SourceMage
+# Status: Works on Ubuntu (Subprocess.run)
+#         Works, but buggy on SourceMage (Prints significantly
+#                        more than expected)
 #
 #-------------------------------------------------------------------------------
 def gaze_alien(args):
@@ -117,7 +155,6 @@ def gaze_alien(args):
 
     # create 'alien' object
     alien = libsystem.Alien()
-
     alien.identify()
 
     logger.debug('End Function')
@@ -130,20 +167,22 @@ def gaze_alien(args):
 # Display installed spells that have no explicit dependencies on them
 #
 # Input:  args
+#         args.quiet
 # Output: Prints a list of orphaned files
 # Return: None
 #
-# Status: Works on ubuntu
+# Status: Works on Ubuntu (subprocess)
+#         Works on Source Mage (subprocess)
 #
 #-------------------------------------------------------------------------------
 def gaze_orphans(args):
     logger.debug('Begin Function')
 
-    #
+    # Create Orphan object
     orphans = libspell.SpellList()
-
+    # Gather List of orphans
     orphan_list = orphans.list_orphans()
-
+    # Print Orphan List
     orphans.print_list(orphan_list)
 
     logger.debug('End Function')
@@ -158,10 +197,11 @@ def gaze_orphans(args):
 # such as casts, summons etc.)
 #
 # Input:  args
+#         args.quiet - Decrease Output Verbosity
 # Output: Prints the activity log to the console
 # Return: None
 #
-# Status: Works on Ubuntu
+# Status: Works on Ubuntu (subprocess)
 #         Works on Source Mage
 #
 #-------------------------------------------------------------------------------
@@ -176,22 +216,26 @@ def gaze_activity(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_install_queue
+# Function gaze_queue
 #
-# Shows the queue of spells waiting to be installed
-#
-# Shows the queue of spells waiting to be removed
+# Shows the queue of spells waiting to be Installed
+# Shows the queue of spells waiting to be Removed
 #
 # Input:  args
-# Output: Prints the install queue
+#         args.queue - sets which queue to print (install or remove)
+#         args.quiet - decrease verbosity
+# Output: Prints the queue
 # Return: None
 #
 # Status: Works on Source Mage
+#         'Install' queue works on Ubuntu
+#         'Remove' queue does not work on Ubuntu
 #
 #-------------------------------------------------------------------------------
 def gaze_queue(args):
     logger.debug('Begin Function')
 
+    # 
     queue = libspell.SpellList()
     spell_queue = queue.list_queue(args.queue)
 
@@ -208,6 +252,8 @@ def gaze_queue(args):
 # displays spells that provide the feature
 #
 # Input:  args
+#         args.feature - feature to search for
+#         args.quiet   - decrease verbosity
 # Output:
 # Return: None
 #
@@ -218,9 +264,13 @@ def gaze_provides(args):
     logger.debug('Begin Function')
 
     queue = libspell.SpellList()
-    provides_list = queue.list_provides(args.feature)
 
-    queue.print_list(provides_list)
+    for feature in args.feature:
+        provides_list = queue.list_provides(feature)
+        message = colortext.colorize(feature + ':', 'bold','white','black')
+        logger.info(message)
+        queue.print_list(provides_list)
+        logger.info('')
 
     logger.debug('End Function')
     return
@@ -232,7 +282,11 @@ def gaze_provides(args):
 # view the long package description
 #
 # Input:  args
-# Output:
+#         args.spell    - List of spells to get description.
+#                         Minimum 1
+#         args.grimoire - Grimoire(s) to check for spell
+#         args.quiet    - Limit print output
+# Output: Prints spell description
 # Return: None
 #
 # Status: Working for Source Mage
@@ -242,6 +296,7 @@ def gaze_provides(args):
 def gaze_what(args):
     logger.debug('Begin Function')
 
+    # For each spell in the spell list...
     for i in args.spell:
         logger.debug2('Loop iteration: ' + i)
         
@@ -265,6 +320,10 @@ def gaze_what(args):
 # view the short package description
 #
 # Input:  args
+#         args.spell    - List of spells to get description.
+#                         Minimum 1
+#         args.grimoire - 
+#         args.quiet    - 
 # Output:
 # Return: None
 #
@@ -293,12 +352,18 @@ def gaze_short(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function where
+# Function gaze_where
 #
 # display the section a spell belongs to.
 # If -path is given, display the full path to spell
 #
 # Input:  args
+#         args.spell     - List of spells to get section.
+#                          Minimum 1
+#         args.grimoires - 
+#         args.path      - Print spell path information instead
+#                          of section name.
+#         args.quiet     - decrease verbosity
 # Output:
 # Return: None
 #
@@ -312,9 +377,8 @@ def gaze_where(args):
     for i in args.spell:
         spell = libspell.Spell(i)
 
-        logger.debug(spell)
+        logger.debug2(spell)
         
-        colortext = libtext.ConsoleText()
         name = colortext.colorize(str(spell.name), 'bold','white','black')
         section = colortext.colorize(str(spell.section), 'none','white','black')
         logger.info(name + ': ')
@@ -330,6 +394,10 @@ def gaze_where(args):
 # display the URL for the specified spell
 #
 # Input:  args
+#         args.spell    - List of spells to get section.
+#                         Minimum 1
+#         args.grimoire -
+#         args.quiet    - decrease verbosity
 # Output:
 # Return: None
 #
@@ -360,6 +428,9 @@ def gaze_url(args):
 # list all source files contained in a spell
 #
 # Input:  args
+#         args.spell - List of spells to get section.
+#                      Minimum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -392,6 +463,10 @@ def gaze_sources(args):
 # lists the urls to all files contained in a spell
 #
 # Input:  args
+#         args.spell    - List of spells to get section.
+#                         Minimum 1
+#         args.grimoire -
+#         args.quiet    - decrease verbosity
 # Output:
 # Return: None
 #
@@ -425,6 +500,10 @@ def gaze_source_urls(args):
 # maintaining a specified section
 #
 # Input:  args
+#         args.spell    - List of spells to get section.
+#                         Minimum 1
+#         args.grimoire -
+#         args.quiet    - decrease verbosity
 # Output:
 # Return: None
 #
@@ -452,13 +531,16 @@ def gaze_maintainer(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_compile
+# Function gaze_logs
 #
 # Show the compiler output generated when the spell was built. 
 # If no optional version was given, try the installed version. 
 # If the spell is not installed use the version in the grimoire.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -486,13 +568,16 @@ def gaze_log(args):
 # Function gaze_version
 #
 # Shows the installed version of the spell and the main grimoires version.
-#
-# If versions
-#   Shows the installed version of the spell and lists all available versions 
-#   in all grimoires. If used without a spell name, then lists order of available
-#   grimoires.
 # 
 # Input:  args
+#         args.spell    - Spell to print compile log.
+#                         Maximum 1
+#         args.grimoire -
+#         args.quiet    - decrease verbosity
+#         args.multi    - Shows the installed version of the spell
+#                         and lists all available versions in all
+#                         grimoires. If used without a spell name,
+#                         then lists order of available grimoires.
 # Output:
 # Return: None
 #
@@ -521,6 +606,10 @@ def gaze_version(args):
 # or view the information about given license(s)
 #
 # Input:  args
+#         args.spell    - Spell to print compile log.
+#                         Maximum 1
+#         args.grimoire -
+#         args.quiet    - decrease verbosity
 # Output:
 # Return: None
 #
@@ -558,6 +647,10 @@ def gaze_license(args):
 #   section(s) or entire grimoire(s) if left blank.
 #
 # Input:  args
+#         args.spell    - Spell to print compile log.
+#                         Maximum 1
+#         args.grimoire -
+#         args.quiet    - decrease verbosity
 # Output:
 # Return: None
 #
@@ -588,6 +681,10 @@ def gaze_checksum(args):
 # specified, of all the spells. In addition, this will print the largest spell.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.all   -
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -596,16 +693,17 @@ def gaze_checksum(args):
 #-------------------------------------------------------------------------------
 def gaze_size(args):
     logger.debug('Begin Function')
-        
-    spell = libspell.Spell(i)
 
-    logger.debug3('Spell: ' + str(spell))
-        
-    message = colortext.colorize(spell.name, 'bold','white','black')
-    logger.info(message)
+    for i in args.spell:
+        spell = libspell.Spell(i)
 
-    message = colortext.colorize(spell.description, 'none','white','black')
-    logger.info1(message)
+        logger.debug3('Spell: ' + str(spell))
+        
+        message = colortext.colorize(spell.name, 'bold','white','black')
+        logger.info(message)
+
+        message = colortext.colorize(str(spell.size) + 'kb', 'none','white','black')
+        logger.info1(message)
 
     logger.debug('End Function')
     return
@@ -617,6 +715,7 @@ def gaze_size(args):
 # take a snapshot of all currently installed spells and their configuration.
 #
 # Input:  args
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -652,6 +751,9 @@ def gaze_export(args):
 # agressive.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -684,6 +786,12 @@ def gaze_import(args):
 #   Displays installed grimoires by name only
 #
 # Input:  args
+#         args.grimoire      - Spell to print compile log.
+#                              Minimum 1
+#         args.quiet         - decrease verbosity
+#         args.multi         -
+#         args.displayformat - console or html
+#         args.columns       - have the grimoires be columns
 # Output:
 # Return: None
 #
@@ -708,27 +816,6 @@ def gaze_grimoire(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_html
-#
-# Prints the specified grimoire or all grimoires if grimoire-name is omitted
-# in a nice html format.  Additionally displays links to the source files
-# when -s is given.
-#
-# Input:  args
-# Output:
-# Return: None
-#
-# Status: Not implimented
-#
-#-------------------------------------------------------------------------------
-def gaze_html(args):
-    logger.debug('Begin Function')
-
-    logger.debug('End Function')
-    return
-
-#-------------------------------------------------------------------------------
-#
 # Function gaze_search
 #
 # search [-name|-short] 'phrase'
@@ -744,6 +831,11 @@ def gaze_html(args):
 # the expression.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.name  -
+#         args.short -
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -766,6 +858,9 @@ def gaze_search(args):
 # There are two special dates, last_sorcery_update and last_cast.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -789,6 +884,9 @@ def gaze_newer(args):
 # the date must be specified in 'yyyymmdd' format
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -812,17 +910,19 @@ def gaze_older(args):
 # regular expressions against the whole paths in the lists of installed files.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
-# Status: Not implimented
+# Status: Working on Ubuntu
 #
 #-------------------------------------------------------------------------------
 def gaze_from(args):
     logger.debug('Begin Function')
 
     spell = libfiles.Files(args.filename[0])
-
     spell.print_from()
     
     logger.debug('End Function')
@@ -843,10 +943,14 @@ def gaze_from(args):
 # (which means they are not to be cast in any way)
 #
 # Input:  args
+#         args.spell       - Spell to print compile log.
+#                            Minimum 1
+#         args.spellstatus - 
+#         args.quiet       - decrease verbosity
 # Output:
 # Return: None
 #
-# Status: Not implimented
+# Status: Works on Source Mage
 #
 #-------------------------------------------------------------------------------
 def gaze_installed(args):
@@ -877,6 +981,9 @@ def gaze_installed(args):
 # of packages from a specific section
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -899,6 +1006,9 @@ def gaze_section(args):
 # after which to abort when no casts could be found.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -926,6 +1036,9 @@ def gaze_voyeur(args):
 # SUB_DEPENDS | TRANSFER | TRIGGER_CHECK | TRIGGERS | UP_TRIGGERS
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -934,26 +1047,6 @@ def gaze_voyeur(args):
 #-------------------------------------------------------------------------------
 def gaze_file(args):
     logger.debug('Begin Function')
-    
-    logger.debug('End Function')
-    return
-
-#-------------------------------------------------------------------------------
-#
-# Function gaze_history
-#
-# Show history for a spell (alias for gaze HISTORY <spell>)
-#
-# Input:  args
-# Output: 
-# Return: None
-#
-# Status: Not implimented
-#
-#-------------------------------------------------------------------------------
-def gaze_history(args):
-    logger.debug('Begin Function')
-    
     
     logger.debug('End Function')
     return
@@ -972,6 +1065,9 @@ def gaze_history(args):
 # runtime ones are skipped.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -994,6 +1090,9 @@ def gaze_depends(args):
 # shown, the --no-optionals flag skips optional dependencies.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -1022,6 +1121,9 @@ def gaze_dependencies(args):
 #   specified orphaned spells are skipped.
 #
 # Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
 # Output:
 # Return: None
 #
@@ -1039,6 +1141,7 @@ def gaze_time(args):
 #
 # Real_Main
 #
+# 
 #
 # Input:  args
 # Output:
@@ -1184,10 +1287,7 @@ def real_main(args):
                                              default = 0,
                                              help = verbose_help)
         inst_queue_logging_opts.add_argument('--loglevel',
-                                             choices = ['debug','info','warning',
-                                                      'error','critical','DEBUG',
-                                                      'INFO','WARNING','ERROR',
-                                                      'CRITICAL'],
+                                             choices = loglevel_choices,
                                              help = loglevel_help)
         inst_queue_logging_opts.add_argument('--debug',
                                              action = 'store_true',
@@ -1217,10 +1317,7 @@ def real_main(args):
                                                default = 0,
                                                help = verbose_help)
         remove_queue_logging_opts.add_argument('--loglevel',
-                                               choices = ['debug','info','warning',
-                                                        'error','critical','DEBUG',
-                                                        'INFO','WARNING','ERROR',
-                                                        'CRITICAL'],
+                                               choices = loglevel_choices,
                                                help = loglevel_help)
         remove_queue_logging_opts.add_argument('--debug',
                                                action = 'store_true',
@@ -1237,8 +1334,7 @@ def real_main(args):
     show_held_help = 'Shows all spells currently held (which means they are not to be updated).'
     parser_show_held = subparsers.add_parser('show-held',
                                              help = show_held_help)
-
-
+    
     show_held_logging_opts = parser_show_held.add_argument_group('Logging Options')
 
 
@@ -1253,10 +1349,7 @@ def real_main(args):
                                             default = 0,
                                             help = verbose_help)
         show_held_logging_opts.add_argument('--loglevel',
-                                            choices = ['debug','info','warning',
-                                                     'error','critical','DEBUG',
-                                                     'INFO','WARNING','ERROR',
-                                                     'CRITICAL'],
+                                            choices = loglevel_choices,
                                             help = loglevel_help)
         show_held_logging_opts.add_argument('--debug',
                                             action = 'store_true',
@@ -1287,10 +1380,7 @@ def real_main(args):
                                               default = 0,
                                               help = verbose_help)
         show_exiled_logging_opts.add_argument('--loglevel',
-                                              choices = ['debug','info','warning',
-                                                       'error','critical','DEBUG',
-                                                       'INFO','WARNING','ERROR',
-                                                       'CRITICAL'],
+                                              choices = loglevel_choices,
                                               help = loglevel_help)
         show_exiled_logging_opts.add_argument('--debug',
                                               action = 'store_true',
@@ -1307,10 +1397,10 @@ def real_main(args):
     #
     #-------------------------------------------
     parser_provides = subparsers.add_parser('provides',
-                                            help = 'Displays spells that provide the feature. (Not Working)')
+                                            help = 'Displays spells that provide the feature.')
     provides_logging_opts = parser_provides.add_argument_group('Logging Options')
     parser_provides.add_argument('feature',
-                             nargs = 1,
+                             nargs = '+',
                              help = 'Feature')
     provides_logging_opts.add_argument('-q', '--quiet',
                                  action = 'count',
@@ -1323,10 +1413,7 @@ def real_main(args):
                                            default = 0,
                                            help = verbose_help)
         provides_logging_opts.add_argument('--loglevel',
-                                           choices = ['debug','info','warning',
-                                                    'error','critical','DEBUG',
-                                                    'INFO','WARNING','ERROR',
-                                                    'CRITICAL'],
+                                           choices = loglevel_choices,
                                            help = loglevel_help)
         provides_logging_opts.add_argument('--debug',
                                            action = 'store_true',
@@ -1360,10 +1447,7 @@ def real_main(args):
                                        default = 0,
                                        help = verbose_help)
         what_logging_opts.add_argument('--loglevel',
-                                       choices = ['debug','info','warning',
-                                                'error','critical','DEBUG',
-                                                'INFO','WARNING','ERROR',
-                                                'CRITICAL'],
+                                       choices = loglevel_choices,
                                        help = loglevel_help)
         what_logging_opts.add_argument('--debug',
                                        action = 'store_true',
@@ -1396,10 +1480,7 @@ def real_main(args):
                                   default = 0,
                                   help = verbose_help)
         parser_short.add_argument('--loglevel',
-                                  choices = ['debug','info','warning',
-                                           'error','critical','DEBUG',
-                                           'INFO','WARNING','ERROR',
-                                           'CRITICAL'],
+                                  choices = loglevel_choices,
                                   help = loglevel_help)
         parser_short.add_argument('--debug',
                                   action = 'store_true',
@@ -1440,10 +1521,7 @@ def real_main(args):
                                         default = 0,
                                         help = verbose_help)
         where_logging_opts.add_argument('--loglevel',
-                                        choices = ['debug','info','warning',
-                                                 'error','critical','DEBUG',
-                                                 'INFO','WARNING','ERROR',
-                                                 'CRITICAL'],
+                                        choices = loglevel_choices,
                                         help = loglevel_help)
         where_logging_opts.add_argument('--debug',
                                         action = 'store_true',
@@ -1482,10 +1560,7 @@ def real_main(args):
                                       default = 0,
                                       help = verbose_help)
         url_logging_opts.add_argument('--loglevel',
-                                      choices = ['debug','info','warning',
-                                               'error','critical','DEBUG',
-                                               'INFO','WARNING','ERROR',
-                                               'CRITICAL'],
+                                      choices = loglevel_choices,
                                       help = loglevel_help)
         url_logging_opts.add_argument('--debug',
                                       action = 'store_true',
@@ -1541,7 +1616,7 @@ def real_main(args):
         #
         #-------------------------------------------
     parser_source_url = subparsers.add_parser('source_urls',
-                                              help = 'Lists the urls to all files contained in a spell. (Not Working)')
+                                              help = 'Lists the urls to all files contained in a spell.')
 
 
     source_url_logging_opts = parser_source_url.add_argument_group('Logging Options')
@@ -1564,10 +1639,7 @@ def real_main(args):
                                              default = 0,
                                              help = verbose_help)
         source_url_logging_opts.add_argument('--loglevel',
-                                             choices = ['debug','info','warning',
-                                                      'error','critical','DEBUG',
-                                                      'INFO','WARNING','ERROR',
-                                                      'CRITICAL'],
+                                             choices = loglevel_choices,
                                              help = loglevel_help)
         source_url_logging_opts.add_argument('--debug',
                                              action = 'store_true',
@@ -1605,10 +1677,7 @@ def real_main(args):
                                              default = 0,
                                              help = verbose_help)
         maintainer_logging_opts.add_argument('--loglevel',
-                                             choices = ['debug','info','warning',
-                                                      'error','critical','DEBUG',
-                                                      'INFO','WARNING','ERROR',
-                                                      'CRITICAL'],
+                                             choices = loglevel_choices,
                                              help = loglevel_help)
         maintainer_logging_opts.add_argument('--debug',
                                              action = 'store_true',
@@ -1647,10 +1716,7 @@ def real_main(args):
                                           default = 0,
                                           help = verbose_help)
         compile_logging_opts.add_argument('--loglevel',
-                                          choices = ['debug','info','warning',
-                                                   'error','critical','DEBUG',
-                                                   'INFO','WARNING','ERROR',
-                                                   'CRITICAL'],
+                                          choices = loglevel_choices,
                                           help = loglevel_help)
         compile_logging_opts.add_argument('--debug',
                                           action = 'store_true',
@@ -2358,7 +2424,7 @@ def real_main(args):
     #
     #-------------------------------------------
     parser_from = subparsers.add_parser('from',
-                                        help = "find out which spell has installed 'path/file.'  Matching is done literally against the end of the path names in the lists of installed files. (Not Working)")
+                                        help = "find out which spell has installed 'path/file.'  Matching is done literally against the end of the path names in the lists of installed files.")
 
     
     from_logging_opts = parser_from.add_argument_group('Logging Options')

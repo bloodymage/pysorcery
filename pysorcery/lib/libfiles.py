@@ -221,7 +221,9 @@ class ConfigureFile(BaseFile):
 class ConflictsFile(BaseFile):
     def __init__(self,filename):
         logger.debug('Begin Function')
-        BaseFile.__init__(self,filename)
+        
+        BaseFile.__init__(self,spell_directory + '/CONFIGURE')
+        
         logger.debug('End Function')
         return
 
@@ -825,35 +827,14 @@ class CTarFile(BaseFile):
             
         return 0
 
+
 #-------------------------------------------------------------------------------
 #
-# Class SourceFile
+# Class CompressedFile
 # 
 #
 #-------------------------------------------------------------------------------
-class SourceFile(CZipFile,CTarFile):
-    def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        self.url = url
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def download(self):
-        logger.debug("Begin Function")
-        self.description="Ooops!"
-        logger.debug("End Function")
-        return
-
+class CompressedFile(CZipFile,CTarFile):
     #-------------------------------------------------------------------------------
     #
     # Function 
@@ -866,7 +847,12 @@ class SourceFile(CZipFile,CTarFile):
     def unpack(self):
         logger.debug("Begin Function")
 
-        if xfile.endswith('tar') or xfile.endswith('tar.gz') or xfile.endswith('tar.bz2') or xfile.endswith('tar.xz') or xfile.endswith('tgz') or xfile.endswith('tbz2'):
+        if (xfile.endswith('tar') or
+            xfile.endswith('tar.gz') or
+            xfile.endswith('tar.bz2') or
+            xfile.endswith('tar.xz') or
+            xfile.endswith('tgz') or
+            xfile.endswith('tbz2')):
             if tarfile.is_tarfile(self.name):
                 cfile = CTarFile(xfile)
         elif xfile.endswith('zip') and zipfile.is_zipfile(self.name):
@@ -892,6 +878,36 @@ class SourceFile(CZipFile,CTarFile):
 
         logger.debug("End Function")
         return
+
+
+#-------------------------------------------------------------------------------
+#
+# Class SourceFile
+# 
+#
+#-------------------------------------------------------------------------------
+class SourceFile(CZipFile,CTarFile):
+    def set_url(self,url):
+        logger.debug("Begin Function")
+        self.url = url
+        logger.debug("End Function")
+        return
+
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def download(self):
+        logger.debug("Begin Function")
+        self.description="Ooops!"
+        logger.debug("End Function")
+        return
+
 
     #-------------------------------------------------------------------------------
     #

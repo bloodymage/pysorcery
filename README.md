@@ -46,6 +46,8 @@ Alt genurates a new grimoire (Repository) with the latest version on the softwar
 
 ### pygaze
 
+
+
 Major changes: Removed prune (This was depreciated sometime between 2001-2005)
 
 ### pyressurect
