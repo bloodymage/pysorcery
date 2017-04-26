@@ -36,18 +36,9 @@
 #-------------------------------------------------------------------------------
 
 # System Libraries
-import sys
 import os
-import argparse
-import copy
 import subprocess
-import tarfile
-import zipfile
-import zlib
-import lzma
-import gzip
-import bz2
-
+import mimetypes
 
 # Other Libraries
 # Only Load if module rarfile available.
@@ -60,7 +51,6 @@ import bz2
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-from pysorcery import __version__
 from pysorcery.lib import libtext
 from pysorcery.lib import libconfig
 
@@ -744,141 +734,6 @@ class Files(DebianFiles,BaseFile):
         logger.debug("End Function")
         return installed_files
 
-#-------------------------------------------------------------------------------
-#
-# Class CZipFile
-#
-#-------------------------------------------------------------------------------
-class CZipFile(BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
-        logger.debug("Xfile: "+ str(self.name))
-
-        file_dir, basename, ext = CompressedFile.pne(self)
-
-        logger.debug("File_dir: " + str(file_dir))
-        logger.debug("File name: " + str(basename))
-        logger.debug("Extention: " + str(ext))
-    
-        try:
-            zip_file = zipfile.ZipFile(self.name)
-            for name in zip_file.namelist():
-                zip_file.extractall(basename)
-            logger.info("Extracted file: " + str(self.name))
-        except zipfile.BadZipFile:
-            logger.error("Unk Extraction Error")
-            pass
-        except IOError:
-            logger.error("IO Error")
-            pass
-        except:
-            logger.error("Unknown Error")
-            
-        return 0
-
-
-#-------------------------------------------------------------------------------
-#
-# Class TarFile
-#
-#-------------------------------------------------------------------------------
-class CTarFile(BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
-        logger.debug("Xfile: " + str(self.name))
-
-        file_dir, basename, ext = CompressedFile.pne(self)
-
-        logger.debug("File_dir: " + str(file_dir))
-        logger.debug("File name: " + str(basename))
-        logger.debug("Extention: " + str(ext))
-    
-        try:
-            tar_file = tarfile.open(self.name)
-            for name in tar_file.getnames():
-                tar_file.extractall(basename)
-            logger.info("Extracted file: " + str(self.name))
-        except zipfile.BadZipFile:
-            logger.error("Unk Extraction Error")
-            pass
-        except IOError:
-            logger.error("IO Error")
-            pass
-        except:
-            logger.error("Unknown Error")
-            
-        return 0
-
-
-#-------------------------------------------------------------------------------
-#
-# Class CompressedFile
-# 
-#
-#-------------------------------------------------------------------------------
-class CompressedFile(CZipFile,CTarFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def unpack(self):
-        logger.debug("Begin Function")
-
-        if (xfile.endswith('tar') or
-            xfile.endswith('tar.gz') or
-            xfile.endswith('tar.bz2') or
-            xfile.endswith('tar.xz') or
-            xfile.endswith('tgz') or
-            xfile.endswith('tbz2')):
-            if tarfile.is_tarfile(self.name):
-                cfile = CTarFile(xfile)
-        elif xfile.endswith('zip') and zipfile.is_zipfile(self.name):
-            cfile = CZipFile(xfile)
-        #    elif xfile.endswith('gz'):
-        #        extract_gzipfile(xfile)
-        #    elif xfile.endswith('bz2'):
-        #        extract_bzipfile(xfile)
-        #    elif xfile.endswith('lzma') or xfile.endswith('xz'):
-        #        extract_lzmafile(xfile)
-        #    elif xfile.endswith('.Z'):
-        #        extract_zlibfile(xfile)
-        #    elif xfile.endswith('7z'):
-        #        extract_7zfile(xfile)
-        #    elif xfile.endswith('rar'):
-        #        extract_rarfile(xfile)
-        #    elif xfile.endswith('exe'):
-        #       extract_exefile(xfile)
-        else:
-            logger.error("Not Extracting: " + str(self.name))
-
-        cfile.extract()
-
-        logger.debug("End Function")
-        return
-
 
 #-------------------------------------------------------------------------------
 #
@@ -886,7 +741,7 @@ class CompressedFile(CZipFile,CTarFile):
 # 
 #
 #-------------------------------------------------------------------------------
-class SourceFile(CZipFile,CTarFile):
+class SourceFile(BaseFile):
     def set_url(self,url):
         logger.debug("Begin Function")
         self.url = url

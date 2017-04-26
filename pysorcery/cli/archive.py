@@ -8,6 +8,8 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
+# File: pysorcery/cli/archive.py
+#
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
@@ -23,12 +25,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# pyArchive
 #
-#
-#
+#   This is a bonus application for pysorcery.  PySorcery for multiple ruosons
+# to internally extract, create, list the contents, etc. archive files of
+# multiple formats.  To test the capabilities of the underlying code, this
+# application was developed.
 #
 #-------------------------------------------------------------------------------
-
 
 #-------------------------------------------------------------------------------
 #
@@ -37,26 +41,24 @@
 #-------------------------------------------------------------------------------
 
 # System Libraries
-import sys
-import os
-import copy
-import subprocess
+import argparse
 
 # Other Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib import argparse
-from pysorcery.lib import distro
-from pysorcery.lib import logging
+from pysorcery.lib.system import logging
 
 # Other Application Libraries
-from pysorcery import __version__, enable_debugging_mode
-from pysorcery.lib import libtext
-from pysorcery.lib import libconfig
-from pysorcery.lib import libfiles
+from pysorcery import *
+from pysorcery import lib
+from pysorcery.lib.util import config
+from pysorcery.lib.util import text
+
+
 # Other Optional Libraries
+
 
 #-------------------------------------------------------------------------------
 #
@@ -67,14 +69,13 @@ from pysorcery.lib import libfiles
 # create logger
 logger = logging.getLogger(__name__)
 # Allow Color text on console
-colortext = libtext.ConsoleText()
+colortext = text.ConsoleText()
 
 #-------------------------------------------------------------------------------
 #
 # Classes
 #
 #-------------------------------------------------------------------------------
-
             
 #-------------------------------------------------------------------------------
 #
@@ -96,11 +97,27 @@ colortext = libtext.ConsoleText()
 #
 # Function archive_extract
 #
+# Extract files listed.
 #
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_extract(args):
     logger.debug('Begin Function')
+
+    for i in args.files:
+        if args.recursive:
+            for root, dirs, files in os.walk(i):
+                for sfile in files:
+                    cfile = archive.CompressedFile(sfile)
+                    cfile.extract()
+                    
+        print('Extracting file: ' + i)
+        cfile = archive.CompressedFile(i)
+        cfile.extract()
 
     logger.debug('End Function')
     return
@@ -110,10 +127,28 @@ def archive_extract(args):
 # Function archive_list
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_list(args):
     logger.debug('Begin Function')
+
+    for i in args.files:
+        if args.recursive:
+            for root, dirs, files in os.walk(i):
+                for sfile in files:
+                    cfile = archive.CompressedFile(sfile)
+                    cfile.list_files()
+                    
+        print('Extracting file: ' + i)
+        cfile = archive.CompressedFile(i)
+        cfile.list_files()
 
     logger.debug('End Function')
     return
@@ -123,11 +158,22 @@ def archive_list(args):
 # Functions archive_create
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_create(args):
     logger.debug('Begin Function')
 
+    newarchive = archive.CompressedFile(args.archive)
+
+    for i in args.source:
+        newarchive.compress(i)
     
     logger.debug('End Function')
     return
@@ -137,6 +183,13 @@ def archive_create(args):
 # Functions archive_create
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_test(args):
@@ -151,6 +204,13 @@ def archive_test(args):
 # Functions archive_create
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_repack(args):
@@ -165,6 +225,13 @@ def archive_repack(args):
 # Functions archive_create
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_recompress(args):
@@ -179,6 +246,13 @@ def archive_recompress(args):
 # Functions archive_create
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_diff(args):
@@ -193,6 +267,13 @@ def archive_diff(args):
 # Functions archive_create
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_search(args):
@@ -207,13 +288,59 @@ def archive_search(args):
 # Functions archive_create
 #
 #
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None
 #
 #-------------------------------------------------------------------------------
 def archive_formats(args):
     logger.debug('Begin Function')
 
-    logger.info('Tar:')
-    
+    formats = [ '7z',
+                # 'ace',
+                # 'adf',  # Maybe future support
+                # 'alzip',
+                # 'ar',
+                # 'arc',
+                # 'arj',
+                'bzip2',
+                # 'cab',
+                # 'chm',
+                # 'compress',
+                'cpio',
+                'deb',
+                # 'dms',
+                'gzip',
+                'iso',
+                # 'lrzip',
+                # 'lzh',
+                # 'lzip',
+                'lzma',
+                # 'lzop',
+                # 'rar',
+                'rpm',
+                # 'rzip',
+                # 'shar',
+                'tar',
+                # 'vhd',
+                'xz',
+                'zip'
+                # 'zoo',
+                # 'zpac'
+                ]
+
+    for i in formats:
+        logger.info(i + ' files:')
+        logger.info('    extract : ')
+        logger.info('    create  : ')
+        logger.info('    list    : ')
+        logger.info('    test    : ')
+
+        
     logger.debug('End Function')
     return
 
@@ -221,7 +348,14 @@ def archive_formats(args):
 #
 # Real_Main
 #
-# 
+#
+# Find and display all files which are not currently tracked by the
+# sorcery package management system
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+# Output: Prints list of alien files
+# Return: None 
 #
 #-------------------------------------------------------------------------------
 def real_main(args):    
@@ -243,298 +377,210 @@ def real_main(args):
                          'ERROR',
                          'CRITICAL'
     ]
+    epilog_text = """
+See man pyarchive() for more information.\n
+\n
+Report bugs to ...
+"""
 
     # Parse Command Line Arguments
-    parser = argparse.ArgumentParser(description = 'Query / View Sorcery package management information')
-
+    parser = argparse.ArgumentParser(
+        description = 'Universal archive extractor. creator, etc...',
+        epilog = epilog_text
+    )
+    parser.add_argument('-V',
+                        '--version',
+                        action = 'version',
+                        help = 'Print version information and exit',
+                        version = '%(prog)s ' + __version__
+    )
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    # Parser Groups
+    logging_opts = parent_parser.add_argument_group('Logging Options')
+    logging_opts.add_argument('-q',
+                              '--quiet',
+                              action = 'count',
+                              default = 0,
+                              help = quiet_help
+    )
+    if enable_debugging_mode is True:
+        logging_opts.add_argument('-v',
+                                  '--verbosity',
+                                  action = 'count',
+                                  default = 0,
+                                  help = verbose_help
+        )
+        logging_opts.add_argument('--loglevel',
+                                  choices = loglevel_choices,
+                                  default = 'INFO',
+                                  help = loglevel_help
+        )
+        logging_opts.add_argument('--debug',
+                                  action = 'store_true',
+                                  help = debug_help
+        )
+    parent_parser.add_argument('-V',
+                        '--version',
+                        action = 'version',
+                        help = 'Print version information and exit',
+                        version = '%(prog)s ' + __version__
+    )
 
     # Create subcommands
     subparsers = parser.add_subparsers(title = 'commands',
                                        metavar = 'Command',
-                                       help = 'Description')
-    # Enable aliases for subcommands
-    parser.register('action',
-                    'parsers',
-                    argparse.AliasedSubParsersAction)
-
+                                       help = 'Description'
+    )
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'extract' command
+    #
+    #-----------------------------------------------------------------
     parser_extract = subparsers.add_parser('extract',
-                                        help = 'Extract files')
-    parser_extract.add_argument('file',
-                             nargs = '+',
-                             help = 'Extract files')
-    parser_extract.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_extract.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_extract.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_extract.add_argument('--debug',
+                                           parents = [parent_parser],
+                                           help = 'Extract files'
+    )
+    parser_extract.add_argument('files',
+                                nargs = '+',
+                                help = 'Extract files'
+    )
+    parser_extract.add_argument('-o',
+                                '--output-dir',
+                                metavar = 'DIRECTORY',
+                                help = 'Output Directory'
+    )
+    parser_extract.add_argument('-r', '--recursive',
                                 action = 'store_true',
-                                help = debug_help)
-
+                                help = 'Recursive'
+    )
     parser_extract.set_defaults(func = archive_extract)
-
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'list' command
+    #
+    #-----------------------------------------------------------------
     parser_list = subparsers.add_parser('list',
+                                        parents = [parent_parser],
                                         help = 'List files')
-    parser_list.add_argument('file',
+    parser_list.add_argument('files',
                              nargs = '+',
                              help = 'List files')
-    parser_list.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_list.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_list.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_list.add_argument('--debug',
+    parser_list.add_argument('-r', '--recursive',
                                 action = 'store_true',
-                                help = debug_help)
-
+                                help = 'Recursive')
     parser_list.set_defaults(func = archive_list)
 
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'create' command
+    #
+    #-----------------------------------------------------------------
     parser_create = subparsers.add_parser('create',
-                                        help = 'Create files')
-    parser_create.add_argument('file',
-                             nargs = '+',
-                             help = 'Create files')
-    parser_create.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_create.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_create.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_create.add_argument('--debug',
-                                action = 'store_true',
-                                help = debug_help)
-
+                                          parents = [parent_parser],
+                                          help = 'Create files')
+    parser_create.add_argument('archive',
+                               nargs = 1,
+                               help = 'Create files')
+    parser_create.add_argument('source',
+                               nargs = '+',
+                               help = 'Files / Directories to add to the archive')
     parser_create.set_defaults(func = archive_create)
-
-    # create the parser for the 'test' command
+    #-----------------------------------------------------------------
+    #
+    # create the test command
+    #
+    #-----------------------------------------------------------------
     parser_test = subparsers.add_parser('test',
-                                        help = 'Test files')
-    parser_test.add_argument('file',
-                             nargs = '+',
-                             help = 'Test files')
-    parser_test.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_test.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_test.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_test.add_argument('--debug',
-                                action = 'store_true',
-                                help = debug_help)
-
+                                          help = 'Test files')
+    parser_test.add_argument('archive',
+                               nargs = 1,
+                               help = 'Create files')
+    parser_test.add_argument('source',
+                               nargs = '+',
+                               help = 'Files / Directories to add to the archive')
     parser_test.set_defaults(func = archive_test)
 
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'repack' command
+    #
+    #-----------------------------------------------------------------
     parser_repack = subparsers.add_parser('repack',
+                                          parents = [parent_parser],
                                         help = 'Repack files')
     parser_repack.add_argument('file',
                              nargs = '+',
                              help = 'Repack files')
-    parser_repack.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_repack.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_repack.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_repack.add_argument('--debug',
-                                action = 'store_true',
-                                help = debug_help)
-
     parser_repack.set_defaults(func = archive_repack)
 
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'recompress' command
+    #
+    #-----------------------------------------------------------------
     parser_recompress = subparsers.add_parser('recompress',
-                                        help = 'Recompress files')
+                                              parents = [parent_parser],
+                                              help = 'Recompress files'
+    )
     parser_recompress.add_argument('file',
                              nargs = '+',
                              help = 'Recompress files')
-    parser_recompress.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_recompress.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_recompress.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_recompress.add_argument('--debug',
-                                action = 'store_true',
-                                help = debug_help)
-
     parser_recompress.set_defaults(func = archive_recompress)
 
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'diff' command
+    #
+    #-----------------------------------------------------------------
     parser_diff = subparsers.add_parser('diff',
+                                        parents = [parent_parser],
                                         help = 'Diff files')
     parser_diff.add_argument('file',
                              nargs = '+',
                              help = 'Diff files')
-    parser_diff.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_diff.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_diff.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_diff.add_argument('--debug',
-                                action = 'store_true',
-                                help = debug_help)
-
     parser_diff.set_defaults(func = archive_diff)
 
-
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'search' command
+    #
+    #-----------------------------------------------------------------
     parser_search = subparsers.add_parser('search',
-                                        help = 'Search files')
+                                          parents = [parent_parser],
+                                          help = 'Search files')
     parser_search.add_argument('file',
                              nargs = '+',
                              help = 'Search files')
-    parser_search.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_search.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_search.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_search.add_argument('--debug',
-                                action = 'store_true',
-                                help = debug_help)
-
     parser_search.set_defaults(func = archive_search)
 
-
+    #-----------------------------------------------------------------
+    #
     # create the parser for the 'formats' command
+    #
+    #-----------------------------------------------------------------
     parser_formats = subparsers.add_parser('formats',
-                                        help = 'Formats files')
-    parser_formats.add_argument('-q', '--quiet',
-                                 action = 'count',
-                                 default = 0,
-                                 help = quiet_help)
-
-    if enable_debugging_mode:
-        parser_formats.add_argument('-v', '--verbosity',
-                                action = 'count',
-                                default = 0,
-                                help = verbose_help)
-        parser_formats.add_argument('--loglevel',
-                                choices = loglevel_choices,
-                                help = loglevel_help)
-        parser_formats.add_argument('--debug',
-                                action = 'store_true',
-                                help = debug_help)
-
+                                           parents = [parent_parser],
+                                           help = 'Formats files')
     parser_formats.set_defaults(func = archive_formats)
 
-    # Parser Groups
-    logging_opts = parser.add_argument_group('Logging Options')
-
-    logging_opts.add_argument('-q', '--quiet',
-                              action = 'count',
-                              default = 0,
-                              help = quiet_help)
-
-    if enable_debugging_mode is True:
-        logging_opts.add_argument('-v', '--verbosity',
-                                  action = 'count',
-                                  default = 0,
-                                  help = verbose_help)
-        logging_opts.add_argument('--loglevel',
-                                  choices = ['debug','info','warning',
-                                           'error','critical',
-                                           'DEBUG','INFO','WARNING',
-                                           'ERROR','CRITICAL'],
-                                  help = loglevel_help)
-        logging_opts.add_argument('--debug',
-                                  action = 'store_true',
-                                  help = debug_help)
-
     # With version, help description must be before version declaration
-    parser.add_argument('-V', '--version',
-                        action = 'version',
-                        help = 'Print version information and exit',
-                        version = '%(prog)s ' + __version__)
-    parser.set_defaults(func = False,
-                        debug = False,
-                        verbosity = 0,
-                        loglevel = 'INFO')
-
+    parser.set_defaults(func = False)
+    
     args = parser.parse_args()
 
-    #if os.geteuid() != 0:
-        # os.execvp() replaces the running process, rather than launching a child
-        # process, so there's no need to exit afterwards. The extra 'sudo' in the
-        # second parameter is required because Python doesn't automatically set $0
-        # in the new process.
-    #    os.execvp('sudo', ['sudo'] + sys.argv)
-
-    config = libconfig.main_configure(args)
+    # Set configuration
+    config_ = config.main_configure(args)
 
     logger.debug('Configuration set')
-    logger.debug2('Configuration Settings: ' + str(config))
+    logger.debug2('Configuration Settings: ' + str(config_))
     logger.debug3('Arguments: ' + str(args))
 
     # 'application' code
     args.func(args)
-    
-#    logging.verifydebuglevels()
+
+    #logging.verifydebuglevels()
     logger.debug('End Function')
-    return 0
+    return
 
 
 #-------------------------------------------------------------------------------

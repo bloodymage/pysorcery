@@ -21,18 +21,16 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
 #
 #
 #
 #-------------------------------------------------------------------------------
-"""
-  BASH version
-  Original version Copyright 2001 by Kyle Sallee
 
-"""
+
+
 #-------------------------------------------------------------------------------
 #
 # Libraries
@@ -44,47 +42,48 @@ import sys
 
 # Other Libraries
 
-
 # Application Libraries
-# System Library Overrides
-from pysorcery.lib.system import logging
-# Other Application Libraries
+from pysorcery.lib import logging
+
+# Other Optional Libraries
+
 
 #-------------------------------------------------------------------------------
 #
 # Global Variables
 #
 #-------------------------------------------------------------------------------
-__all__ = ['__author__',
-           '__contact__',
-           '__copyright__',
-           '__license__',
-           '__status__',
-           '__version__',
-           'enable_debugging_mode'
-           ]
-__author__ = 'Geoff S Derber'
-__contact__ = 'gd.smlinux@gmail.com'
-__copyright__ = 2017
-__license__ = 'GPLv3+'
-__status__ = 'Prototype'
-__version__ = '0.0.1'
-enable_debugging_mode=True
-
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
-logger.setLevel(20)
 
-# Define Handlers
-consolehandler = logging.ColorizingStreamHandler()
+#-------------------------------------------------------------------------------
+#
+# Classes
+#
+#-------------------------------------------------------------------------------
 
-# Define Formatters
-consoleformatter = logging.ConsoleLvlFormatter("%(name)s:%(funcName)s:%(lineno)d - %(levelname)s - %(message)s")
+#-------------------------------------------------------------------------------
+#
+# Functions
+#
+#-------------------------------------------------------------------------------
 
-# Set handler ...
-consolehandler.setLevel(0)
-consolehandler.setFormatter(consoleformatter)
+#-------------------------------------------------------------------------------
+#
+# defPluginList
+#
+# Gather the default plugins
+#
+#-------------------------------------------------------------------------------
+def defPluginList():
+    defPluginPath = plugins.__path__
+    filelist = fileops.listFiles(defPluginPath,0)
 
-# Add handlers to logger
-logger.addHandler(consolehandler)
+    if '__init__.py' in filelist:
+        filelist.remove('__init__.py')
+
+    for item in filelist:
+        filelist[filelist.index(item)] = item.replace(".py","")
+        
+    return filelist

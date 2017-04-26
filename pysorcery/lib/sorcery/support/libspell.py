@@ -8,8 +8,6 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/lib/__init__.py
-#
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
@@ -25,38 +23,44 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
 #
-# This file is the pysorcery API.  All files should reference this file.
+#
+#
 #
 #-------------------------------------------------------------------------------
+
+
 
 #-------------------------------------------------------------------------------
 #
 # Libraries
 #
+#
 #-------------------------------------------------------------------------------
 
 # System Libraries
-import os
+import sys
 import subprocess
-import mimetypes
+import os
 
 # Other Libraries
-# Only Load if module rarfile available.
-# If not, error, ask if user wants to install
-# import rarfile
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import distro
-from pysorcery.lib.system import logging
+from pysorcery.lib import distro
+from pysorcery.lib import logging
 # Other Application Libraries
-from pysorcery.lib.util import config
-from pysorcery.lib.util import text
+import pysorcery
+from pysorcery.lib import libcodex
+from pysorcery.lib import libfiles
+from pysorcery.lib import libmisc
+from pysorcery.lib import libmisc
+from pysorcery.lib import libtext
 
 # Other Optional Libraries
+if distro.distro_id in distro.distro_dict['deb']:
+    import apt
 
 #-------------------------------------------------------------------------------
 #
@@ -64,174 +68,82 @@ from pysorcery.lib.util import text
 #
 #-------------------------------------------------------------------------------
 # Enable Logging
-# create logger
 logger = logging.getLogger(__name__)
 
 #-------------------------------------------------------------------------------
 #
 # Classes
 #
-# Files
+#
+# BaseSpell
+# DebianSpell
+# Spell
+#
+# BaseSpellQueue
+# DebianSpellQueue
+# SpellQueue
 #
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 #
-# Class File
+# Class BaseSpell
 # 
 #
 #-------------------------------------------------------------------------------
-class Files(DebianFiles,BaseFile):
-    def __init__(self,filename):
+class BaseSpell():
+    def __init__(self,name):
         logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFiles.__init__(self,filename)
-        else:
-            BaseFile.__init__(self,filename)
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def print_from(self):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFiles.print_from(self)
-        else:
-            BaseFile.print_from(self)
-
-        logger.debug("End Function")
-        return
-
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        if distro.distro_id in distro.distro_dict['deb']:
-            installed_files = DebianFileList.list_installed_files(self)
-        else:
-            installed_files = BaseFileList.list_installed_files(self)
-            
-        logger.debug("End Function")
-        return installed_files
-
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class Directories(DebianDirectories,BaseDirectories):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianDirectories.__init__(self,dirname)
-        else:
-            BaseDirectories.__init__(self,dirname)
-
-        logger.debug("End Function")
-        return
-
-#-------------------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-------------------------------------------------------------------------------
-class FileList(DebianFileList,BaseFileList):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFileList.__init__(self)
-        else:
-            BaseFileList.__init__(self)
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        if distro.distro_id in distro.distro_dict['deb']:
-            installed_files = DebianFileList.list_installed_files(self)
-        else:
-            installed_files = BaseFileList.list_installed_files(self)
-            
-            logger.debug("End Function")
-        return installed_files
-
-#-------------------------------------------------------------------------------
-#
-# Class CompressedFile
-# 
-#
-#-------------------------------------------------------------------------------
-class CompressedFile(files.BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function id_type
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def __init__(self,filename):
-        logger.debug("Begin Function")
-        files.BaseFile.__init__(self,filename)
         
-        if (self.filename.endswith('tar') or
-            self.filename.endswith('tar.gz') or
-            self.filename.endswith('tar.bz2') or
-            self.filename.endswith('tar.xz') or
-            self.filename.endswith('tgz') or
-            self.filename.endswith('tbz2')):
-            if tarfile.is_tarfile(self.filename):
-                self.cfile = archive.CTarFile(self.filename)
-        elif self.filename.endswith('zip') and zipfile.is_zipfile(self.filename):
-            self.cfile = archive.CZipFile(self.filename)
-        elif self.filename.endswith('gz'):
-            self.cfile = archive.GZFile(self.filename)
-        elif self.filename.endswith('bz2'):
-            self.cfile = archive.BZ2file(self.filename)
-        elif self.filename.endswith('lzma') or self.filename.endswith('xz'):
-            self.cfile = archive.LZMAfile(self.filename)
-        #    elif self.filename.endswith('.Z'):
-        #        extract_zlibfile(self.filename)
-        #    elif self.filename.endswith('7z'):
-        #        extract_7zfile(self.filename)
-        #    elif self.filename.endswith('rar'):
-        #        extract_rarfile(self.filename)
-        #    elif self.filename.endswith('exe'):
-        #       extract_exefile(self.filename)
-        else:
-            logger.error("Invalid: " + str(self.filename))
+        self.name = name
+
+        logger.debug('End Function')
+        return
+    
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def set_details(self):
+        logger.debug('Begin Function')
+        
+        codex = libcodex.Codex()
+        grimoire_list = codex.list_grimoires()
+
+        for i in grimoire_list:
+            spell_list_file = libfiles.Files(i + '/codex.index')
+            spell_list = spell_list_file.read()
+
+            for item in spell_list:
+                spell, section_dir = item.split(' ')
+
+                if self.name == spell:
+                    self.section_dir = section_dir
+                    break
+
+            if self.name == spell:
+                self.grimoire = i.split('/')[-1]
+                break
+
+        self.section = self.section_dir.split('/')[-1]
+        self.spell_directory = self.section_dir + '/' + self.name
+
+        details_file = libfiles.DetailsFile(self.spell_directory)
+        details = details_file.read()
+        
+        self.description = details['description']
+        self.version = details['version']
+        self.url = details['website']
+        self.short = details['short']
+        
+        self.source_files = {}
+
+        #file_name = url.split('/')[-1]
 
         logger.debug("End Function")
         return
@@ -245,10 +157,111 @@ class CompressedFile(files.BaseFile):
     # Return: ...
     #
     #-------------------------------------------------------------------------------
-    def extract(self):
+    def install(self,args):
         logger.debug("Begin Function")
+        print("Installing: " + self.name)
+        logger.debug("End Function")
+        return
 
-        shutil.unpack_archive(self.filename)
+#-------------------------------------------------------------------------------
+#
+# Class BaseSpell
+# 
+#
+#-------------------------------------------------------------------------------
+class SMGLBashSpell():
+    def __init__(self,name):
+        logger.debug("Begin Function")
+        BaseSpell.__init__(self,name)
+        
+        codex = libcodex.Codex()
+        grimoire_list = codex.list_grimoires()
+
+        for i in grimoire_list:
+            spell_list_file = libfiles.Files(i + '/codex.index')
+            spell_list = spell_list_file.read()
+
+            for item in spell_list:
+                spell, section_dir = item.split(' ')
+
+                if self.name == spell:
+                    self.section_dir = section_dir
+                    break
+
+            if self.name == spell:
+                self.grimoire = i.split('/')[-1]
+                break
+
+        self.section = self.section_dir.split('/')[-1]
+        self.spell_directory = self.section_dir + '/' + self.name
+
+        details_file = libfiles.DetailsFile(self.spell_directory)
+        details = details_file.read()
+        
+        self.description = details['description']
+        self.version = details['version']
+        self.url = details['website']
+        self.short = details['short']
+        
+        self.source_files = {}
+
+        #file_name = url.split('/')[-1]
+
+        logger.debug("End Function")
+        return
+
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def install(self,args):
+        logger.debug("Begin Function")
+        print("Installing: " + self.name)
+        logger.debug("End Function")
+        return
+
+#-------------------------------------------------------------------------------
+#
+# Class DebianSpell
+# 
+#
+#-------------------------------------------------------------------------------
+class DebianSpell(BaseSpell):
+    def __init__(self,name):
+        logger.debug("Begin Function")
+        BaseSpell.__init__(self,name)
+
+        self.cache    = apt.cache.Cache()
+#        self.cache.update()
+        self.cache.open()
+        
+        self.pkg      = self.cache[self.name]
+
+        versions = self.pkg.versions
+
+        self.version = versions[0].version
+
+        self.architecture = versions[0].architecture
+        self.description  = versions[0].description
+        self.url = versions[0].homepage
+        self.short = self.description
+
+        pkg_section = versions[0].section
+
+        if 'universe' in pkg_section or 'multiverse' in pkg_section:
+            self.section = str(pkg_section).split('/')[1]
+        else:
+            self.section = str(pkg_section)            
+
+        self.grimoire = 'Fix Me'            
+        self.dependencies = versions[0].dependencies
+        self.optional_dependencies = versions[0].suggests
+        self.size = versions[0].installed_size
         
         logger.debug("End Function")
         return
@@ -258,15 +271,22 @@ class CompressedFile(files.BaseFile):
     # Function 
     #
     # Input:  ...
-    # Output: ...
+    # Output: ....x
     # Return: ...
     #
     #-------------------------------------------------------------------------------
-    def list_files(self):
+    def install(self, args):
         logger.debug("Begin Function")
 
-        self.cfile.list_files()
+        if args.reconfigure:
+            subprocess.run(['dpkg-reconfigure', self.name])
 
+            
+        if args.compile:
+            subprocess.run(['apt-build', 'install', self.name])
+        else:
+            subprocess.run(['apt-get', 'install', self.name])
+                    
         logger.debug("End Function")
         return
 
@@ -279,31 +299,33 @@ class CompressedFile(files.BaseFile):
     # Return: ...
     #
     #-------------------------------------------------------------------------------
-    def compress(self):
+    def remove(self, args):
         logger.debug("Begin Function")
 
-        shutil.make_archive(self.filename,
-                            self.filetype,
-                            logger
-                            )
+        #subprocess.run(['apt-get', 'remove', self.name])
 
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def test(self):
-        logger.debug("Begin Function")
-
-        self.cfile.test()
-
+        cache = apt.cache.Cache()
+        cache.open(None)
+        pkg = cache[pkg_name]
+        cache.update()
+        pkg.mark_delete(True, purge=True)
+        resolver = apt.cache.ProblemResolver(cache)
+        
+        if pkg.is_installed is False:
+            logger.error(pkg_name + " not installed so not removed")
+        else:
+            for pkg in cache.get_changes():
+                if pkg.mark_delete:
+                    logger.info(pkg_name + " is installed and will be removed")
+                    logger.info(" %d package(s) will be removed" % cache.delete_count)
+                    resolver.remove(pkg)
+                    
+        try:
+            cache.commit()
+            cache.close()
+        except Exception:
+            logger.error("Sorry, package removal failed.")
+                    
         logger.debug("End Function")
         return
 
@@ -430,6 +452,224 @@ class Spell(DebianSpell,SMGLBashSpell,BaseSpell):
 
 #-------------------------------------------------------------------------------
 #
+# Class BaseSpellQueue
+#
+# This is the spell API.
+# All spell related actions should go through this class
+#
+#-------------------------------------------------------------------------------
+class BaseSpellList():
+    def __init__(self):
+        logger.debug("Begin Function")
+        logger.debug("End Function")
+        return
+
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_queue(self,which_queue):
+        logger.debug("Begin Function")
+        queue_file = libfiles.Files('/var/log/sorcery/queue/' + which_queue)
+
+        queue = queue_file.read()
+
+        logger.debug("End Function")
+        return queue
+    
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_installed(self,status=None):
+        logger.debug("Begin Function")
+
+        spell_list = []
+
+        for line in open('/var/state/sorcery/packages'):
+            spell = line.split(':')
+
+            name = spell[0]
+            date = spell[1]
+            spellstatus = spell[2]
+            version = spell[3]
+
+            if not status and spellstatus != 'exiled':
+                spell_list.append(name)
+                spell_list.append(date)
+                spell_list.append(version)
+            elif status == spellstatus:
+                spell_list.append(name)
+                spell_list.append(date)
+                spell_list.append(version)
+            else:
+                logger.error('We fucked up')
+
+        logger.debug('End Function')
+        return spell_list
+
+
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_orphans(self):
+        logger.debug('Begin Function')
+
+        var = subprocess.check_output(['gaze','orphans'])
+
+        orphan_list = []
+        for line in var.splitlines():
+            line_list = str(line).split(',')
+            item = line_list[0].split("'")[1]
+            orphan_list.append(item)
+
+        logger.debug2(orphan_list)
+        logger.debug('End Function')
+        return orphan_list
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_provides(self, feature):
+        logger.debug('Begin Function')
+
+        grimoires =  libcodex.Codex()
+
+        providers = []
+        for grimoire in grimoires.list_grimoires():
+            for line in open(grimoire + '/provides.index'):
+                if feature.upper() == line.split(' ')[0]:
+                    providers.append(line.split('/')[-1][:-1])
+
+        logger.debug('End Function')
+        return providers
+
+
+#-------------------------------------------------------------------------------
+#
+# Class DebianSpellQueue
+#
+# This is the spell API.
+# All spell related actions should go through this class
+#
+#-------------------------------------------------------------------------------
+class DebianSpellList(BaseSpellList):
+    def __init__(self):
+        logger.debug("Begin Function")
+        BaseSpellList.__init__(self)
+
+        #self.cache = apt.Cache()
+        #self.cache.update()
+        #self.cache.open(None)
+
+        logger.debug("End Function")
+        return
+        
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_queue(self,which_queue):
+        logger.debug("Begin Function")
+
+        if which_queue == 'install':
+            cache = apt.cache.Cache()
+            cache.open(None)
+            cache.upgrade()
+            queue = cache.get_changes()
+        elif which_queue == 'remove':
+            queue = []
+            logger.error('Not Implimented')
+        else:
+            queue = []
+            logger.critical('We Fucked Up')
+            
+
+        logger.debug2(queue)
+        logger.debug("End Function")
+        return queue
+    
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_installed(self,status=None):
+        logger.debug("Begin Function")
+        var = subprocess.check_output(['apt', 'list','--installed'])
+
+        spell_list = []
+        
+        for line in var.splitlines():
+            tmpline = str(line).split("'")[1]
+            
+            name = tmpline.split('/')[0]
+            
+            if 'Listi' not in name:
+                spell_list.append(name)
+                spell_list.append('-')
+                spell_list.append('-')
+
+        logger.debug2(spell_list)
+        logger.debug("End Function")
+        return spell_list        
+        
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+    def list_orphans(self):
+        logger.debug('Begin Function')
+
+        var = subprocess.check_output(['deborphan'])
+
+        orphan_list = []
+        for line in var.splitlines():
+            line_list = str(line).split(',')
+            item = line_list[0].split("'")[1]
+            print(item)
+
+        logger.debug(orphan_list)
+        logger.debug('End Function')
+        return orphan_list
+
+#-------------------------------------------------------------------------------
+#
 # Class SpellList
 #
 # This is the spell queue API.
@@ -539,112 +779,7 @@ class SpellList(DebianSpellList,BaseSpellList):
         print_list = ['Spell','Installed Version', 'Installed Date',
                       '-----','-----------------', '--------------'] + spell_list
         
-        text.column_print(print_list,cols=3,columnwise=False,gap=2)
+        libmisc.column_print(print_list,cols=3,columnwise=False,gap=2)
         
         logger.debug("End Function")
-        return
-
-#-------------------------------------------------------------------------------
-#
-# Class Repository
-# 
-#
-#-------------------------------------------------------------------------------
-class Repository(DebianGrimoire,BaseGrimoire):
-    def __init__(self,name = None, grim_dir = None):
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianGrimoire.__init__(self,name, grim_dir)
-        else:
-            BaseGrimoire.__init__(self,name, grim_dir)
-
-        return
-    
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_spells(self):
-        print("Spells")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def add(self):
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianGrimoire.add(self)
-        else: # distro.distro_id in distro.distro_dict['smgl']:
-            BaseGrimoire.add(self)
-        #else:
-            # Add except?
-            #logger.critical("We shouldn't be here")
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_sections(self):
-        if distro.distro_id in distro.distro_dict['deb']:
-            section_list = DebianGrimoire.list_sections(self)
-        else: # distro.distro_id in distro.distro_dict['smgl']:
-            section_list = BaseGrimoire.list_sections(self)
-        #else:
-            # Add except?
-            #logger.critical("We shouldn't be here")
-
-        return section_list
-
-#-------------------------------------------------------------------------------
-#
-# Class URI
-# 
-# The URI API
-#
-# Currently Supports:
-#   HTTP(S)
-#
-# Planned Support:
-#   SFTP
-#
-#-------------------------------------------------------------------------------
-class URI(HTTPUri,
-          FTPUri,
-          RsyncUri,
-          GitUri,
-          CVSUri,
-          SVNUri,
-          TorrentUri,
-          BaseURI):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # 
-    #
-    #-------------------------------------------------------------------------------
-    def download(self):
-        logger.debug('Begin Function')
-
-        if self.uri.startswith('http'):
-            HTTPUri.download(self)
-        else:
-            logger.error('We Fucked Up')
-            
-        logger.debug('End Function')
         return

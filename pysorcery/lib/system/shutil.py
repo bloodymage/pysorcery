@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 #-------------------------------------------------------------------------------
 #
 # Original BASH version
@@ -28,11 +28,7 @@
 #
 #
 #-------------------------------------------------------------------------------
-"""
-  BASH version
-  Original version Copyright 2001 by Kyle Sallee
 
-"""
 #-------------------------------------------------------------------------------
 #
 # Libraries
@@ -40,51 +36,29 @@
 #-------------------------------------------------------------------------------
 
 # System Libraries
-import sys
+from shutil import *
 
 # Other Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import logging
 # Other Application Libraries
+
 
 #-------------------------------------------------------------------------------
 #
 # Global Variables
 #
 #-------------------------------------------------------------------------------
-__all__ = ['__author__',
-           '__contact__',
-           '__copyright__',
-           '__license__',
-           '__status__',
-           '__version__',
-           'enable_debugging_mode'
-           ]
-__author__ = 'Geoff S Derber'
-__contact__ = 'gd.smlinux@gmail.com'
-__copyright__ = 2017
-__license__ = 'GPLv3+'
-__status__ = 'Prototype'
-__version__ = '0.0.1'
-enable_debugging_mode=True
 
-# Enable Logging
-# create logger
-logger = logging.getLogger(__name__)
-logger.setLevel(20)
-
-# Define Handlers
-consolehandler = logging.ColorizingStreamHandler()
-
-# Define Formatters
-consoleformatter = logging.ConsoleLvlFormatter("%(name)s:%(funcName)s:%(lineno)d - %(levelname)s - %(message)s")
-
-# Set handler ...
-consolehandler.setLevel(0)
-consolehandler.setFormatter(consoleformatter)
-
-# Add handlers to logger
-logger.addHandler(consolehandler)
+#-------------------------------------------------------------------------------
+#
+# Classes
+#
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#
+# Functions
+#
+#-------------------------------------------------------------------------------

@@ -16,27 +16,27 @@ pyscribe
 
 ### 0.0.4
 #### Functional Scripts
-pycast
+pysummon
 
 ### 0.0.5
 #### Functional Scripts
-pydispel
+pycast
 
 ### 0.0.6
 #### Functional Scripts
-pycleanse
+pydispel
 
 ### 0.0.7
 #### Functional Scripts
-pyscribbler
+pycleanse
 
 ### 0.0.8
 #### Functional Scripts
-pysorcery
+pyscribbler
 
 ### 0.0.9
 #### Functional Scripts
-pyresurrect
+pysorcery
 
 
 ## 0.1
@@ -58,27 +58,27 @@ pygaze
 
 ### 0.1.3
 #### Functional Scripts
-pyalter
+pyresurrect
 
 ### 0.1.4
 #### Functional Scripts
-pyenchant
+pyalter
 
 ### 0.1.5
 #### Functional Scripts
-pycauldron
+pyenchant
 
 ### 0.1.6
 #### Functional Scripts
-pyvcast
+pycauldron
 
 ### 0.1.7
 #### Functional Scripts
-pycabal
+pyvcast
 
 ### 0.1.8
 #### Functional Scripts
-- pysmgl-ledger
+pycabal
 
 ### 0.1.9
 #### Modified Scripts
@@ -87,7 +87,7 @@ pycabal
 
 
 ## 0.2
-- CLI functionally complete
+- Sorcery CLI functional replacement for BASH version
 
 ### 0.2.1
 ####
@@ -99,6 +99,17 @@ pycabal
 
 ### 0.2.3
 - Ensure proper exception handling
+
+### 0.2.4
+- Setup.py
+
+### 0.2.5
+####
+- pyconfmeld
+
+### 0.2.6
+####
+- pydelve
 
 
 ## 0.3
@@ -119,9 +130,13 @@ Add plugin system
 ## 0.5
 -
 
-### 0.5.x
-- Guru tools
+### 0.5.1
+#### Functional Scripts
+- pysmgl-ledger
 
+### 0.5.2
+- Guru tools
+  
 
 ## 0.6
 - Base Code Functional
@@ -159,7 +174,7 @@ Add support for 'portage'
 - Major Linux distributions package managers supported
 
 ### 0.8.1
-- Add support for 'pip'
+- Add support for 'pip' package manager
 
 
 ## 0.9

@@ -45,7 +45,7 @@ import copy
 
 # Application Libraries
 import pysorcery
-from pysorcery.lib import libtext
+from pysorcery.lib.util import text
 
 #-------------------------------------------------------------------------------
 #
@@ -95,6 +95,7 @@ logging.addLevelName(27, "INFO7")
 logging.addLevelName(28, "INFO8")
 logging.addLevelName(29, "INFO9")
 
+colortext = text.ConsoleText()
 #-------------------------------------------------------------------------------
 #
 # Classes part 1
@@ -355,7 +356,7 @@ class ConsoleLvlFormatter(logging.Formatter):
 # 
 #
 #-------------------------------------------------------------------------------
-class ColorizingStreamHandler(logging.StreamHandler,libtext.ConsoleText):
+class ColorizingStreamHandler(logging.StreamHandler,text.ConsoleText):
     def __init__(self, *args, **kwargs):
         self._colors = {DEBUG10: "green",
                         DEBUG9: "green",
@@ -412,7 +413,6 @@ class ColorizingStreamHandler(logging.StreamHandler,libtext.ConsoleText):
             if not self.is_tty:
                 stream.write(message)
             else:
-                colortext = libtext.ConsoleText()
                 message = colortext.colorize(message, "none", self._colors[record.levelno],"black")
                 stream.write(message)
             stream.write(getattr(self, 'terminator', '\n'))
