@@ -68,7 +68,7 @@ __contact__ = 'gd.smlinux@gmail.com'
 __copyright__ = 2017
 __license__ = 'GPLv3+'
 __status__ = 'Prototype'
-__version__ = '0.0.1'
+__version__ = 'HEAD'
 enable_debugging_mode=True
 
 # Enable Logging
