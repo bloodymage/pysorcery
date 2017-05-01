@@ -4,70 +4,79 @@
 
 ### 0.0.1
 #### Functional Scripts
-pyarchive
-
+-pyarchive
+ [ ] tar
+ [ ] gz
+ [ ] xz
+ [ ] bz2
+ [ ] zip
+ 
 ### 0.0.2    
 #### Functional Scripts
-pygaze
+-pygaze
 
 ### 0.0.3
 #### Functional Scripts
-pyscribe
+-pyscribe
 
 ### 0.0.4
 #### Functional Scripts
-pysummon
-
+-pysummon
+ [ ] http
+ 
 ### 0.0.5
 #### Functional Scripts
-pycast
+-pycast
 
 ### 0.0.6
 #### Functional Scripts
-pydispel
+-pydispel
 
 ### 0.0.7
 #### Functional Scripts
-pycleanse
+-pycleanse
 
 ### 0.0.8
 #### Functional Scripts
-pyscribbler
+- pyscribbler
 
 ### 0.0.9
 #### Functional Scripts
-pysorcery
+- pysorcery
 
 
 ## 0.1
 
 #### Supported Distributions
-Source Mage
-Xubuntu
+- Source Mage
+- Xubuntu
 
 ### 0.1.1
 #### Functional Scripts
-pyupstream
-- Check Debian Upstream
-- Create Spell From Debian Upstream
+- pyupstream
+ - Check Debian Upstream
+ - Create Spell From Debian Upstream
 
 ### 0.1.2
 #### Script Modifications
-pygaze
--  Add Upstream information
+-pygaze
+ -Add Upstream information
 
 ### 0.1.3
 #### Functional Scripts
-pyresurrect
+-pyresurrect
 
 ### 0.1.4
 #### Functional Scripts
-pyalter
+-pyalter
 
 ### 0.1.5
 #### Functional Scripts
-pyenchant
-
+-pyenchant
+#### Script Modifications
+-pyarchive
+ [ ]iso
+ 
 ### 0.1.6
 #### Functional Scripts
 pycauldron
