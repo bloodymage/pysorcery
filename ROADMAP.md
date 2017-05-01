@@ -5,11 +5,11 @@
 ### 0.0.1
 #### Functional Scripts
 - pyarchive
-  [ ] tar
-  [ ] gz
-  [ ] xz
-  [ ] bz2
-  [ ] zip
+  [] tar
+  [] gz
+  [] xz
+  [] bz2
+  [] zip
  
 ### 0.0.2    
 #### Functional Scripts
@@ -22,7 +22,7 @@
 ### 0.0.4
 #### Functional Scripts
 - pysummon
-  [ ] http
+  [] http
  
 ### 0.0.5
 #### Functional Scripts
