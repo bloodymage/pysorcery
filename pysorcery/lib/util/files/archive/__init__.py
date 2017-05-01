@@ -1,330 +1,119 @@
+#! /usr/bin/env python3
+#-----------------------------------------------------------------------
+#
+# Original BASH version
+# Original version Copyright 2001 by Kyle Sallee
+# Additions/corrections Copyright 2002 by the Source Mage Team
+#
+# Python rewrite
+# Copyright 2017 Geoff S Derber
+#
+# This file is part of Sorcery.
+#
+#    Sorcery is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    Dionysius is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+#
+#
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
 # Libraries
 #
-#-------------------------------------------------------------------------------
-
+#-----------------------------------------------------------------------
 # System Libraries
-import tarfile
-import zipfile
-import zlib
-import lzma
-import gzip
-import bz2
+import glob
+import importlib
+import os
 
-# Other Libraries
-# Only Load if module rarfile available.
-# If not, error, ask if user wants to install
-# import rarfile
-
+# 3rd Party Libraries
 
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import shutil
 # Other Application Libraries
-from pysorcery.lib.sorcery import files
-from pysorcery.lib.util import text
-
+from pysorcery.lib.util import files
 
 # Other Optional Libraries
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------------
+ArchiveModules = {
+    'tar': 'tar'
+    }
+
+#-----------------------------------------------------------------------
 #
 # Classes
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
 #
-# Class CZipFile
+# Functions
 #
-#-------------------------------------------------------------------------------
-class CZipFile(files.BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
-        logger.debug("Xfile: "+ str(self.filename))
+# get_archive_cmd_func
+#
+#-----------------------------------------------------------------------
 
-        file_dir, basename, ext = CompressedFile.pne(self)
-
-        logger.debug("File_dir: " + str(file_dir))
-        logger.debug("File name: " + str(basename))
-        logger.debug("Extention: " + str(ext))
-    
-        try:
-            zip_file = zipfile.ZipFile(self.filename)
-            for name in zip_file.namelist():
-                zip_file.extractall(basename)
-            logger.info("Extracted file: " + str(self.filename))
-        except zipfile.BadZipFile:
-            logger.error("Unk Extraction Error")
-            pass
-        except IOError:
-            logger.error("IO Error")
-            pass
-        except:
-            logger.error("Unknown Error")
+#-------------------------------------------------------------------
+#
+# Function get_archive_cmd_func
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def get_archive_formats():
+    modules = glob.glob(os.path.dirname(__file__)+"/*.py")
+    supformats = []
+    for f in modules:
+        if (os.path.isfile(f) and
+            f.split('/')[-1] != '__init__.py'):
+            supformats.append(os.path.basename(f)[:-3])
             
-        return 0
+    return supformats
 
-    def list_files(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-    def compress(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-    
-    def test(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------
 #
-# Class TarFile
+# Function get_archive_cmd_func
 #
-#-------------------------------------------------------------------------------
-class CTarFile(files.BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
-        logger.debug("Xfile: " + str(self.filename))
-
-        file_dir, basename, ext = files.BaseFile.pne(self)
-
-        logger.debug("File_dir: " + str(file_dir))
-        logger.debug("File name: " + str(basename))
-        logger.debug("Extention: " + str(ext))
-    
-        try:
-            tar_file = tarfile.open(self.filename)
-            for name in tar_file.getnames():
-                tar_file.extractall(basename)
-#                logger.info2(name)
-#            logger.info1("Extracted file: " + str(self.filename))
-        except zipfile.BadZipFile:
-            logger.error("Unk Extraction Error")
-            pass
-        except IOError:
-            logger.error("IO Error")
-            pass
-        except:
-            logger.error("Unknown Error")
-            
-        return
-
-    def list_files(self):
-        logger.debug("Begin Function")
-
-        try:
-            tar_file = tarfile.open(self.filename)
-            for name in tar_file.getnames():
-                logger.info1(name)
-            logger.info("Extracted file: " + str(self.filename))
-        except zipfile.BadZipFile:
-            logger.error("Unk Extraction Error")
-            pass
-        except IOError:
-            logger.error("IO Error")
-            pass
-        except:
-            logger.error("Unknown Error")
-
-        logger.debug('End Function')
-        return
-
-    def compress(self,source):
-        logger.debug("Begin Function")
-        
-        try:
-            tar_file = tarfile.open(self.filename)
-            tar_file.add(source)
-
-            logger.info("Added file: " + str(self.source))
-        except zipfile.BadZipFile:
-            logger.error("Unk Extraction Error")
-            pass
-        except IOError:
-            logger.error("IO Error")
-            pass
-        except:
-            logger.error("Unknown Error")
-
-        logger.debug('End Function')
-        return
-    
-    def test(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-
-#-------------------------------------------------------------------------------
+# Input:  ...
+# Output: ...
+# Return: ...
 #
-# Class CZipFile
-#
-#-------------------------------------------------------------------------------
-class CLZMAFile(files.BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
-        
-        logger.debug("Xfile: "+ str(self.filename))            
-        return 0
-
-    def list_files(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-    def compress(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-    
-    def test(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-#-------------------------------------------------------------------------------
-#
-# Class CZipFile
-#
-#-------------------------------------------------------------------------------
-class CGZFile(files.BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
-        logger.debug("Xfile: "+ str(self.filename))
-
-        logger.debug('End Function')            
-        return 0
-
-    def list_files(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-    def compress(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-    
-    def test(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-#-------------------------------------------------------------------------------
-#
-# Class CZipFile
-#
-#-------------------------------------------------------------------------------
-class CBZ2File(files.BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
-        logger.debug("Xfile: "+ str(self.filename))
-
-        file_dir, basename, ext = CompressedFile.pne(self)
-
-        logger.debug("File_dir: " + str(file_dir))
-        logger.debug("File name: " + str(basename))
-        logger.debug("Extention: " + str(ext))
-    
-        try:
-            zip_file = zipfile.ZipFile(self.filename)
-            for name in zip_file.namelist():
-                zip_file.extractall(basename)
-            logger.info("Extracted file: " + str(self.filename))
-        except zipfile.BadZipFile:
-            logger.error("Unk Extraction Error")
-            pass
-        except IOError:
-            logger.error("IO Error")
-            pass
-        except:
-            logger.error("Unknown Error")
-            
-        return 0
-
-    def list_files(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
-    def compress(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-    
-    def test(self):
-        logger.debug("Begin Function")
-        
-        logger.debug('End Function')
-        return
-
+#-------------------------------------------------------------------
+def get_archive_cmd_func(archive_format,command):
+    modulename = "pysorcery.lib.util.files.archive." + ArchiveModules.get(archive_format, archive_format)
+    # import the module
+    try:
+        module = importlib.import_module(modulename, __name__)
+    except ImportError as msg:
+        raise logger.error(msg)
+    # get the function
+    try:
+        return getattr(module, command)
+    except AttributeError as msg:
+        raise logger.error(msg)

@@ -48,6 +48,7 @@
 #-------------------------------------------------------------------------------
 
 # System Libraries
+import argparse
 import sys
 import os
 import copy
@@ -62,11 +63,11 @@ from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 
 # Other Application Libraries
-from pysorcery import __version__, enable_debugging_mode
+from pysorcery import *
+#from pysorcery.lib.sorcery import repositories
+#from pysorcery.lib.sorcery import packages
 from pysorcery.lib.util import config
-from pysorcery.lib.api import files
-from pysorcery.lib.api import repositories
-from pysorcery.lib.api import packages
+#from pysorcery.lib.util import files
 from pysorcery.lib.util import text
 
 
@@ -205,7 +206,12 @@ def gaze_orphans(args):
 def gaze_activity(args):
     logger.debug('Begin Function')
 
-    activity = libfiles.ActivityLog()
+    activity_files = {
+        'deb'  : '/var/log/apt/history.log',
+        'smgl' : '/var/log/sorcery/activity'
+    }
+    
+    activity = lib.Files()
     activity.print_activity()
 
     logger.debug('End Function')
@@ -1136,6 +1142,39 @@ def gaze_time(args):
 
 #-------------------------------------------------------------------------------
 #
+# Function gaze_time
+#
+# shows the time the spell(s) needed to get cast. By default the last casting
+# time is shown, alternatively the median, mean or weighted mean can be shown.
+# The weighted mean mode gives more weight to the last casting time. If more
+# then one spell is specified, also a total time is shown.
+#
+# If --full is specified, then all the calculations will be shown for each spell.
+#
+# If time-system:
+#   shows the time the whole system needed to get cast. If --no-orphans is
+#   specified orphaned spells are skipped.
+#
+# Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
+# Output:
+# Return: None
+#
+# Status: Not implimented
+#
+#-------------------------------------------------------------------------------
+def gaze_42(args):
+    logger.debug('Begin Function')
+
+    logger.info1('What is the meaning of life?')
+    
+    logger.debug('End Function')
+    return
+
+#-------------------------------------------------------------------------------
+#
 # Real_Main
 #
 # 
@@ -1188,6 +1227,7 @@ def real_main(args):
         )
         logging_opts.add_argument('--loglevel',
                                   choices = loglevel_choices,
+                                  default = 'INFO',
                                   help = loglevel_help
         )
         logging_opts.add_argument('--debug',
@@ -1204,8 +1244,7 @@ def real_main(args):
     
     # Create subcommands
     subparsers = parser.add_subparsers(title = 'commands',
-                                       metavar = 'Command',
-                                       help = 'Description')
+                                       metavar = 'Description')
 
     #------------------------------------------
     #
@@ -1959,8 +1998,13 @@ def real_main(args):
                              help = 'Display System Info')
     parser_time_system.set_defaults(func = gaze_time,
                                     system = True)
+                                      
+    parser_42 = subparsers.add_parser('42',
+                                      parents = [parent_parser])
+    parser_42.set_defaults(func = gaze_42)
+    
 
-
+    
     # Parser Arguments
     #parser.add_argument('filename',
     #                    choices = [ 'BUILD',
@@ -2015,10 +2059,10 @@ def real_main(args):
     # Now we are definitely running as root
 
     # Parse the config files
-    config = libconfig.main_configure(args)
+    config_ = config.main_configure(args)
 
     logger.debug2('Configuration set')
-    logger.debug3('Configuration Settings: ' + str(config))
+    logger.debug3('Configuration Settings: ' + str(config_))
     logger.debug4('Arguments: ' + str(args))
 
     # 'application' code

@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -13,9 +13,9 @@
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU General Public License as published
+#    by the Free Software Foundation, either version 3 of the License,
+#    or (at your option) any later version.
 #
 #    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,23 +27,29 @@
 #
 # pyArchive
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple ruosons
-# to internally extract, create, list the contents, etc. archive files of
-# multiple formats.  To test the capabilities of the underlying code, this
-# application was developed.
+#   This is a bonus application for pysorcery.  PySorcery for multiple
+#   reasons to internally extract, create, list the contents, etc.
+#   archive files of multiple formats.  To test the capabilities of the
+#   underlying code, this application was developed.
 #
-#-------------------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+"""
+This is a bonus application for pysorcery.  PySorcery for multiple
+reasons to internally extract, create, list the contents, etc.
+archive files of multiple formats.  To test the capabilities of the
+underlying code, this application was developed.
+"""
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 import argparse
+import sys
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
@@ -54,30 +60,30 @@ from pysorcery.lib.system import logging
 from pysorcery import *
 from pysorcery import lib
 from pysorcery.lib.util import config
+from pysorcery.lib.util.files import archive
 from pysorcery.lib.util import text
 
+# Conditional Libraries
 
-# Other Optional Libraries
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Classes
 #
-#-------------------------------------------------------------------------------
-            
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
 #
 # Functions
 #
@@ -91,9 +97,9 @@ colortext = text.ConsoleText()
 # archive_search
 # archive_formats
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function archive_extract
 #
@@ -101,28 +107,36 @@ colortext = text.ConsoleText()
 #
 # Input:  args
 #         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
+#         args.files - List of files to extract
+#         args.recursive - Extract all files in all subfolders
+#         args.depth (Add me) - if recursive, limit to depth #
+#         args.output_dir - Directory to extract to
 # Return: None
 #
-#-------------------------------------------------------------------------------
-def archive_extract(args):
+#-----------------------------------------------------------------------
+def archive_file(args):
     logger.debug('Begin Function')
 
     for i in args.files:
+        # Check for recursive extraction
         if args.recursive:
+            # If True, extract all compressed files within a directory and
+            # its sub directories
+            #
+            # Fix me! Add max depth option
             for root, dirs, files in os.walk(i):
                 for sfile in files:
-                    cfile = archive.CompressedFile(sfile)
-                    cfile.extract()
-                    
-        print('Extracting file: ' + i)
-        cfile = archive.CompressedFile(i)
-        cfile.extract()
+                    cfile = lib.Files(sfile)
+                    cfile.archive(args.cmd, args.output_dir)
+        # Always extract what is explicitly listed
+        logger.info('Extracting file: ' + i)
+        cfile = lib.Files(i)
+        cfile.archive(args.cmd, args.output_dir)
 
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function archive_list
 #
@@ -135,7 +149,7 @@ def archive_extract(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_list(args):
     logger.debug('Begin Function')
 
@@ -143,18 +157,17 @@ def archive_list(args):
         if args.recursive:
             for root, dirs, files in os.walk(i):
                 for sfile in files:
-                    cfile = archive.CompressedFile(sfile)
+                    cfile = lib.CompressedFile(sfile)
                     cfile.list_files()
                     
         print('Extracting file: ' + i)
-        cfile = archive.CompressedFile(i)
+        cfile = lib.CompressedFile(i)
         cfile.list_files()
 
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
-#
+#-----------------------------------------------------------------------#
 # Functions archive_create
 #
 #
@@ -166,11 +179,11 @@ def archive_list(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_create(args):
     logger.debug('Begin Function')
 
-    newarchive = archive.CompressedFile(args.archive)
+    newarchive = lib.CompressedFile(args.archive)
 
     for i in args.source:
         newarchive.compress(i)
@@ -178,7 +191,7 @@ def archive_create(args):
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions archive_create
 #
@@ -191,7 +204,7 @@ def archive_create(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_test(args):
     logger.debug('Begin Function')
 
@@ -199,7 +212,7 @@ def archive_test(args):
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions archive_create
 #
@@ -212,7 +225,7 @@ def archive_test(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_repack(args):
     logger.debug('Begin Function')
 
@@ -220,7 +233,7 @@ def archive_repack(args):
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions archive_create
 #
@@ -233,7 +246,7 @@ def archive_repack(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_recompress(args):
     logger.debug('Begin Function')
 
@@ -241,7 +254,7 @@ def archive_recompress(args):
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions archive_create
 #
@@ -254,7 +267,7 @@ def archive_recompress(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_diff(args):
     logger.debug('Begin Function')
 
@@ -262,7 +275,7 @@ def archive_diff(args):
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions archive_create
 #
@@ -275,7 +288,7 @@ def archive_diff(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_search(args):
     logger.debug('Begin Function')
 
@@ -283,7 +296,7 @@ def archive_search(args):
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions archive_create
 #
@@ -296,55 +309,26 @@ def archive_search(args):
 # Output: Prints list of alien files
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def archive_formats(args):
     logger.debug('Begin Function')
 
-    formats = [ '7z',
-                # 'ace',
-                # 'adf',  # Maybe future support
-                # 'alzip',
-                # 'ar',
-                # 'arc',
-                # 'arj',
-                'bzip2',
-                # 'cab',
-                # 'chm',
-                # 'compress',
-                'cpio',
-                'deb',
-                # 'dms',
-                'gzip',
-                'iso',
-                # 'lrzip',
-                # 'lzh',
-                # 'lzip',
-                'lzma',
-                # 'lzop',
-                # 'rar',
-                'rpm',
-                # 'rzip',
-                # 'shar',
-                'tar',
-                # 'vhd',
-                'xz',
-                'zip'
-                # 'zoo',
-                # 'zpac'
-                ]
+    formats = archive.get_archive_formats()
 
+    cmd = 'archive_support'
+    
     for i in formats:
         logger.info(i + ' files:')
-        logger.info('    extract : ')
-        logger.info('    create  : ')
-        logger.info('    list    : ')
-        logger.info('    test    : ')
 
-        
+        archive_func = archive.get_archive_cmd_func(i,
+                                                    cmd)
+        # We know what the format is, initialize that format's class
+        archive_func()
+
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Real_Main
 #
@@ -357,7 +341,7 @@ def archive_formats(args):
 # Output: Prints list of alien files
 # Return: None 
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def real_main(args):    
     logger.debug('Entered Function')
 
@@ -403,7 +387,7 @@ Report bugs to ...
                               default = 0,
                               help = quiet_help
     )
-    if enable_debugging_mode is True:
+    if DEBUG:
         logging_opts.add_argument('-v',
                                   '--verbosity',
                                   action = 'count',
@@ -453,7 +437,8 @@ Report bugs to ...
                                 action = 'store_true',
                                 help = 'Recursive'
     )
-    parser_extract.set_defaults(func = archive_extract)
+    parser_extract.set_defaults(func=archive_file,
+                                cmd='extract')
     #-----------------------------------------------------------------
     #
     # create the parser for the 'list' command
@@ -468,7 +453,8 @@ Report bugs to ...
     parser_list.add_argument('-r', '--recursive',
                                 action = 'store_true',
                                 help = 'Recursive')
-    parser_list.set_defaults(func = archive_list)
+    parser_list.set_defaults(func = archive_file,
+                             cmd='listfiles')
 
     #-----------------------------------------------------------------
     #
@@ -484,21 +470,24 @@ Report bugs to ...
     parser_create.add_argument('source',
                                nargs = '+',
                                help = 'Files / Directories to add to the archive')
-    parser_create.set_defaults(func = archive_create)
+    parser_create.set_defaults(func = archive_file,
+                               cmd = 'create')
     #-----------------------------------------------------------------
     #
     # create the test command
     #
     #-----------------------------------------------------------------
     parser_test = subparsers.add_parser('test',
-                                          help = 'Test files')
+                                        aliases = ['verify'],
+                                        help = 'Test files')
     parser_test.add_argument('archive',
-                               nargs = 1,
-                               help = 'Create files')
+                             nargs = 1,
+                             help = 'Create files')
     parser_test.add_argument('source',
-                               nargs = '+',
-                               help = 'Files / Directories to add to the archive')
-    parser_test.set_defaults(func = archive_test)
+                             nargs = '+',
+                             help = 'Files / Directories to add to the archive')
+    parser_test.set_defaults(func = archive_file,
+                             cmd = 'testarchive')
 
     #-----------------------------------------------------------------
     #
@@ -507,11 +496,12 @@ Report bugs to ...
     #-----------------------------------------------------------------
     parser_repack = subparsers.add_parser('repack',
                                           parents = [parent_parser],
-                                        help = 'Repack files')
+                                          help = 'Repack files')
     parser_repack.add_argument('file',
-                             nargs = '+',
-                             help = 'Repack files')
-    parser_repack.set_defaults(func = archive_repack)
+                               nargs = '+',
+                               help = 'Repack files')
+    parser_repack.set_defaults(func = archive_file,
+                               cmd = 'repack')
 
     #-----------------------------------------------------------------
     #
@@ -525,7 +515,8 @@ Report bugs to ...
     parser_recompress.add_argument('file',
                              nargs = '+',
                              help = 'Recompress files')
-    parser_recompress.set_defaults(func = archive_recompress)
+    parser_recompress.set_defaults(func = archive_file,
+                                   cmd = 'recompress')
 
     #-----------------------------------------------------------------
     #
@@ -536,7 +527,7 @@ Report bugs to ...
                                         parents = [parent_parser],
                                         help = 'Diff files')
     parser_diff.add_argument('file',
-                             nargs = '+',
+                             nargs = 2,
                              help = 'Diff files')
     parser_diff.set_defaults(func = archive_diff)
 
@@ -564,7 +555,11 @@ Report bugs to ...
     parser_formats.set_defaults(func = archive_formats)
 
     # With version, help description must be before version declaration
-    parser.set_defaults(func = False)
+    parser.set_defaults(func = False,
+                        quiet = 0,
+                        verbosity = 0,
+                        debug = False,
+                        loglevel = 'INFO')
     
     args = parser.parse_args()
 
@@ -576,15 +571,18 @@ Report bugs to ...
     logger.debug3('Arguments: ' + str(args))
 
     # 'application' code
-    args.func(args)
+    if args.func:
+        args.func(args)
+    else:
+        parser.print_help()
+        logger.error('No command was given')
 
     #logging.verifydebuglevels()
     logger.debug('End Function')
     return
 
 
-#-------------------------------------------------------------------------------
-#
+#-----------------------------------------------------------------------#
 # Main
 #
 # The First function, initalizes everything else.
@@ -603,21 +601,26 @@ Report bugs to ...
 #
 # Note: Any cli switches will override the settings in the config files
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def main(args=None):
-        """Run the main command-line interface for dionysius. Includes top-level
-    exception handlers that print friendly error messages.
-        """
+    """Run the main command-line interface for pyarchive. Includes 
+    top-level exception handlers that print friendly error messages.
+    """
 
-        logger.debug('Begin Application')
-#        try:         
-#            real_main(args)
-        real_main(args)        
-#        except:
-#            logger.critical('You Fucked Up')
+    logger.debug('Begin Application')
+    #try:         
+        #real_main(args)
+    real_main(args)        
+    #except:
+    #    logger.critical('You Fucked Up')
 
-        logger.debug('End Application')
-        return 0
+    logger.debug('End Application')
+    return
 
+#-----------------------------------------------------------------------
+#
+#
+#
+#-----------------------------------------------------------------------
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

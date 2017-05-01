@@ -54,18 +54,28 @@ from distro import *
 #-------------------------------------------------------------------------------
 # Distro Definitions
 
-deb_distro_list = ['Ubuntu','linuxmint','debian','Kali']
-smgl_distro_list = ['Source Mage']
-yum_distro_list = ['Red Hat', 'Fedora']
-pac_distro_list = ['Arch']
-ebuild_distro_list = [ 'Gentoo' ]
-lunar_distro_list = [ 'Lunar' ]
+distro_definitions = {
+    ('Ubuntu',
+     'Linux Mint',
+     'Debian',
+     'Kali'
+    ): 'deb',
+    ('Source Mage'): 'smgl',
+    ('Red Hat',
+     'Fedora'
+    ): 'rh',
+    ('Arch',
+     'Black Arch'
+    ): 'arch',
+    ('Gentoo',
+     'Funtoo'
+    ): 'gentoo',
+    ('Lunar'): 'lunar'
+    }
 
-distro_dict = { 'deb': deb_distro_list,
-                'smgl': smgl_distro_list,
-                'yum': yum_distro_list,
-                'pac': pac_distro_list,
-                'ebuild': ebuild_distro_list,
-                'lunar': lunar_distro_list
-                }
+distro_type = {}
+for k, v in distro_definitions.items():
+    for key in k:
+        distro_type[key] = v
+
 distro_id = linux_distribution()[0]

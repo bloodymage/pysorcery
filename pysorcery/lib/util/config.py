@@ -327,9 +327,6 @@ def configure_logging(args,config):
     else:
         config['logging']['loglevel'] = 11 - min(10,config['logging']['verbosity'])
 
-    print('config')
-    print(args.verbosity)
-    
     if args.debug:
         config['logging']['loglevel'] = 1
     elif args.quiet > 0:

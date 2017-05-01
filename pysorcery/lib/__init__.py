@@ -26,7 +26,6 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 # 
-#
 # This file is the pysorcery API.  All files should reference this file.
 #
 #-------------------------------------------------------------------------------
@@ -38,14 +37,9 @@
 #-------------------------------------------------------------------------------
 
 # System Libraries
-import os
-import subprocess
-import mimetypes
+
 
 # Other Libraries
-# Only Load if module rarfile available.
-# If not, error, ask if user wants to install
-# import rarfile
 
 
 # Application Libraries
@@ -53,8 +47,12 @@ import mimetypes
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery.lib.util import config
-from pysorcery.lib.util import text
+#from pysorcery.lib.sorcery import packages
+#from pysorcery.lib.sorcery import repositories
+#from pysorcery.lib.util import config
+from pysorcery.lib.util import files
+#from pysorcery.lib.util import text
+#from pysorcery.lib.util import url
 
 # Other Optional Libraries
 
@@ -72,6 +70,13 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 # Files
+# Directories
+# FileList
+# DirectoryList
+# Package
+# PackageList
+# Rupository
+# RepositoryList
 #
 #-------------------------------------------------------------------------------
 
@@ -81,36 +86,18 @@ logger = logging.getLogger(__name__)
 # 
 #
 #-------------------------------------------------------------------------------
-class Files(DebianFiles,BaseFile):
-    def __init__(self,filename):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFiles.__init__(self,filename)
-        else:
-            BaseFile.__init__(self,filename)
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def print_from(self):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFiles.print_from(self)
-        else:
-            BaseFile.print_from(self)
-
-        logger.debug("End Function")
-        return
-
+class Files(files.BaseFile):
+    pass
+#    def __init__(self,filename):
+#        logger.debug("Begin Function")
+#        
+#        if distro.distro_id in distro.distro_dict['deb']:
+#            files.DebianFiles.__init__(self,filename)
+#        else:
+#            files.BaseFile.__init__(self,filename)
+#
+#        logger.debug("End Function")
+#        return
 
     #-------------------------------------------------------------------------------
     #
@@ -121,192 +108,95 @@ class Files(DebianFiles,BaseFile):
     # Return: ...
     #
     #-------------------------------------------------------------------------------
-    def list_installed_files(self):
-        logger.debug("Begin Function")
+#    def print_from(self):
+#        logger.debug("Begin Function")
+#        if distro.distro_id in distro.distro_dict['deb']:
+#            files.DebianFiles.print_from(self)
+#        else:
+#            files.BaseFile.print_from(self)
+#
+#        logger.debug("End Function")
+#        return
 
-        if distro.distro_id in distro.distro_dict['deb']:
-            installed_files = DebianFileList.list_installed_files(self)
-        else:
-            installed_files = BaseFileList.list_installed_files(self)
-            
-        logger.debug("End Function")
-        return installed_files
+
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+#    def list_installed_files(self):
+#        logger.debug("Begin Function")
+#
+#        if distro.distro_id in distro.distro_dict['deb']:
+#            installed_files = files.DebianFileList.list_installed_files(self)
+#        else:
+#            installed_files = files.BaseFileList.list_installed_files(self)
+#            
+#        logger.debug("End Function")
+#        return installed_files
 
 #-------------------------------------------------------------------------------
 #
-# Class Alien
+# Class FileList
 # 
 #
 #-------------------------------------------------------------------------------
-class Directories(DebianDirectories,BaseDirectories):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianDirectories.__init__(self,dirname)
-        else:
-            BaseDirectories.__init__(self,dirname)
+class FileList(files.BaseFileList):
+    pass
+#    def __init__(self,dirname):
+#        logger.debug("Begin Function")
+#        if distro.distro_id in distro.distro_dict['deb']:
+#            files.DebianFileList.__init__(self)
+#        else:
+#            files.BaseFileList.__init__(self)
+#
+#        logger.debug("End Function")
+#        return
 
-        logger.debug("End Function")
-        return
+    #-------------------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------------------
+#    def list_installed_files(self):
+#        logger.debug("Begin Function")
+#
+#        if distro.distro_id in distro.distro_dict['deb']:
+#            installed_files = files.DebianFileList.list_installed_files(self)
+#        else:
+#            installed_files = files.BaseFileList.list_installed_files(self)
+#            
+#            logger.debug("End Function")
+#        return installed_files
 
 #-------------------------------------------------------------------------------
 #
-# Class Alien
+# Class Directories
 # 
 #
 #-------------------------------------------------------------------------------
-class FileList(DebianFileList,BaseFileList):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFileList.__init__(self)
-        else:
-            BaseFileList.__init__(self)
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        if distro.distro_id in distro.distro_dict['deb']:
-            installed_files = DebianFileList.list_installed_files(self)
-        else:
-            installed_files = BaseFileList.list_installed_files(self)
-            
-            logger.debug("End Function")
-        return installed_files
-
-#-------------------------------------------------------------------------------
+#class Directories(files.DebianDirectories,files.BaseDirectories):
+#    def __init__(self,dirname):
+#        logger.debug("Begin Function")
+#        if distro.distro_id in distro.distro_dict['deb']:
+#            files.DebianDirectories.__init__(self,dirname)
+#        else:
+#            files.BaseDirectories.__init__(self,dirname)
 #
-# Class CompressedFile
-# 
-#
-#-------------------------------------------------------------------------------
-class CompressedFile(files.BaseFile):
-    #-------------------------------------------------------------------------------
-    #
-    # Function id_type
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def __init__(self,filename):
-        logger.debug("Begin Function")
-        files.BaseFile.__init__(self,filename)
-        
-        if (self.filename.endswith('tar') or
-            self.filename.endswith('tar.gz') or
-            self.filename.endswith('tar.bz2') or
-            self.filename.endswith('tar.xz') or
-            self.filename.endswith('tgz') or
-            self.filename.endswith('tbz2')):
-            if tarfile.is_tarfile(self.filename):
-                self.cfile = archive.CTarFile(self.filename)
-        elif self.filename.endswith('zip') and zipfile.is_zipfile(self.filename):
-            self.cfile = archive.CZipFile(self.filename)
-        elif self.filename.endswith('gz'):
-            self.cfile = archive.GZFile(self.filename)
-        elif self.filename.endswith('bz2'):
-            self.cfile = archive.BZ2file(self.filename)
-        elif self.filename.endswith('lzma') or self.filename.endswith('xz'):
-            self.cfile = archive.LZMAfile(self.filename)
-        #    elif self.filename.endswith('.Z'):
-        #        extract_zlibfile(self.filename)
-        #    elif self.filename.endswith('7z'):
-        #        extract_7zfile(self.filename)
-        #    elif self.filename.endswith('rar'):
-        #        extract_rarfile(self.filename)
-        #    elif self.filename.endswith('exe'):
-        #       extract_exefile(self.filename)
-        else:
-            logger.error("Invalid: " + str(self.filename))
+#        logger.debug("End Function")
+#        return
 
-        logger.debug("End Function")
-        return
 
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def extract(self):
-        logger.debug("Begin Function")
 
-        shutil.unpack_archive(self.filename)
-        
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_files(self):
-        logger.debug("Begin Function")
-
-        self.cfile.list_files()
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def compress(self):
-        logger.debug("Begin Function")
-
-        shutil.make_archive(self.filename,
-                            self.filetype,
-                            logger
-                            )
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def test(self):
-        logger.debug("Begin Function")
-
-        self.cfile.test()
-
-        logger.debug("End Function")
-        return
-
+"""
 #-------------------------------------------------------------------------------
 #
 # Class Spell
@@ -315,7 +205,7 @@ class CompressedFile(files.BaseFile):
 # All spell related actions should go through this class
 #
 #-------------------------------------------------------------------------------
-class Spell(DebianSpell,SMGLBashSpell,BaseSpell):
+class Spell(packages.DebianSpell,packages.SMGLBashSpell,packages.BaseSpell):
     def __init__(self,name):
         logger.debug("Begin Function")
         if distro.distro_id in distro.distro_dict['deb']:
@@ -648,3 +538,5 @@ class URI(HTTPUri,
             
         logger.debug('End Function')
         return
+
+"""

@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -11,9 +11,9 @@
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU General Public License as published
+#    by the Free Software Foundation, either version 3 of the License,
+#    or (at your option) any later version.
 #
 #    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,41 +27,24 @@
 #
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 """
   BASH version
   Original version Copyright 2001 by Kyle Sallee
 
 """
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Libraries
+# Dunders
 #
-#-------------------------------------------------------------------------------
-
-# System Libraries
-import sys
-
-# Other Libraries
-
-
-# Application Libraries
-# System Library Overrides
-from pysorcery.lib.system import logging
-# Other Application Libraries
-
-#-------------------------------------------------------------------------------
-#
-# Global Variables
-#
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 __all__ = ['__author__',
            '__contact__',
            '__copyright__',
            '__license__',
            '__status__',
            '__version__',
-           'enable_debugging_mode'
+           'DEBUG'
            ]
 __author__ = 'Geoff S Derber'
 __contact__ = 'gd.smlinux@gmail.com'
@@ -69,7 +52,29 @@ __copyright__ = 2017
 __license__ = 'GPLv3+'
 __status__ = 'Prototype'
 __version__ = 'HEAD'
-enable_debugging_mode=True
+
+#-----------------------------------------------------------------------
+#
+# Libraries
+#
+#-----------------------------------------------------------------------
+
+# System Libraries
+
+# 3rd Party Libraries
+
+
+# Application Libraries
+# System Library Overrides
+from pysorcery.lib.system import logging
+# Other Application Libraries
+
+#-----------------------------------------------------------------------
+#
+# Global Variables
+#
+#-----------------------------------------------------------------------
+DEBUG=True
 
 # Enable Logging
 # create logger

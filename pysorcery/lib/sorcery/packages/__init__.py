@@ -51,12 +51,7 @@ import os
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-import pysorcery
-from pysorcery.lib import libcodex
-from pysorcery.lib import libfiles
-from pysorcery.lib import libmisc
-from pysorcery.lib import libmisc
-from pysorcery.lib import libtext
+from pysorcery.lib.sorcery import repositories
 
 # Other Optional Libraries
 if distro.distro_id in distro.distro_dict['deb']:
@@ -112,7 +107,7 @@ class BaseSpell():
     def set_details(self):
         logger.debug('Begin Function')
         
-        codex = libcodex.Codex()
+        codex = repositories.Repo_Lists()
         grimoire_list = codex.list_grimoires()
 
         for i in grimoire_list:

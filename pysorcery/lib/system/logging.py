@@ -55,6 +55,8 @@ from pysorcery.lib.util import text
 # Seethe Roadmap for version information
 __version__ = '0.1.1'
 
+#for level in ['DEBUG','INFOV','INFO']:
+    
 DEBUG2 = 9
 DEBUG3 = 8
 DEBUG4 = 7

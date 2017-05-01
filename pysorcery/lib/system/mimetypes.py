@@ -38,6 +38,8 @@
 # System Libraries
 from mimetypes import *
 
+#
+from pysorcery.lib.system import logging
 
 # Other Optional Libraries
 
@@ -56,26 +58,17 @@ logger = logging.getLogger(__name__)
 #
 #-------------------------------------------------------------------------------
 
-# Map MIME types to archive format
-ArchiveMimetypes = {
+# Map MIME types to file format
+FileMimetypes = {
     'application/gzip': 'gzip',
     'application/java-archive': 'zip',
     'application/rar': 'rar',
-    'application/vnd.ms-cab-compressed': 'cab',
     'application/x-7z-compressed': '7z',
     'application/x-ace': 'ace',
-    'application/x-adf': 'adf',
-    'application/x-alzip': 'alzip',
-    'application/x-archive': 'ar',
-    'application/x-arc': 'arc',
-    'application/x-arj': 'arj',
     'application/x-bzip2': 'bzip2',
-    'application/x-cab': 'cab',
-    'application/x-chm': 'chm',
     'application/x-compress': 'compress',
     'application/x-cpio': 'cpio',
     'application/x-debian-package': 'deb',
-    'application/x-dms': 'dms',
     'application/x-gzip': 'gzip',
     'application/x-iso9660-image': 'iso',
     'application/x-lzop': 'lzop',
@@ -87,16 +80,9 @@ ArchiveMimetypes = {
     'application/x-rar': 'rar',
     'application/x-redhat-package-manager': 'rpm',
     'application/x-rpm': 'rpm',
-    'application/x-rzip': 'rzip',
-    'application/x-shar': 'shar',
     'application/x-tar': 'tar',
-    'application/x-vhd': 'vhd',
     'application/x-xz': 'xz',
     'application/x-zip-compressed': 'zip',
-    'application/x-zoo': 'zoo',
-    'application/zip': 'zip',
-    'application/zpaq': 'zpaq',
-    'audio/x-ape': 'ape',
-    'audio/x-shn': 'shn',
-    'audio/flac': 'flac',
+    'application/zip': 'zip'
 }
+
