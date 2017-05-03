@@ -5,44 +5,90 @@
 ### 0.0.1
 #### Functional Scripts
 - pyarchive
-  - [ ] tar
-  - [ ] gz
-  - [ ] xz
-  - [ ] bz2
-  - [ ] zip
+  - Functions
+    - [ ] extract
+    - [ ] list
+    - [ ] create
+    - [ ] test
+    - [ ] repack
+    - [ ] recompress
+    - [ ] diff
+    - [ ] search
+    - [ ] formats
+  - Formats
+    - [ ] tar
+    - [ ] gz
+    - [ ] xz
+    - [ ] bz2
+    - [ ] zip
  
 ### 0.0.2    
 #### Functional Scripts
 - pygaze
-
+  - [ ] alien
+  - [ ] orphans
+  - [ ] activity
+  - [ ] queue
+  - [ ] provides
+  - [ ] what
+  - [ ] short
+  - [ ] where
+  - [ ] url
+  - [ ] sources
+  - [ ] source_urls
+  - [ ] maintainer
+  - [ ] logs
+  - [ ] versions
+  
 ### 0.0.3
-#### Functional Scripts
-- pyscribe
-
-### 0.0.4
 #### Functional Scripts
 - pysummon
   - [ ] http
+
+### 0.0.4
+#### Functional Scripts
+- pyscribe
+  - [ ] add
+  - [ ] remove
+  - [ ] update
+#### Modified Scripts
+- pysummon
+  - [ ] git
  
 ### 0.0.5
 #### Functional Scripts
 - pycast
+#### Modified Scripts
+- pysummon
+  - [ ] cvs
 
 ### 0.0.6
 #### Functional Scripts
 - pydispel
+#### Modified Scripts
+- pysummon
+  - [ ] ftp
 
 ### 0.0.7
 #### Functional Scripts
 - pycleanse
+#### Modified Scripts
+- pysummon
+  - [ ] svn
 
 ### 0.0.8
 #### Functional Scripts
 - pyscribbler
+#### Modified Scripts
+- pysummon
+  - [ ] rsync
 
 ### 0.0.9
 #### Functional Scripts
 - pysorcery
+#### Modified Scripts
+- pysummon
+  - [ ] bzr
 
 
 ## 0.1
@@ -56,6 +102,9 @@
 - pyupstream
   - Check Debian Upstream
   - Create Spell From Debian Upstream
+#### Modified Scripts
+- pysummon
+  - [ ] file (Include Directories)
 
 ### 0.1.2
 #### Script Modifications
@@ -75,24 +124,25 @@
 - pyenchant
 #### Script Modifications
 - pyarchive
-  - [ ] iso
+  - formats
+    - [ ] iso
  
 ### 0.1.6
 #### Functional Scripts
-pycauldron
+- pycauldron
 
 ### 0.1.7
 #### Functional Scripts
-pyvcast
+- pyvcast
 
 ### 0.1.8
 #### Functional Scripts
-pycabal
+- pycabal
 
 ### 0.1.9
 #### Modified Scripts
 - pyupdate
--- Add Homepage upstream
+  - Add Homepage upstream
 
 
 ## 0.2
@@ -131,19 +181,20 @@ pycabal
 
 ## 0.4
 - GUI functionally complete
+- Open to the public?
 
 ### 0.4.1
-Add plugin system
+- Add plugin system
 
 
 ## 0.5
--
 
 ### 0.5.1
 #### Functional Scripts
 - pysmgl-ledger
 
 ### 0.5.2
+#### Functional Scripts
 - Guru tools
   
 
@@ -164,19 +215,21 @@ Add plugin system
 - Debian APT complete
 
 ### 0.7.1
-#### Package Manager
-- Lunar Linux
-    Ensure commands are compatible with Lunar Linux commands
+#### New Package Manager
+- Add support for Lunar Linux '...'
+  - Ensure commands are compatible with Lunar Linux commands
 
 ### 0.7.2
-#### Package Manager
+#### New Package Manager
 - Add support for Arch 'pacman'
 
 ### 0.7.3
-Add support for Fedora 'yum'
+#### New Package Manager
+-  Add support for Fedora 'yum'
 
 ### 0.7.4
-Add support for 'portage'
+#### New Package Manager
+- Add support for Gentoo 'portage'
 
 
 ## 0.8
@@ -201,7 +254,8 @@ Debug, debug, debug
 - Release 2
 
 ### 2.0.1
-Add support for 'Homebrew'
+#### New Package Manager
+- Add support for MacOS 'Homebrew'
 
 
 ## 3.0
