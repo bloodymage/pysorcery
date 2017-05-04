@@ -35,9 +35,6 @@
 #
 #-----------------------------------------------------------------------
 # System Libraries
-import glob
-import importlib
-import os
 
 # 3rd Party Libraries
 
@@ -45,7 +42,7 @@ import os
 # System Library Overrides
 from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery.lib.util import files
+
 
 # Other Optional Libraries
 

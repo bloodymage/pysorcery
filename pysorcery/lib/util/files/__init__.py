@@ -182,8 +182,9 @@ class BaseFile():
         archive_format, encoding = get_archive_format(self.mimetype,
                                                       self.encoding)
 
-        archive_func = archive.get_archive_cmd_func(archive_format,
-                                                    cmd)
+        archive_func = util.get_module_func('util_archive',
+                                            archive_format,
+                                            cmd)
         # We know what the format is, initialize that format's class
         archive_func(self.filename)
         

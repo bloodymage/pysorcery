@@ -237,16 +237,16 @@ def archive_search(args):
 def archive_formats(args):
     logger.debug('Begin Function')
 
-    formats = util.get_cmd_types('archive')
+    formats = util.get_cmd_types('util_archive')
 
     cmd = 'archive_support'
     
     for i in formats:
         logger.info(i + ' files:')
 
-        archive_func = util.get_module_func('archive',
-                                                 i,
-                                                 cmd)
+        archive_func = util.get_module_func('util_archive',
+                                            i,
+                                            cmd)
         # We know what the format is, initialize that format's class
         archive_func()
 

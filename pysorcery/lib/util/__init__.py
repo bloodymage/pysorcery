@@ -34,10 +34,6 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
 """
 #-----------------------------------------------------------------------
 #
@@ -76,17 +72,17 @@ logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
 
-ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery',
-                                               'lib/util/files/archive/')
-URL_PATH = pkg_resources.resource_filename('pysorcery', 'lib/util/url/')
+UTIL_ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery',
+                                                    'lib/util/files/archive/')
+UTIL_URL_PATH = pkg_resources.resource_filename('pysorcery', 'lib/util/url/')
 
 cmd_dir = {
-    'archive': ARCHIVE_PATH,
-    'url': URL_PATH
+    'util_archive': UTIL_ARCHIVE_PATH,
+    'util_url': UTIL_URL_PATH
 }
 
 import_path = {
-    'archive': 'pysorcery.lib.util.files.archive.'
+    'util_archive': 'pysorcery.lib.util.files.archive.'
     }
 ArchiveModules = {
     'tar': 'tar'
