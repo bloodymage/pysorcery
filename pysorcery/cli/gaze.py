@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -28,24 +28,25 @@
 #
 # is part of the Sorcery source-based package management suite. It is a
 # general purpose command-line tool for displaying package logs, version 
-# information, checking for installed packages, checksums, message digests,
-# maintainer information, package URL information, removing obsolete packages,
-# displaying new packages, untracked files, sections, searching for files that
-# are installed, finding when spells were created and packages in the
-# software catalogue. It can even take and retrieve snap shots of currently
-# installed packages for easy duplication.
+# information, checking for installed packages, checksums, message
+# digests, maintainer information, package URL information, removing
+# obsolete packages, displaying new packages, untracked files, sections,
+# searching for files that are installed, finding when spells were
+# created and packages in the software catalogue. It can even take and
+# retrieve snap shots of currently installed packages for easy
+# duplication.
 #
 #
 # Status:
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 import argparse
@@ -71,24 +72,24 @@ from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
 # Allow color text on console
 colortext = text.ConsoleText()
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Classes
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions
 #

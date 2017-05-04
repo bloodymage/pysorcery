@@ -59,10 +59,10 @@ from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
+from pysorcery.lib import util
 from pysorcery.lib.util import config
-from pysorcery.lib.util.files import archive
 from pysorcery.lib.util import text
-
+from pysorcery.lib.util.files import archive
 # Conditional Libraries
 
 
@@ -127,88 +127,12 @@ def archive_file(args):
             for root, dirs, files in os.walk(i):
                 for sfile in files:
                     cfile = lib.Files(sfile)
-                    cfile.archive(args.cmd, args.output_dir)
+                    cfile.archivefiles(args.cmd, args.output_dir)
         # Always extract what is explicitly listed
         logger.info('Extracting file: ' + i)
         cfile = lib.Files(i)
-        cfile.archive(args.cmd, args.output_dir)
+        cfile.archivefiles(args.cmd, args.output_dir)
 
-    logger.debug('End Function')
-    return
-
-#-----------------------------------------------------------------------
-#
-# Function archive_list
-#
-#
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
-#
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
-# Return: None
-#
-#-----------------------------------------------------------------------
-def archive_list(args):
-    logger.debug('Begin Function')
-
-    for i in args.files:
-        if args.recursive:
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.CompressedFile(sfile)
-                    cfile.list_files()
-                    
-        print('Extracting file: ' + i)
-        cfile = lib.CompressedFile(i)
-        cfile.list_files()
-
-    logger.debug('End Function')
-    return
-
-#-----------------------------------------------------------------------#
-# Functions archive_create
-#
-#
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
-#
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
-# Return: None
-#
-#-----------------------------------------------------------------------
-def archive_create(args):
-    logger.debug('Begin Function')
-
-    newarchive = lib.CompressedFile(args.archive)
-
-    for i in args.source:
-        newarchive.compress(i)
-    
-    logger.debug('End Function')
-    return
-
-#-----------------------------------------------------------------------
-#
-# Functions archive_create
-#
-#
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
-#
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
-# Return: None
-#
-#-----------------------------------------------------------------------
-def archive_test(args):
-    logger.debug('Begin Function')
-
-    
     logger.debug('End Function')
     return
 
@@ -313,15 +237,16 @@ def archive_search(args):
 def archive_formats(args):
     logger.debug('Begin Function')
 
-    formats = archive.get_archive_formats()
+    formats = util.get_cmd_types('archive')
 
     cmd = 'archive_support'
     
     for i in formats:
         logger.info(i + ' files:')
 
-        archive_func = archive.get_archive_cmd_func(i,
-                                                    cmd)
+        archive_func = util.get_module_func('archive',
+                                                 i,
+                                                 cmd)
         # We know what the format is, initialize that format's class
         archive_func()
 

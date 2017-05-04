@@ -58,9 +58,6 @@ from pysorcery.lib.util import files
 # create logger
 logger = logging.getLogger(__name__)
 
-ArchiveModules = {
-    'tar': 'tar'
-    }
 
 #-----------------------------------------------------------------------
 #
@@ -69,51 +66,3 @@ ArchiveModules = {
 #-----------------------------------------------------------------------
 
 
-#-----------------------------------------------------------------------
-#
-# Functions
-#
-# get_archive_cmd_func
-#
-#-----------------------------------------------------------------------
-
-#-------------------------------------------------------------------
-#
-# Function get_archive_cmd_func
-#
-# Input:  ...
-# Output: ...
-# Return: ...
-#
-#-------------------------------------------------------------------
-def get_archive_formats():
-    modules = glob.glob(os.path.dirname(__file__)+"/*.py")
-    supformats = []
-    for f in modules:
-        if (os.path.isfile(f) and
-            f.split('/')[-1] != '__init__.py'):
-            supformats.append(os.path.basename(f)[:-3])
-            
-    return supformats
-
-#-------------------------------------------------------------------
-#
-# Function get_archive_cmd_func
-#
-# Input:  ...
-# Output: ...
-# Return: ...
-#
-#-------------------------------------------------------------------
-def get_archive_cmd_func(archive_format,command):
-    modulename = "pysorcery.lib.util.files.archive." + ArchiveModules.get(archive_format, archive_format)
-    # import the module
-    try:
-        module = importlib.import_module(modulename, __name__)
-    except ImportError as msg:
-        raise logger.error(msg)
-    # get the function
-    try:
-        return getattr(module, command)
-    except AttributeError as msg:
-        raise logger.error(msg)

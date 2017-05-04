@@ -1,4 +1,4 @@
-|#! /usr/bin/env python3
+#! /usr/bin/env python3
 #-----------------------------------------------------------------------
 #
 # Original BASH version
@@ -176,7 +176,7 @@ class BaseFile():
     # Return: ...
     #
     #-------------------------------------------------------------------
-    def archive(self, cmd, outdir=None):
+    def archivefile(self, cmd, outdir=None):
         logger.debug('Begin Function')
 
         archive_format, encoding = get_archive_format(self.mimetype,
