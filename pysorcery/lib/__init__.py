@@ -51,6 +51,7 @@ from pysorcery.lib.system import logging
 #from pysorcery.lib.sorcery import repositories
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
+from pysorcery.lib.util.files import archive
 #from pysorcery.lib.util import text
 #from pysorcery.lib.util import url
 
@@ -86,7 +87,7 @@ logger = logging.getLogger(__name__)
 # 
 #
 #-----------------------------------------------------------------------
-class Files(files.BaseFile):
+class Files(archive.Archive, files.BaseFile):
     pass
 #    def __init__(self,filename):
 #        logger.debug("Begin Function")

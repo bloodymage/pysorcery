@@ -35,16 +35,21 @@
 #
 #-----------------------------------------------------------------------
 # System Libraries
+import os
 
 # 3rd Party Libraries
 
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
+from pysorcery.lib.system import mimetypes
+from pysorcery.lib.system import shutil
 # Other Application Libraries
-
+from pysorcery.lib import util
+from pysorcery.lib.util import files
 
 # Other Optional Libraries
+
 
 #-----------------------------------------------------------------------
 #
@@ -61,5 +66,126 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 #-----------------------------------------------------------------------
+class Archive(files.BaseFile):
+    #-------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------
+    def extract(self, extractdir=None):
+        logger.debug('Begin Function')
+        
+        shutil.unpack_archive(self.filename, extractdir)
 
+        logger.debug('End Function')
+        return
+    
+    #-------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------
+    def create(self, root_dir=None, base_dir=None):
+        logger.debug('Begin Function')
 
+        root, base_name, extention = files.pne(self.filename)
+
+        archive_format, encoding = get_archive_format(self.mimetype,
+                                                      self.encoding)
+
+        shutil.make_archive(base_name,
+                            shutil.file_format[encoding],
+                            root_dir,
+                            base_dir)
+
+        logger.debug('End Function')
+        return
+
+    #-------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------
+    def listfiles(self):
+        logger.debug('Begin Function')
+
+        archive_format, encoding = get_archive_format(self.mimetype,
+                                                      self.encoding)
+
+        archive_func = util.get_module_func('util_archive',
+                                            archive_format,
+                                            'listfiles')
+        # We know what the format is, initialize that format's class
+        archive_func(self.filename)
+        
+        logger.debug('End Function')
+        return
+
+    #-------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------
+    def testarchive(self):
+        logger.debug('Begin Function')
+
+        archive_format, encoding = get_archive_format(self.mimetype,
+                                                      self.encoding)
+
+        archive_func = util.get_module_func('util_archive',
+                                            archive_format,
+                                            'testarchive')
+        # We know what the format is, initialize that format's class
+        if archive_func(self.filename):
+            logger.info(str(self.filename) + ' is a valid, readable archive')
+        else:
+            logger.error(str(self.filename) + ' is not a valid, readable archive')
+            
+        logger.debug('End Function')
+        return 
+
+    
+#-------------------------------------------------------------------
+#
+# Function id_archive_format
+#
+# Input:  ...
+# Output: ...
+# Return: archive_format
+#         encoding
+#
+#-------------------------------------------------------------------
+def get_archive_format(mimetype=None,encoding=None):
+    logger.debug('Begin Function')
+    
+    if (mimetype is None and
+        encoding is None):
+        logger.error('Unknown archive type')
+
+    if mimetype in mimetypes.FileMimetypes:
+        archive_format = mimetypes.FileMimetypes[mimetype]
+    else:
+        archive_format = mimetype
+        logger.error('Unknown archive type for mime:' + str(mimetype))
+
+    if archive_format == encoding:
+        encoding = None
+    
+    logger.debug('End Function')
+    return archive_format, encoding

@@ -47,6 +47,7 @@ underlying code, this application was developed.
 
 # System Libraries
 import argparse
+import os
 import sys
 
 # 3rd Party Libraries
@@ -127,11 +128,31 @@ def archive_file(args):
             for root, dirs, files in os.walk(i):
                 for sfile in files:
                     cfile = lib.Files(sfile)
-                    cfile.archivefiles(args.cmd, args.output_dir)
+                    if args.cmd == 'extract':
+                        cfile.extract(args.output_dir)
+                    elif args.cmd == 'create':
+                        cfiles.create(args.output_dir)
+                    elif args.cmd == 'testarchive':
+                        cfiles.testarchive()
+                    elif args.cmd == 'listfiles':
+                        cfiles.listfiles()
+                    else:
+                        logger.error('Improper Command')
+                        logger.error("We Shouldn't be here")
         # Always extract what is explicitly listed
-        logger.info('Extracting file: ' + i)
+        #logger.info('Archive file: ' + i)
         cfile = lib.Files(i)
-        cfile.archivefiles(args.cmd, args.output_dir)
+        if args.cmd == 'extract':
+            cfile.extract(args.output_dir)
+        elif args.cmd == 'create':
+            cfile.create(os.getcwd(), args.output_dir)
+        elif args.cmd == 'testarchive':
+            cfile.testarchive()
+        elif args.cmd == 'listfiles':
+            cfile.listfiles()
+        else:
+            logger.error('Improper Command')
+            logger.error("We Shouldn't be here")
 
     logger.debug('End Function')
     return
@@ -180,7 +201,7 @@ def archive_recompress(args):
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_create
+# Functions archive_diff
 #
 #
 # Find and display all files which are not currently tracked by the
@@ -379,6 +400,7 @@ Report bugs to ...
                                 action = 'store_true',
                                 help = 'Recursive')
     parser_list.set_defaults(func = archive_file,
+                             output_dir = ['fixme','use kwargs?'],
                              cmd='listfiles')
 
     #-----------------------------------------------------------------
@@ -389,13 +411,15 @@ Report bugs to ...
     parser_create = subparsers.add_parser('create',
                                           parents = [parent_parser],
                                           help = 'Create files')
-    parser_create.add_argument('archive',
+    parser_create.add_argument('files',
                                nargs = 1,
-                               help = 'Create files')
-    parser_create.add_argument('source',
-                               nargs = '+',
+                               metavar = 'archive',
+                               help = 'Archive file to create')
+    parser_create.add_argument('output_dir',
+                               metavar = 'source',
                                help = 'Files / Directories to add to the archive')
     parser_create.set_defaults(func = archive_file,
+                               recursive = False,
                                cmd = 'create')
     #-----------------------------------------------------------------
     #
@@ -405,13 +429,12 @@ Report bugs to ...
     parser_test = subparsers.add_parser('test',
                                         aliases = ['verify'],
                                         help = 'Test files')
-    parser_test.add_argument('archive',
+    parser_test.add_argument('files',
                              nargs = 1,
+                             metavar = 'archive',
                              help = 'Create files')
-    parser_test.add_argument('source',
-                             nargs = '+',
-                             help = 'Files / Directories to add to the archive')
     parser_test.set_defaults(func = archive_file,
+                             recursive = False,
                              cmd = 'testarchive')
 
     #-----------------------------------------------------------------

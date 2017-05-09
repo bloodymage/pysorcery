@@ -48,10 +48,9 @@ from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 # Other Application Libraries
+from pysorcery.lib import util
 from pysorcery.lib.util import config
-from pysorcery.lib.util.files import archive
 from pysorcery.lib.util import text
-
 # Conditional Libraries
 
 #-----------------------------------------------------------------------
@@ -165,58 +164,6 @@ class BaseFile():
         self.description="Ooops!"
 
         logger.debug("Begin Function")
-        return
-
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------
-    def archivefile(self, cmd, outdir=None):
-        logger.debug('Begin Function')
-
-        archive_format, encoding = get_archive_format(self.mimetype,
-                                                      self.encoding)
-
-        archive_func = util.get_module_func('util_archive',
-                                            archive_format,
-                                            cmd)
-        # We know what the format is, initialize that format's class
-        archive_func(self.filename)
-        
-        logger.debug('End Function')
-        return
-
-#-----------------------------------------------------------------------
-#
-# Class SourceFile
-# 
-#
-#-----------------------------------------------------------------------
-class DebianFiles(BaseFile):
-    def __init__(self,filename):
-        logger.debug("Begin Function")
-        BaseFile.__init__(self,filename)
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------
-    def print_from(self):
-        logger.debug("Begin Function")
-        
-        logger.debug("End Function")
         return
 
 
@@ -419,27 +366,3 @@ def pne(ifilename):
         ext = first_ext + ext
     return path, root, ext
 
-#-------------------------------------------------------------------
-#
-# Function id_archive_format
-#
-# Input:  ...
-# Output: ...
-# Return: archive_format
-#         encoding
-#
-#-------------------------------------------------------------------
-def get_archive_format(mimetype=None,encoding=None):
-    if (mimetype is None and
-        encoding is None):
-        logger.error('Unknown archive type')
-
-    if mimetype in mimetypes.FileMimetypes:
-        archive_format = mimetypes.FileMimetypes[mimetype]
-    else:
-        logger.error('Unknown archive type for mime:' + mimetype)
-
-    if archive_format == encoding:
-        encoding = None
-
-    return archive_format, encoding

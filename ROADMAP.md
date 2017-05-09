@@ -6,17 +6,17 @@
 #### Functional Scripts
 - pyarchive
   - Functions
-    - [ ] extract
-    - [ ] list
-    - [ ] create
-    - [ ] test
+    - [X] extract
+    - [X] list
+    - [X] create
+    - [X] test
     - [ ] repack
     - [ ] recompress
     - [ ] diff
     - [ ] search
     - [ ] formats
   - Formats
-    - [ ] tar
+    - [X] tar
     - [ ] gz
     - [ ] xz
     - [ ] bz2

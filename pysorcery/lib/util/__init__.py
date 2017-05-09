@@ -84,6 +84,7 @@ cmd_dir = {
 import_path = {
     'util_archive': 'pysorcery.lib.util.files.archive.'
     }
+
 ArchiveModules = {
     'tar': 'tar'
     }
@@ -142,9 +143,9 @@ def get_module_func(cmd_class,
     try:
         module = importlib.import_module(modulename, __name__)
     except ImportError as msg:
-        raise logger.error(msg)
+        logger.error(msg)
     # get the function
     try:
         return getattr(module, command)
     except AttributeError as msg:
-        raise logger.error(msg)
+        logger.error(msg)

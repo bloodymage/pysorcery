@@ -44,13 +44,19 @@ from shutil import *
 # Application Libraries
 # System Library Overrides
 # Other Application Libraries
-
+from pysorcery.lib import util
 
 #-------------------------------------------------------------------------------
 #
 # Global Variables
 #
 #-------------------------------------------------------------------------------
+file_format = {
+    'xz': 'xztar',
+    'gz': 'gztar',
+    'bz': 'bztar',
+    'tar': 'tar'
+    }
 
 #-------------------------------------------------------------------------------
 #
@@ -62,3 +68,16 @@ from shutil import *
 # Functions
 #
 #-------------------------------------------------------------------------------
+def init_archive_formats():
+    logger.debug('Begin Function')
+    available_formats = util.get_archive_formats('archive')
+
+    for i in available_formats:
+        if (i != 'tar' or
+            i != 'zip'):
+            print('Add Module')
+        else:
+            print('Skipping Module')
+
+    logger.debug('End Function')
+    return

@@ -42,6 +42,7 @@ import tarfile
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
+from pysorcery.lib.system import mimetypes
 from pysorcery.lib.system import shutil
 # Other Application Libraries
 from pysorcery.lib.util import files
@@ -57,6 +58,13 @@ from pysorcery.lib.util import files
 # create logger
 logger = logging.getLogger(__name__)
 
+file_format = {
+    'xz': 'xztar',
+    'gz': 'gztar',
+    'bz': 'bztar',
+    'tar': 'tar'
+    }
+
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -71,41 +79,6 @@ logger = logging.getLogger(__name__)
 #
 #-------------------------------------------------------------------
 
-#-------------------------------------------------------------------
-#
-# Function 
-#
-# Input:  ...
-# Output: ...
-# Return: ...
-#
-#-------------------------------------------------------------------
-def extract(filename):
-    logger.debug("Begin Function")
-    logger.debug("Xfile: " + str(filename))
-
-    file_dir, basename, ext = files.pne(filename)
-
-    logger.debug("File_dir: " + str(file_dir))
-    logger.debug("File name: " + str(basename))
-    logger.debug("Extention: " + str(ext))
-
-    try:
-        tar_file = tarfile.open(filename)
-        for name in tar_file.getnames():
-            tar_file.extractall(basename)
-            # logger.info2(name)
-            # logger.info1("Extracted file: " + str(self.filename))
-    except tarfile.ExtractError:
-        logger.error("Unk Extraction Error")
-        pass
-    except IOError:
-        logger.error("IO Error")
-        pass
-    except:
-        logger.error("Unknown Error")
-            
-    return
 
 #-------------------------------------------------------------------
 #
@@ -123,7 +96,6 @@ def listfiles(filename):
         tar_file = tarfile.open(filename)
         for name in tar_file.getnames():
             logger.info1(name)
-            logger.info("Extracted file: " + str(self.filename))
     except tarfile.ExtractError:
         logger.error("Unk Extraction Error")
         pass
@@ -136,34 +108,6 @@ def listfiles(filename):
     logger.debug('End Function')
     return
 
-#-------------------------------------------------------------------
-#
-# Function 
-#
-# Input:  ...
-# Output: ...
-# Return: ...
-#
-#-------------------------------------------------------------------
-def compress(source):
-    logger.debug("Begin Function")
-    
-    try:
-        tar_file = tarfile.open(self.filename)
-        tar_file.add(source)
-        
-        logger.info("Added file: " + str(self.source))
-    except tarfile.CompressionError:
-        logger.error("Unk Extraction Error")
-        pass
-    except IOError:
-        logger.error("IO Error")
-        pass
-    except:
-        logger.error("Unknown Error")
-        
-    logger.debug('End Function')
-    return
     
 #-------------------------------------------------------------------
 #
@@ -174,11 +118,10 @@ def compress(source):
 # Return: ...
 #
 #-------------------------------------------------------------------
-def test(filename):
-    logger.debug("Begin Function")
-        
+def testarchive(filename):
+    logger.debug("Begin Function")    
     logger.debug('End Function')
-    return
+    return tarfile.is_tarfile(filename)
 
 #-------------------------------------------------------------------
 #
