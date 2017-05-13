@@ -66,9 +66,7 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 #-----------------------------------------------------------------------
-class Archive(files.BaseFile):
-
-        
+class CompressedFile(files.BaseFile):
     #-------------------------------------------------------------------
     #
     # Function 
@@ -78,7 +76,7 @@ class Archive(files.BaseFile):
     # Return: ...
     #
     #-------------------------------------------------------------------
-    def extract(self, extractdir=None):
+    def decompress(self, extractdir=None):
         logger.debug('Begin Function')
         
         shutil.unpack_archive(self.filename, extractdir)
@@ -95,10 +93,13 @@ class Archive(files.BaseFile):
     # Return: ...
     #
     #-------------------------------------------------------------------
-    def create(self, root_dir=None, base_dir=None):
+    def compress(self, source_file=None, root_dir=None, base_dir=None):
         logger.debug('Begin Function')
-        
-        shutil.make_archive(self.basename,
+
+        if source_file is None:
+            source_file = self.basename
+            
+        shutil.make_archive(source_file,
                             self.format_,
                             root_dir,
                             base_dir)
@@ -115,17 +116,17 @@ class Archive(files.BaseFile):
     # Return: ...
     #
     #-------------------------------------------------------------------
-    def listfiles(self):
+    def read(self):
         logger.debug('Begin Function')
 
-        archive_func = util.get_module_func('util_archive',
-                                            self.format_class,
-                                            'listfiles')
+        archive_func = util.get_module_func('util_compressed',
+                                            self.format_,
+                                            'read')
         # We know what the format is, initialize that format's class
-        archive_func(self.filename)
+        content = archive_func(self.filename)
         
         logger.debug('End Function')
-        return
+        return content
 
     #-------------------------------------------------------------------
     #
@@ -139,7 +140,7 @@ class Archive(files.BaseFile):
     def testarchive(self):
         logger.debug('Begin Function')
 
-        archive_func = util.get_module_func('util_archive',
+        archive_func = util.get_module_func('util_compressed',
                                             self.format_,
                                             'testarchive')
         # We know what the format is, initialize that format's class
@@ -149,4 +150,6 @@ class Archive(files.BaseFile):
             logger.error(str(self.filename) + ' is not a valid, readable archive')
             
         logger.debug('End Function')
-        return
+        return 
+
+    

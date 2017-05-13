@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -27,62 +27,78 @@
 #
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 from mimetypes import *
 
-#
+# 3rd Party Libraries
+
+# Application Libraries
+# System Library Overrides
 from pysorcery.lib.system import logging
+# Other Application Libraries
 
 # Other Optional Libraries
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Classes
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # Map MIME types to file format
-FileMimetypes = {
-    'application/gzip': 'gzip',
-    'application/java-archive': 'zip',
-    'application/rar': 'rar',
+
+CompressedMimetypes = {
+    'application/gzip': 'gzip',    
     'application/x-7z-compressed': '7z',
-    'application/x-ace': 'ace',
     'application/x-bzip2': 'bzip2',
     'application/x-compress': 'compress',
+    'application/x-gzip': 'gzip',    
+    'application/x-lzma': 'lzma',
+    'application/x-xz': 'xz'
+}
+
+ArchiveMimetypes = {
+    'application/java-archive': 'zip',
+    'application/rar': 'rar',
+    'application/x-ace': 'ace',
     'application/x-cpio': 'cpio',
     'application/x-debian-package': 'deb',
-    'application/x-gzip': 'gzip',
     'application/x-iso9660-image': 'iso',
-    'application/x-lzop': 'lzop',
-    'application/x-lzma': 'lzma',
-    'application/x-lzip': 'lzip',
-    'application/x-lha': 'lzh',
-    'application/x-lrzip': 'lrzip',
-    'application/x-lzh': 'lzh',
     'application/x-rar': 'rar',
     'application/x-redhat-package-manager': 'rpm',
     'application/x-rpm': 'rpm',
     'application/x-tar': 'tar',
-    'application/x-xz': 'xz',
     'application/x-zip-compressed': 'zip',
     'application/zip': 'zip'
 }
 
+VerifyMimetypes = {
+    'application/x-lzop': 'lzop',
+    'application/x-lzip': 'lzip',
+    'application/x-lha': 'lzh',
+    'application/x-lrzip': 'lrzip',
+    'application/x-lzh': 'lzh'
+}
+
+encoding_methods = {
+    'gzip': 'gzip',
+    'xz': 'lzma',
+    'bzip2': 'bzip2'
+}

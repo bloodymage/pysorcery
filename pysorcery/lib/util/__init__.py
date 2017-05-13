@@ -74,19 +74,29 @@ colortext = text.ConsoleText()
 
 UTIL_ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery',
                                                     'lib/util/files/archive/')
+
+UTIL_COMPRESSED_PATH = pkg_resources.resource_filename('pysorcery',
+                                                       'lib/util/files/compressed/')
+
 UTIL_URL_PATH = pkg_resources.resource_filename('pysorcery', 'lib/util/url/')
 
 cmd_dir = {
     'util_archive': UTIL_ARCHIVE_PATH,
+    'util_compressed': UTIL_COMPRESSED_PATH,
     'util_url': UTIL_URL_PATH
 }
 
 import_path = {
-    'util_archive': 'pysorcery.lib.util.files.archive.'
+    'util_archive': 'pysorcery.lib.util.files.archive.',
+    'util_compressed': 'pysorcery.lib.util.files.compressed.'
     }
 
+# Used if module names can not be
+# the same as the archive format
 ArchiveModules = {
-    'tar': 'tar'
+    }
+
+CompressedModules = {
     }
 
 UrlModules = {}
@@ -138,14 +148,26 @@ def get_module_func(cmd_class,
     logger.debug('Begun Function')
 
     basemodname = import_path[cmd_class]
-    modulename = basemodname + ArchiveModules.get(cmd_type, cmd_type)
+
+    if cmd_class == 'util_archive':
+        modulename = basemodname + ArchiveModules.get(cmd_type, cmd_type)
+    elif cmd_class == 'util_compressed':
+        modulename = basemodname + CompressedModules.get(cmd_type, cmd_type)
+    else:
+        modulename = basemodname + cmd_type
+
     # import the module
     try:
         module = importlib.import_module(modulename, __name__)
     except ImportError as msg:
-        logger.error(msg)
+        logger.error(msg + ' ' + modulename)
     # get the function
     try:
+        logger.debug('Module: ' + str(modulename))
+        logger.debug('Command: ' + str(command)) 
+        logger.debug('End Function')
         return getattr(module, command)
     except AttributeError as msg:
         logger.error(msg)
+        logger.debug('End Function')
+        return

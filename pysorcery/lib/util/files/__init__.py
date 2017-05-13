@@ -47,6 +47,7 @@ import subprocess
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
+from pysorcery.lib.system import shutil
 # Other Application Libraries
 from pysorcery.lib import util
 from pysorcery.lib.util import config
@@ -81,7 +82,11 @@ class BaseFile():
         
         self.filename = filename
         self.mimetype, self.encoding = mimetypes.guess_type(self.filename)
-        
+        self.path, self.basename, self.extention = pne(self.filename)
+
+        self.format_class, self.format_ = get_format(self.mimetype,
+                                                     self.encoding)
+
         logger.debug("End Function")
         return
 
@@ -366,3 +371,41 @@ def pne(ifilename):
         ext = first_ext + ext
     return path, root, ext
 
+#-------------------------------------------------------------------
+#
+# Function id_archive_format
+#
+# Input:  ...
+# Output: ...
+# Return: archive_format
+#         encoding
+#
+#-------------------------------------------------------------------
+def get_format(mimetype=None,encoding=None):
+    logger.debug('Begin Function')
+
+    if (mimetype is None and
+        encoding is None):
+        logger.error('Unknown archive type')
+        
+    elif (mimetype not in mimetypes.ArchiveMimetypes and
+        encoding in mimetypes.encoding_methods):
+        archive_class = mimetypes.encoding_methods[encoding]
+        
+    elif mimetype in mimetypes.ArchiveMimetypes:
+        archive_class = mimetypes.ArchiveMimetypes[mimetype]
+    else:
+        archive_class = mimetype
+        logger.error('Unknown archive type for mime:' + str(mimetype))
+
+    if archive_class in shutil.archive_formats:
+        archive_format = shutil.archive_formats[archive_class][encoding]
+        shutil.init_formats('util_archive')
+    elif archive_class in shutil.compressed_formats:
+        archive_format = shutil.compressed_formats[archive_class][encoding]
+        shutil.init_formats('util_compressed')
+    else:
+        archive_format = 'Unknown'
+
+    logger.debug('End Function')
+    return archive_class, archive_format

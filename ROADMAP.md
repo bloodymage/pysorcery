@@ -11,17 +11,19 @@
     - [X] create
     - [X] test
     - [ ] repack
-    - [ ] recompress
+    - [/] recompress
     - [ ] diff
     - [ ] search
-    - [ ] formats
-  - Formats
+    - [/] formats
+  - Archive Formats
     - [X] tar
-    - [ ] gz
-    - [ ] xz
-    - [ ] bz2
-    - [ ] zip
- 
+    - [X] zip
+  - Compression Formats
+    - [X] gz
+    - [X] xz
+    - [X] bz2
+
+
 ### 0.0.2    
 #### Functional Scripts
 - pygaze

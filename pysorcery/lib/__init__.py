@@ -46,12 +46,14 @@
 # System Library Overrides
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
+from pysorcery.lib.system import mimetypes
 # Other Application Libraries
 #from pysorcery.lib.sorcery import packages
 #from pysorcery.lib.sorcery import repositories
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
+from pysorcery.lib.util.files import compressed
 #from pysorcery.lib.util import text
 #from pysorcery.lib.util import url
 
@@ -87,58 +89,16 @@ logger = logging.getLogger(__name__)
 # 
 #
 #-----------------------------------------------------------------------
-class Files(archive.Archive, files.BaseFile):
-    pass
-#    def __init__(self,filename):
-#        logger.debug("Begin Function")
-#        
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            files.DebianFiles.__init__(self,filename)
-#        else:
-#            files.BaseFile.__init__(self,filename)
-#
-#        logger.debug("End Function")
-#        return
+class Files(compressed.CompressedFile, archive.Archive, files.BaseFile):
+    def read(self):
+        if self.format_ != 'Unknown':
+            content =compressed.CompressedFile.read(self)
+        else:
+            content = files.BaseFile.read(self)
 
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------
-#    def print_from(self):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            files.DebianFiles.print_from(self)
-#        else:
-#            files.BaseFile.print_from(self)
-#
-#        logger.debug("End Function")
-#        return
+        logger.debug('End Function')
+        return content
 
-
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------
-#    def list_installed_files(self):
-#        logger.debug("Begin Function")
-#
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            installed_files = files.DebianFileList.list_installed_files(self)
-#        else:
-#            installed_files = files.BaseFileList.list_installed_files(self)
-#            
-#        logger.debug("End Function")
-#        return installed_files
 
 #-----------------------------------------------------------------------
 #

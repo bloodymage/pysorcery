@@ -35,15 +35,16 @@
 #
 #-----------------------------------------------------------------------
 # System Libraries
-import tarfile
+import gzip
+import shutil
 
 # 3rd Party Libraries
 
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-from pysorcery.lib.system import shutil
+#from pysorcery.lib.system import mimetypes
+#from pysorcery.lib.system import shutil
 # Other Application Libraries
 from pysorcery.lib.util import files
 
@@ -71,6 +72,28 @@ logger = logging.getLogger(__name__)
 # extract
 #
 #-------------------------------------------------------------------
+def decompress(filename, root_dir=None, base_dir=None, verbose=0,
+                 dry_run=0, owner=None, group=None, logger=None):
+#    logger.debug('Begin Function')
+
+    path, base_name, ext = files.pne(filename)
+    with gzip.open(filename, 'rb') as f_in:
+        with open(base_name, 'wb') as f_out:
+            shutil.copyfileobj(f_in, f_out)
+    
+#    logger.debug('End Function')
+    return
+
+def compress(filename, base_dir,verbose=0, dry_run=0, logger=None,
+           owner=None,group=None):
+#    logger.debug('Begin Function')
+
+    with open(filename, 'rb') as f_in:
+        with gzip.open(filename + '.gz', 'wb') as f_out:
+            shutil.copyfileobj(f_in, f_out)
+
+#    logger.debug('End Function')
+    return
 
 
 #-------------------------------------------------------------------
@@ -82,26 +105,18 @@ logger = logging.getLogger(__name__)
 # Return: ...
 #
 #-------------------------------------------------------------------
-def listfiles(filename):
+def read(filename):
     logger.debug("Begin Function")
     
-    try:
-        tar_file = tarfile.open(filename)
-        for name in tar_file.getnames():
-            logger.info1(name)
-    except tarfile.ExtractError:
-        logger.error("Unk Extraction Error")
-        pass
-    except IOError:
-        logger.error("IO Error")
-        pass
-    except:
-        logger.error("Unknown Error")
-        
-    logger.debug('End Function')
-    return
+    line_list = []    
+    with gzip.open(filename, 'r') as f:
+        for line in f:
+            line_list.append(line.decode('utf-8')[:-1])
 
-    
+    logger.debug('End Function')
+    return line_list
+
+
 #-------------------------------------------------------------------
 #
 # Function 
@@ -114,7 +129,7 @@ def listfiles(filename):
 def testarchive(filename):
     logger.debug("Begin Function")    
     logger.debug('End Function')
-    return tarfile.is_tarfile(filename)
+    return True
 
 #-------------------------------------------------------------------
 #

@@ -56,6 +56,7 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
+from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
 from pysorcery import *
@@ -128,10 +129,17 @@ def archive_file(args):
             for root, dirs, files in os.walk(i):
                 for sfile in files:
                     cfile = lib.Files(sfile)
+                    print(cfile.mimetype)
                     if args.cmd == 'extract':
-                        cfile.extract(args.output_dir)
+                        if cfile.mimetype in mimetypes.ArchiveMimetypes:
+                            cfile.extract(args.output_dir)
+                        else:
+                            cfile.decompress(args.output_dir)
                     elif args.cmd == 'create':
-                        cfiles.create(args.output_dir)
+                        if cfile.mimetype in mimetypes.ArchiveMimetypes:
+                            cfiles.create(args.output_dir)
+                        else:
+                            cfiles.compress(args.output_dir)
                     elif args.cmd == 'testarchive':
                         cfiles.testarchive()
                     elif args.cmd == 'listfiles':
@@ -143,13 +151,25 @@ def archive_file(args):
         #logger.info('Archive file: ' + i)
         cfile = lib.Files(i)
         if args.cmd == 'extract':
-            cfile.extract(args.output_dir)
+            if cfile.mimetype in mimetypes.ArchiveMimetypes:
+                cfile.extract(args.output_dir)
+            else:
+                cfile.decompress(args.output_dir)
         elif args.cmd == 'create':
-            cfile.create(os.getcwd(), args.output_dir)
+            if cfile.mimetype in mimetypes.ArchiveMimetypes:
+                cfile.create(os.getcwd(), args.output_dir)
+            else:
+                cfile.compress(args.output_dir)
         elif args.cmd == 'testarchive':
             cfile.testarchive()
         elif args.cmd == 'listfiles':
-            cfile.listfiles()
+            if cfile.mimetype in mimetypes.ArchiveMimetypes:
+                cfile.listfiles()
+            else:
+                content = cfile.read()
+                for line in content:
+                    print(line)
+
         else:
             logger.error('Improper Command')
             logger.error("We Shouldn't be here")
@@ -195,6 +215,11 @@ def archive_repack(args):
 def archive_recompress(args):
     logger.debug('Begin Function')
 
+    source_file = lib.Files(args.srcfile)
+    source_file.decompress(None)
+    
+    dest_file = lib.Files(args.dstfile)
+    dest_file.compress(source_file.basename)
     
     logger.debug('End Function')
     return
@@ -258,18 +283,20 @@ def archive_search(args):
 def archive_formats(args):
     logger.debug('Begin Function')
 
-    formats = util.get_cmd_types('util_archive')
+    format_groups = ['util_archive', 'util_compressed']
 
     cmd = 'archive_support'
     
-    for i in formats:
-        logger.info(i + ' files:')
+    for x in format_groups:
+        formats = util.get_cmd_types(x)
+        for i in formats:
+            logger.info(i + ' files:')
 
-        archive_func = util.get_module_func('util_archive',
-                                            i,
-                                            cmd)
-        # We know what the format is, initialize that format's class
-        archive_func()
+            archive_func = util.get_module_func(x,
+                                                i,
+                                                cmd)
+            # We know what the format is, initialize that format's class
+            archive_func()
 
     logger.debug('End Function')
     return
@@ -448,8 +475,7 @@ Report bugs to ...
     parser_repack.add_argument('file',
                                nargs = '+',
                                help = 'Repack files')
-    parser_repack.set_defaults(func = archive_file,
-                               cmd = 'repack')
+    parser_repack.set_defaults(func = archive_repack)
 
     #-----------------------------------------------------------------
     #
@@ -460,11 +486,11 @@ Report bugs to ...
                                               parents = [parent_parser],
                                               help = 'Recompress files'
     )
-    parser_recompress.add_argument('file',
-                             nargs = '+',
-                             help = 'Recompress files')
-    parser_recompress.set_defaults(func = archive_file,
-                                   cmd = 'recompress')
+    parser_recompress.add_argument('srcfile',
+                                   help = 'Recompress files')
+    parser_recompress.add_argument('dstfile',
+                                   help = 'Recompress files')
+    parser_recompress.set_defaults(func = archive_recompress)
 
     #-----------------------------------------------------------------
     #

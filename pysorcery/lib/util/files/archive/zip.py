@@ -35,7 +35,7 @@
 #
 #-----------------------------------------------------------------------
 # System Libraries
-import tarfile
+import zipfile
 
 # 3rd Party Libraries
 
@@ -86,10 +86,11 @@ def listfiles(filename):
     logger.debug("Begin Function")
     
     try:
-        tar_file = tarfile.open(filename)
-        for name in tar_file.getnames():
+        zip_file = zipfile.ZipFile(filename)
+        zip_file.open()
+        for name in zip_file.namelist():
             logger.info1(name)
-    except tarfile.ExtractError:
+    except zipfile.BadZipFile:
         logger.error("Unk Extraction Error")
         pass
     except IOError:
@@ -114,7 +115,7 @@ def listfiles(filename):
 def testarchive(filename):
     logger.debug("Begin Function")    
     logger.debug('End Function')
-    return tarfile.is_tarfile(filename)
+    return zipfile.is_zipfile(filename)
 
 #-------------------------------------------------------------------
 #
