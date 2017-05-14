@@ -87,6 +87,7 @@ logger = logging.getLogger(__name__)
 #
 # Class Files
 # 
+# The File API.  This is the class that is used for ALL file activities
 #
 #-----------------------------------------------------------------------
 class Files(compressed.CompressedFile, archive.Archive, files.BaseFile):
@@ -137,15 +138,19 @@ class FileList(files.BaseFileList):
 # Return: None
 #
 #-------------------------------------------------------------------------------
-def recompress(srcfile, dstfile):
+def repack(srcfile, dstfile, componly=False):
     logger.debug('Begin Function')
+
+    if (self.mimetype not in mimetypes.ArchiveMimetypes or
+        componly = True):
+        source_file = Files(srcfile)
+        source_file.decompress(None)
     
-    source_file = Files(srcfile)
-    source_file.decompress(None)
-    
-    dest_file = Files(dstfile)
-    dest_file.compress(source_file.basename)
-    
+        dest_file = Files(dstfile)
+        dest_file.compress(source_file.basename)
+    else:
+        print('Fix Me')
+        
     logger.debug('End Function')
     return
 

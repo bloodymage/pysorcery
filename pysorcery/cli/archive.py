@@ -116,7 +116,7 @@ colortext = text.ConsoleText()
 # Return: None
 #
 #-----------------------------------------------------------------------
-def archive_file(args):
+def archive_extract(args):
     logger.debug('Begin Function')
 
     for i in args.files:
@@ -180,10 +180,93 @@ def archive_file(args):
 
 #-----------------------------------------------------------------------
 #
+# Function archive_extract
+#
+# Extract files listed.
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+#         args.files - List of files to extract
+#         args.recursive - Extract all files in all subfolders
+#         args.depth (Add me) - if recursive, limit to depth #
+#         args.output_dir - Directory to extract to
+# Return: None
+#
+#-----------------------------------------------------------------------
+def archive_create(args):
+    logger.debug('Begin Function')
+
+    for i in args.files:
+        cfile = lib.Files(i)
+        if cfile.mimetype in mimetypes.ArchiveMimetypes:
+            cfile.create(os.getcwd(), args.output_dir)
+        else:
+            cfile.compress(args.output_dir)
+
+    logger.debug('End Function')
+    return
+
+#-----------------------------------------------------------------------
+#
+# Function archive_extract
+#
+# Extract files listed.
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+#         args.files - List of files to extract
+#         args.recursive - Extract all files in all subfolders
+#         args.depth (Add me) - if recursive, limit to depth #
+#         args.output_dir - Directory to extract to
+# Return: None
+#
+#-----------------------------------------------------------------------
+def archive_list(args):
+    logger.debug('Begin Function')
+
+    for i in args.files:
+        cfile = lib.Files(i)
+        if cfile.mimetype in mimetypes.ArchiveMimetypes:
+            cfile.listfiles()
+        else:
+            content = cfile.read()
+            for line in content:
+                print(line)
+
+    logger.debug('End Function')
+    return
+
+#-----------------------------------------------------------------------
+#
+# Function archive_extract
+#
+# Extract files listed.
+#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+#         args.files - List of files to extract
+#         args.recursive - Extract all files in all subfolders
+#         args.depth (Add me) - if recursive, limit to depth #
+#         args.output_dir - Directory to extract to
+# Return: None
+#
+#-----------------------------------------------------------------------
+def archive_test(args):
+    logger.debug('Begin Function')
+
+    for i in args.files:
+        cfile = lib.Files(i)
+        cfile.testarchive()
+
+    logger.debug('End Function')
+    return
+
+#-----------------------------------------------------------------------
+#
 # Functions archive_create
 #
 #
-# Convert files from one archive format to another
+# Convert files from one archive or compression format to another
 #
 #
 # Input:  args
@@ -197,6 +280,7 @@ def archive_file(args):
 def archive_repack(args):
     logger.debug('Begin Function')
 
+    lib.repack(args.srcfile, args.dstfile)
     
     logger.debug('End Function')
     return
@@ -206,7 +290,7 @@ def archive_repack(args):
 # Functions archive_recompress
 #
 #
-# Recompresses a file from one compression format to another.
+# Recompresses a file.
 #
 # Input:  args
 #         args.quiet   - Decrease Output Verbosity
@@ -219,7 +303,7 @@ def archive_repack(args):
 def archive_recompress(args):
     logger.debug('Begin Function')
 
-    lib.recompress(args.srcfile, args.dstfile)
+
 
     logger.debug('End Function')
     return
@@ -425,8 +509,7 @@ Report bugs to ...
                                 action = 'store_true',
                                 help = 'Recursive'
     )
-    parser_extract.set_defaults(func=archive_file,
-                                cmd='extract')
+    parser_extract.set_defaults(func=archive_extract)
     #-----------------------------------------------------------------
     #
     # create the parser for the 'list' command
@@ -441,9 +524,7 @@ Report bugs to ...
     parser_list.add_argument('-r', '--recursive',
                                 action = 'store_true',
                                 help = 'Recursive')
-    parser_list.set_defaults(func = archive_file,
-                             output_dir = ['fixme','use kwargs?'],
-                             cmd='listfiles')
+    parser_list.set_defaults(func = archive_list) 
 
     #-----------------------------------------------------------------
     #
@@ -460,9 +541,8 @@ Report bugs to ...
     parser_create.add_argument('output_dir',
                                metavar = 'source',
                                help = 'Files / Directories to add to the archive')
-    parser_create.set_defaults(func = archive_file,
-                               recursive = False,
-                               cmd = 'create')
+    parser_create.set_defaults(func = archive_create)
+    
     #-----------------------------------------------------------------
     #
     # create the test command
@@ -475,9 +555,7 @@ Report bugs to ...
                              nargs = 1,
                              metavar = 'archive',
                              help = 'Create files')
-    parser_test.set_defaults(func = archive_file,
-                             recursive = False,
-                             cmd = 'testarchive')
+    parser_test.set_defaults(func = archive_test)
 
     #-----------------------------------------------------------------
     #

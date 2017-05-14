@@ -10,8 +10,8 @@
     - [X] list
     - [X] create
     - [X] test
-    - [ ] repack
-    - [/] recompress
+    - [X] repack
+    - [ ] recompress
     - [ ] diff
     - [ ] search
     - [/] formats
