@@ -39,7 +39,7 @@
 # System Libraries
 
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
@@ -73,26 +73,26 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 # Files
-# Directories
 # FileList
+# Directories
 # DirectoryList
 # Package
 # PackageList
-# Rupository
+# Repository
 # RepositoryList
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Class File
+# Class Files
 # 
 #
 #-----------------------------------------------------------------------
 class Files(compressed.CompressedFile, archive.Archive, files.BaseFile):
     def read(self):
         if self.format_ != 'Unknown':
-            content =compressed.CompressedFile.read(self)
+            content = compressed.CompressedFile.read(self)
         else:
             content = files.BaseFile.read(self)
 
@@ -108,35 +108,6 @@ class Files(compressed.CompressedFile, archive.Archive, files.BaseFile):
 #-----------------------------------------------------------------------
 class FileList(files.BaseFileList):
     pass
-#    def __init__(self,dirname):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            files.DebianFileList.__init__(self)
-#        else:
-#            files.BaseFileList.__init__(self)
-#
-#        logger.debug("End Function")
-#        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def list_installed_files(self):
-#        logger.debug("Begin Function")
-#
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            installed_files = files.DebianFileList.list_installed_files(self)
-#        else:
-#            installed_files = files.BaseFileList.list_installed_files(self)
-#            
-#            logger.debug("End Function")
-#        return installed_files
 
 #-------------------------------------------------------------------------------
 #
@@ -145,17 +116,38 @@ class FileList(files.BaseFileList):
 #
 #-------------------------------------------------------------------------------
 #class Directories(files.DebianDirectories,files.BaseDirectories):
-#    def __init__(self,dirname):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            files.DebianDirectories.__init__(self,dirname)
-#        else:
-#            files.BaseDirectories.__init__(self,dirname)
+# pass
+
+#-------------------------------------------------------------------------------
 #
-#        logger.debug("End Function")
-#        return
+# Functions
+# 
+# Recompress
+#
+#
+#-------------------------------------------------------------------------------
 
-
+#-------------------------------------------------------------------------------
+#
+# Function recompress
+#
+# Input:  @param: srcfile - the original file
+#         @param: dstfile - the new file we are creating with the new
+#                           compression method.
+# Return: None
+#
+#-------------------------------------------------------------------------------
+def recompress(srcfile, dstfile):
+    logger.debug('Begin Function')
+    
+    source_file = Files(srcfile)
+    source_file.decompress(None)
+    
+    dest_file = Files(dstfile)
+    dest_file.compress(source_file.basename)
+    
+    logger.debug('End Function')
+    return
 
 """
 #-------------------------------------------------------------------------------

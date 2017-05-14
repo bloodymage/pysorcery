@@ -147,6 +147,7 @@ def archive_file(args):
                     else:
                         logger.error('Improper Command')
                         logger.error("We Shouldn't be here")
+
         # Always extract what is explicitly listed
         #logger.info('Archive file: ' + i)
         cfile = lib.Files(i)
@@ -182,12 +183,14 @@ def archive_file(args):
 # Functions archive_create
 #
 #
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
+# Convert files from one archive format to another
+#
 #
 # Input:  args
 #         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
+#         args.srcfile
+#         args.dstfile
+#
 # Return: None
 #
 #-----------------------------------------------------------------------
@@ -200,27 +203,24 @@ def archive_repack(args):
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_create
+# Functions archive_recompress
 #
 #
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
+# Recompresses a file from one compression format to another.
 #
 # Input:  args
-#         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
+#         args.quiet   - Decrease Output Verbosity
+#         args.srcfile - Original File
+#         args.dstfile - Destination File
+#
 # Return: None
 #
 #-----------------------------------------------------------------------
 def archive_recompress(args):
     logger.debug('Begin Function')
 
-    source_file = lib.Files(args.srcfile)
-    source_file.decompress(None)
-    
-    dest_file = lib.Files(args.dstfile)
-    dest_file.compress(source_file.basename)
-    
+    lib.recompress(args.srcfile, args.dstfile)
+
     logger.debug('End Function')
     return
 
@@ -229,12 +229,10 @@ def archive_recompress(args):
 # Functions archive_diff
 #
 #
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
+# Find and display all differences between two archive filesxs
 #
 # Input:  args
 #         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
 # Return: None
 #
 #-----------------------------------------------------------------------
@@ -247,15 +245,13 @@ def archive_diff(args):
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_create
+# Functions archive_search
 #
 #
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
+# Search archive for search term.
 #
 # Input:  args
 #         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
 # Return: None
 #
 #-----------------------------------------------------------------------
@@ -268,15 +264,13 @@ def archive_search(args):
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_create
+# Functions archive_formats
 #
 #
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
+# List all archive and compression formats supported.
 #
 # Input:  args
 #         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
 # Return: None
 #
 #-----------------------------------------------------------------------
@@ -286,16 +280,21 @@ def archive_formats(args):
     format_groups = ['util_archive', 'util_compressed']
 
     cmd = 'archive_support'
-    
+
     for x in format_groups:
+        # Obtain list of all supported formats of type 'x'
         formats = util.get_cmd_types(x)
+
+        # 
         for i in formats:
             logger.info(i + ' files:')
 
+            # Identify function that displays formats support
             archive_func = util.get_module_func(x,
                                                 i,
                                                 cmd)
-            # We know what the format is, initialize that format's class
+            
+            # Execute the identified function
             archive_func()
 
     logger.debug('End Function')
@@ -305,13 +304,12 @@ def archive_formats(args):
 #
 # Real_Main
 #
-#
-# Find and display all files which are not currently tracked by the
-# sorcery package management system
+# 1. Creates the argument parser
+# 2. Eshablishes configuration
+# 3. Runs the function specified by the arguments
 #
 # Input:  args
-#         args.quiet - Decrease Output Verbosity
-# Output: Prints list of alien files
+# 
 # Return: None 
 #
 #-----------------------------------------------------------------------
@@ -345,37 +343,53 @@ Report bugs to ...
         description = 'Universal archive extractor. creator, etc...',
         epilog = epilog_text
     )
+
+    # Parser for printing cmd version information
     parser.add_argument('-V',
                         '--version',
                         action = 'version',
                         help = 'Print version information and exit',
                         version = '%(prog)s ' + __version__
     )
+
+    # Create Parent Parsur
     parent_parser = argparse.ArgumentParser(add_help=False)
+    
     # Parser Groups
+    # Logging Group
     logging_opts = parent_parser.add_argument_group('Logging Options')
+
+    # Quiet Settings
     logging_opts.add_argument('-q',
                               '--quiet',
                               action = 'count',
                               default = 0,
                               help = quiet_help
     )
+
+    # If debugging is enabled
     if DEBUG:
+        # Verbose Options
         logging_opts.add_argument('-v',
                                   '--verbosity',
                                   action = 'count',
                                   default = 0,
                                   help = verbose_help
         )
+        # Set Loglevel
         logging_opts.add_argument('--loglevel',
                                   choices = loglevel_choices,
                                   default = 'INFO',
                                   help = loglevel_help
         )
+
+        # Maximize logging
         logging_opts.add_argument('--debug',
                                   action = 'store_true',
                                   help = debug_help
         )
+
+    # Enable version in child parsers
     parent_parser.add_argument('-V',
                         '--version',
                         action = 'version',
@@ -388,6 +402,7 @@ Report bugs to ...
                                        metavar = 'Command',
                                        help = 'Description'
     )
+    
     #-----------------------------------------------------------------
     #
     # create the parser for the 'extract' command
@@ -472,9 +487,10 @@ Report bugs to ...
     parser_repack = subparsers.add_parser('repack',
                                           parents = [parent_parser],
                                           help = 'Repack files')
-    parser_repack.add_argument('file',
-                               nargs = '+',
-                               help = 'Repack files')
+    parser_repack.add_argument('srcfile',
+                               help = 'Original File')
+    parser_repack.add_argument('dstfile',
+                               help = 'Destination File')
     parser_repack.set_defaults(func = archive_repack)
 
     #-----------------------------------------------------------------
@@ -487,9 +503,9 @@ Report bugs to ...
                                               help = 'Recompress files'
     )
     parser_recompress.add_argument('srcfile',
-                                   help = 'Recompress files')
+                                   help = 'Source file')
     parser_recompress.add_argument('dstfile',
-                                   help = 'Recompress files')
+                                   help = 'Destination file')
     parser_recompress.set_defaults(func = archive_recompress)
 
     #-----------------------------------------------------------------
@@ -499,10 +515,11 @@ Report bugs to ...
     #-----------------------------------------------------------------
     parser_diff = subparsers.add_parser('diff',
                                         parents = [parent_parser],
-                                        help = 'Diff files')
-    parser_diff.add_argument('file',
-                             nargs = 2,
-                             help = 'Diff files')
+                                        help = 'Compare Archive Files')
+    parser_diff.add_argument('archive1',
+                             help = 'Archives to compare')
+    parser_diff.add_argument('archive2',
+                             help = 'Archives to compare')
     parser_diff.set_defaults(func = archive_diff)
 
     #-----------------------------------------------------------------
@@ -512,10 +529,12 @@ Report bugs to ...
     #-----------------------------------------------------------------
     parser_search = subparsers.add_parser('search',
                                           parents = [parent_parser],
-                                          help = 'Search files')
-    parser_search.add_argument('file',
+                                          help = 'Search archive')
+    parser_search.add_argument('archive',
+                             help = 'Archive to search')
+    parser_search.add_argument('searchterm',
                              nargs = '+',
-                             help = 'Search files')
+                             help = 'Term to search for')
     parser_search.set_defaults(func = archive_search)
 
     #-----------------------------------------------------------------
@@ -556,7 +575,8 @@ Report bugs to ...
     return
 
 
-#-----------------------------------------------------------------------#
+#-----------------------------------------------------------------------
+#
 # Main
 #
 # The First function, initalizes everything else.
@@ -566,12 +586,7 @@ Report bugs to ...
 # This is ugly code
 #
 #
-# Reads configuration files in the following order:
-# 1. ~/.config/dionysius/dionysis.conf
-# 2. /etc/dionysius/dionysius.conf
-# 3. {python-dir}/dist-___/pydionysius/dionysius.conf
 #
-# Conf files are in yaml format
 #
 # Note: Any cli switches will override the settings in the config files
 #
@@ -582,11 +597,10 @@ def main(args=None):
     """
 
     logger.debug('Begin Application')
-    #try:         
-        #real_main(args)
-    real_main(args)        
-    #except:
-    #    logger.critical('You Fucked Up')
+    try:         
+        real_main(args)
+    except:
+        logger.critical('You Fucked Up')
 
     logger.debug('End Application')
     return
