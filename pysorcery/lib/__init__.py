@@ -142,7 +142,7 @@ def repack(srcfile, dstfile, componly=False):
     logger.debug('Begin Function')
 
     if (self.mimetype not in mimetypes.ArchiveMimetypes or
-        componly = True):
+        componly is True):
         source_file = Files(srcfile)
         source_file.decompress(None)
     
