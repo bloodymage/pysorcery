@@ -22,7 +22,6 @@
     - [X] xz
     - [X] bz2
 
-
 ### [ ] pygaze
   - [ ] alien
   - [ ] orphans

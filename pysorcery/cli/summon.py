@@ -160,6 +160,10 @@ def real_main(args):
                         action = 'count',
                         default = 0,
                         help = quiet_help)
+    parser.add_argument('-s','--section',
+                        action = 'store_true',
+                        default = 0,
+                        help = "Flag the 'spell' argument as a section")
     if enable_debugging_mode is True:
         parser.add_argument("-v", "--verbosity",
                             action = "count",
