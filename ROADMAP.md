@@ -92,14 +92,21 @@
 - pysummon
   - [ ] bzr
 
+### 0.0.10
+#### Functional Scripts
+- Guru tools
+  - [ ] Spider
+    - [ ] Check for Broken Links
+    - [ ] Validate URIs
+    - [ ] Watch URLs for Changes
+  - [ ] Dependencies
+        - [ ] list cast order of list of spells based on dependencies
+	- [ ] Check for circular dependencies
+	- [ ] Find missing dependencies
+	- [ ] Check duplicate dependencies
+  - [ ] MD5unpack - Obtain MD5/SHA256/SHA512 for a tarball
 
-## 0.1
-
-#### Supported Distributions
-- Source Mage
-- Xubuntu
-
-### 0.1.1
+### 0.0.11
 #### Functional Scripts
 - pyupstream
   - Check Debian Upstream
@@ -108,47 +115,48 @@
 - pysummon
   - [ ] file (Include Directories)
 
-### 0.1.2
+### 0.0.12
 #### Script Modifications
 - pygaze
   - Add Upstream information
 
-### 0.1.3
+### 0.0.13
 #### Functional Scripts
 - pyresurrect
 
-### 0.1.4
+### 0.0.14
 #### Functional Scripts
 - pyalter
 
-### 0.1.5
-#### Functional Scripts
-- pyenchant
-#### Script Modifications
-- pyarchive
-  - formats
-    - [ ] iso
- 
-### 0.1.6
-#### Functional Scripts
-- pycauldron
-
-### 0.1.7
+### 0.0.15
 #### Functional Scripts
 - pyvcast
 
-### 0.1.8
+### 0.0.16
 #### Functional Scripts
 - pycabal
 
-### 0.1.9
+### 0.0.17
+#### Functional Scripts
+- pyconfmeld
+
+### 0.0.18
+#### Functional Scripts
+- pydelve
+
+### 0.0.19
 #### Modified Scripts
 - pyupdate
   - Add Homepage upstream
 
 
-## 0.2
+## 0.1
+
 - Sorcery CLI functional replacement for BASH version
+#### Supported Distributions
+- [ ] Source Mage
+- [ ] Xubuntu
+
 
 ### 0.2.1
 ####
@@ -164,43 +172,53 @@
 ### 0.2.4
 - Setup.py
 
-### 0.2.5
-####
-- pyconfmeld
+### 0.1.5
+#### Functional Scripts
+- pyenchant
+#### Script Modifications
+- pyarchive
+  - formats
+    - [ ] iso
+ 
+### 0.1.6
+#### Functional Scripts
+- pycauldron
 
-### 0.2.6
-####
-- pydelve
 
-
-## 0.3
+## 0.2
 - Framework functionally complete
+- Open to the public?
 
 ### 0.3.1
 #### Functional Scripts
 - pyxsorcery
 
 
-## 0.4
+## 0.3
 - GUI functionally complete
-- Open to the public?
+
+
+## 0.4
 
 ### 0.4.1
 - Add plugin system
 
-
-## 0.5
+### 0.5.2
+#### Modified Scripts
+- Guru toolsr
+  - [ ] Fix History
+  - [ ] Report
+    - [ ] Grimoire Image
+    - [ ] Compare Images
+  - [ ] MD5unpack - Obtain MD5/SHA256/SHA512 for a tarball
+  - [ ] Rebuild packages (Repairs /var/state/sorcery/packages
+  - [ ] Cherry-pick
 
 ### 0.5.1
 #### Functional Scripts
 - pysmgl-ledger
 
-### 0.5.2
-#### Functional Scripts
-- Guru tools
-  
-
-## 0.6
+## 0.5
 - Base Code Functional
 
 ### 0.6.1
@@ -210,9 +228,9 @@
 ### 0.6.2
 #### Supported Distributions
 - Debian
+  
 
-
-## 0.7
+## 0.6
 - Sorcery Pockage Management Complete
 - Debian APT complete
 
@@ -234,11 +252,14 @@
 - Add support for Gentoo 'portage'
 
 
-## 0.8
+## 0.7
 - Major Linux distributions package managers supported
 
-### 0.8.1
+## 0.8
 - Add support for 'pip' package manager
+
+### 0.8.1
+
 
 
 ## 0.9
