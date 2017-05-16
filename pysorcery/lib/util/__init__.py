@@ -80,15 +80,23 @@ UTIL_COMPRESSED_PATH = pkg_resources.resource_filename('pysorcery',
 
 UTIL_URL_PATH = pkg_resources.resource_filename('pysorcery', 'lib/util/url/')
 
+ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/archive/')
+GAZE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/gaze/')
+
+
 cmd_dir = {
     'util_archive': UTIL_ARCHIVE_PATH,
     'util_compressed': UTIL_COMPRESSED_PATH,
-    'util_url': UTIL_URL_PATH
+    'util_url': UTIL_URL_PATH,
+    'gaze': GAZE_PATH,
+    'archive': ARCHIVE_PATH
 }
 
 import_path = {
     'util_archive': 'pysorcery.lib.util.files.archive.',
-    'util_compressed': 'pysorcery.lib.util.files.compressed.'
+    'util_compressed': 'pysorcery.lib.util.files.compressed.',
+    'archive': 'pysorcery.plugins.archive.',
+    'gaze': 'pysorcery.plugins.gaze.'
     }
 
 # Used if module names can not be
@@ -129,6 +137,7 @@ def get_cmd_types(cmd_class):
             f.split('/')[-1] != '__init__.py'):
             supformats.append(os.path.basename(f)[:-3])
 
+    supformats.sort()
     logger.debug('Return: ' + str(supformats))
     logger.debug('End Function')
     return supformats

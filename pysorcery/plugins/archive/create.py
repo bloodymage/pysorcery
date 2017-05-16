@@ -51,6 +51,7 @@ import sys
 
 # 3rd Party Libraries
 
+
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
@@ -88,117 +89,71 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# real_main
-# main
+# archive_extract
+# archive_list
+# archive_create
+# archive_test
+# archive_repack
+# archive_recompress
+# archive_diff
+# archive_search
+# archive_formats
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Real_Main
+# Function archive_create
 #
-# 1. Creates the argument parser
-# 2. Eshablishes configuration
-# 3. Runs the function specified by the arguments
+# Create archive file.
 #
 # Input:  args
-# 
-# Return: None 
+#         args.quiet - Decrease Output Verbosity
+#         args.files - List of files to extract
+#         args.output_dir - Directory to create archive of
+#                           If this is a single file, compress the file
+# Return: None
 #
 #-----------------------------------------------------------------------
-def real_main(args):    
-    logger.debug('Entered Function')
+def archive_create(args):
+    logger.debug('Begin Function')
 
+    for i in args.files:
+        cfile = lib.Files(i)
+        if cfile.mimetype in mimetypes.ArchiveMimetypes:
+            cfile.create(os.getcwd(), args.output_dir)
+        else:
+            cfile.compress(args.output_dir)
 
-    subcommands = util.get_cmd_types('archive')
-
-    epilog_text = """
-See man pyarchive() for more information.\n
-\n
-Report bugs to ...
-"""
-
-    # Parse Command Line Arguments
-    parser = argparse.CommonParser(
-        description = 'Universal archive extractor. creator, etc...',
-        epilog = epilog_text
-    )
-
-    parser.add_version_option()
-    parent_parser = parser.add_logging_option()
-
-    # Create subcommands
-    subparsers = parser.add_subparsers(title = 'commands',
-                                       metavar = 'Command',
-                                       help = 'Description'
-    )
-
-    for i in subcommands:
-        subcommand = util.get_module_func('archive',i,'parser')
-        subcommand(subparsers, parent_parser)
-        
-    # With version, help description must be before version declaration
-    parser.set_defaults(func = False,
-                        quiet = 0,
-                        verbosity = 0,
-                        debug = False,
-                        loglevel = 'INFO')
-    
-    args = parser.parse_args()
-
-    # Set configuration
-    config_ = config.main_configure(args)
-
-    logger.debug('Configuration set')
-    logger.debug2('Configuration Settings: ' + str(config_))
-    logger.debug3('Arguments: ' + str(args))
-
-    # 'application' code
-    if args.func:
-        args.func(args)
-    else:
-        parser.print_help()
-        logger.error('No command was given')
-
-    #logging.verifydebuglevels()
     logger.debug('End Function')
     return
 
-
 #-----------------------------------------------------------------------
 #
-# Main
+# Function archive_extract
 #
-# The First function, initalizes everything else.
+# Extract files listed.
 #
-# Inputs come from command line argument
-#
-# This is ugly code
-#
-#
-#
-#
-# Note: Any cli switches will override the settings in the config files
-#
-#-----------------------------------------------------------------------
-def main(args=None):
-    """Run the main command-line interface for pyarchive. Includes 
-    top-level exception handlers that print friendly error messages.
-    """
-    logger.debug('Begin Application')
-
-    try:         
-        real_main(args)
-    except:
-        logger.critical('You Fucked Up')
-
-    logger.debug('End Application')
-    return
-
-#-----------------------------------------------------------------------
-#
-#
+# Input:  args
+#         args.quiet - Decrease Output Verbosity
+#         args.files - List of files to extract
+#         args.recursive - Extract all files in all subfolders
+#         args.depth (Add me) - if recursive, limit to depth #
+#         args.output_dir - Directory to extract to
+# Return: None
 #
 #-----------------------------------------------------------------------
-if __name__ == '__main__':
-    sys.exit(main())
+def parser(subparsers, parent_parser):
+    parser_create = subparsers.add_parser('create',
+                                          parents = [parent_parser],
+                                          help = 'Create files')
+    parser_create.add_argument('files',
+                               nargs = 1,
+                               metavar = 'archive',
+                               help = 'Archive file to create')
+    parser_create.add_argument('output_dir',
+                               metavar = 'source',
+                               help = 'Files / Directories to add to the archive')
+    parser_create.set_defaults(func = archive_create)
+
+    return parser_create

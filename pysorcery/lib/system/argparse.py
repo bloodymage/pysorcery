@@ -39,6 +39,7 @@
 import argparse
 from argparse import *
 
+from pysorcery import __version__, DEBUG
 #-------------------------------------------------------------------------------
 #
 # Global Variables
@@ -59,94 +60,77 @@ from argparse import *
 # Class AliasedSubParserAction
 #
 #-------------------------------------------------------------------------------
-class AliasedSubParsersAction(argparse._SubParsersAction):
+class CommonParser(ArgumentParser):
+    def __init__(self, *args, **kwargs):
+        super(CommonParser, self).__init__(*args, **kwargs)
 
-    #-------------------------------------------------------------------------------
-    #
-    # Class AliasedPseudoAction
-    #
-    #-------------------------------------------------------------------------------
-    class _AliasedPseudoAction(Action):
-        #---------------------------------------------------------------------------
-        #
-        # Function __init__
-        #
-        #
-        #
-        # Input:  ...
-        # Output: ...
-        # Return: ...
-        #
-        #-------------------------------------------------------------------------
-        def __init__(self, name, aliases, help):
-            dest = name
-            if aliases:
-                dest += ' (%s)' % ','.join(aliases)
-            sup = super(AliasedSubParsersAction._AliasedPseudoAction, self)
-            sup.__init__(option_strings=[], dest=dest, help=help) 
+        return
 
-    #-------------------------------------------------------------------------------
-    #
-    # Function add_parser
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def add_parser(self, name, **kwargs):
-        if 'aliases' in kwargs:
-            aliases = kwargs['aliases']
-            del kwargs['aliases']
-        else:
-            aliases = []
+    def add_version_option(self):
+        self.add_argument('-V',
+                          '--version',
+                          action = 'version',
+                          help = 'Print version information and exit',
+                          version = '%(prog)s ' + __version__
+        )
+        return
 
-        parser = super(AliasedSubParsersAction, self).add_parser(name, **kwargs)
+    def add_logging_option(self):
+        # Common Help Descriptions:
+        quiet_help = 'Decrease output'
+        verbose_help = 'Increase output'
+        loglevel_help = 'Specify output level'
+        debug_help = 'Maximize output level'
+        loglevel_choices = [ 'debug',
+                             'info',
+                             'warning',
+                             'error',
+                             'critical',
+                             'DEBUG',
+                             'INFO',
+                             'WARNING',
+                             'ERROR',
+                             'CRITICAL'
+        ]
 
-        # Make the aliases work.
-        for alias in aliases:
-            self._name_parser_map[alias] = parser
-        # Make the help text reflect them, first removing old help entry.
-        if 'help' in kwargs:
-            help = kwargs.pop('help')
-            self._choices_actions.pop()
-            pseudo_action = self._AliasedPseudoAction(name, aliases, help)
-            self._choices_actions.append(pseudo_action)
-
-        return parser
-
-#-------------------------------------------------------------------------------
-#
-# Functions
-#
-#
-#
-#-------------------------------------------------------------------------------
-
-
-#-------------------------------------------------------------------------------
-#
-# ...
-#
-#
-#
-#-------------------------------------------------------------------------------
-if __name__ == '__main__':
-    # An example parser with subcommands.
+        # Create Parent Parsur
+        self.parent = argparse.ArgumentParser(add_help=False)
     
-    parser = ArgumentParser()
-    parser.register('action', 'parsers', AliasedSubParsersAction)
-    parser.add_argument("--library", metavar="libfile", type=str,
-        help="library database filename")
-    subparsers = parser.add_subparsers(title="commands", metavar="COMMAND")
+        # Parser Groups
+        # Logging Group
+        self.logging = self.parent.add_argument_group('Logging Options')
 
-    p_import = subparsers.add_parser("import", help="add files to library",
-                                     aliases=('imp', 'im'))
-    p_import.add_argument("filename", metavar="file", type=str, nargs="+",
-        help="the files to import")
+        # Quiet Settings
+        self.logging.add_argument('-q',
+                                  '--quiet',
+                                  action = 'count',
+                                  default = 0,
+                                  help = quiet_help
+        )
 
-    p_remove = subparsers.add_parser("remove", aliases=('rm',),
-        help="remove items")
-    
-    args = parser.parse_args()
-    print(args)
+        # If debugging is enabled
+        if DEBUG:
+            # Verbose Options
+            self.logging.add_argument('-v',
+                                      '--verbosity',
+                                      action = 'count',
+                                      default = 0,
+                                      help = verbose_help
+            )
+            # Set Loglevel
+            self.logging.add_argument('--loglevel',
+                                      choices = loglevel_choices,
+                                      default = 'INFO',
+                                      help = loglevel_help
+            )
+
+            # Maximize logging
+            self.logging.add_argument('--debug',
+                                      action = 'store_true',
+                                      help = debug_help
+            )
+
+        return self.parent
+        
+
+

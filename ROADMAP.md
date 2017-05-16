@@ -201,9 +201,6 @@
 ## 0.4
 
 ### 0.4.1
-- Add plugin system
-
-### 0.5.2
 #### Modified Scripts
 - Guru toolsr
   - [ ] Fix History
@@ -214,7 +211,7 @@
   - [ ] Rebuild packages (Repairs /var/state/sorcery/packages
   - [ ] Cherry-pick
 
-### 0.5.1
+### 0.4.2
 #### Functional Scripts
 - pysmgl-ledger
 
