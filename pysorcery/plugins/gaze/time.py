@@ -65,6 +65,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.plugins import gaze
 # Conditional Libraries
 
 
@@ -162,24 +163,32 @@ def archive_extract(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
+def parser(subparsers, parent_parser, repo_parent_parser=None):
+    cmd = subparsers.add_parser('time',
+                                help = 'Shows the time the spell(s) needed to get cast. By default the last casting time is shown, alternatively the median, mean or weighted mean can be shown.  If more then one spell is specified, also a total time is shown. (Not Working)'
     )
-    parser_extract.add_argument('files',
-                                nargs = '+',
-                                help = 'Extract files'
-    )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
-    )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
-    )
-    parser_extract.set_defaults(func=archive_extract)
+    cmd.add_argument('spell',
+                     nargs = '+',
+                     help = 'Display System Info')
+    cmd.add_argument('-g','--grimoire',
+                     nargs = '+',
+                     help = 'specify which grimoire(s) to look in.')
+    cmd.add_argument('--last',
+                     action = 'store_true',
+                     help = 'Display System Info')
+    cmd.add_argument('--medium',
+                     action = 'store_true',
+                     help = 'Display System Info')
+    cmd.add_argument('--mean',
+                     action = 'store_true',
+                     help = 'Display System Info')
+    cmd.add_argument('--weight-last',
+                     action = 'store_true',
+                     help = 'Give more weight to the last casting time.')
+    cmd.add_argument('--full',
+                     action = 'store_true',
+                     help = 'Display System Info')
+    cmd.set_defaults(func = gaze.time,
+                     system = False)
 
-    return parser_extract
+    return cmd

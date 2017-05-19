@@ -101,47 +101,32 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #
-# Function archive_extract
+# Function gaze_export
 #
-# Extract files listed.
+# take a snapshot of all currently installed spells and their configuration.
 #
 # Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
+#         args.quiet - decrease verbosity
+# Output:
 # Return: None
 #
-#-----------------------------------------------------------------------
-def archive_extract(args):
+# Status: Not implimented
+#
+#-------------------------------------------------------------------------------
+def gaze_export(args):
     logger.debug('Begin Function')
 
-    for i in args.files:
-        # Check for recursive extraction
-        if args.recursive:
-            # If True, extract all compressed files within a directory and
-            # its sub directories
-            #
-            # Fix me! Add max depth option
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.Files(sfile)
-                    logger.debug3(cfile.mimetype)
-                    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-                        cfile.extract(args.output_dir)
-                    else:
-                        cfile.decompress(args.output_dir)
+    spell = libspell.Spell(i)
 
-        # Always extract what is explicitly listed
-        #logger.info('Archive file: ' + i)
-        cfile = lib.Files(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(args.output_dir)
-        else:
-            cfile.decompress(args.output_dir)
+    logger.debug3('Spell: ' + str(spell))
+        
+    message = colortext.colorize(spell.name, 'bold','white','black')
+    logger.info(message)
+
+    message = colortext.colorize(spell.description, 'none','white','black')
+    logger.info1(message)
 
     logger.debug('End Function')
     return
@@ -162,24 +147,11 @@ def archive_extract(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
+def parser(subparsers, parent_parser, repo_parent_parser=None):
+    cmd = subparsers.add_parser('export',
+                                parents = [parent_parser],
+                                help = 'Take a snapshot of all currently installed spells and their configuration. (Not Working)'
     )
-    parser_extract.add_argument('files',
-                                nargs = '+',
-                                help = 'Extract files'
-    )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
-    )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
-    )
-    parser_extract.set_defaults(func=archive_extract)
+    cmd.set_defaults(func = gaze_export)
 
-    return parser_extract
+    return cmd

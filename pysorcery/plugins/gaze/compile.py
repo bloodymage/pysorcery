@@ -65,6 +65,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.plugins import gaze
 # Conditional Libraries
 
 
@@ -101,50 +102,6 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-#
-# Function archive_extract
-#
-# Extract files listed.
-#
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
-#
-#-----------------------------------------------------------------------
-def archive_extract(args):
-    logger.debug('Begin Function')
-
-    for i in args.files:
-        # Check for recursive extraction
-        if args.recursive:
-            # If True, extract all compressed files within a directory and
-            # its sub directories
-            #
-            # Fix me! Add max depth option
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.Files(sfile)
-                    logger.debug3(cfile.mimetype)
-                    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-                        cfile.extract(args.output_dir)
-                    else:
-                        cfile.decompress(args.output_dir)
-
-        # Always extract what is explicitly listed
-        #logger.info('Archive file: ' + i)
-        cfile = lib.Files(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(args.output_dir)
-        else:
-            cfile.decompress(args.output_dir)
-
-    logger.debug('End Function')
-    return
 
 
 #-----------------------------------------------------------------------
@@ -162,24 +119,23 @@ def archive_extract(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
+def parser(subparsers, parent_parser, repo_parent_parser=None):
+    cmd = subparsers.add_parser('compile',
+                                parents = [parent_parser,
+                                           repo_parent_parser
+                                ],
+                                help = 'Show the compiler output generated when the spell was built.  If no optional version was given, try the installed version.  If the spell is not installed use the version in the grimoire. (Not Working)'
     )
-    parser_extract.add_argument('files',
-                                nargs = '+',
-                                help = 'Extract files'
+    cmd.add_argument('spell',
+                     nargs = 1,
+                     help = 'Spell'
     )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
+    cmd.add_argument('version',
+                     nargs = '?',
+                     help = 'Specifies which Version of spell to view.'
+    )        
+    cmd.set_defaults(func = gaze.log,
+                     log = 'compile'
     )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
-    )
-    parser_extract.set_defaults(func=archive_extract)
 
-    return parser_extract
+    return cmd

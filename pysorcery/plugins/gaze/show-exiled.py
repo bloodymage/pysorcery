@@ -65,6 +65,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.plugins import gaze
 # Conditional Libraries
 
 
@@ -162,24 +163,20 @@ def archive_extract(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
+def parser(subparsers, parent_parser, repo_parent_parser=None):
+    #-------------------------------------------
+    #
+    # create the parser for the 'show-exiled' command
+    #
+    #-------------------------------------------
+    show_exiled_help = 'Shows all spells currently exiled (which means they are not to be cast in any way).'
+    cmd = subparsers.add_parser('show-exiled',
+                                parents = [parent_parser],
+                                help = show_exiled_help
     )
-    parser_extract.add_argument('files',
-                                nargs = '+',
-                                help = 'Extract files'
+    cmd.set_defaults(func = gaze.installed,
+                     spellstatus = 'exiled',
+                     spell = False
     )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
-    )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
-    )
-    parser_extract.set_defaults(func=archive_extract)
 
-    return parser_extract
+    return cmd

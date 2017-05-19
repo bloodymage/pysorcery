@@ -65,6 +65,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.plugins import gaze
 # Conditional Libraries
 
 
@@ -162,24 +163,15 @@ def archive_extract(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
+def parser(subparsers, parent_parser, repo_parent_parser=None):
+    cmd = subparsers.add_parser('history',
+                                parents = [parent_parser],
+                                help = 'Show history for a spell (alias for gaze HISTORY). (Not Working)'
     )
-    parser_extract.add_argument('files',
-                                nargs = '+',
-                                help = 'Extract files'
-    )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
-    )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
-    )
-    parser_extract.set_defaults(func=archive_extract)
+    cmd.add_argument('spell',
+                     nargs = 1,
+                     help = 'Display System Info')
+    cmd.set_defaults(func = gaze.file,
+                     filename = 'HISTORY')
 
-    return parser_extract
+    return cmd

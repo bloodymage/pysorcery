@@ -101,48 +101,30 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #
-# Function archive_extract
+# Function gaze_newer
 #
-# Extract files listed.
+# print packages first submitted after a specified date. the date must be
+# specified in the 'yyyymmdd' format, where y=year, m=month, and d=day.
+# There are two special dates, last_sorcery_update and last_cast.
 #
 # Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
+# Output:
 # Return: None
 #
-#-----------------------------------------------------------------------
-def archive_extract(args):
+# Status: Not implimented
+#
+#-------------------------------------------------------------------------------
+def gaze_newer(args):
     logger.debug('Begin Function')
 
-    for i in args.files:
-        # Check for recursive extraction
-        if args.recursive:
-            # If True, extract all compressed files within a directory and
-            # its sub directories
-            #
-            # Fix me! Add max depth option
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.Files(sfile)
-                    logger.debug3(cfile.mimetype)
-                    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-                        cfile.extract(args.output_dir)
-                    else:
-                        cfile.decompress(args.output_dir)
+    
 
-        # Always extract what is explicitly listed
-        #logger.info('Archive file: ' + i)
-        cfile = lib.Files(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(args.output_dir)
-        else:
-            cfile.decompress(args.output_dir)
-
+    
     logger.debug('End Function')
     return
 
@@ -162,24 +144,15 @@ def archive_extract(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
+def parser(subparsers, parent_parser, repo_parent_parser=None):
+    cmd = subparsers.add_parser('newer',
+                                parents = [parent_parser],
+                                help = 'Print packages first submitted after a specified date. (Not Working)'
     )
-    parser_extract.add_argument('files',
-                                nargs = '+',
-                                help = 'Extract files'
-    )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
-    )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
-    )
-    parser_extract.set_defaults(func=archive_extract)
+    cmd.add_argument('date',
+                     nargs = '?',
+                     default = 'last_sorcery_update',
+                     help = "Specify Date.  The date must be in the 'yyyymmdd' format, where y = year, m = month, and d = day.  There are two special dates, last_sorcery_update and last_cast.")
+    cmd.set_defaults(func = gaze_newer)
 
-    return parser_extract
+    return cmd

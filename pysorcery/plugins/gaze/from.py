@@ -101,48 +101,32 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #
-# Function archive_extract
+# Function gaze_from
 #
-# Extract files listed.
+# find out which spell has installed path/file
+#
+# Matching is done literally against the end of the path names in the lists
+# of installed files. If -regex is passed, the matching is done using basic
+# regular expressions against the whole paths in the lists of installed files.
 #
 # Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
+# Output:
 # Return: None
 #
-#-----------------------------------------------------------------------
-def archive_extract(args):
+# Status: Working on Ubuntu
+#
+#-------------------------------------------------------------------------------
+def gaze_from(args):
     logger.debug('Begin Function')
 
-    for i in args.files:
-        # Check for recursive extraction
-        if args.recursive:
-            # If True, extract all compressed files within a directory and
-            # its sub directories
-            #
-            # Fix me! Add max depth option
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.Files(sfile)
-                    logger.debug3(cfile.mimetype)
-                    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-                        cfile.extract(args.output_dir)
-                    else:
-                        cfile.decompress(args.output_dir)
-
-        # Always extract what is explicitly listed
-        #logger.info('Archive file: ' + i)
-        cfile = lib.Files(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(args.output_dir)
-        else:
-            cfile.decompress(args.output_dir)
-
+    spell = libfiles.Files(args.filename[0])
+    spell.print_from()
+    
     logger.debug('End Function')
     return
 
@@ -162,24 +146,24 @@ def archive_extract(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
+def parser(subparsers, parent_parser, repo_parent_parser=None):
+    #-------------------------------------------
+    #
+    # create the cmd for the 'from' command
+    #
+    #-------------------------------------------
+    cmd = subparsers.add_parser('from',
+                             parents = [parent_parser],
+                             help = "find out which spell has installed 'path/file.'  Matching is done literally against the end of the path names in the lists of installed files."
     )
-    parser_extract.add_argument('files',
-                                nargs = '+',
-                                help = 'Extract files'
+    cmd.add_argument('filename',
+                     nargs = 1,
+                     help = 'Display System Info'
     )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
-    )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
-    )
-    parser_extract.set_defaults(func=archive_extract)
+    cmd.add_argument('-r','-regex','--regex',
+                     action = 'store_true',
+                     help = 'Matching using basic regular expressions against the whole paths in the lists of installed files.'
+    )        
+    cmd.set_defaults(func = gaze_from)
 
-    return parser_extract
+    return cmd
