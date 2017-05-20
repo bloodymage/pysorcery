@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -27,16 +27,14 @@
 #
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 import sys
@@ -51,42 +49,36 @@ import os
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-from pysorcery.lib.sorcery import repositories
+from pysorcery.lib import util
+# from pysorcery.lib.sorcery import repositories
 
-# Other Optional Libraries
-if distro.distro_id in distro.distro_dict['deb']:
-    import apt
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------------
+#
+pkg_mgr = distro.distro_group[distro.distro_id]
+#-----------------------------------------------------------------------
 #
 # Classes
 #
 #
-# BaseSpell
-# DebianSpell
-# Spell
+# BasePackage
 #
-# BaseSpellQueue
-# DebianSpellQueue
-# SpellQueue
-#
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class BaseSpell
 # 
 #
-#-------------------------------------------------------------------------------
-class BaseSpell():
+#-----------------------------------------------------------------------
+class BasePackage():
     def __init__(self,name):
         logger.debug("Begin Function")
         
@@ -95,7 +87,7 @@ class BaseSpell():
         logger.debug('End Function')
         return
     
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function 
     #
@@ -103,7 +95,23 @@ class BaseSpell():
     # Output: ...
     # Return: ...
     #
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
+    def get_description(self):
+        func = util.get_module_func('packages',
+                                    pkg_mgr,
+                                    'get_description')
+        description = func(self.name)
+        return description
+    
+    #-------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Output: ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------
     def set_details(self):
         logger.debug('Begin Function')
         
@@ -143,7 +151,7 @@ class BaseSpell():
         logger.debug("End Function")
         return
 
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function 
     #
@@ -151,178 +159,14 @@ class BaseSpell():
     # Output: ...
     # Return: ...
     #
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def install(self,args):
         logger.debug("Begin Function")
         print("Installing: " + self.name)
         logger.debug("End Function")
         return
 
-#-------------------------------------------------------------------------------
-#
-# Class BaseSpell
-# 
-#
-#-------------------------------------------------------------------------------
-class SMGLBashSpell():
-    def __init__(self,name):
-        logger.debug("Begin Function")
-        BaseSpell.__init__(self,name)
-        
-        codex = libcodex.Codex()
-        grimoire_list = codex.list_grimoires()
 
-        for i in grimoire_list:
-            spell_list_file = libfiles.Files(i + '/codex.index')
-            spell_list = spell_list_file.read()
-
-            for item in spell_list:
-                spell, section_dir = item.split(' ')
-
-                if self.name == spell:
-                    self.section_dir = section_dir
-                    break
-
-            if self.name == spell:
-                self.grimoire = i.split('/')[-1]
-                break
-
-        self.section = self.section_dir.split('/')[-1]
-        self.spell_directory = self.section_dir + '/' + self.name
-
-        details_file = libfiles.DetailsFile(self.spell_directory)
-        details = details_file.read()
-        
-        self.description = details['description']
-        self.version = details['version']
-        self.url = details['website']
-        self.short = details['short']
-        
-        self.source_files = {}
-
-        #file_name = url.split('/')[-1]
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def install(self,args):
-        logger.debug("Begin Function")
-        print("Installing: " + self.name)
-        logger.debug("End Function")
-        return
-
-#-------------------------------------------------------------------------------
-#
-# Class DebianSpell
-# 
-#
-#-------------------------------------------------------------------------------
-class DebianSpell(BaseSpell):
-    def __init__(self,name):
-        logger.debug("Begin Function")
-        BaseSpell.__init__(self,name)
-
-        self.cache    = apt.cache.Cache()
-#        self.cache.update()
-        self.cache.open()
-        
-        self.pkg      = self.cache[self.name]
-
-        versions = self.pkg.versions
-
-        self.version = versions[0].version
-
-        self.architecture = versions[0].architecture
-        self.description  = versions[0].description
-        self.url = versions[0].homepage
-        self.short = self.description
-
-        pkg_section = versions[0].section
-
-        if 'universe' in pkg_section or 'multiverse' in pkg_section:
-            self.section = str(pkg_section).split('/')[1]
-        else:
-            self.section = str(pkg_section)            
-
-        self.grimoire = 'Fix Me'            
-        self.dependencies = versions[0].dependencies
-        self.optional_dependencies = versions[0].suggests
-        self.size = versions[0].installed_size
-        
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ....x
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def install(self, args):
-        logger.debug("Begin Function")
-
-        if args.reconfigure:
-            subprocess.run(['dpkg-reconfigure', self.name])
-
-            
-        if args.compile:
-            subprocess.run(['apt-build', 'install', self.name])
-        else:
-            subprocess.run(['apt-get', 'install', self.name])
-                    
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def remove(self, args):
-        logger.debug("Begin Function")
-
-        #subprocess.run(['apt-get', 'remove', self.name])
-
-        cache = apt.cache.Cache()
-        cache.open(None)
-        pkg = cache[pkg_name]
-        cache.update()
-        pkg.mark_delete(True, purge=True)
-        resolver = apt.cache.ProblemResolver(cache)
-        
-        if pkg.is_installed is False:
-            logger.error(pkg_name + " not installed so not removed")
-        else:
-            for pkg in cache.get_changes():
-                if pkg.mark_delete:
-                    logger.info(pkg_name + " is installed and will be removed")
-                    logger.info(" %d package(s) will be removed" % cache.delete_count)
-                    resolver.remove(pkg)
-                    
-        try:
-            cache.commit()
-            cache.close()
-        except Exception:
-            logger.error("Sorry, package removal failed.")
-                    
-        logger.debug("End Function")
-        return
 
 #-------------------------------------------------------------------------------
 #
@@ -332,12 +176,12 @@ class DebianSpell(BaseSpell):
 # All spell related actions should go through this class
 #
 #-------------------------------------------------------------------------------
-class Spell(DebianSpell,SMGLBashSpell,BaseSpell):
+class Spell():
     def __init__(self,name):
         logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
+        if distro.distro_group[distro.distro_id] == 'deb':
             DebianSpell.__init__(self,name)
-        elif distro.distro_id in distro.distro_dict['smgl']:
+        elif distro.distro_group[distro.distro_id] == 'smgl':
             SMGLBashSpell.__init__(self,name)
         else:
             BaseSpell.__init__(self,name)

@@ -59,23 +59,23 @@ distro_definitions = {
      'Linux Mint',
      'Debian',
      'Kali'
-    ): 'deb',
-    ('Source Mage'): 'smgl',
+    ): 'apt',
+    ('Source Mage'): 'spell',
     ('Red Hat',
      'Fedora'
-    ): 'rh',
+    ): 'yum',
     ('Arch',
      'Black Arch'
-    ): 'arch',
+    ): 'pacman',
     ('Gentoo',
      'Funtoo'
-    ): 'gentoo',
-    ('Lunar'): 'lunar'
+    ): 'ebuild',
+    ('Lunar'): 'module'
     }
 
-distro_type = {}
+distro_group = {}
 for k, v in distro_definitions.items():
     for key in k:
-        distro_type[key] = v
+        distro_group[key] = v
 
 distro_id = linux_distribution()[0]

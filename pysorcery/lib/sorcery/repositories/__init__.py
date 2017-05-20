@@ -54,7 +54,7 @@ from pysorcery.lib.system import logging
 from pysorcery.lib.util import text
 
 # Other Optional Libraries
-if distro.distro_id in distro.distro_dict['deb']:
+if distro.distro_group[distro.distro_id] == 'deb':
     import apt
     import aptsources
     import softwareproperties
@@ -77,7 +77,7 @@ logger = logging.getLogger(__name__)
 # 
 #
 #-------------------------------------------------------------------------------
-class BaseGrimoire():
+class BaseRepository():
     def __init__(self,name=None,grim_dir=None):
         logger.debug('Begin Function')
 

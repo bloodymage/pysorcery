@@ -25,7 +25,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# gaze whats
 #
 #   This is a bonus application for pysorcery.  PySorcery for multiple
 #   reasons to internally extract, create, list the contents, etc.
@@ -34,10 +34,9 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Gaze what
+
+View the long package description
 """
 #-----------------------------------------------------------------------
 #
@@ -89,15 +88,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# gaze_what
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -122,26 +114,35 @@ colortext = text.ConsoleText()
 def gaze_what(args):
     logger.debug('Begin Function')
 
-    # For each spell in the spell list...
-    if args._egg:
-        terms = {
-            'the_force': 'The Force is ...',
-            '42': 'What is the answer to life, the universe, and everything?'
-            }
-        logger.info(terms[args.spell[0]])
+    terms = {
+        'the_force': 'The Force is an energy field created by all living things. It surrounds us, penetrates us, and binds the galaxy together.',
+        '42': '42 is the answer to life, the universe, and everything.',
+        'the_matrix': '"The Matrix is everywhere. It is all around us, even now in this very room. You can see it when you look out your window or when you turn on your television. You can feel it when you go to work, when you go to church, when you pay your taxes; it is the world that has been pulled over your eyes to blind you from the truth."'
+        
+    }
+
+    # Provide hidden easter egg:
+    if (args.spell[0] == 'is' and
+        args.spell[1] in terms):
+        logger.info(terms[args.spell[1]])
         
     else:
+        # For each spell in the spell list...
         for i in args.spell:
             logger.debug2('Loop iteration: ' + i)
             
-            spell = libspell.Spell(i)
-            
+            spell = lib.Package(i)
+            try:
+                description = spell.get_description()
+            except:
+                description = 'Fall back description, something went wrong'
+
             logger.debug3('Spell: ' + str(spell))
             
             message = colortext.colorize(spell.name, 'bold','white','black')
             logger.info(message)
 
-            message = colortext.colorize(spell.description, 'none','white','black')
+            message = colortext.colorize(description, 'none','white','black')
             logger.info1(message)
 
     
@@ -151,41 +152,27 @@ def gaze_what(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Generate command subparser
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input:  subparser
+#         parent_parser
+#         repo_parent_parser
+# Return: cmd
 #
 #-----------------------------------------------------------------------
 def parser(subparsers, parent_parser, repo_parent_parser=None):
-    #-------------------------------------------
-    #
-    # create the parser for the 'what' command
-    #
-    #-------------------------------------------
     cmd = subparsers.add_parser('what',
-                                        parents = [parent_parser,
-                                                   repo_parent_parser
-                                        ],
-                                        help = 'Display spell description.'
+                                parents = [parent_parser,
+                                           repo_parent_parser
+                                ],
+                                help = 'Display spell description.'
     )
-    subcmd = cmd.add_subparsers(title="",
-                                description="")
     cmd.add_argument('spell',
-                             nargs = '+',
-                             help = 'Display System Info')
-    cmd.set_defaults(func = gaze_what)
-
-    subcmd_is = subcmd.add_parser('is',
-                                      parents = [parent_parser])
-    subcmd_is.set_defaults(_egg = True)
-
+                     nargs = '+',
+                     help = 'Display System Info')
+    cmd.set_defaults(func = gaze_what,
+                     sudo = False)
 
     return cmd

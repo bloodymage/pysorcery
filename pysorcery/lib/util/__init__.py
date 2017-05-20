@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/lib/util/__init__.py
 #
 # This file is part of Sorcery.
 #
@@ -25,12 +25,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
-#
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
 #
 #-----------------------------------------------------------------------
 """
@@ -83,20 +77,23 @@ UTIL_URL_PATH = pkg_resources.resource_filename('pysorcery', 'lib/util/url/')
 ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/archive/')
 GAZE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/gaze/')
 
+PACKAGES_PATH = pkg_resources.resource_filename('pysorcery','lib/sorcery/packages')
 
 cmd_dir = {
     'util_archive': UTIL_ARCHIVE_PATH,
     'util_compressed': UTIL_COMPRESSED_PATH,
     'util_url': UTIL_URL_PATH,
     'gaze': GAZE_PATH,
-    'archive': ARCHIVE_PATH
+    'archive': ARCHIVE_PATH,
+    'packages': PACKAGES_PATH
 }
 
 import_path = {
     'util_archive': 'pysorcery.lib.util.files.archive.',
     'util_compressed': 'pysorcery.lib.util.files.compressed.',
     'archive': 'pysorcery.plugins.archive.',
-    'gaze': 'pysorcery.plugins.gaze.'
+    'gaze': 'pysorcery.plugins.gaze.',
+    'packages': 'pysorcery.lib.sorcery.packages.'
     }
 
 # Used if module names can not be
@@ -127,8 +124,10 @@ UrlModules = {}
 #-------------------------------------------------------------------
 def get_cmd_types(cmd_class):
     logger.debug('Begin Function')
-    
-    modules = glob.glob(os.path.dirname(cmd_dir[cmd_class]) + "/*.py")
+
+    # Use [a-z] to allow finding directories, but ignoring
+    # '__pycache__', etc
+    modules = glob.glob(os.path.dirname(cmd_dir[cmd_class]) + "/[a-z]*")
     logger.debug(modules)
 
     supformats = []
@@ -169,7 +168,7 @@ def get_module_func(cmd_class,
     try:
         module = importlib.import_module(modulename, __name__)
     except ImportError as msg:
-        logger.error(msg + ' ' + modulename)
+        logger.error(str(msg) + ' ' + str(modulename))
     # get the function
     try:
         logger.debug('Module: ' + str(modulename))

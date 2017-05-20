@@ -40,7 +40,17 @@
 # Status:
 #
 #-----------------------------------------------------------------------
-
+"""
+Gaze is part of the Sorcery source-based package management suite. It 
+is a general purpose command-line tool for displaying package logs, 
+version information, checking for installed packages, checksums, message
+digests, maintainer information, package URL information, removing
+obsolete packages, displaying new packages, untracked files, sections,
+searching for files that are installed, finding when spells were
+created and packages in the software catalogue. It can even take and
+retrieve snap shots of currently installed packages for easy
+duplication.
+"""
 
 #-----------------------------------------------------------------------
 #
@@ -53,7 +63,7 @@ import sys
 import os
 import copy
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
@@ -63,12 +73,11 @@ from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 
 # Other Application Libraries
-from pysorcery import *
+#from pysorcery import *
 #from pysorcery.lib.sorcery import repositories
 #from pysorcery.lib.sorcery import packages
 from pysorcery.lib import util
 from pysorcery.lib.util import config
-#from pysorcery.lib.util import files
 from pysorcery.lib.util import text
 
 
@@ -114,7 +123,7 @@ def real_main(args):
     subcommands = util.get_cmd_types('gaze')
     
     epilog_text = """
-See man pyarchive() for more information.\n
+See man pygaze() for more information.\n
 \n
 Report bugs to ...
 """
@@ -136,8 +145,8 @@ Report bugs to ...
     )
 
     repo_parent_parser.add_argument('-g','--grimoire',
-                        nargs = '*',
-                        help = 'Specify which grimoire(s) to look in.')
+                                    nargs = '*',
+                                    help = 'Specify which grimoire(s) to look in.')
 
     for i in subcommands:
         subcommand = util.get_module_func('gaze',i,'parser')
@@ -180,19 +189,17 @@ Report bugs to ...
                         debug = False,
                         verbosity = 0,
                         loglevel = 'INFO')
-
     
     # Store all the arguments in a variable
     args = parser.parse_args()
-
-
     
-    # Ensure we have root access
-    if os.geteuid() != 0:
-        # os.execvp() replaces the running process, rather than launching a child
-        # process, so there's no need to exit afterwards. The extra 'sudo' in the
-        # second parameter is required because Python doesn't automatically set $0
-        # in the new process.
+    # Ensure we have root access if needed
+    if (args.sudo is True and
+        os.geteuid() != 0):
+        # os.execvp() replaces the running process, rather than launching a
+        # child process, so there's no need to exit afterwards. The extra
+        # 'sudo' in the second parameter is required because Python
+        # doesn't automatically set $0 in the new process.
         os.execvp('sudo', ['sudo'] + sys.argv)
 
     # Now we are definitely running as root
@@ -208,9 +215,8 @@ Report bugs to ...
     # Run the specified subcommand as per args
     args.func(args)
     
-
     logger.debug('End Function')
-    return 0
+    return
 
 
 #-------------------------------------------------------------------------------
@@ -234,20 +240,21 @@ Report bugs to ...
 #
 #-------------------------------------------------------------------------------
 def main(args = None):
-        """Run the main command-line interface for dionysius. Includes top-level
+    """Run the main command-line interface for dionysius. Includes top-level
     exception handlers that print friendly error messages.
-        """
+    """
 
-        logger.debug('Begin Application')
-        real_main(args)
+    logger.debug('Begin Application')
 
-        #try:         
-        #    real_main(args)
-        #except:
-        #    logger.critical('You Fucked Up')
+    real_main(args)
+    
+#    try:         
+#        real_main(args)
+#    except:
+#        logger.critical('You Fucked Up')
 
-        logger.debug('End Application')
-        return
+    logger.debug('End Application')
+    return
 
 if __name__ == '__main__':
     main()
