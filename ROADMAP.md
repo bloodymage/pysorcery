@@ -11,6 +11,10 @@
     - [X] create
     - [X] test
     - [X] repack
+    - [ ] search
+    - [ ] diff
+    - [ ] formats
+    - [ ] recompress    
   - Archive Formats
     - [X] tar
     - [X] zip
@@ -66,74 +70,52 @@
     - [ ] voyeur
     - [X] what
     - [ ] where
-
-#### Modified Scripts
-- pyarchive
-  - Functions
-    - [/] search
+    
   
 ### 0.0.3
 #### Functional Scripts
 - pysummon
   - [ ] http
-
-#### Modified Scripts
-- pyarchive
-  - Functions
-    - [ ] formats
-
+  - [ ] ftp
+  - [ ] git
+  - [ ] svn
+  - [ ] cvs
+  - [ ] rsync
+  - [ ] bzr
+  - [ ] file (Include Directories)
+  
 ### 0.0.4
 #### Functional Scripts
 - pyscribe
   - [ ] add
   - [ ] remove
   - [ ] update
-#### Modified Scripts
-- pysummon
-  - [ ] git
-- pyarchive
-  - Functions
-    - [ ] diff
 
 
 ### 0.0.5
 #### Functional Scripts
 - pycast
-#### Modified Scripts
-- pysummon
-  - [ ] cvs
-- pyarchive
-  - Functions
-    - [ ] recompress
 
 
 ### 0.0.6
 #### Functional Scripts
 - pydispel
-#### Modified Scripts
-- pysummon
-  - [ ] ftp
+
 
 ### 0.0.7
 #### Functional Scripts
 - pycleanse
-#### Modified Scripts
-- pysummon
-  - [ ] svn
+
 
 ### 0.0.8
 #### Functional Scripts
 - pyscribbler
-#### Modified Scripts
-- pysummon
-  - [ ] rsync
+
 
 ### 0.0.9
 #### Functional Scripts
 - pysorcery
-#### Modified Scripts
-- pysummon
-  - [ ] bzr
+
 
 ### 0.0.10
 #### Functional Scripts
@@ -154,9 +136,7 @@
 - pyupstream
   - Check Debian Upstream
   - Create Spell From Debian Upstream
-#### Modified Scripts
-- pysummon
-  - [ ] file (Include Directories)
+
 
 ### 0.0.12
 #### Script Modifications
