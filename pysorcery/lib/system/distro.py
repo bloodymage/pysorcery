@@ -60,7 +60,9 @@ distro_definitions = {
      'Debian',
      'Kali'
     ): 'apt',
-    ('Source Mage'): 'spell',
+    ('Source Mage',
+     'SMGL'
+    ): 'spell',
     ('Red Hat',
      'Fedora'
     ): 'yum',

@@ -66,18 +66,21 @@ logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
 
+# Utilities
 UTIL_ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery',
                                                     'lib/util/files/archive/')
-
 UTIL_COMPRESSED_PATH = pkg_resources.resource_filename('pysorcery',
                                                        'lib/util/files/compressed/')
-
 UTIL_URL_PATH = pkg_resources.resource_filename('pysorcery', 'lib/util/url/')
 
+# Cemmand Plugins
 ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/archive/')
 GAZE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/gaze/')
 
+# Sorcecy
 PACKAGES_PATH = pkg_resources.resource_filename('pysorcery','lib/sorcery/packages')
+REPOSITORIES_PATH = pkg_resources.resource_filename('pysorcery',
+                                                    'lib/sorcery/packages')
 
 cmd_dir = {
     'util_archive': UTIL_ARCHIVE_PATH,
@@ -85,15 +88,18 @@ cmd_dir = {
     'util_url': UTIL_URL_PATH,
     'gaze': GAZE_PATH,
     'archive': ARCHIVE_PATH,
-    'packages': PACKAGES_PATH
+    'packages': PACKAGES_PATH,
+    'repositories': REPOSITORIES_PATH
 }
 
 import_path = {
     'util_archive': 'pysorcery.lib.util.files.archive.',
     'util_compressed': 'pysorcery.lib.util.files.compressed.',
+    'util_url': 'pysorcery.lib.util.url.',
     'archive': 'pysorcery.plugins.archive.',
     'gaze': 'pysorcery.plugins.gaze.',
-    'packages': 'pysorcery.lib.sorcery.packages.'
+    'packages': 'pysorcery.lib.sorcery.packages.',
+    'repositories': 'pysorcery.lib.sorcery.repositories.'
     }
 
 # Used if module names can not be
@@ -104,22 +110,24 @@ ArchiveModules = {
 CompressedModules = {
     }
 
-UrlModules = {}
+UrlModules = {
+}
 #-----------------------------------------------------------------------
 #
 # Functions
 #
-# get_archive_cmd_func
+# get_cmd_types
+# get_cmd_func
 #
 #-----------------------------------------------------------------------
 
 #-------------------------------------------------------------------
 #
-# Function get_archive_cmd_func
+# Function get_cmd_types
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# Input:  cmd_class - I really need a new name for this...
+#         
+# Return: supformats - 'Supported Formats'
 #
 #-------------------------------------------------------------------
 def get_cmd_types(cmd_class):
@@ -143,7 +151,7 @@ def get_cmd_types(cmd_class):
 
 #-------------------------------------------------------------------
 #
-# Function get_archive_cmd_func
+# Function get_module_func
 #
 # Input:  ...
 # Output: ...

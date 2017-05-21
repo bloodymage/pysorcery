@@ -132,10 +132,11 @@ def gaze_what(args):
             logger.debug2('Loop iteration: ' + i)
             
             spell = lib.Package(i)
-            try:
-                description = spell.get_description()
-            except:
-                description = 'Fall back description, something went wrong'
+            description = spell.get_description()
+#            try:
+#                description = spell.get_description()
+#            except:
+#                description = 'Fall back description, something went wrong'
 
             logger.debug3('Spell: ' + str(spell))
             

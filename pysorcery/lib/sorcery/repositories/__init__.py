@@ -51,6 +51,7 @@ import os
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 # Other Application Libraries
+from pysorcery.lib import util
 from pysorcery.lib.util import text
 
 # Other Optional Libraries
@@ -68,31 +69,34 @@ if distro.distro_group[distro.distro_id] == 'deb':
 # create logger
 logger = logging.getLogger(__name__)
 
-
+if distro.distro_group[distro.distro_id] == 'spell':
+    pkg_mgr = 'codex'
+else:
+    pkg_mgr = distro.distro_group[distro.distro_id]
+    
 #-------------------------------------------------------------------------------
 #
 # Classes
 #
-# Spell
+# BaseRepository
+# Repositories
+#
+#-------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------
+#
+# Class BaseRepository
 # 
 #
 #-------------------------------------------------------------------------------
 class BaseRepository():
-    def __init__(self,name=None,grim_dir=None):
+    def __init__(self,name=None,repo_dir=None):
         logger.debug('Begin Function')
 
         logger.debug2('Name: ' + str(name))
-        logger.debug2('Grimoire: ' + str(grim_dir))
-        
-        if grim_dir and not name:
-            name = grim_dir.split('/')[-1]
 
-        if name and not grim_dir:
-            grim_dir = '/var/lib/sorcery/codex' + name
-
-        self.name = name
-        self.grim_dir = grim_dir
-        self.url = 'http://codex.sourcemage.org/' + self.name + '.tar.bz2'
+        self.name = get_repo_name(name, repo_dir)
 
         logger.debug('End Function')
         return
@@ -137,145 +141,35 @@ class BaseRepository():
 
 #-------------------------------------------------------------------------------
 #
-# Class DebianGrimoire
+# Class Repositories
 # 
 #
 #-------------------------------------------------------------------------------
-class DebianGrimoire(BaseGrimoire):
-    def __init__(self,name = None, grim_dir = None):
-        logger.debug('Begin Function')
-        BaseGrimoire.__init__(self,name, grim_dir)
-
-        if self.name[0].startswith('ppa://'):
-            self.url = self.name
-
-            # force new ppa file to be 644 (LP: #399709)
-            #os.umask(0o022)
-
-            # get the line
-            #line = args[0]
-            #print(line)
-            
-            # add it
-            #sp = SoftwareProperties(options=options)
-            #distro = aptsources.distro.get_distro()
-            #distro.get_sources(sp.sourceslist)
-
-        logger.debug('End Function')
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_spells(self):
-        logger.debug('Begin Function')
-
-        
-        logger.debug('End Function')
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_sections(self):
-        logger.debug('Begin Function')
-
-        section_list = [ 'Fuck' ]
-        logger.debug('End Function')
-        return section_list
-    
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def add(self):
-        logger.debug('Begin Function')
-
-        print(self.url)
-
-        logger.debug('End Function')
-        return
+class Repositories():
+    pass
 
 #-------------------------------------------------------------------------------
 #
-# Class DebianGrimoire
+# Functions
+#
+# Get Repo Name
 # 
 #
 #-------------------------------------------------------------------------------
-class Grimoire(DebianGrimoire,BaseGrimoire):
-    def __init__(self,name = None, grim_dir = None):
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianGrimoire.__init__(self,name, grim_dir)
-        else:
-            BaseGrimoire.__init__(self,name, grim_dir)
 
-        return
+#-------------------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Return: ...
+#
+#-------------------------------------------------------------------------------
+def get_repo_name(name=None, repo_dir=None):
     
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_spells(self):
-        print("Spells")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def add(self):
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianGrimoire.add(self)
-        else: # distro.distro_id in distro.distro_dict['smgl']:
-            BaseGrimoire.add(self)
-        #else:
-            # Add except?
-            #logger.critical("We shouldn't be here")
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-    def list_sections(self):
-        if distro.distro_id in distro.distro_dict['deb']:
-            section_list = DebianGrimoire.list_sections(self)
-        else: # distro.distro_id in distro.distro_dict['smgl']:
-            section_list = BaseGrimoire.list_sections(self)
-        #else:
-            # Add except?
-            #logger.critical("We shouldn't be here")
-
-        return section_list
+    func = util.get_module_func('repositories',
+                                pkg_mgr,
+                                'get_repo_name')
+    name = func(name, repo_dir)
+    return name
 

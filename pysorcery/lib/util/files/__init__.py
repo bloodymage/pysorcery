@@ -383,10 +383,10 @@ def pne(ifilename):
 #-------------------------------------------------------------------
 def get_format(mimetype=None,encoding=None):
     logger.debug('Begin Function')
-
+    
     if (mimetype is None and
         encoding is None):
-        logger.error('Unknown archive type')
+        archive_class = 'Unknown'
         
     elif (mimetype not in mimetypes.ArchiveMimetypes and
         encoding in mimetypes.encoding_methods):

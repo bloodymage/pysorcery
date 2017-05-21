@@ -51,7 +51,11 @@ import os
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
+from pysorcery import lib
+from pysorcery.lib.sorcery import packages
+from pysorcery.lib.sorcery.packages.spell import bashspell
 from pysorcery.lib.sorcery import repositories
+from pysorcery.lib.sorcery.repositories import codex
 
 #-------------------------------------------------------------------------------
 #
@@ -67,12 +71,6 @@ logger = logging.getLogger(__name__)
 #
 #
 # BaseSpell
-# DebianSpell
-# Spell
-#
-# BaseSpellQueue
-# DebianSpellQueue
-# SpellQueue
 #
 #-------------------------------------------------------------------------------
 
@@ -83,43 +81,10 @@ logger = logging.getLogger(__name__)
 # 
 #
 #-------------------------------------------------------------------------------
-class SMGLBashSpell(packages.BaseSpell):
+class Spell(packages.BasePackage):
     def __init__(self,name):
         logger.debug("Begin Function")
-        BaseSpell.__init__(self,name)
-        
-        codex = libcodex.Codex()
-        grimoire_list = codex.list_grimoires()
-
-        for i in grimoire_list:
-            spell_list_file = libfiles.Files(i + '/codex.index')
-            spell_list = spell_list_file.read()
-
-            for item in spell_list:
-                spell, section_dir = item.split(' ')
-
-                if self.name == spell:
-                    self.section_dir = section_dir
-                    break
-
-            if self.name == spell:
-                self.grimoire = i.split('/')[-1]
-                break
-
-        self.section = self.section_dir.split('/')[-1]
-        self.spell_directory = self.section_dir + '/' + self.name
-
-        details_file = libfiles.DetailsFile(self.spell_directory)
-        details = details_file.read()
-        
-        self.description = details['description']
-        self.version = details['version']
-        self.url = details['website']
-        self.short = details['short']
-        
-        self.source_files = {}
-
-        #file_name = url.split('/')[-1]
+        super(Spell, self).__init__(*args, **kwargs)
 
         logger.debug("End Function")
         return
@@ -156,12 +121,30 @@ class SMGLBashSpell(packages.BaseSpell):
 #
 #-------------------------------------------------------------------------------
 def get_description(name):
-    cache    = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    versions = pkg.versions
-    description  = versions[0].description
+    spell_codex = codex.Codex()
+    grimoire_list = spell_codex.list_grimoires()
 
-    cache.close()
+
+    for grimoire in grimoire_list:
+        spell_list_file = lib.Files(grimoire + '/codex.index')
+        spell_list = spell_list_file.read()
+        
+        for item in spell_list:
+            spell, section_dir = item.split(' ')
+
+            if name == spell:
+                break
+            
+        if name == spell:
+            grimoire = grimoire.split('/')[-1]
+            break
+
+    section = section_dir.split('/')[-1]
+    spell_directory = section_dir + '/' + name
+
+    details_file = bashspell.DetailsFile(spell_directory)
+    details = details_file.parse()
+        
+    description = details['description']
+
     return description

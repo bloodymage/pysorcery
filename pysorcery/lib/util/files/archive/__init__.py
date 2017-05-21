@@ -66,12 +66,10 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 #-----------------------------------------------------------------------
-class Archive(files.BaseFile):
-
-        
+class Archive(files.BaseFile):        
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function extract
     #
     # Input:  ...
     # Output: ...

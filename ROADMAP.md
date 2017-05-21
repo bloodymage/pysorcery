@@ -11,10 +11,6 @@
     - [X] create
     - [X] test
     - [X] repack
-    - [ ] recompress
-    - [ ] diff
-    - [ ] search
-    - [/] formats
   - Archive Formats
     - [X] tar
     - [X] zip
@@ -27,25 +23,64 @@
 ### 0.0.2    
 #### Functional Scripts
 - pygaze
-  - [ ] alien
-  - [ ] orphans
-  - [ ] activity
-  - [ ] queue
-  - [ ] provides
-  - [ ] what
-  - [ ] short
-  - [ ] where
-  - [ ] url
-  - [ ] sources
-  - [ ] source_urls
-  - [ ] maintainer
-  - [ ] logs
-  - [ ] versions
+    - [ ] activity
+    - [ ] alien
+    - [ ] checkmd5s
+    - [ ] compile
+    - [ ] dependencies
+    - [ ] depends
+    - [ ] export
+    - [ ] from
+    - [ ] grimoire
+    - [ ] grimoires
+    - [ ] history
+    - [ ] html
+    - [ ] import
+    - [ ] installed
+    - [ ] install-full
+    - [ ] install
+    - [ ] install-queue
+    - [ ] install-spell
+    - [ ] licenses
+    - [ ] maintainer
+    - [ ] md5sum
+    - [ ] newer
+    - [ ] older
+    - [ ] orphans
+    - [ ] provides
+    - [ ] remove-queue
+    - [ ] search
+    - [ ] section
+    - [ ] short
+    - [ ] show-exiled
+    - [ ] show-held
+    - [ ] size
+    - [ ] sources
+    - [ ] source_urls
+    - [ ] sum
+    - [ ] time
+    - [ ] time-system
+    - [ ] url
+    - [ ] version
+    - [ ] versions
+    - [ ] voyeur
+    - [X] what
+    - [ ] where
+
+#### Modified Scripts
+- pyarchive
+  - Functions
+    - [/] search
   
 ### 0.0.3
 #### Functional Scripts
 - pysummon
   - [ ] http
+
+#### Modified Scripts
+- pyarchive
+  - Functions
+    - [ ] formats
 
 ### 0.0.4
 #### Functional Scripts
@@ -56,13 +91,21 @@
 #### Modified Scripts
 - pysummon
   - [ ] git
- 
+- pyarchive
+  - Functions
+    - [ ] diff
+
+
 ### 0.0.5
 #### Functional Scripts
 - pycast
 #### Modified Scripts
 - pysummon
   - [ ] cvs
+- pyarchive
+  - Functions
+    - [ ] recompress
+
 
 ### 0.0.6
 #### Functional Scripts

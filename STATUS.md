@@ -23,20 +23,49 @@
     - [X] bz2
 
 ### [ ] pygaze
-  - [ ] alien
-  - [ ] orphans
-  - [ ] activity
-  - [ ] queue
-  - [ ] provides
-  - [ ] what
-  - [ ] short
-  - [ ] where
-  - [ ] url
-  - [ ] sources
-  - [ ] source_urls
-  - [ ] maintainer
-  - [ ] logs
-  - [ ] versions
+    - [ ] activity
+    - [ ] alien
+    - [ ] checkmd5s
+    - [ ] compile
+    - [ ] dependencies
+    - [ ] depends
+    - [ ] export
+    - [ ] from
+    - [ ] grimoire
+    - [ ] grimoires
+    - [ ] history
+    - [ ] html
+    - [ ] import
+    - [ ] installed
+    - [ ] install-full
+    - [ ] install
+    - [ ] install-queue
+    - [ ] install-spell
+    - [ ] licenses
+    - [ ] maintainer
+    - [ ] md5sum
+    - [ ] newer
+    - [ ] older
+    - [ ] orphans
+    - [ ] provides
+    - [ ] remove-queue
+    - [ ] search
+    - [ ] section
+    - [ ] short
+    - [ ] show-exiled
+    - [ ] show-held
+    - [ ] size
+    - [ ] sources
+    - [ ] source_urls
+    - [ ] sum
+    - [ ] time
+    - [ ] time-system
+    - [ ] url
+    - [ ] version
+    - [ ] versions
+    - [ ] voyeur
+    - [X] what
+    - [ ] where
   
 ### [ ] pysummon
   - [ ] http
@@ -98,7 +127,7 @@
 
 ### [ ] pydelve
 
-### [ ] Setup.py
+### [ ] Setupy
 
 ### [ ] pyenchant
 
