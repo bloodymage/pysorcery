@@ -139,6 +139,20 @@ def diff(filename):
 # Return: ...
 #
 #-------------------------------------------------------------------
+def search(filename):
+    logger.debug("Begin Function")    
+    logger.debug('End Function')
+    return
+
+#-------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
 def verify_extract():
     logger.debug('Begin Function')
 
