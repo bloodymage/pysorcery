@@ -125,6 +125,7 @@ def testarchive(filename):
 # Return: ...
 #
 #-------------------------------------------------------------------
+<<<<<<< HEAD
 def diff(filename):
     logger.debug("Begin Function")    
     logger.debug('End Function')

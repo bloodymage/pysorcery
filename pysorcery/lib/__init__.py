@@ -110,378 +110,35 @@ class Files(compressed.CompressedFile, archive.Archive, files.BaseFile):
 class FileList(files.BaseFileList):
     pass
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class Directories
 # 
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #class Directories(files.DebianDirectories,files.BaseDirectories):
 # pass
 
-
-#-------------------------------------------------------------------------------
-#
-# Class Package
-#
-# This is the spell API.
-# All spell related actions should go through this class
-#
-#-------------------------------------------------------------------------------
-class Package(packages.BasePackage):
-    pass
-#    def __init__(self,name):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            DebianSpell.__init__(self,name)
-#        elif distro.distro_id in distro.distro_dict['smgl']:
-#            SMGLBashSpell.__init__(self,name)
-#        else:
-#            BaseSpell.__init__(self,name)
-
-#        logger.debug("Begin Function")
-#        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def print_version(self,multi=False):
-#        logger.debug("Begin Function")
-        
-#        if multi:
-#            grimoires = libcodex.Codex()
-#            grimoire_list = grimoires.list_grimoires()
-            
-#            m = len(grimoire_list)
-#        else:
-#            grimoire_list = [ self.grimoire ]
-#            m = 1
-
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            print_list = [ "Repository       " ]
-#        else:
-#            print_list = [ "Grimoire         " ]
-            
-#        print_list.append("Section          ")
-
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            print_list.append("Package          ")
-#        else:
-#            print_list.append("Spell            ")
-
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            print_list.append("Repo version     ")
-#        else:
-#            print_list.append("Grimoire Version ")
-
-#        print_list.append("Installed version")
-#        print_list.append("----------       ")
-#        print_list.append("-------          ")
-#        print_list.append("-------          ")
-#        print_list.append("------------     ")
-#        print_list.append("-----------------")
-
-
-#        for i in grimoire_list:
-#            print_list.append(i.split('/')[-1])
-#            print_list.append(self.section)
-#            print_list.append(self.name)
-#            print_list.append(self.version)
-#            print_list.append('-')
-#
-#        libmisc.column_print(print_list,cols=5,columnwise=False,gap=2)
-#                
-#        logger.debug("End Function")
-#        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def install(self,args):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            DebianSpell.install(self,args)
-#        elif distro.distro_id in distro.distro_dict['smgl']:
-#            SMGLBashSpell.install(self,args)
-#        else:
-#            BaseSpell.install(self,args)
-#
-#        logger.debug("End Function")
-#        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def remove(self,args):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            DebianSpell.remove(self,args)
-#        elif distro.distro_id in distro.distro_dict['smgl']:
-#            SMGLBashSpell.install(self,args)
-#        else:
-#            BaseSpell.remove(self,args)
-#
-#        logger.debug("End Function")
-#        return    
-
-#-------------------------------------------------------------------------------
-#
-# Class SpellList
-#
-# This is the spell queue API.
-# All spell related actions should go through this class
-#
-#-------------------------------------------------------------------------------
-#class PackageList(DebianSpellList,BaseSpellList):
-#    def __init__(self):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            DebianSpellList.__init__(self)
-#        else:
-#            BaseSpellList.__init__(self)
-
- #       logger.debug("End Function")
-#        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def list_queue(self,which_queue):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            queue = DebianSpellList.list_queue(self,which_queue)
-#        else:
-#            queue = BaseSpellList.list_queue(self,which_queue)
-
-#        logger.debug("End Function")
-#        return queue
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def list_installed(self,status=None):
-#        logger.debug("Begin Function")
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            installed_spells = DebianSpellList.list_installed(self,status)
-#        else:
-#            installed_spells = BaseSpellList.list_installed(self,status)
-
-#        logger.debug("End Function")
-#        return installed_spells
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def list_orphans(self):
-#        logger.debug('Begin Function')
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            orphan_list = DebianSpellList.list_orphans(self)
-#        else:
-#            orphan_list = BaseSpellList.list_orphans(self)
-
-#        logger.debug('End Function')
-#        return orphan_list
-
-#-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def print_list(self, print_list):
-#        logger.debug("Begin Function")
-
-#        for item in print_list:
-#            logger.info1(item)
-            
-#        logger.debug("End Function")
-#        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def print_installed(self):
-#        logger.debug("Begin Function")
-
-#        spell_list = InstalledSpells.list_installed(self)
-
-#        print_list = ['Spell','Installed Version', 'Installed Date',
-#                      '-----','-----------------', '--------------'] + spell_list
-        
-#        text.column_print(print_list,cols=3,columnwise=False,gap=2)
-        
-#        logger.debug("End Function")
-#        return
-
-#-------------------------------------------------------------------------------
-#
-# Class Repository
-# 
-#
-#-------------------------------------------------------------------------------
-#class Repository(DebianGrimoire,BaseGrimoire):
-#    def __init__(self,name = None, grim_dir = None):
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            DebianGrimoire.__init__(self,name, grim_dir)
-#        else:
-#            BaseGrimoire.__init__(self,name, grim_dir)
-
-#        return
-    
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def list_spells(self):
-#        print("Spells")
-#        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def add(self):
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            DebianGrimoire.add(self)
-#        else: # distro.distro_id in distro.distro_dict['smgl']:
-#            BaseGrimoire.add(self)
-        #else:
-            # Add except?
-            #logger.critical("We shouldn't be here")
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------------------
-#    def list_sections(self):
-#        if distro.distro_id in distro.distro_dict['deb']:
-#            section_list = DebianGrimoire.list_sections(self)
-#        else: # distro.distro_id in distro.distro_dict['smgl']:
-#            section_list = BaseGrimoire.list_sections(self)
-        #else:
-            # Add except?
-            #logger.critical("We shouldn't be here")
-
-#        return section_list
-
-#-------------------------------------------------------------------------------
-#
-# Class URI
-# 
-# The URI API
-#
-# Currently Supports:
-#   HTTP(S)
-#
-# Planned Support:
-#   SFTP
-#
-#-------------------------------------------------------------------------------
-#class URI(HTTPUri,
-#          FTPUri,
-#          RsyncUri,
-#          GitUri,
-#          CVSUri,
-#          SVNUri,
-#          TorrentUri,
-#          BaseURI):
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # 
-    #
-    #-------------------------------------------------------------------------------
-#    def download(self):
-#        logger.debug('Begin Function')
-
-#        if self.uri.startswith('http'):
-#            HTTPUri.download(self)
-#        else:
-#            logger.error('We Fucked Up')
-            
-#        logger.debug('End Function')
-#        return
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions
 # 
-# Recompress
+# Repack
+# Diff
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function recompress
+# Function repack
 #
 # Input:  @param: srcfile - the original file
 #         @param: dstfile - the new file we are creating with the new
 #                           compression method.
 # Return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def repack(srcfile, dstfile, componly=False):
     logger.debug('Begin Function')
 
@@ -495,5 +152,11 @@ def repack(srcfile, dstfile, componly=False):
     else:
         print('Fix Me')
         
+    logger.debug('End Function')
+    return
+
+def filediff(file1, file2, size=False, contents=False):
+    logger.debug('Begin Function')
+
     logger.debug('End Function')
     return
