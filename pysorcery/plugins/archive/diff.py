@@ -52,7 +52,6 @@ import sys
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
@@ -60,6 +59,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -88,6 +88,7 @@ colortext = text.ConsoleText()
 # parser
 #
 #-----------------------------------------------------------------------
+
 #-----------------------------------------------------------------------
 #
 # Functions archive_diff
@@ -122,9 +123,14 @@ def archive_diff(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
+def parser(*args, **kwargs):
+
+    subparsers = args[0]
+
+    parent_parsers = list(args[1:])
+        
     cmd = subparsers.add_parser('diff',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 help = 'Compare Archive Files')
     cmpgroup = cmd.add_argument_group('Comparison Options')
     group = cmpgroup.add_mutually_exclusive_group()
