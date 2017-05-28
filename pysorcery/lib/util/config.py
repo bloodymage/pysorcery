@@ -354,7 +354,7 @@ def configure_logging(args,config):
 #    logger.debug2("Arguments: " + str(args))
     
     logger.debug("End Function")
-    return 0
+    return
 
 #-------------------------------------------------------------------------------
 #

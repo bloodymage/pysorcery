@@ -103,6 +103,8 @@ class ConsoleText():
             "white": 47    
         }
 
+        return
+
     #-------------------------------------------------------------------------------
     #
     # function ConsoleText.colorize
@@ -111,62 +113,23 @@ class ConsoleText():
     #
     #-------------------------------------------------------------------------------
     def colorize(self,text,attribute="none",fgcolor="white",bgcolor="black"):
-
-        escape = "\x1b["
-
-        attributes = {
-            "none": 0,
-            "bold":1,
-            "unk_a":2,
-            "unk_b":3,
-            "underline":4,
-            "blink":5,
-            "unk_c":6,
-            "reverse": 7
-        }
-
-        fgcolors = {
-            "black" : 30,
-            "red": 31,
-            "green": 32,
-            "yellow": 33,
-            "blue": 34,
-            "fuchsia": 35,
-            "magenta": 35,
-            "turquoise": 36,
-            "cyan": 36,
-            "white": 37
-        }
-
-        bgcolors = {
-            "black" : 40,
-            "red": 41,
-            "green": 42,
-            "yellow": 43,
-            "blue": 44,
-            "fuchsia": 45,
-            "magenta": 45,
-            "turquoise": 46,
-            "cyan": 46,
-            "white": 47    
-        }
-
-        if attribute in attributes:
-            begincolor=escape + str(attributes[attribute])
+        
+        if attribute in self.attributes:
+            begincolor = self.escape + str(self.attributes[attribute])
         else:
-            begincolor=escape + str(attributes['none'])
+            begincolor = self.escape + str(self.attributes['none'])
 
-        if fgcolor in fgcolors:
-            begincolor=begincolor + ";" + str(fgcolors[fgcolor])
+        if fgcolor in self.fgcolors:
+            begincolor = begincolor + ";" + str(self.fgcolors[fgcolor])
         else:
-            begincolor=begincolor + ";" + str(fgcolors['white'])
+            begincolor = begincolor + ";" + str(self.fgcolors['white'])
     
-        if bgcolor in bgcolors:
-            begincolor=begincolor + ";" + str(bgcolors[bgcolor]) + "m"
+        if bgcolor in self.bgcolors:
+            begincolor = begincolor + ";" + str(self.bgcolors[bgcolor]) + "m"
         else:
-            begincolor=begincolor + ";" + str(bgcolors['black']) + "m"
+            begincolor = begincolor + ";" + str(self.bgcolors['black']) + "m"
 
-        resetcolor=escape + str(attributes['none']) + ";" + str(fgcolors['white']) + ";" + str(bgcolors['black']) + "m"
+        resetcolor = self.escape + str(self.attributes['none']) + ";" + str(self.fgcolors['white']) + ";" + str(self.bgcolors['black']) + "m"
 
         textstring = begincolor + text + resetcolor
     

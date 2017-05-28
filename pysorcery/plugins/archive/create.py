@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/archive/create.py
 #
 # This file is part of Sorcery.
 #
@@ -32,12 +32,20 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
+# plugin: create
+#
+#   This plugin adds archive/compressed file creation and the
+#   applicable command line arguments.
+#
 #-----------------------------------------------------------------------
 """
 This is a bonus application for pysorcery.  PySorcery for multiple
 reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
+
+This plugin adds archive/compressed file creation and the applicable 
+command line arguments.
 """
 #-----------------------------------------------------------------------
 #
@@ -89,15 +97,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
 # archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -130,9 +131,9 @@ def archive_create(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Creates the parser subcommand and
 #
 # Input:  args
 #         args.quiet - Decrease Output Verbosity
@@ -140,20 +141,18 @@ def archive_create(args):
 #         args.recursive - Extract all files in all subfolders
 #         args.depth (Add me) - if recursive, limit to depth #
 #         args.output_dir - Directory to extract to
-# Return: None
+# Return: cmd
 #
 #-----------------------------------------------------------------------
 def parser(subparsers, parent_parser):
-    parser_create = subparsers.add_parser('create',
-                                          parents = [parent_parser],
-                                          help = 'Create files')
-    parser_create.add_argument('files',
-                               nargs = 1,
-                               metavar = 'archive',
-                               help = 'Archive file to create')
-    parser_create.add_argument('output_dir',
-                               metavar = 'source',
-                               help = 'Files / Directories to add to the archive')
-    parser_create.set_defaults(func = archive_create)
+    cmd = subparsers.add_parser('create',
+                                parents = [parent_parser],
+                                help = 'Create files')
+    cmd.add_argument('archive',
+                     nargs = 1,
+                     help = 'Archive file to create')
+    cmd.add_argument('filename',
+                     help = 'Files / Directories to add to the archive')
+    cmd.set_defaults(func = archive_create)
 
-    return parser_create
+    return cmd
