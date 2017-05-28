@@ -107,7 +107,7 @@ colortext = text.ConsoleText()
 def archive_diff(args):
     logger.debug('Begin Function')
 
-    lib.filediff(args.archive1, args.archive2, args.size, args.content)
+    lib.filediff(args.archive, args.size, args.content)
     
     logger.debug('End Function')
     return

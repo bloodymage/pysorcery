@@ -205,6 +205,8 @@ class BaseFiles():
     def __init__(self, *args, **kwargs):
         logger.debug("Begin Function")
 
+        self.files = kwargs['filelist']
+
         logger.debug("End Function")
         return
 
@@ -259,6 +261,57 @@ class BaseFiles():
         logger.debug("End Function")
         return sys_files
 
+    #-----------------------------------------------------------------------
+    #
+    # Function repack
+    #
+    # Input:  @param: srcfile - the original file
+    #         @param: dstfile - the new file we are creating with the new
+    #                           compression method.
+    # Return: None
+    #
+    #-----------------------------------------------------------------------
+    def repack(self, componly=False):
+        logger.debug('Begin Function')
+        
+        if (self.mimetype not in mimetypes.ArchiveMimetypes or
+            componly is True):
+            source_file = Files(self.files[0])
+            source_file.decompress(None)
+            
+            dest_file = Files(self.files[1])
+            dest_file.compress(source_file.basename)
+        else:
+            print('Fix Me')
+            
+            logger.debug('End Function')
+            return
+
+    #-----------------------------------------------------------------------
+    #
+    # Function diff
+    #
+    # Input:  @param: files - the file to compare
+    # Return: None
+    #
+    #-----------------------------------------------------------------------
+    def diff(self, size=False, contents=False):
+        logger.debug('Begin Function')
+        
+        logger.debug('End Function')
+        return
+
+
+
+#-----------------------------------------------------------------------
+#
+# Class BaseDirectories
+#
+# Directories are a specific type of file
+#
+#-----------------------------------------------------------------------
+class BaseDirectories(BaseFiles):
+    pass
 
 #-------------------------------------------------------------------
 #
@@ -329,6 +382,6 @@ def get_format(mimetype=None,encoding=None):
         shutil.init_formats('util_compressed')
     else:
         archive_format = 'Unknown'
-
+        
     logger.debug('End Function')
     return archive_class, archive_format

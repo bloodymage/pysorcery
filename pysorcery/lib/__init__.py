@@ -112,12 +112,21 @@ class Files(files.BaseFiles):
 
 #-----------------------------------------------------------------------
 #
+# Class Directory
+# 
+#
+#-----------------------------------------------------------------------
+class Directory(files.BaseDirectory):
+    pass
+
+#-----------------------------------------------------------------------
+#
 # Class Directories
 # 
 #
 #-----------------------------------------------------------------------
-#class Directories(files.DebianDirectories,files.BaseDirectories):
-# pass
+class Directories(files.BaseDirectories):
+    pass
 
 #-----------------------------------------------------------------------
 #
@@ -129,44 +138,3 @@ class Files(files.BaseFiles):
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-#
-# Function repack
-#
-# Input:  @param: srcfile - the original file
-#         @param: dstfile - the new file we are creating with the new
-#                           compression method.
-# Return: None
-#
-#-----------------------------------------------------------------------
-def repack(srcfile, dstfile, componly=False):
-    logger.debug('Begin Function')
-
-    if (self.mimetype not in mimetypes.ArchiveMimetypes or
-        componly is True):
-        source_file = Files(srcfile)
-        source_file.decompress(None)
-    
-        dest_file = Files(dstfile)
-        dest_file.compress(source_file.basename)
-    else:
-        print('Fix Me')
-        
-    logger.debug('End Function')
-    return
-
-#-----------------------------------------------------------------------
-#
-# Function diff
-#
-# Input:  @param: file1 - the original file
-#         @param: file2 - the new file we are creating with the new
-#                           compression method.
-# Return: None
-#
-#-----------------------------------------------------------------------
-def filediff(file1, file2, size=False, contents=False):
-    logger.debug('Begin Function')
-
-    logger.debug('End Function')
-    return
