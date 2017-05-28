@@ -90,7 +90,7 @@ logger = logging.getLogger(__name__)
 # The File API.  This is the class that is used for ALL file activities
 #
 #-----------------------------------------------------------------------
-class Files(compressed.CompressedFile, archive.Archive, files.BaseFile):
+class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     def read(self):
         if self.format_ != 'Unknown':
             content = compressed.CompressedFile.read(self)
@@ -107,7 +107,7 @@ class Files(compressed.CompressedFile, archive.Archive, files.BaseFile):
 # 
 #
 #-----------------------------------------------------------------------
-class FileList(files.BaseFileList):
+class Files(files.BaseFiles):
     pass
 
 #-----------------------------------------------------------------------
@@ -155,6 +155,16 @@ def repack(srcfile, dstfile, componly=False):
     logger.debug('End Function')
     return
 
+#-----------------------------------------------------------------------
+#
+# Function diff
+#
+# Input:  @param: file1 - the original file
+#         @param: file2 - the new file we are creating with the new
+#                           compression method.
+# Return: None
+#
+#-----------------------------------------------------------------------
 def filediff(file1, file2, size=False, contents=False):
     logger.debug('Begin Function')
 

@@ -51,13 +51,17 @@ from pysorcery import __version__, DEBUG
 #
 # Classes
 #
-# AliasedSubParserAction
+# CommonParser
+# ArgParser
 #
 #-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 #
-# Class AliasedSubParserAction
+# Class CommonParser
+#
+# input:
+# return: None
 #
 #-------------------------------------------------------------------------------
 class CommonParser(ArgumentParser):
@@ -65,6 +69,14 @@ class CommonParser(ArgumentParser):
         super(CommonParser, self).__init__(*args, **kwargs)
 
         return
+
+    def create_subparsers(self):
+        self.subparser = self.add_subparsers(title = 'commands',
+                            metavar = 'Command',
+                            help = 'Description'
+        )
+        return self.subparser
+
 
     def add_version_option(self):
         self.add_argument('-V',
@@ -132,5 +144,13 @@ class CommonParser(ArgumentParser):
 
         return self.parent
         
-
-
+#-------------------------------------------------------------------------------
+#
+# Class ArgParser
+#
+# input:
+# return: None
+#
+#-------------------------------------------------------------------------------
+class ArgParser(CommonParser):
+    pass

@@ -24,8 +24,9 @@
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
+# This implements the archive classes
 #
-#
+#    
 #
 #-----------------------------------------------------------------------
 
@@ -35,7 +36,7 @@
 #
 #-----------------------------------------------------------------------
 # System Libraries
-import os
+
 
 # 3rd Party Libraries
 
@@ -72,8 +73,7 @@ class Archive(files.BaseFile):
     # Function extract
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: None
     #
     #-------------------------------------------------------------------
     def extract(self, extractdir=None):
@@ -86,11 +86,10 @@ class Archive(files.BaseFile):
     
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function create
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: None
     #
     #-------------------------------------------------------------------
     def create(self, root_dir=None, base_dir=None):
@@ -106,11 +105,10 @@ class Archive(files.BaseFile):
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function listfiles
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: None
     #
     #-------------------------------------------------------------------
     def listfiles(self):
@@ -127,11 +125,10 @@ class Archive(files.BaseFile):
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function testarchive
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: None
     #
     #-------------------------------------------------------------------
     def testarchive(self):

@@ -52,7 +52,6 @@ import sys
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
@@ -60,6 +59,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -88,6 +88,7 @@ colortext = text.ConsoleText()
 # parser
 #
 #-----------------------------------------------------------------------
+
 #-----------------------------------------------------------------------
 #
 # Functions archive_diff
@@ -117,20 +118,25 @@ def archive_diff(args):
 #
 # Create subcommand parsing options
 #
-# Input:  subparsers    - 
-#         parent_parser - 
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
+def parser(*args, **kwargs):
+
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+        
     cmd = subparsers.add_parser('diff',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 help = 'Compare Archive Files')
     cmpgroup = cmd.add_argument_group('Comparison Options')
     group = cmpgroup.add_mutually_exclusive_group()
-    cmd.add_argument('archive1',
-                     help = 'Archives to compare')
-    cmd.add_argument('archive2',
+    cmd.add_argument('archive',
+                     nargs=2,
                      help = 'Archives to compare')
     group.add_argument('-s',
                      '--size',
