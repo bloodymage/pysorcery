@@ -118,15 +118,16 @@ def archive_diff(args):
 #
 # Create subcommand parsing options
 #
-# Input:  subparsers    - 
-#         parent_parser - 
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
 
     subparsers = args[0]
-
     parent_parsers = list(args[1:])
         
     cmd = subparsers.add_parser('diff',
@@ -134,9 +135,8 @@ def parser(*args, **kwargs):
                                 help = 'Compare Archive Files')
     cmpgroup = cmd.add_argument_group('Comparison Options')
     group = cmpgroup.add_mutually_exclusive_group()
-    cmd.add_argument('archive1',
-                     help = 'Archives to compare')
-    cmd.add_argument('archive2',
+    cmd.add_argument('archive',
+                     nargs=2,
                      help = 'Archives to compare')
     group.add_argument('-s',
                      '--size',

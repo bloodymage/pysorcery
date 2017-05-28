@@ -135,21 +135,18 @@ def archive_create(args):
 #
 # Creates the parser subcommand and
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
+# Input:  *args - tuple of all parent parsers
 # Return: cmd
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
     cmd = subparsers.add_parser('create',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 help = 'Create files')
     cmd.add_argument('archive',
-                     nargs = 1,
                      help = 'Archive file to create')
     cmd.add_argument('filename',
                      help = 'Files / Directories to add to the archive')

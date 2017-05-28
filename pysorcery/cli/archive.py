@@ -166,10 +166,6 @@ Report bugs to ...
 #
 # Inputs come from command line argument
 #
-# This is ugly code
-#
-#
-#
 #
 # Note: Any cli switches will override the settings in the config files
 #
@@ -180,10 +176,13 @@ def main(args=None):
     """
     logger.debug('Begin Application')
 
-    try:         
+    if DEBUG is False:
+        try:         
+            real_main(args)
+        except:
+            logger.critical('You Fucked Up')
+    else:
         real_main(args)
-    except:
-        logger.critical('You Fucked Up')
 
     logger.debug('End Application')
     return

@@ -32,6 +32,10 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
+# extract
+#
+#   This plugin provides the extraction interface...
+#
 #-----------------------------------------------------------------------
 """
 This is a bonus application for pysorcery.  PySorcery for multiple
@@ -90,14 +94,6 @@ colortext = text.ConsoleText()
 # Functions
 #
 # archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
 #
 #-----------------------------------------------------------------------
 
@@ -151,35 +147,43 @@ def archive_extract(args):
 #
 # Function archive_extract
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_extract = subparsers.add_parser('extract',
-                                           parents = [parent_parser],
-                                           help = 'Extract files'
-    )
-    parser_extract.add_argument('files',
-                                nargs = '+',
+def parser(*args, **kwargs):
+
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
+    cmd = subparsers.add_parser('extract',
+                                parents = parent_parsers,
                                 help = 'Extract files'
     )
-    parser_extract.add_argument('-o',
-                                '--output-dir',
-                                metavar = 'DIRECTORY',
-                                help = 'Output Directory'
+    cmd.add_argument('files',
+                     nargs = '+',
+                     help = 'File(s) to extract'
     )
-    parser_extract.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive'
+    cmd.add_argument('-o',
+                     '--output-dir',
+                     metavar = 'DIRECTORY',
+                     help = 'Output Directory'
     )
-    parser_extract.set_defaults(func=archive_extract)
+    cmd.add_argument('-r',
+                     '--recursive',
+                     action = 'store_true',
+                     help = 'Recursive'
+    )
+    cmd.add_argument('-d',
+                     '--depth',
+                     action = 'store_true',
+                     help = 'limit recursion to specified depth'
+    )
+    cmd.set_defaults(func=archive_extract)
 
-    return parser_extract
+    return cmd

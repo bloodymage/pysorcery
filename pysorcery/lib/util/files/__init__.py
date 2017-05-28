@@ -197,15 +197,6 @@ class BaseDirectory(BaseFile):
 
 #-----------------------------------------------------------------------
 #
-# Class Alien
-# 
-#
-#-----------------------------------------------------------------------
-class Directories(BaseDirectory):
-    pass
-
-#-----------------------------------------------------------------------
-#
 # Class BaseFiles
 # 
 #
@@ -255,6 +246,7 @@ class BaseFiles():
         # List of directories to check        
         sys_dirs = [ '/bin', '/boot', '/etc', '/lib', '/lib64',
                      '/opt', '/sbin', '/share', '/usr','/var' ]
+        ignore_dirs = ['/home']
 
         sys_files = []
         for sys_dir in sys_dirs:
