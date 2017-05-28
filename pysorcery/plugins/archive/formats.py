@@ -89,14 +89,6 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
 # archive_formats
 #
 #-----------------------------------------------------------------------
@@ -108,8 +100,7 @@ colortext = text.ConsoleText()
 #
 # List all archive and compression formats supported.
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
+# Input:  @param: args
 # Return: None
 #
 #-----------------------------------------------------------------------
@@ -120,17 +111,17 @@ def archive_formats(args):
 
     cmd = 'archive_support'
 
-    for x in format_groups:
+    for group in format_groups:
         # Obtain list of all supported formats of type 'x'
         formats = util.get_cmd_types(x)
 
         # 
-        for i in formats:
-            logger.info(i + ' files:')
+        for format_ in formats:
+            logger.info(format_ + ' files:')
 
             # Identify function that displays formats support
-            archive_func = util.get_module_func(x,
-                                                i,
+            archive_func = util.get_module_func(group,
+                                                format_,
                                                 cmd)
             
             # Execute the identified function
@@ -141,23 +132,25 @@ def archive_formats(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_formats = subparsers.add_parser('formats',
-                                           parents = [parent_parser],
-                                           help = 'Formats files')
-    parser_formats.set_defaults(func = archive_formats)
+def parser(*args, **kwargs):
 
-    return parser_formats
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
+    cmd = subparsers.add_parser('formats',
+                                parents = parent_parsers,
+                                help = 'Formats files')
+    cmd.set_defaults(func = archive_formats)
+
+    return cmd
