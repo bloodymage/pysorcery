@@ -39,6 +39,7 @@ reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 """
+
 #-----------------------------------------------------------------------
 #
 # Libraries
@@ -109,9 +110,6 @@ colortext = text.ConsoleText()
 def real_main(args):    
     logger.debug('Entered Function')
 
-
-    subcommands = util.get_cmd_types('archive')
-
     epilog_text = """
 See man pyarchive() for more information.\n
 \n
@@ -119,7 +117,7 @@ Report bugs to ...
 """
 
     # Parse Command Line Arguments
-    parser = argparse.CommonParser(
+    parser = argparse.ArgParser(
         description = 'Universal archive extractor. creator, etc...',
         epilog = epilog_text
     )
@@ -128,35 +126,31 @@ Report bugs to ...
     parent_parser = parser.add_logging_option()
 
     # Create subcommands
-    subparsers = parser.add_subparsers(title = 'commands',
-                                       metavar = 'Command',
-                                       help = 'Description'
-    )
+    subparsers = parser.create_subparsers()
 
+    # Get list of subcommands
+    subcommands = util.get_cmd_types('archive')
+
+    # Create the subcommand arguments
     for i in subcommands:
         subcommand = util.get_module_func('archive',i,'parser')
         subcommand(subparsers, parent_parser)
-        
-    # With version, help description must be before version declaration
-    parser.set_defaults(func = False,
-                        quiet = 0,
-                        verbosity = 0,
-                        debug = False,
-                        loglevel = 'INFO')
-    
+
+    #
     args = parser.parse_args()
 
     # Set configuration
     config_ = config.main_configure(args)
 
+    # Print status if debugging
     logger.debug('Configuration set')
     logger.debug2('Configuration Settings: ' + str(config_))
     logger.debug3('Arguments: ' + str(args))
 
     # 'application' code
-    if args.func:
+    try:
         args.func(args)
-    else:
+    except:
         parser.print_help()
         logger.error('No command was given')
 
@@ -173,10 +167,6 @@ Report bugs to ...
 #
 # Inputs come from command line argument
 #
-# This is ugly code
-#
-#
-#
 #
 # Note: Any cli switches will override the settings in the config files
 #
@@ -187,10 +177,13 @@ def main(args=None):
     """
     logger.debug('Begin Application')
 
-    try:         
+    if DEBUG is False:
+        try:         
+            real_main(args)
+        except:
+            logger.critical('You Fucked Up')
+    else:
         real_main(args)
-    except:
-        logger.critical('You Fucked Up')
 
     logger.debug('End Application')
     return

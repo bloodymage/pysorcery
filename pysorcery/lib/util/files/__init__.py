@@ -15,17 +15,17 @@
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Dionysius is distributed in the hope that it will be useful,
+#    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-#
-#
+# Library for sorcery that provides for interfacing with
+# files/directories.
 #
 #-----------------------------------------------------------------------
 
@@ -52,6 +52,7 @@ from pysorcery.lib.system import shutil
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
+
 # Conditional Libraries
 
 #-----------------------------------------------------------------------
@@ -66,7 +67,9 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
+# BaseFile
 #
+# 
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -77,7 +80,7 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 class BaseFile():
-    def __init__(self,filename):
+    def __init__(self, filename, *args, **kwargs):
         logger.debug("Begin Function")
         
         self.filename = filename
@@ -92,11 +95,10 @@ class BaseFile():
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function list_from
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: pkg_list - list of ..
     #
     #-------------------------------------------------------------------
     def list_from(self):
@@ -120,11 +122,10 @@ class BaseFile():
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function remove
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: None
     #
     #-------------------------------------------------------------------
     def remove(self):
@@ -137,11 +138,10 @@ class BaseFile():
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function read
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: None
     #
     #-------------------------------------------------------------------
     def read(self):
@@ -156,11 +156,10 @@ class BaseFile():
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function write
     #
     # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Return: none
     #
     #-------------------------------------------------------------------
     def write(self):
@@ -174,18 +173,12 @@ class BaseFile():
 
 #-----------------------------------------------------------------------
 #
-# Class Alien
-# 
+# Class BaseDirectory
+#
+# Directories are a specific type of file
 #
 #-----------------------------------------------------------------------
-class BaseDirectories():
-    def __init__(self,dirname):
-        logger.debug('Begin Function')
-
-        self.dirname = dirname
-
-        logger.debug('End Function')
-        return
+class BaseDirectory(BaseFile):
 
     #-------------------------------------------------------------------
     #
@@ -198,28 +191,21 @@ class BaseDirectories():
     #-------------------------------------------------------------------
     def print_name(self):
         logger.debug("Begin Function")
-        logger.info(self.dirname)
+        logger.info(self.filename)
         logger.debug("End Function")
         return
 
 #-----------------------------------------------------------------------
 #
-# Class Alien
+# Class BaseFiles
 # 
 #
 #-----------------------------------------------------------------------
-class Directories(BaseDirectories):
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-----------------------------------------------------------------------
-class BaseFileList():
-    def __init__(self,dirname):
+class BaseFiles():
+    def __init__(self, *args, **kwargs):
         logger.debug("Begin Function")
+
+        self.files = kwargs['filelist']
 
         logger.debug("End Function")
         return
@@ -229,7 +215,6 @@ class BaseFileList():
     # Function 
     #
     # Input:  ...
-    # Output: ...
     # Return: ...
     #
     #-------------------------------------------------------------------
@@ -252,7 +237,6 @@ class BaseFileList():
     # Function 
     #
     # Input:  ...
-    # Output: ...
     # Return: ...
     #
     #-------------------------------------------------------------------
@@ -262,6 +246,7 @@ class BaseFileList():
         # List of directories to check        
         sys_dirs = [ '/bin', '/boot', '/etc', '/lib', '/lib64',
                      '/opt', '/sbin', '/share', '/usr','/var' ]
+        ignore_dirs = ['/home']
 
         sys_files = []
         for sys_dir in sys_dirs:
@@ -274,68 +259,58 @@ class BaseFileList():
         logger.debug("End Function")
         return sys_files
 
-#-----------------------------------------------------------------------
-#
-# Class Alien
-# 
-#
-#-----------------------------------------------------------------------
-class DebianFileList(BaseFileList):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianDirectories.__init__(self)
+    #-----------------------------------------------------------------------
+    #
+    # Function repack
+    #
+    # Input:  @param: srcfile - the original file
+    #         @param: dstfile - the new file we are creating with the new
+    #                           compression method.
+    # Return: None
+    #
+    #-----------------------------------------------------------------------
+    def repack(self, componly=False):
+        logger.debug('Begin Function')
+        
+        if (self.mimetype not in mimetypes.ArchiveMimetypes or
+            componly is True):
+            source_file = Files(self.files[0])
+            source_file.decompress(None)
+            
+            dest_file = Files(self.files[1])
+            dest_file.compress(source_file.basename)
         else:
-            BaseDirectories.__init__(self)
+            print('Fix Me')
+            
+            logger.debug('End Function')
+            return
 
-        logger.debug("End Function")
+    #-----------------------------------------------------------------------
+    #
+    # Function diff
+    #
+    # Input:  @param: files - the file to compare
+    # Return: None
+    #
+    #-----------------------------------------------------------------------
+    def diff(self, size=False, contents=False):
+        logger.debug('Begin Function')
+
+        logger.info(self.files)
+        
+        logger.debug('End Function')
         return
 
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        install_files = [ 'Fuck' ]
-        
-        logger.debug("End Function")
-        return install_files
 
 #-----------------------------------------------------------------------
 #
-# Class Alien
-# 
+# Class BaseDirectories
+#
+# Directories are a specific type of file
 #
 #-----------------------------------------------------------------------
-class FileList(DebianFileList,BaseFileList):
-    def __init__(self,dirname):
-        logger.debug("Begin Function")
-        if distro.distro_id in distro.distro_dict['deb']:
-            DebianFileList.__init__(self)
-        else:
-            BaseFileList.__init__(self)
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
-    #
-    #-------------------------------------------------------------------
-    def list_installed_files(self):
-        logger.debug("Begin Function")
-
-        if distro.distro_id in distro.distro_dict['deb']:
-            installed_files = DebianFileList.list_installed_files(self)
-        else:
-            installed_files = BaseFileList.list_installed_files(self)
-        
-        logger.debug("End Function")
-        return installed_files
-
+class BaseDirectories(BaseFiles):
+    pass
 
 #-------------------------------------------------------------------
 #
@@ -406,6 +381,6 @@ def get_format(mimetype=None,encoding=None):
         shutil.init_formats('util_compressed')
     else:
         archive_format = 'Unknown'
-
+        
     logger.debug('End Function')
     return archive_class, archive_format

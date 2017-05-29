@@ -39,11 +39,12 @@
 # System Libraries
 from distro import *
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
+
 # Other Application Libraries
 
 
@@ -52,8 +53,8 @@ from distro import *
 # Global Variables
 #
 #-------------------------------------------------------------------------------
-# Distro Definitions
 
+# Distro Definitions
 distro_definitions = {
     ('Ubuntu',
      'Linux Mint',

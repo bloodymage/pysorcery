@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -11,9 +11,9 @@
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU General Public License as published
+#    by the Free Software Foundation, either version 3 of the License,
+#    or (at your option) any later version.
 #
 #    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,44 +27,65 @@
 #
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+"""
+Aliases for argparse positional arguments.
+"""
 
-"""Aliases for argparse positional arguments."""
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
-#-------------------------------------------------------------------------------
-import argparse
+#-----------------------------------------------------------------------
+# System Libraries
 from argparse import *
 
+# 3rd Party Libraries
+
+
+# Application Libraries
+# System Library Overrides
+
+# Other Application Libraries
 from pysorcery import __version__, DEBUG
-#-------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Classes
 #
-# AliasedSubParserAction
+# CommonParser
+# ArgParser
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Class AliasedSubParserAction
+# Class CommonParser
 #
-#-------------------------------------------------------------------------------
+# input:
+# return: None
+#
+#-----------------------------------------------------------------------
 class CommonParser(ArgumentParser):
     def __init__(self, *args, **kwargs):
         super(CommonParser, self).__init__(*args, **kwargs)
 
         return
+
+    def create_subparsers(self):
+        self.subparser = self.add_subparsers(title = 'commands',
+                            metavar = 'Command',
+                            help = 'Description'
+        )
+        return self.subparser
+
 
     def add_version_option(self):
         self.add_argument('-V',
@@ -94,7 +115,7 @@ class CommonParser(ArgumentParser):
         ]
 
         # Create Parent Parsur
-        self.parent = argparse.ArgumentParser(add_help=False)
+        self.parent = ArgumentParser(add_help=False)
     
         # Parser Groups
         # Logging Group
@@ -132,5 +153,13 @@ class CommonParser(ArgumentParser):
 
         return self.parent
         
-
-
+#-----------------------------------------------------------------------
+#
+# Class ArgParser
+#
+# input:
+# return: None
+#
+#-----------------------------------------------------------------------
+class ArgParser(CommonParser):
+    pass

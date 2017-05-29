@@ -25,19 +25,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# Archive Diff
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+# This plugin provides the ability to compare archive and compressed
+# files.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+This plugin provides the ability to compare archive and compressed files.
 """
 #-----------------------------------------------------------------------
 #
@@ -57,7 +52,6 @@ import sys
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
@@ -65,6 +59,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -89,59 +84,68 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
 # archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
+
 #-----------------------------------------------------------------------
 #
 # Functions archive_diff
-#
 #
 # Find and display all differences between two archive filesxs
 #
 # Input:  args
 #         args.quiet - Decrease Output Verbosity
+#         args.archive1 - First archive to compare
+#         args.archive2 - Second archive to compare
+#         args.size - Compare content file sizes as well (conflicts with content)
+#         args.content - Compare File Contents (conflicts with size)
 # Return: None
 #
 #-----------------------------------------------------------------------
 def archive_diff(args):
     logger.debug('Begin Function')
 
+    lib.filediff(args.archive, args.size, args.content)
     
     logger.debug('End Function')
     return
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_diff = subparsers.add_parser('diff',
-                                        parents = [parent_parser],
-                                        help = 'Compare Archive Files')
-    parser_diff.add_argument('archive1',
-                             help = 'Archives to compare')
-    parser_diff.add_argument('archive2',
-                             help = 'Archives to compare')
-    parser_diff.set_defaults(func = archive_diff)
+def parser(*args, **kwargs):
 
-    return parser_diff
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+        
+    cmd = subparsers.add_parser('diff',
+                                parents = parent_parsers,
+                                help = 'Compare Archive Files')
+    cmpgroup = cmd.add_argument_group('Comparison Options')
+    group = cmpgroup.add_mutually_exclusive_group()
+    cmd.add_argument('archive',
+                     nargs=2,
+                     help = 'Archives to compare')
+    group.add_argument('-s',
+                     '--size',
+                     action='store_true',
+                     help='Compare file names and sizes')
+    group.add_argument('-c',
+                     '--contents',
+                     action='store_true',
+                     help='Compare file contents')
+    cmd.set_defaults(func = archive_diff)
+
+    return cmd
