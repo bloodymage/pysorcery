@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/archive/search.py
 #
 # This file is part of Sorcery.
 #
@@ -25,19 +25,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyArchive: Search
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#   This plugin gives the user the ability to search archives files for
+#  files with the searched naame or string.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+pyArchive: Search
+
+This plugin gives the user the ability to search archives files for
+files with the searched naame or string.
 """
 #-----------------------------------------------------------------------
 #
@@ -46,15 +44,12 @@ underlying code, this application was developed.
 #-----------------------------------------------------------------------
 
 # System Libraries
-import os
-import sys
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
@@ -89,27 +84,30 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
 # archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 #-----------------------------------------------------------------------
 #
-# Functions archive_search
-#
+# Function archive_search
 #
 # Search archive for search term.
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-# Return: None
+# Inputs
+# ------
+# Args:
+#       args.quiet  - Decrease Output Verbosity
+#       args.search - What we are searching for
+#
+# Returns
+# -------
+# None
+#
+# Raises
+# ------
+# Error:
+#
 #
 #-----------------------------------------------------------------------
 def archive_search(args):
@@ -121,28 +119,38 @@ def archive_search(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create search parser options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input
+# -----
+# @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+# @param: **kwargs - Not used (Future?)
+#
+# Return
+# ------
+# cmd
+#
+# Raises
+# ------
+# ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_search = subparsers.add_parser('search',
-                                          parents = [parent_parser],
-                                          help = 'Search archive')
-    parser_search.add_argument('archive',
-                             help = 'Archive to search')
-    parser_search.add_argument('searchterm',
-                             nargs = '+',
-                             help = 'Term to search for')
-    parser_search.set_defaults(func = archive_search)
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
 
-    return parser_search
+    cmd = subparsers.add_parser('search',
+                                parents = parent_parsers,
+                                help = 'Search archive')
+    cmd.add_argument('archive',
+                     help = 'Archive to search')
+    cmd.add_argument('searchterm',
+                     nargs = '+',
+                     help = 'Term to search for')
+    cmd.set_defaults(func = archive_search)
+
+    return cmd
