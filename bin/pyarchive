@@ -47,5 +47,5 @@ from pkg_resources import load_entry_point
 
 if __name__ == '__main__':
     sys.exit(
-        load_entry_point('pysorcery==0.0.1', 'console_scripts', 'pyarchive')()
+        load_entry_point(__requires__, 'console_scripts', 'pyarchive')()
     )
