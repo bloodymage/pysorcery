@@ -29,7 +29,9 @@
 # This file is the pysorcery API.  All files should reference this file.
 #
 #-----------------------------------------------------------------------
-
+"""
+This file provides the high level Sorcery API.
+"""
 #-----------------------------------------------------------------------
 #
 # Libraries
@@ -54,8 +56,6 @@ from pysorcery.lib.sorcery import packages
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
 from pysorcery.lib.util.files import compressed
-#from pysorcery.lib.util import text
-#from pysorcery.lib.util import url
 
 # Other Optional Libraries
 
@@ -72,14 +72,10 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
+# File
 # Files
-# FileList
+# Directory
 # Directories
-# DirectoryList
-# Package
-# PackageList
-# Repository
-# RepositoryList
 #
 #-----------------------------------------------------------------------
 
@@ -91,6 +87,13 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Calls the read function based on the file format.
+    #
+    #-------------------------------------------------------------------
     def read(self):
         if self.format_ != 'Unknown':
             content = compressed.CompressedFile.read(self)
@@ -103,9 +106,9 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
 
 #-----------------------------------------------------------------------
 #
-# Class FileList
+# Class Files
 # 
-#
+# 
 #-----------------------------------------------------------------------
 class Files(files.BaseFiles):
     pass
@@ -132,8 +135,6 @@ class Directories(files.BaseDirectories):
 #
 # Functions
 # 
-# Repack
-# Diff
 #
 #
 #-----------------------------------------------------------------------
