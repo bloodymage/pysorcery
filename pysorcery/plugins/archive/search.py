@@ -27,7 +27,7 @@
 #
 # pyArchive: Search
 #
-#   This plugin gives the user the ability to search archives files for
+#  This plugin gives the user the ability to search archives files for
 #  files with the searched naame or string.
 #
 #-----------------------------------------------------------------------
@@ -98,6 +98,7 @@ colortext = text.ConsoleText()
 # ------
 # Args:
 #       args.quiet  - Decrease Output Verbosity
+#       args.archive - Archive to search
 #       args.search - What we are searching for
 #
 # Returns
@@ -113,6 +114,7 @@ colortext = text.ConsoleText()
 def archive_search(args):
     logger.debug('Begin Function')
 
+    archive = lib.File(args.archive)
     
     logger.debug('End Function')
     return
@@ -123,15 +125,15 @@ def archive_search(args):
 #
 # Create search parser options
 #
-# Input
-# -----
+# Inputs
+# ------
 # @param: *args    - tuple of all subparsers and parent parsers
 #                            args[0]: the subparser
 #                            args[1:] the parent parsers
 # @param: **kwargs - Not used (Future?)
 #
-# Return
-# ------
+# Returns
+# -------
 # cmd
 #
 # Raises
