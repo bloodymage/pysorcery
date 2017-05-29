@@ -113,7 +113,7 @@ colortext = text.ConsoleText()
 # 
 #
 #-------------------------------------------------------------------------------
-class LocalLogger(logging.Logger):
+class LocalLogger(Logger):
     #-------------------------------------------------------------------------------
     #
     # debug#
@@ -301,9 +301,9 @@ class LocalLogger(logging.Logger):
 # 
 #
 #-------------------------------------------------------------------------------
-class ConsoleLvlFormatter(logging.Formatter):
+class ConsoleLvlFormatter(Formatter):
     def __init__(self, fmt="%(levelno)s: %(message)s"):
-        logging.Formatter.__init__(self, fmt)
+        Formatter.__init__(self, fmt)
         self.dbg_fmt  = "%(name)s:%(funcName)s:%(lineno)d - %(levelname)s - %(message)s"
         self.info_fmt = "%(message)s"
         self.warn_fmt  = "%(message)s"
@@ -327,24 +327,24 @@ class ConsoleLvlFormatter(logging.Formatter):
         format_orig = self._style._fmt
 
         # Replace the original format with one customized by logging level
-        if record.levelno <= logging.DEBUG:
+        if record.levelno <= DEBUG:
             self._style._fmt = self.dbg_fmt
 
-        elif record.levelno >= logging.INFO and record.levelno < logging.WARNING:
+        elif record.levelno >= INFO and record.levelno < WARNING:
             self._style._fmt = self.info_fmt
 
-        elif record.levelno == logging.WARNING:
+        elif record.levelno == WARNING:
             self._style._fmt = self.warn_fmt
 
-        elif record.levelno == logging.ERROR:
+        elif record.levelno == ERROR:
             self._style._fmt = self.err_fmt
 
-        elif record.levelno == logging.CRITICAL:
+        elif record.levelno == CRITICAL:
             self._style._fmt = self.crit_fmt
 
 
         # Call the original formatter class to do the grunt work
-        result = logging.Formatter.format(self, record)
+        result = Formatter.format(self, record)
 
         # Restore the original format configured by the user
         self._style._fmt = format_orig
@@ -358,7 +358,7 @@ class ConsoleLvlFormatter(logging.Formatter):
 # 
 #
 #-------------------------------------------------------------------------------
-class ColorizingStreamHandler(logging.StreamHandler,text.ConsoleText):
+class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
     def __init__(self, *args, **kwargs):
         self._colors = {DEBUG10: "green",
                         DEBUG9: "green",
@@ -369,8 +369,8 @@ class ColorizingStreamHandler(logging.StreamHandler,text.ConsoleText):
                         DEBUG4: "green",
                         DEBUG3: "green",
                         DEBUG2: "green",
-                        logging.DEBUG: "green",
-                        logging.INFO: "white",
+                        DEBUG: "green",
+                        INFO: "white",
                         INFO1: "white",
                         INFO2: "white",
                         INFO3: "white",
@@ -380,9 +380,9 @@ class ColorizingStreamHandler(logging.StreamHandler,text.ConsoleText):
                         INFO7: "white",
                         INFO8: "white",
                         INFO9: "white",
-                        logging.WARNING: "yellow",
-                        logging.ERROR: "red",
-                        logging.CRITICAL: "magenta"}
+                        WARNING: "yellow",
+                        ERROR: "red",
+                        CRITICAL: "magenta"}
         super(ColorizingStreamHandler, self).__init__(*args, **kwargs)
 
     #-------------------------------------------------------------------------------
@@ -437,7 +437,7 @@ class ColorizingStreamHandler(logging.StreamHandler,text.ConsoleText):
         self._colors[logging_level] = escaped_ansi_code
 
 
-local_manager = copy.copy(logging.Logger.manager)
+local_manager = copy.copy(Logger.manager)
 local_manager.loggerClass = LocalLogger
 
 
@@ -453,7 +453,7 @@ def getLogger(name=None):  # noqa
     if name:
         return local_manager.getLogger(name)
     else:
-        return logging.Logger.root
+        return Logger.root
 
 
 #-------------------------------------------------------------------------------
@@ -466,19 +466,19 @@ def getLogger(name=None):  # noqa
 #
 #-------------------------------------------------------------------------------
 def verifydebuglevels():
-    logger.debug10("Holy Mothermof Fuck")
-    logger.debug9("Holy Fuck")
-    logger.debug8("Fubar")
-    logger.debug7("snafu")
-    logger.debug6("fuck")
-    logger.debug5("holy shit")
-    logger.debug4("shit")
-    logger.debug3("damn")
-    logger.debug2("crap")
-    logger.debug("Debug Msg")
-    logger.info("Info Msg")
-    logger.warn("Warn Msg")
-    logger.error("Error Msg")
-    logger.critical("Crit Msg")
+    debug10("Holy Mothermof Fuck")
+    debug9("Holy Fuck")
+    debug8("Fubar")
+    debug7("snafu")
+    debug6("fuck")
+    debug5("holy shit")
+    debug4("shit")
+    debug3("damn")
+    debug2("crap")
+    debug("Debug Msg")
+    info("Info Msg")
+    warn("Warn Msg")
+    error("Error Msg")
+    critical("Crit Msg")
     return 0
 

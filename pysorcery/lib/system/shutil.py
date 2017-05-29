@@ -107,6 +107,18 @@ _extensions = {
 # Functions
 #
 #-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Function init_formats
+#
+#
+#
+# Input:
+# Return:
+#
+# Exceptions:
+#-----------------------------------------------------------------------
 def init_formats(format_type):
     logger.debug('Begin Function')
     available_formats = util.get_cmd_types(format_type)

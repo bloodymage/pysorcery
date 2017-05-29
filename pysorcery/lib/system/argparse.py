@@ -37,9 +37,18 @@ Aliases for argparse positional arguments.
 # Libraries
 #
 #-----------------------------------------------------------------------
+# System Libraries
 from argparse import *
 
+# 3rd Party Libraries
+
+
+# Application Libraries
+# System Library Overrides
+
+# Other Application Libraries
 from pysorcery import __version__, DEBUG
+
 #-----------------------------------------------------------------------
 #
 # Global Variables
