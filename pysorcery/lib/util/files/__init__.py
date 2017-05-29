@@ -215,7 +215,6 @@ class BaseFiles():
     # Function 
     #
     # Input:  ...
-    # Output: ...
     # Return: ...
     #
     #-------------------------------------------------------------------
@@ -238,7 +237,6 @@ class BaseFiles():
     # Function 
     #
     # Input:  ...
-    # Output: ...
     # Return: ...
     #
     #-------------------------------------------------------------------
@@ -297,10 +295,11 @@ class BaseFiles():
     #-----------------------------------------------------------------------
     def diff(self, size=False, contents=False):
         logger.debug('Begin Function')
+
+        logger.info(self.files)
         
         logger.debug('End Function')
         return
-
 
 
 #-----------------------------------------------------------------------
