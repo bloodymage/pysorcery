@@ -67,3 +67,6 @@ Major changes: Removed prune (This was depreciated sometime between 2001-2005)
 ## Supported Distros
 - Source Mage (Tested using python 3.6.1)
 - Ubuntu (Tested on X-Ubuntu 16.04 LTS using python 3.5)
+
+## Further information:
+- (a relative link) [ROADMAP.md]
