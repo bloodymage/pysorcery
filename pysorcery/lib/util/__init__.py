@@ -125,9 +125,17 @@ UrlModules = {
 #
 # Function get_cmd_types
 #
-# Input:  cmd_class - I really need a new name for this...
+# Inputs
+# ------
+#     cmd_class - I really need a new name for this...
 #         
-# Return: supformats - 'Supported Formats'
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def get_cmd_types(cmd_class):
@@ -140,8 +148,12 @@ def get_cmd_types(cmd_class):
 
     supformats = []
     for f in modules:
+        # Verify f is a real file
+        # skip f if f's name is __init__.py
+        # skip f if f is an emacs backup
         if (os.path.isfile(f) and
-            f.split('/')[-1] != '__init__.py'):
+            f.split('/')[-1] != '__init__.py' and
+            f.split('.')[-1] != 'py~'):
             supformats.append(os.path.basename(f)[:-3])
 
     supformats.sort()
@@ -177,6 +189,7 @@ def get_module_func(cmd_class,
         module = importlib.import_module(modulename, __name__)
     except ImportError as msg:
         logger.error(str(msg) + ' ' + str(modulename))
+
     # get the function
     try:
         logger.debug('Module: ' + str(modulename))

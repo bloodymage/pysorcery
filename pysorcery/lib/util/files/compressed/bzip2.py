@@ -140,6 +140,23 @@ def testarchive(filename):
 # Return: ...
 #
 #-------------------------------------------------------------------
+def search(filename, searchstring):
+    logger.debug("Begin Function")    
+
+    results = 'BZ2 file search results'
+    
+    logger.debug('End Function')
+    return results
+
+#-------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
 def verify_extract():
     logger.debug('Begin Function')
 

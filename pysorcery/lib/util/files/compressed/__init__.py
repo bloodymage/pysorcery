@@ -152,4 +152,33 @@ class CompressedFile(files.BaseFile):
         logger.debug('End Function')
         return 
 
-    
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Searches archive files
+    #
+    # Inputs
+    # ------
+    #     self:
+    #     searchstring:
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #-------------------------------------------------------------------
+    def search(self, searchstring):
+        logger.debug('Begin Function')
+
+        archive_func = util.get_module_func('util_compressed',
+                                            self.format_,
+                                            'search')
+
+        results = archive_func(self.filename, searchstring)
+        
+        logger.debug('End Function')
+        return results

@@ -115,6 +115,9 @@ def archive_search(args):
     logger.debug('Begin Function')
 
     archive = lib.File(args.archive)
+    results = archive.search(args.searchterm)
+
+    print(results)
     
     logger.debug('End Function')
     return
