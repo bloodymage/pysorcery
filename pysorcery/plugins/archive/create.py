@@ -119,12 +119,11 @@ colortext = text.ConsoleText()
 def archive_create(args):
     logger.debug('Begin Function')
 
-    for i in args.files:
-        cfile = lib.Files(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.create(os.getcwd(), args.output_dir)
-        else:
-            cfile.compress(args.output_dir)
+    cfile = lib.File(args.archive)
+    if cfile.mimetype in mimetypes.ArchiveMimetypes:
+        cfile.create(os.getcwd(), args.filename)
+    else:
+        cfile.compress(args.filename)
 
     logger.debug('End Function')
     return

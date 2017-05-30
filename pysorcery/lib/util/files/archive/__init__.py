@@ -8,6 +8,8 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
+# File: pysorcery/lib/util/files/archive/__init__.py
+#
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
@@ -26,10 +28,12 @@
 #
 # This implements the archive classes
 #
-#    
+#
 #
 #-----------------------------------------------------------------------
-
+"""
+Impliments classes for working with archive files.
+"""
 #-----------------------------------------------------------------------
 #
 # Libraries
@@ -127,15 +131,25 @@ class Archive(files.BaseFile):
     #
     # Function testarchive
     #
-    # Input:  ...
-    # Return: None
+    # Test to ensure the archive is a valid archive
+    #
+    # Inputs
+    # ------
+    #     self:
+    #
+    # Returns
+    # -------
+    #     None (change this to True or False?)
+    #
+    # Raises
+    # ------
     #
     #-------------------------------------------------------------------
     def testarchive(self):
         logger.debug('Begin Function')
 
         archive_func = util.get_module_func('util_archive',
-                                            self.format_,
+                                            self.format_class,
                                             'testarchive')
         # We know what the format is, initialize that format's class
         if archive_func(self.filename):
@@ -146,3 +160,33 @@ class Archive(files.BaseFile):
         logger.debug('End Function')
         return
 
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Searches archive files
+    #
+    # Inputs
+    # ------
+    #     self:
+    #     searchstring:
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #-------------------------------------------------------------------
+    def search(self, searchstring):
+        logger.debug('Begin Function')
+
+        archive_func = util.get_module_func('util_archive',
+                                            self.format_class,
+                                            'search')
+
+        results = archive_func(self.filename, searchstring)
+        
+        logger.debug('End Function')
+        return results

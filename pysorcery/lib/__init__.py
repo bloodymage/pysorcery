@@ -49,6 +49,7 @@ This file provides the high level Sorcery API.
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
+from pysorcery.lib.system import shutil
 # Other Application Libraries
 from pysorcery.lib.sorcery import packages
 #from pysorcery.lib.sorcery import repositories
@@ -95,6 +96,7 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     #-------------------------------------------------------------------
     def read(self):
+        logger.debug('Begin Function')
         if self.format_ != 'Unknown':
             content = compressed.CompressedFile.read(self)
         else:
@@ -103,6 +105,25 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
         logger.debug('End Function')
         return content
 
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Calls the read function based on the file format.
+    #
+    #-------------------------------------------------------------------
+    def search(self, searchstring):
+        logger.debug('Begin Function')
+        
+        if self.format_class in shutil.archive_formats:
+            results = archive.Archive.search(self, searchstring)
+        elif self.format_ != 'Unknown':
+            results = compressed.CompressedFile.search(self, searchstring)
+        else:
+            results = files.BaseFile.search(self, searchstring)
+
+        logger.debug('End Function')
+        return results
 
 #-----------------------------------------------------------------------
 #

@@ -170,6 +170,21 @@ class BaseFile():
         logger.debug("Begin Function")
         return
 
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Input:  ...
+    # Return: none
+    #
+    #-------------------------------------------------------------------
+    def search(self):
+        logger.debug("Begin Function")
+
+        results = "File Search Results"
+
+        logger.debug("Begin Function")
+        return results
 
 #-----------------------------------------------------------------------
 #
@@ -358,7 +373,9 @@ def pne(ifilename):
 #-------------------------------------------------------------------
 def get_format(mimetype=None,encoding=None):
     logger.debug('Begin Function')
-    
+
+    logger.debug2('Mimetype: ' + str(mimetype))
+
     if (mimetype is None and
         encoding is None):
         archive_class = 'Unknown'
@@ -372,6 +389,11 @@ def get_format(mimetype=None,encoding=None):
     else:
         archive_class = mimetype
         logger.error('Unknown archive type for mime:' + str(mimetype))
+
+    if encoding is None:
+        encoding = archive_class
+
+    logger.debug2('Archive class: ' + str(archive_class))
 
     if archive_class in shutil.archive_formats:
         archive_format = shutil.archive_formats[archive_class][encoding]

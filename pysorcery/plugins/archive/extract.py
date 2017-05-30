@@ -124,7 +124,7 @@ def archive_extract(args):
             # Fix me! Add max depth option
             for root, dirs, files in os.walk(i):
                 for sfile in files:
-                    cfile = lib.Files(sfile)
+                    cfile = lib.File(sfile)
                     logger.debug3(cfile.mimetype)
                     if cfile.mimetype in mimetypes.ArchiveMimetypes:
                         cfile.extract(args.output_dir)
@@ -133,7 +133,7 @@ def archive_extract(args):
 
         # Always extract what is explicitly listed
         #logger.info('Archive file: ' + i)
-        cfile = lib.Files(i)
+        cfile = lib.File(i)
         if cfile.mimetype in mimetypes.ArchiveMimetypes:
             cfile.extract(args.output_dir)
         else:

@@ -125,7 +125,6 @@ def testarchive(filename):
 # Return: ...
 #
 #-------------------------------------------------------------------
-<<<<<<< HEAD
 def diff(filename):
     logger.debug("Begin Function")    
     logger.debug('End Function')
@@ -140,10 +139,13 @@ def diff(filename):
 # Return: ...
 #
 #-------------------------------------------------------------------
-def search(filename):
+def search(filename, searchstring):
     logger.debug("Begin Function")    
+
+    results = 'Tarfile search results'
+    
     logger.debug('End Function')
-    return
+    return results
 
 #-------------------------------------------------------------------
 #
