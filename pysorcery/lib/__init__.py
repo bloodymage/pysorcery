@@ -125,6 +125,7 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
         logger.debug('End Function')
         return results
 
+
 #-----------------------------------------------------------------------
 #
 # Class Files
@@ -132,7 +133,41 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
 # 
 #-----------------------------------------------------------------------
 class Files(files.BaseFiles):
-    pass
+    def __init__(self, *args, **kwargs):
+        files = kwargs['filelist']
+        self.files = []
+        for f in files:
+            self.files.append(File(f))
+            
+        super(Files, self).__init__(*args, **kwargs)
+
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Input:  ...
+    # Return: none
+    #
+    #-------------------------------------------------------------------
+    def diff(self):
+        logger.debug("Begin Function")
+
+        file1 = self.files[0]
+        file2 = self.files[1]
+
+
+        if (file1.format_class in shutil.archive_formats and
+            file2.format_class in shutil.archive_formats):
+
+            file1_content = file1.listfiles()
+            file2_content = file2.listfiles()
+
+            
+        results = "Diff results"
+
+        logger.debug("Begin Function")
+        return results
+
 
 #-----------------------------------------------------------------------
 #
@@ -149,7 +184,7 @@ class Directory(files.BaseDirectory):
 # 
 #
 #-----------------------------------------------------------------------
-class Directories(files.BaseDirectories):
+class Directories(files.BaseFiles):
     pass
 
 #-----------------------------------------------------------------------

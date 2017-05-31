@@ -125,10 +125,12 @@ def testarchive(filename):
 # Return: ...
 #
 #-------------------------------------------------------------------
-def diff(filename):
-    logger.debug("Begin Function")    
+def diff(filename1, filename2):
+    logger.debug("Begin Function")
+
+    results = 'Tarfile diff'
     logger.debug('End Function')
-    return tarfile.is_tarfile(filename)
+    return results
 
 #-------------------------------------------------------------------
 #

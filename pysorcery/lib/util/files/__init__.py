@@ -178,13 +178,14 @@ class BaseFile():
     # Return: none
     #
     #-------------------------------------------------------------------
-    def search(self):
+    def search(self, searchstring):
         logger.debug("Begin Function")
 
         results = "File Search Results"
 
         logger.debug("Begin Function")
         return results
+
 
 #-----------------------------------------------------------------------
 #
@@ -300,32 +301,6 @@ class BaseFiles():
             logger.debug('End Function')
             return
 
-    #-----------------------------------------------------------------------
-    #
-    # Function diff
-    #
-    # Input:  @param: files - the file to compare
-    # Return: None
-    #
-    #-----------------------------------------------------------------------
-    def diff(self, size=False, contents=False):
-        logger.debug('Begin Function')
-
-        logger.info(self.files)
-        
-        logger.debug('End Function')
-        return
-
-
-#-----------------------------------------------------------------------
-#
-# Class BaseDirectories
-#
-# Directories are a specific type of file
-#
-#-----------------------------------------------------------------------
-class BaseDirectories(BaseFiles):
-    pass
 
 #-------------------------------------------------------------------
 #

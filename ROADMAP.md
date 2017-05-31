@@ -11,17 +11,62 @@
     - [X] create
     - [X] test
     - [X] repack
-    - [ ] search
+    - [X] search
     - [ ] diff
-    - [ ] formats
+    - [X] formats
     - [ ] recompress    
   - Archive Formats
     - [X] tar
+      - [X] extract
+      - [X] list
+      - [X] create
+      - [X] test
+      - [ ] repack
+      - [ ] search
+      - [ ] diff
+      - [ ] formats
+      - [ ] recompress    
     - [X] zip
+      - [X] extract
+      - [X] list
+      - [X] create
+      - [X] test
+      - [ ] repack
+      - [ ] search
+      - [ ] diff
+      - [ ] formats
+      - [ ] recompress    
   - Compression Formats
     - [X] gz
+      - [X] extract (decompress)
+      - [X] list (read)
+      - [X] create (compress)
+      - [X] test
+      - [ ] repack
+      - [ ] search
+      - [ ] diff
+      - [ ] formats
+      - [ ] recompress    
     - [X] xz
+      - [X] extract (decompress)
+      - [X] list (read)
+      - [X] create (compress)
+      - [X] test
+      - [ ] repack
+      - [ ] search
+      - [ ] diff
+      - [ ] formats
+      - [ ] recompress    
     - [X] bz2
+      - [X] extract (decompress)
+      - [X] list (read)
+      - [X] create (compress)
+      - [X] test
+      - [ ] repack
+      - [ ] search
+      - [ ] diff
+      - [ ] formats
+      - [ ] recompress    
 
 
 ### 0.0.2    

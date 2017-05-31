@@ -190,3 +190,36 @@ class Archive(files.BaseFile):
         
         logger.debug('End Function')
         return results
+
+#-----------------------------------------------------------------------
+#
+# Classes
+#
+#-----------------------------------------------------------------------
+class Archives(files.BaseFiles):
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Searches archive files
+    #
+    # Inputs
+    # ------
+    #     self:
+    #     searchstring:
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #-------------------------------------------------------------------
+    def diff(self):
+        logger.debug('Begin Function')
+
+        results = "A + B"
+        
+        logger.debug('End Function')
+        return results

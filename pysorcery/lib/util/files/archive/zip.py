@@ -143,6 +143,23 @@ def search(filename, searchstring):
 # Return: ...
 #
 #-------------------------------------------------------------------
+def diff(filename):
+    logger.debug("Begin Function")    
+
+    results = 'Zipfile diff results'
+    
+    logger.debug('End Function')
+    return results
+
+#-------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
 def verify_extract():
     logger.debug('Begin Function')
 

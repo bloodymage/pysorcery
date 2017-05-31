@@ -182,3 +182,40 @@ class CompressedFile(files.BaseFile):
         
         logger.debug('End Function')
         return results
+
+#-----------------------------------------------------------------------
+#
+# Classes
+#
+#-----------------------------------------------------------------------
+class CompressedFiles(files.BaseFiles):
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Searches archive files
+    #
+    # Inputs
+    # ------
+    #     self:
+    #     searchstring:
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #-------------------------------------------------------------------
+    def diff(self):
+        logger.debug('Begin Function')
+
+        archive_func = util.get_module_func('util_archive',
+                                            self.format_class,
+                                            'diff')
+
+        results = archive_func(self.filename)
+        
+        logger.debug('End Function')
+        return results
