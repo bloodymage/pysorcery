@@ -12,7 +12,7 @@
     - [X] test
     - [X] repack
     - [X] search
-    - [ ] diff
+    - [X] diff
     - [X] formats
     - [ ] recompress    
   - Archive Formats
@@ -23,7 +23,7 @@
       - [X] test
       - [ ] repack
       - [ ] search
-      - [ ] diff
+      - [X] diff
       - [ ] formats
       - [ ] recompress    
     - [X] zip
@@ -33,7 +33,7 @@
       - [X] test
       - [ ] repack
       - [ ] search
-      - [ ] diff
+      - [X] diff
       - [ ] formats
       - [ ] recompress    
   - Compression Formats
