@@ -113,7 +113,7 @@ def archive_formats(args):
 
     for group in format_groups:
         # Obtain list of all supported formats of type 'x'
-        formats = util.get_cmd_types(x)
+        formats = util.get_cmd_types(group)
 
         # 
         for format_ in formats:
