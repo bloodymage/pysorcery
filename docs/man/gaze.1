@@ -1,0 +1,290 @@
+.TH GAZE "1" "February 2005" "Source Mage GNU Linux" "User Commands"
+.SH NAME
+gaze \- query/view sorcery package management information
+.PP
+.SH SYNOPSIS
+.PP
+.B gaze
+[-q] [-g <grimoires>] <what> [<arguments>]
+.SH "DESCRIPTION"
+.I gaze
+is part of the sorcery source-based package management suite. It is a
+general purpose command-line tool for displaying package logs, version 
+information, checking for installed packages, checksums, message digests,
+maintainer information, package URL information, removing obsolete packages,
+displaying new packages, untracked files, sections, searching for files that
+are installed, finding when spells were created and packages in the
+software catalogue. It can even take and retrieve snap shots of currently
+installed packages for easy duplication.
+.SH "OPTIONS"
+.PP
+.SS -q
+.IP
+disable human style output.
+.PP
+.SS -g <grimoires>
+.IP
+specify which grimoire(s) to look in. To pass more than one, encapsulate them in quotes.
+.PP
+.SS alien
+.IP
+find and display all files which are not currently tracked by the
+sorcery package management system
+.PP
+.SS prune
+.IP
+removes all old source code and old backups. otherwise the source code from
+previous versions is kept so that the packages can be rolled back to older
+versions. This does not delete sources that are up to date, but not installed.
+
+NOTE: This is deprecated. Use 
+.I cleanse --sweep
+.PP
+.SS orphans
+.IP
+display installed spells that have no explicit dependencies on them
+.PP
+.SS activity
+.IP
+show the activity log.
+(note: this is actually a log of all that happened involving sorcery,
+such as casts, summons etc.)
+.PP
+.SS install-queue
+.IP
+shows the queue of spells waiting to be installed
+.PP
+.SS remove-queue
+.IP
+shows the queue of spells waiting to be removed
+.PP
+.SS show\-held
+.IP
+shows all spells currently held
+(which means they are not to be updated)
+.PP
+.SS show\-exiled
+.IP
+shows all spells currently exiled
+(which means they are not to be cast in any way)
+.PP
+.SS provides <feature>
+.IP
+displays spells that provide the feature
+.PP
+.SS what <spell>
+.IP
+view the long package description
+.PP
+.SS short <spell>
+.IP
+view the short package description
+.PP
+.SS where [-path] <spell>
+.IP
+display the section a spell belongs to. If -path is given, display the full path to spell
+.PP
+.SS website|url <spell>
+.IP
+display the URL for the specified spell
+.PP
+.SS sources <spell>
+.IP
+list all source files contained in a spell
+.PP
+.SS source_urls <spell>
+.IP
+lists the urls to all files contained in a spell
+.PP
+.SS maintainer <section>
+.IP
+display the email address of the person currently responsible for
+maintaining a specified section
+.PP
+.SS compile <spell> [version]
+.IP
+show the compiler output generated when the spell was built. 
+If no optional version was given, try the installed version. 
+If the spell is not installed use the version in the grimoire.
+.PP
+.SS install <spell> [version]
+.IP
+Used to determine what files were installed by a spell and where
+those files are located, excludes sorcery state files.
+If no optional version was given, try the installed version.
+.PP
+.SS install-full <spell> [version]
+.IP
+Like gaze install spell, but shows sorcery state files.
+.PP
+.SS install-spell <spell> [version]
+.IP
+Like gaze install spell, but excludes sorcery log files.
+.PP
+.SS version <spell>
+.IP
+shows the installed version of the spell and the main grimoires version.
+.PP
+.SS versions <spell>
+.IP
+shows the installed version of the spell and lists all available versions 
+in all grimoires. If used without a spell name, then lists order of available
+grimoires.
+.PP
+.SS license <spell>|<section>|<license>
+.IP
+view the license(s) of the given spell(s), or spells in given section(s),
+or view the information about given license(s)
+.PP
+.SS sum <spell>
+.IP
+print CRC checksums for spells(s). If no spell is given it default to all.
+.PP
+.SS md5sum <spell>
+.IP
+print spell MD5 message digests (fingerprints). If no spell is given it default 
+to all
+.PP
+.SS size <spell>|-all
+.IP
+print the sizes and file counts of the passed installed spell(s) or if -all is
+specified, of all the spells. In addition, this will print the largest spell.
+.PP
+.SS export
+.IP
+take a snapshot of all currently installed spells and their configuration.
+.PP
+.SS import [--deprecated] <snapshot>
+.IP
+restore the snapshot from a previous
+.I gaze export
+command (see above)
+
+If --deprecated is specified, the old behaviour is activated and an old cache
+is expected. There is no significant problem if an old cache is restored with
+the new importer. A few files will be ignored - only the files that the new
+exporter saves are considered - and the queuing logic wille be slighty more agressive.
+.PP
+.SS grimoire <grimoire>
+.IP
+prints specified grimoire's spells or all grimoires if grimoire-name is omitted
+.PP
+.SS grimoires
+.IP
+displays installed grimoires by name only
+.PP
+.SS html [-s] <grimoire-name>
+.IP
+prints the specified grimoire or all grimoires if grimoire-name is omitted
+in a nice html format.
+Additionally displays links to the source files when -s is given.
+.PP
+.SS search [-name|-short] "phrase"
+.IP
+When omitting -name and -short searches spells name, short description and long description for
+.I phrase
+.IP
+With -name searches spells name and with -short searches spells short description for
+.I phrase
+.IP
+.I phrase 
+can be any valid extended regular expression. For optimal results, don't forget to
+escape any special characters and use quotes to protect the expression.
+.PP
+.SS newer <date>
+.IP
+print packages first submitted after a specified date. the date must be
+specified in the 'yyyymmdd' format, where y=year, m=month, and d=day.
+There are two special dates, last_sorcery_update and last_cast.
+.PP
+.SS older <date>
+.IP
+print packages that were first submitted before a specified date.
+the date must be specified like for
+.IR "gaze newer" .
+last_sorcery_update and last_cast may not be used here.
+
+.PP
+.SS from [-regex] [<path>/]<file>
+.IP
+find out which spell has installed
+.I path/file
+
+Matching is done literally against the end of the path names in the lists
+of installed files. If -regex is passed, the matching is done using basic
+regular expressions against the whole paths in the lists of installed files.
+.PP
+.SS installed [<spell>]
+.IP
+view all installed packages and corresponding version numbers or check
+to see whether a particular package is installed and if it is
+installed display its version number
+.PP
+.SS section <section>
+.IP
+view a list of all sections in the software catalogue or display a list
+of packages from a specific section
+.PP
+.SS voyeur [<spell>|<delay>]
+.IP
+start looking at what cast is compiling at the moment and outputs its
+compiler messages. A spell can be optionally specified, or a delay
+after which to abort when no casts could be found.
+.PP
+.SS SCRIPT_NAME <spell>
+.IP
+show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the following spell scripts:
+
+BUILD | CONFIGURE | CONFLICTS | DETAILS | DEPENDS | DOWNLOAD | FINAL | HISTORY | INSTALL | INSTALL_EXTRAS | PATCH | POST_BUILD | POST_INSTALL | POST_REMOVE | POST_RESURRECT | PRE_BUILD | PRE_INSTALL | PRE_REMOVE | PRE_RESURRECT | PRE_SUB_DEPENDS | PREPARE | PROVIDES | SECURITY | SUB_DEPENDS | TRANSFER | TRIGGER_CHECK | TRIGGERS | UP_TRIGGERS
+.PP
+.SS history <spell>
+.IP
+show history for a spell (alias for
+.I gaze HISTORY <spell>
+)
+.PP
+.SS checkmd5s [<spell>|<section>] [...]
+.IP
+computes the md5sum on spell sources based on passed spell(s), section(s) or entire grimoire(s) if left blank.
+.PP
+.SS depends [--fast] [--required] <spell> [<level>]
+.IP
+shows the spells that explicitly or recursively depend on this
+.I installed
+spell.
+Up to level $level if specified. Only enabled dependencies are shown.
+
+If --fast is specified more limited output is produced, but it runs much faster.
+If --required is specified only the required dependencies are shown and the
+runtime ones are skipped.
+.PP
+.SS dependencies [-c ] [--no-optionals ] <spell> [<level>]
+.IP
+shows the spells that spell explicitly or recursively depends on.
+Up to level $level if specified. The -c option skips trees that have already been shown, the --no-optionals flag skips optional dependencies.
+.SS time [--last|--median|--mean|--weigh-last|--full] <spell> [spells]
+.IP
+shows the time the spell(s) needed to get cast. By default the last casting time
+is shown, alternatively the median, mean or weighted mean can be shown. The
+weighted mean mode gives more weight to the last casting time. If more then one
+spell is specified, also a total time is shown.
+.IP
+If --full is specified, then all the calculations will be shown for each spell.
+.SS time-system [--no-orphans] [--last|--median|--mean|--weigh-last|--full]
+.IP
+shows the time the whole system needed to get cast. If --no-orphans is specified
+orphaned spells are skipped.
+.SH "AUTHOR"
+Original version written by Brian Peterson, modified by Kyle Sallee and updated 
+by Thomas Stewart and Karsten Behrmann
+.PP
+Maintained by the Source Mage GNU Linux Team (http://www.sourcemage.org)
+.SH "REPORTING BUGS"
+Report bugs to bugzilla <http://bugs.sourcemage.org>
+.SH "SEE ALSO"
+cast(8), cleanse(8), dispel(8), grimoire(5), scribbler(8),
+scribe(8), sorcery(8), sorcery_config(8), summon(8)
+.SH "WARRANTY"
+This is free software with ABSOLUTELY NO WARRANTY
+
+
