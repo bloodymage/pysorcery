@@ -110,7 +110,8 @@ def archive_diff(args):
     archives = lib.Files(filelist=args.archive)
     result = archives.diff()
 
-    print(result)
+    for f in result:
+        logger.info(f)
     
     logger.debug('End Function')
     return

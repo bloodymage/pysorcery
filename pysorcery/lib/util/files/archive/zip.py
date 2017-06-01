@@ -88,8 +88,9 @@ def listfiles(filename):
     try:
         zip_file = zipfile.ZipFile(filename)
         zip_file.open()
+        file_contents = []
         for name in zip_file.namelist():
-            logger.info1(name)
+            file_contents.append(name)
     except zipfile.BadZipFile:
         logger.error("Unk Extraction Error")
         pass
@@ -100,7 +101,7 @@ def listfiles(filename):
         logger.error("Unknown Error")
         
     logger.debug('End Function')
-    return
+    return file_contents
 
     
 #-------------------------------------------------------------------

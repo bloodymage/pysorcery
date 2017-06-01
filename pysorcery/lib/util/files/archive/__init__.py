@@ -122,10 +122,10 @@ class Archive(files.BaseFile):
                                             self.format_class,
                                             'listfiles')
         # We know what the format is, initialize that format's class
-        archive_func(self.filename)
+        file_content = archive_func(self.filename)
         
         logger.debug('End Function')
-        return
+        return file_content
 
     #-------------------------------------------------------------------
     #

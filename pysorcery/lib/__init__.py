@@ -138,9 +138,8 @@ class Files(files.BaseFiles):
         self.files = []
         for f in files:
             self.files.append(File(f))
-            
-        super(Files, self).__init__(*args, **kwargs)
 
+        return
     #-------------------------------------------------------------------
     #
     # Function search
@@ -155,15 +154,16 @@ class Files(files.BaseFiles):
         file1 = self.files[0]
         file2 = self.files[1]
 
-
         if (file1.format_class in shutil.archive_formats and
             file2.format_class in shutil.archive_formats):
 
-            file1_content = file1.listfiles()
-            file2_content = file2.listfiles()
+            list1 = file1.listfiles()
+            list2 = file2.listfiles()
 
-            
-        results = "Diff results"
+            results = list(set(list1) - set(list2))
+            results = results + list(set(list2) - set(list1))
+        else:
+            results = "Diff results"
 
         logger.debug("Begin Function")
         return results

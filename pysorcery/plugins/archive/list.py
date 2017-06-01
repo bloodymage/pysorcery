@@ -120,11 +120,13 @@ def archive_list(args):
     for i in args.files:
         cfile = lib.Files(i)
         if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.listfiles()
+            content = cfile.listfiles()
         else:
             content = cfile.read()
-            for line in content:
-                print(line)
+
+
+    for line in content:
+        print(line)
 
     logger.debug('End Function')
     return

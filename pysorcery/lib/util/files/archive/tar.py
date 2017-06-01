@@ -87,8 +87,9 @@ def listfiles(filename):
     
     try:
         tar_file = tarfile.open(filename)
+        file_content = []
         for name in tar_file.getnames():
-            logger.info1(name)
+            file_content.append(name)
     except tarfile.ExtractError:
         logger.error("Unk Extraction Error")
         pass
@@ -99,7 +100,7 @@ def listfiles(filename):
         logger.error("Unknown Error")
         
     logger.debug('End Function')
-    return
+    return file_content
 
     
 #-------------------------------------------------------------------
