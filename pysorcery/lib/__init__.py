@@ -187,6 +187,17 @@ class Directory(files.BaseDirectory):
 class Directories(files.BaseFiles):
     pass
 
+#-------------------------------------------------------------------------------
+#
+# Class Package
+#
+# This is the spell API.
+# All spell related actions should go through this class
+#
+#-------------------------------------------------------------------------------
+class Package(packages.BasePackage):
+    pass
+
 #-----------------------------------------------------------------------
 #
 # Functions
