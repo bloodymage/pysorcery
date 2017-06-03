@@ -77,6 +77,16 @@ INFO7 = 27
 INFO8 = 28
 INFO9 = 29
 
+VINFO1 = 19
+VINFO2 = 18
+VINFO3 = 17
+VINFO4 = 16
+VINFO5 = 15
+VINFO6 = 14
+VINFO7 = 13
+VINFO8 = 12
+VINFO9 = 11
+
 logging.addLevelName(9, "DEBUG2")
 logging.addLevelName(8, "DEBUG3")
 logging.addLevelName(7, "DEBUG4")
@@ -86,6 +96,16 @@ logging.addLevelName(4, "DEBUG7")
 logging.addLevelName(3, "DEBUG8")
 logging.addLevelName(2, "DEBUG9")
 logging.addLevelName(1, "DEBUG10")
+
+logging.addLevelName(19, "VINFO1")
+logging.addLevelName(18, "VINFO2")
+logging.addLevelName(17, "VINFO3")
+logging.addLevelName(16, "VINFO4")
+logging.addLevelName(15, "VINFO5")
+logging.addLevelName(14, "VINFO6")
+logging.addLevelName(13, "VINFO7")
+logging.addLevelName(12, "VINFO8")
+logging.addLevelName(11, "VINFO9")
 
 logging.addLevelName(21, "INFO1")
 logging.addLevelName(22, "INFO2")
@@ -203,6 +223,96 @@ class LocalLogger(Logger):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(1):
             self._log(1, message, args, **kws)
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo1(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(19):
+            self._log(19, message, args, **kws)
+
+    #----------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo2(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(18):
+            self._log(18, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo3(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(17):
+            self._log(17, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo4(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(16):
+            self._log(16, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo5(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(15):
+            self._log(15, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo6(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(14):
+            self._log(14, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo7(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(13):
+            self._log(13, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo8(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(12):
+            self._log(12, message, args, **kws) 
+
+    #-------------------------------------------------------------------------------
+    #
+    # debug#
+    #
+    #-------------------------------------------------------------------------------
+    def vinfo9(self, message, *args, **kws):
+        # Yes, logger takes its '*args' as 'args'.
+        if self.isEnabledFor(11):
+            self._log(11, message, args, **kws)
 
     #-------------------------------------------------------------------------------
     #
@@ -370,6 +480,15 @@ class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
                         DEBUG3: "green",
                         DEBUG2: "green",
                         DEBUG: "green",
+                        VINFO1: "white",
+                        VINFO2: "white",
+                        VINFO3: "white",
+                        VINFO4: "white",
+                        VINFO5: "white",
+                        VINFO6: "white",
+                        VINFO7: "white",
+                        VINFO8: "white",
+                        VINFO9: "white",
                         INFO: "white",
                         INFO1: "white",
                         INFO2: "white",
