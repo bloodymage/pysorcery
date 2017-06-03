@@ -203,18 +203,20 @@ def gaze_version(args):
 
         logger.debug(spell)
 
-        args.quiet = args.quiet + 1
-
-        if args.quiet > 0:
-            message = colortext.colorize(spell.name, 'bold','white','black')
-            logger.info1(message)
-
-            message = colortext.colorize(version, 'none','white','black')
-            logger.info2(message)
-
-            print()
-        else:
+        if args.multi:
             logger.critical('Fix Me')
+        else:
+            if args.verbose > 0:
+                logger.critical('Fix Me')
+            else:
+                message = colortext.colorize(spell.name, 'bold','white','black')
+                logger.info1(message)
+
+                message = colortext.colorize(version, 'none','white','black')
+                logger.info2(message)
+
+                print()
+
     
     logger.debug('End Function')
     return
