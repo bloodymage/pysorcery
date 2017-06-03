@@ -71,7 +71,6 @@ import copy
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
 #from pysorcery import *
 #from pysorcery.lib.sorcery import repositories
@@ -79,6 +78,7 @@ from pysorcery.lib.system import logging
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
+from pysorcery.plugins import gaze
 
 
 #-----------------------------------------------------------------------

@@ -25,7 +25,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# gaze whats
+# pyArchive
 #
 #   This is a bonus application for pysorcery.  PySorcery for multiple
 #   reasons to internally extract, create, list the contents, etc.
@@ -34,9 +34,10 @@
 #
 #-----------------------------------------------------------------------
 """
-Gaze what
-
-View the long package description
+This is a bonus application for pysorcery.  PySorcery for multiple
+reasons to internally extract, create, list the contents, etc.
+archive files of multiple formats.  To test the capabilities of the
+underlying code, this application was developed.
 """
 #-----------------------------------------------------------------------
 #
@@ -64,6 +65,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.plugins import gaze
 # Conditional Libraries
 
 
@@ -84,72 +86,6 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-#
-# Functions
-#
-# gaze_what
-# parser
-#
-#-----------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-#
-# Function gaze_what
-#
-# view the long package description
-#
-# Input:  args
-#         args.spell    - List of spells to get description.
-#                         Minimum 1
-#         args.grimoire - Grimoire(s) to check for spell
-#         args.quiet    - Limit print output
-# Output: Prints spell description
-# Return: None
-#
-# Status: Working for Source Mage
-#         Working for Ubuntu
-#
-#-------------------------------------------------------------------------------
-def gaze_what(args):
-    logger.debug('Begin Function')
-
-    terms = {
-        'the_force': 'The Force is an energy field created by all living things. It surrounds us, penetrates us, and binds the galaxy together.',
-        '42': '42 is the answer to life, the universe, and everything.',
-        'the_matrix': '"The Matrix is everywhere. It is all around us, even now in this very room. You can see it when you look out your window or when you turn on your television. You can feel it when you go to work, when you go to church, when you pay your taxes; it is the world that has been pulled over your eyes to blind you from the truth."'
-        
-    }
-
-    # Provide hidden easter egg:
-    if (args.spell[0] == 'is' and
-        args.spell[1] in terms):
-        logger.info(terms[args.spell[1]])
-        
-    else:
-        # For each spell in the spell list...
-        for i in args.spell:
-            logger.debug2('Loop iteration: ' + i)
-            
-            spell = lib.Package(i)
-            description = spell.get_description()
-#            try:
-#                description = spell.get_description()
-#            except:
-#                description = 'Fall back description, something went wrong'
-
-            logger.debug3('Spell: ' + str(spell))
-            
-            message = colortext.colorize(spell.name, 'bold','white','black')
-            logger.info(message)
-
-            message = colortext.colorize(description, 'none','white','black')
-            logger.info1(message)
-
-    
-    logger.debug('End Function')
-    return
-
 
 #-----------------------------------------------------------------------
 #
@@ -165,14 +101,17 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('what',
+    cmd = subparsers.add_parser('version',
                                 parents = parent_parsers,
-                                help = 'Display spell description.'
+                                help = 'Shows the installed version of the spell and the main grimoires version.'
     )
     cmd.add_argument('spell',
-                     nargs = '+',
-                     help = 'Display System Info')
-    cmd.set_defaults(func = gaze_what,
-                     sudo = False)
+                     nargs = 1,
+                     help = 'Display System Info'
+    )
+    cmd.set_defaults(func = gaze.gaze_version,
+                     multi = False,
+                     sudo = False
+    )
 
     return cmd
