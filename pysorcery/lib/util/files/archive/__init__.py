@@ -96,7 +96,7 @@ class Archive(files.BaseFile):
     # Return: None
     #
     #-------------------------------------------------------------------
-    def create(self, root_dir=None, base_dir=None):
+    def create(self, root_dir=None, base_dir=None, compression_lvl=9):
         logger.debug('Begin Function')
         
         shutil.make_archive(self.basename,

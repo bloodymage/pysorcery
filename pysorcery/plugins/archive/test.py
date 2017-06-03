@@ -125,27 +125,29 @@ def archive_test(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_test = subparsers.add_parser('test',
-                                        aliases = ['verify'],
-                                        help = 'Test files')
-    parser_test.add_argument('files',
+def parser(*args, **kwargs):
+
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
+    cmd = subparsers.add_parser('test',
+                                aliases = ['verify'],
+                                help = 'Test files')
+    cmd.add_argument('files',
                              nargs = 1,
                              metavar = 'archive',
                              help = 'Create files')
-    parser_test.set_defaults(func = archive_test)
+    cmd.set_defaults(func = archive_test)
 
-    return parser_test
+    return cmd

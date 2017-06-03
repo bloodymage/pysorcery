@@ -84,8 +84,13 @@ def decompress(filename, root_dir=None, base_dir=None, verbose=0,
 #    logger.debug('End Function')
     return
 
-def compress(filename, base_dir,verbose=0, dry_run=0, logger=None,
-           owner=None,group=None):
+def compress(filename,
+             base_dir,
+             verbose=0,
+             dry_run=0,
+             logger=None,
+             owner=None,
+             group=None):
 #    logger.debug('Begin Function')
 
     with open(filename, 'rb') as f_in:

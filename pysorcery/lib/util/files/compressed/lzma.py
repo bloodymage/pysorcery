@@ -89,7 +89,7 @@ def compress(filename, base_dir,verbose=0, dry_run=0, logger=None,
 #    logger.debug('Begin Function')
 
     with open(filename, 'rb') as f_in:
-        with lzma.open(filename + '.xz', 'wb') as f_out:
+        with lzma.open(filename + '.xz', 'wb', preset=9) as f_out:
             shutil.copyfileobj(f_in, f_out)
 
 #    logger.debug('End Function')

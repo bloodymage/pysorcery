@@ -149,6 +149,11 @@ def parser(*args, **kwargs):
                      help = 'Archive file to create')
     cmd.add_argument('filename',
                      help = 'Files / Directories to add to the archive')
+    cmd.add_argument('compression_level',
+                     type = int,
+                     choices = range(0, 9),
+                     default = 9,
+                     help = 'Set new compression level')
     cmd.set_defaults(func = archive_create)
 
     return cmd

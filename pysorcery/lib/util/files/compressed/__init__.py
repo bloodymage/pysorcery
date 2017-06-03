@@ -93,7 +93,11 @@ class CompressedFile(files.BaseFile):
     # Return: ...
     #
     #-------------------------------------------------------------------
-    def compress(self, source_file=None, root_dir=None, base_dir=None):
+    def compress(self,
+                 source_file=None,
+                 root_dir=None,
+                 base_dir=None,
+                 compression_level=9):
         logger.debug('Begin Function')
 
         if source_file is None:

@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/archive/recompress.py
 #
 # This file is part of Sorcery.
 #
@@ -25,19 +25,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyArchive: recompress
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#   Recompresses an archive file
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Recompress an archive file
 """
 #-----------------------------------------------------------------------
 #
@@ -89,15 +83,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
 # archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -110,7 +97,8 @@ colortext = text.ConsoleText()
 #
 # Input:  args
 #         args.quiet   - Decrease Output Verbosity
-#         args.srcfile - Original File
+#         args.archive - Original File
+#         args.compression_level - Compression level to recompress to.
 #
 # Return: None
 #
@@ -118,6 +106,8 @@ colortext = text.ConsoleText()
 def archive_recompress(args):
     logger.debug('Begin Function')
 
+    print('Archive = ' + str(args.archive))
+    print('Comp Lvl = ' + str(args.compression_level))
 
 
     logger.debug('End Function')
@@ -125,28 +115,33 @@ def archive_recompress(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_recompress = subparsers.add_parser('recompress',
-                                              parents = [parent_parser],
-                                              help = 'Recompress files'
-    )
-    parser_recompress.add_argument('srcfile',
-                                   help = 'Source file')
-    parser_recompress.add_argument('dstfile',
-                                   help = 'Destination file')
-    parser_recompress.set_defaults(func = archive_recompress)
+def parser(*args, **kwargs):
 
-    return parser_recompress
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
+    cmd = subparsers.add_parser('recompress',
+                                parents = parent_parsers,
+                                help = 'Recompress files'
+    )
+    cmd.add_argument('archive',
+                     help = 'Source file')
+    cmd.add_argument('compression_level',
+                     type = int,
+                     choices = range(0, 9),
+                     default = 9,
+                     help = 'Set new compression level')
+    cmd.set_defaults(func = archive_recompress)
+
+    return cmd

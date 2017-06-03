@@ -140,14 +140,22 @@ def archive_repack(args):
 # Return: None
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_repack = subparsers.add_parser('repack',
-                                          parents = [parent_parser],
-                                          help = 'Repack files')
-    parser_repack.add_argument('srcfile',
-                               help = 'Original File')
-    parser_repack.add_argument('dstfile',
-                               help = 'Destination File')
-    parser_repack.set_defaults(func = archive_repack)
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
 
-    return parser_repack
+    cmd = subparsers.add_parser('repack',
+                                parents = parent_parsers,
+                                help = 'Repack files')
+    cmd.add_argument('srcfile',
+                     help = 'Original File')
+    cmd.add_argument('dstfile',
+                               help = 'Destination File')
+    cmd.add_argument('compression_level',
+                     type = int,
+                     choices = range(0, 9),
+                     default = 9,
+                     help = 'Set new compression level')
+    cmd.set_defaults(func = archive_repack)
+
+    return cmd

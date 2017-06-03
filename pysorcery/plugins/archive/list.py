@@ -133,29 +133,31 @@ def archive_list(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Input:  @param: *args    - tuple of all subparsers and parent parsers
+#                            args[0]: the subparser
+#                            args[1:] the parent parsers
+#         @param: **kwargs - Not used Future?
+# Return: cmd   - the subcommand parsing options
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_list = subparsers.add_parser('list',
-                                        parents = [parent_parser],
-                                        help = 'List files')
-    parser_list.add_argument('files',
-                             nargs = '+',
-                             help = 'List files')
-    parser_list.add_argument('-r', '--recursive',
-                                action = 'store_true',
-                                help = 'Recursive')
-    parser_list.set_defaults(func = archive_list) 
+def parser(*args, **kwargs):
 
-    return parser_list
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
+    cmd= subparsers.add_parser('list',
+                               parents = parent_parsers,
+                               help = 'List files')
+    cmd.add_argument('files',
+                     nargs = '+',
+                     help = 'List files')
+    cmd.add_argument('-r', '--recursive',
+                     action = 'store_true',
+                     help = 'Recursive')
+    cmd.set_defaults(func = archive_list) 
+
+    return cmd
