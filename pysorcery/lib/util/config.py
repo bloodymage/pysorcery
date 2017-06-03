@@ -325,14 +325,14 @@ def configure_logging(args,config):
     if config['logging']['verbosity'] == 0:
         config['logging']['loglevel'] = loglevels[config['logging']['loglevel']]
     else:
-        config['logging']['loglevel'] = 11 - min(10,config['logging']['verbosity'])
+        config['logging']['loglevel'] = 20 - min(20,config['logging']['verbosity'])
 
     if args.debug:
         config['logging']['loglevel'] = 1
     elif args.quiet > 0:
         config['logging']['loglevel'] = 20 + args.quiet
     elif args.verbosity > 0:
-        config['logging']['loglevel'] = 11 - args.verbosity
+        config['logging']['loglevel'] = 20 - args.verbosity
         print(config['logging']['loglevel'])
     else:
         # Bind loglevel to the upper case string value obtained
