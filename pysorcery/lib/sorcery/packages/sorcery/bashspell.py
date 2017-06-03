@@ -104,7 +104,7 @@ class DetailsFile(lib.Files):
     def __init__(self,spell_directory):
         logger.debug('Begin Function')
         
-        lib.Files.__init__(self,spell_directory + '/DETAILS')
+        lib.File.__init__(self,spell_directory + '/DETAILS')
         
         logger.debug('End Function')
         return

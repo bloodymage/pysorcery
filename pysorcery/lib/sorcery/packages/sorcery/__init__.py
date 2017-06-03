@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/sorcery/packages/sorcery/__init__.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -53,9 +55,9 @@ from pysorcery.lib import logging
 # Other Application Libraries
 from pysorcery import lib
 from pysorcery.lib.sorcery import packages
-from pysorcery.lib.sorcery.packages.spell import bashspell
+from pysorcery.lib.sorcery.packages.sorcery import bashspell
 from pysorcery.lib.sorcery import repositories
-from pysorcery.lib.sorcery.repositories import codex
+from pysorcery.lib.sorcery.repositories import sorcery
 
 #-------------------------------------------------------------------------------
 #
@@ -70,21 +72,68 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 #
-# BaseSpell
+# Spell
 #
 #-------------------------------------------------------------------------------
 
  
 #-------------------------------------------------------------------------------
 #
-# Class BaseSpell
+# Class Spell
 # 
 #
 #-------------------------------------------------------------------------------
 class Spell(packages.BasePackage):
-    def __init__(self,name):
+    def __init__(self, *args, **kwargs):
         logger.debug("Begin Function")
         super(Spell, self).__init__(*args, **kwargs)
+
+        logger.debug("End Function")
+        return
+
+    #-------------------------------------------------------------------
+    #
+    # Function 
+    #
+    # Input:  ...
+    # Return: ...
+    #
+    #-------------------------------------------------------------------
+    def set_details(self):
+        logger.debug('Begin Function')
+        
+        codex = repositories.Repo_Lists()
+        grimoire_list = codex.list_grimoires()
+
+        for i in grimoire_list:
+            spell_list_file = libfiles.Files(i + '/codex.index')
+            spell_list = spell_list_file.read()
+
+            for item in spell_list:
+                spell, section_dir = item.split(' ')
+
+                if self.name == spell:
+                    self.section_dir = section_dir
+                    break
+
+            if self.name == spell:
+                self.grimoire = i.split('/')[-1]
+                break
+
+        self.section = self.section_dir.split('/')[-1]
+        self.spell_directory = self.section_dir + '/' + self.name
+
+        details_file = libfiles.DetailsFile(self.spell_directory)
+        details = details_file.read()
+        
+        self.description = details['description']
+        self.version = details['version']
+        self.url = details['website']
+        self.short = details['short']
+        
+        self.source_files = {}
+
+        #file_name = url.split('/')[-1]
 
         logger.debug("End Function")
         return
@@ -121,12 +170,11 @@ class Spell(packages.BasePackage):
 #
 #-------------------------------------------------------------------------------
 def get_description(name):
-    spell_codex = codex.Codex()
+    spell_codex = sorcery.Codex()
     grimoire_list = spell_codex.list_grimoires()
 
-
     for grimoire in grimoire_list:
-        spell_list_file = lib.Files(grimoire + '/codex.index')
+        spell_list_file = lib.File(grimoire + '/codex.index')
         spell_list = spell_list_file.read()
         
         for item in spell_list:
@@ -148,3 +196,40 @@ def get_description(name):
     description = details['description']
 
     return description
+
+#-------------------------------------------------------------------------------
+#
+# Function get_description
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------------------
+def get_version(name):
+    spell_codex = sorcery.Codex()
+    grimoire_list = spell_codex.list_grimoires()
+
+    for grimoire in grimoire_list:
+        spell_list_file = lib.File(grimoire + '/codex.index')
+        spell_list = spell_list_file.read()
+        
+        for item in spell_list:
+            spell, section_dir = item.split(' ')
+
+            if name == spell:
+                break
+            
+        if name == spell:
+            grimoire = grimoire.split('/')[-1]
+            break
+
+    section = section_dir.split('/')[-1]
+    spell_directory = section_dir + '/' + name
+
+    details_file = bashspell.DetailsFile(spell_directory)
+    details = details_file.parse()
+        
+    version = details['version']
+
+    return version

@@ -199,10 +199,22 @@ def gaze_version(args):
 
     for i in args.spell:
         spell = lib.Package(i)
+        version = spell.get_version()
 
         logger.debug(spell)
 
-        spell.print_version(args.multi)
+        args.quiet = args.quiet + 1
+
+        if args.quiet > 0:
+            message = colortext.colorize(spell.name, 'bold','white','black')
+            logger.info1(message)
+
+            message = colortext.colorize(version, 'none','white','black')
+            logger.info2(message)
+
+            print()
+        else:
+            logger.critical('Fix Me')
     
     logger.debug('End Function')
     return

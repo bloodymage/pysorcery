@@ -161,7 +161,7 @@ class Codex(Grimoire):
     def list_grimoires(self):
         logger.debug('Begin Function')
 
-        grimoire_file = lib.Files('/etc/sorcery/local/grimoire')
+        grimoire_file = lib.File('/etc/sorcery/local/grimoire')
         unedited_grimoire_list = grimoire_file.read()
 
         grimoire_list = []

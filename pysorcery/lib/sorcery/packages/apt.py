@@ -200,3 +200,23 @@ def get_description(name):
 
     cache.close()
     return description
+
+#-------------------------------------------------------------------------------
+#
+# Function get_description
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------------------
+def get_version(name):
+    cache = apt.cache.Cache()
+    cache.open()
+        
+    pkg = cache[name]
+    pkg_info = pkg.versions
+    version = pkg_info[0].version
+
+    cache.close()
+    return version

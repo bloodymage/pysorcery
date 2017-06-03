@@ -106,7 +106,7 @@ def parser(*args, **kwargs):
                                 help = 'Shows the installed version of the spell and the main grimoires version.'
     )
     cmd.add_argument('spell',
-                     nargs = 1,
+                     nargs = '+',
                      help = 'Display System Info'
     )
     cmd.set_defaults(func = gaze.gaze_version,
