@@ -63,7 +63,7 @@ distro_definitions = {
     ): 'apt',
     ('Source Mage',
      'SMGL'
-    ): 'spell',
+    ): 'sorcery',
     ('Red Hat',
      'Fedora'
     ): 'yum',
