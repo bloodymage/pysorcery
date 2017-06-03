@@ -184,11 +184,13 @@ def get_module_func(cmd_class,
     else:
         modulename = basemodname + cmd_type
 
+
     # import the module
-    try:
-        module = importlib.import_module(modulename, __name__)
-    except ImportError as msg:
-        logger.error(str(msg) + ' ' + str(modulename))
+    module = importlib.import_module(modulename, __name__)
+    #    try:
+#        module = importlib.import_module(modulename, __name__)
+#    except ImportError as msg:
+#        logger.error(str(msg) + ' ' + str(modulename))
 
     # get the function
     try:
