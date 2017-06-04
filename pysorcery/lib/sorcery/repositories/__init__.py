@@ -69,17 +69,14 @@ if distro.distro_group[distro.distro_id] == 'deb':
 # create logger
 logger = logging.getLogger(__name__)
 
-if distro.distro_group[distro.distro_id] == 'spell':
-    pkg_mgr = 'codex'
-else:
-    pkg_mgr = distro.distro_group[distro.distro_id]
+pkg_mgr = distro.distro_group[distro.distro_id]
     
 #-------------------------------------------------------------------------------
 #
 # Classes
 #
 # BaseRepository
-# Repositories
+# BaseRepositories
 #
 #-------------------------------------------------------------------------------
 
@@ -145,7 +142,7 @@ class BaseRepository():
 # 
 #
 #-------------------------------------------------------------------------------
-class Repositories():
+class BaseRepositories():
     pass
 
 #-------------------------------------------------------------------------------
@@ -166,7 +163,6 @@ class Repositories():
 #
 #-------------------------------------------------------------------------------
 def get_repo_name(name=None, repo_dir=None):
-    
     func = util.get_module_func('repositories',
                                 pkg_mgr,
                                 'get_repo_name')
