@@ -51,7 +51,7 @@ from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 from pysorcery.lib.system import shutil
 # Other Application Libraries
-from pysorcery.lib.sorcery import packages
+# from pysorcery.lib.sorcery import packages
 #from pysorcery.lib.sorcery import repositories
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
@@ -185,17 +185,6 @@ class Directory(files.BaseDirectory):
 #
 #-----------------------------------------------------------------------
 class Directories(files.BaseFiles):
-    pass
-
-#-------------------------------------------------------------------------------
-#
-# Class Package
-#
-# This is the spell API.
-# All spell related actions should go through this class
-#
-#-------------------------------------------------------------------------------
-class Package(packages.BasePackage):
     pass
 
 #-----------------------------------------------------------------------
