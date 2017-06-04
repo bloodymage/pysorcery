@@ -206,7 +206,7 @@ def gaze_version(args):
         if args.multi:
             logger.critical('Fix Me')
         else:
-            if args.verbose > 0:
+            if args.verbosity > 0:
                 logger.critical('Fix Me')
             else:
                 message = colortext.colorize(spell.name, 'bold','white','black')
