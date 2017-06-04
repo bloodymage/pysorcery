@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/sorcery/packages/__init__.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -41,7 +43,7 @@ import sys
 import subprocess
 import os
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
@@ -69,12 +71,13 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 #
 # BasePackage
+# BasePackages
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Class BaseSpell
+# Class BasePackage
 # 
 #
 #-----------------------------------------------------------------------
@@ -133,3 +136,12 @@ class BasePackage():
         func(args)
         
         return
+
+#-----------------------------------------------------------------------
+#
+# Class BaseSpells
+# 
+#
+#-----------------------------------------------------------------------
+class BasePackages():
+    pass

@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/sorcery/repositories/sorcery/__init__.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -193,4 +195,3 @@ def get_repo_name(name=None, grim_dir=None):
         name = grim_dir.split('/')[-1]
 
     return name
-

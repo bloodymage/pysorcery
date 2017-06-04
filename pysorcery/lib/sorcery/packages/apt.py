@@ -203,7 +203,7 @@ def get_description(name):
 
 #-------------------------------------------------------------------------------
 #
-# Function get_description
+# Function get_version
 #
 # Input:  ...
 # Output: ...
@@ -220,3 +220,47 @@ def get_version(name):
 
     cache.close()
     return version
+
+#-------------------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Return: ...
+#
+#-------------------------------------------------------------------------------
+    def print_version(self,multi=False):
+        logger.debug("Begin Function")
+        
+        if multi:
+            grimoires = libcodex.Codex()
+            grimoire_list = grimoires.list_grimoires()
+            
+            m = len(grimoire_list)
+        else:
+            grimoire_list = [ self.grimoire ]
+            m = 1
+
+        print_list = [ "Repository       " ]
+        print_list.append("Section          ")
+        print_list.append("Package          ")
+        print_list.append("Repo version     ")
+        print_list.append("Installed version")
+        print_list.append("----------       ")
+        print_list.append("-------          ")
+        print_list.append("-------          ")
+        print_list.append("------------     ")
+        print_list.append("-----------------")
+
+
+        for i in grimoire_list:
+            print_list.append(i.split('/')[-1])
+            print_list.append(self.section)
+            print_list.append(self.name)
+            print_list.append(self.version)
+            print_list.append('-')
+
+        libmisc.column_print(print_list,cols=5,columnwise=False,gap=2)
+                
+        logger.debug("End Function")
+        return
