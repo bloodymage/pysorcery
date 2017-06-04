@@ -216,7 +216,6 @@ def gaze_version(args):
                 logger.info2(message)
 
                 print()
-
     
     logger.debug('End Function')
     return
