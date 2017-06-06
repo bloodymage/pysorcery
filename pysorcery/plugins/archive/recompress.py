@@ -25,12 +25,26 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# pyArchive
+#
+#   This is a bonus application for pysorcery.  PySorcery for multiple
+#   reasons to internally extract, create, list the contents, etc.
+#   archive files of multiple formats.  To test the capabilities of the
+#   underlying code, this application was developed.
+#
 # pyArchive: recompress
 #
 #   Recompresses an archive file
 #
 #-----------------------------------------------------------------------
 """
+This is a bonus application for pysorcery.  PySorcery for multiple
+reasons to internally extract, create, list the contents, etc.
+archive files of multiple formats.  To test the capabilities of the
+underlying code, this application was developed.
+
+Plugin: recompress
+
 Recompress an archive file
 """
 #-----------------------------------------------------------------------
@@ -59,6 +73,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -92,15 +107,22 @@ colortext = text.ConsoleText()
 #
 # Functions archive_recompress
 #
-#
 # Recompresses a file.
 #
-# Input:  args
-#         args.quiet   - Decrease Output Verbosity
-#         args.archive - Original File
-#         args.compression_level - Compression level to recompress to.
+# Inputs
+# ------
+#    @param: args
+#            args.quiet   - Decrease Output Verbosity
+#            args.archive - Original File
+#            args.compression_level - Compression level to recompress to.
 #
-# Return: None
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_recompress(args):
@@ -119,11 +141,20 @@ def archive_recompress(args):
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):

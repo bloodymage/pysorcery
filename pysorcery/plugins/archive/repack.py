@@ -89,33 +89,30 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
 # archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_repack
-#
+# Function archive_repack
 #
 # Convert files from one archive or compression format to another
 #
+# Inputs
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.srcfile
+#            args.dstfile
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.srcfile
-#         args.dstfile
+# Returns
+# -------
+#    None
 #
-# Return: None
-#
+# Raises
+# ------
+#    ...
 #-----------------------------------------------------------------------
 def archive_repack(args):
     logger.debug('Begin Function')
@@ -127,17 +124,24 @@ def archive_repack(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):

@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/archive/extract.py
 #
 # This file is part of Sorcery.
 #
@@ -32,7 +32,7 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# extract
+# Plugin: extract
 #
 #   This plugin provides the extraction interface...
 #
@@ -42,6 +42,10 @@ This is a bonus application for pysorcery.  PySorcery for multiple
 reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
+
+Plugin: extract
+
+This plugin provides the extraction interface...
 """
 #-----------------------------------------------------------------------
 #
@@ -69,6 +73,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -94,6 +99,7 @@ colortext = text.ConsoleText()
 # Functions
 #
 # archive_extract
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -103,13 +109,22 @@ colortext = text.ConsoleText()
 #
 # Extract files listed.
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.files - List of files to extract
+#            args.recursive - Extract all files in all subfolders
+#            args.depth (Add me) - if recursive, limit to depth #
+#            args.output_dir - Directory to extract to
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_extract(args):
@@ -145,15 +160,23 @@ def archive_extract(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd   - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):

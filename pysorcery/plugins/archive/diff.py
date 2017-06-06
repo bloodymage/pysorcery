@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/archive/diff.py
 #
 # This file is part of Sorcery.
 #
@@ -25,13 +25,29 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Archive Diff
+# pyArchive
 #
-# This plugin provides the ability to compare archive and compressed
-# files.
+#   This is a bonus application for pysorcery.  PySorcery for multiple
+#   reasons to internally extract, create, list the contents, etc.
+#   archive files of multiple formats.  To test the capabilities of the
+#   underlying code, this application was developed.
+#
+# Plugins: diff
+#
+#   This plugin provides the ability to compare archive and compressed
+#   files.
 #
 #-----------------------------------------------------------------------
 """
+pyArchive
+
+This is a bonus application for pysorcery.  PySorcery for multiple
+reasons to internally extract, create, list the contents, etc.
+archive files of multiple formats.  To test the capabilities of the
+underlying code, this application was developed.
+
+Plugin: diff
+
 This plugin provides the ability to compare archive and compressed files.
 """
 #-----------------------------------------------------------------------
@@ -95,13 +111,22 @@ colortext = text.ConsoleText()
 #
 # Find and display all differences between two archive filesxs
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.archive1 - First archive to compare
-#         args.archive2 - Second archive to compare
-#         args.size - Compare content file sizes as well (conflicts with content)
-#         args.content - Compare File Contents (conflicts with size)
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.archive1 - First archive to compare
+#            args.archive2 - Second archive to compare
+#            args.size - Compare content file sizes as well (conflicts with content)
+#            args.content - Compare File Contents (conflicts with size)
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_diff(args):
@@ -122,11 +147,20 @@ def archive_diff(args):
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd   - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):

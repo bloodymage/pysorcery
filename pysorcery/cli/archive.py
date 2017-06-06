@@ -65,6 +65,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -102,9 +103,20 @@ colortext = text.ConsoleText()
 # 2. Eshablishes configuration
 # 3. Runs the function specified by the arguments
 #
-# Input:  args
-# 
-# Return: None 
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
 def real_main(args):    
@@ -167,10 +179,20 @@ Report bugs to ...
 #
 # The First function, initalizes everything else.
 #
-# Inputs come from command line argument
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
 #
+# Returns
+# -------
+#    None (Change this for error exits)
 #
-# Note: Any cli switches will override the settings in the config files
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
 def main(args=None):

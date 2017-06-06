@@ -86,6 +86,18 @@ logger = logging.getLogger(__name__)
 # 
 # The File API.  This is the class that is used for ALL file activities
 #
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
 #-----------------------------------------------------------------------
 class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #-------------------------------------------------------------------
@@ -93,6 +105,18 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     # Function read
     #
     # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def read(self):
@@ -110,6 +134,18 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     # Function search
     #
     # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def search(self, searchstring):
@@ -129,7 +165,18 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
 #-----------------------------------------------------------------------
 #
 # Class Files
-# 
+#
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 # 
 #-----------------------------------------------------------------------
 class Files(files.BaseFiles):
@@ -142,10 +189,21 @@ class Files(files.BaseFiles):
         return
     #-------------------------------------------------------------------
     #
-    # Function search
+    # Function diff
     #
-    # Input:  ...
-    # Return: none
+    # Diff ...
+    # 
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def diff(self):

@@ -69,16 +69,44 @@ from pysorcery import __version__, DEBUG
 #
 # Class CommonParser
 #
-# input:
-# return: None
+# Inputs
+# ------
+#    @param: *args    - tuple 
+#    @param: **kwargs - dictionary
+#
+# Returns
+# -------
+#    self.parser - 
+#
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
 class CommonParser(ArgumentParser):
     def __init__(self, *args, **kwargs):
         super(CommonParser, self).__init__(*args, **kwargs)
-
         return
 
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def create_subparsers(self):
         self.subparser = self.add_subparsers(title = 'commands',
                             metavar = 'Command',
@@ -87,6 +115,25 @@ class CommonParser(ArgumentParser):
         return self.subparser
 
 
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def add_version_option(self):
         self.add_argument('-V',
                           '--version',
@@ -96,6 +143,25 @@ class CommonParser(ArgumentParser):
         )
         return
 
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def add_logging_option(self):
         # Common Help Descriptions:
         quiet_help = 'Decrease output'
@@ -157,8 +223,20 @@ class CommonParser(ArgumentParser):
 #
 # Class ArgParser
 #
-# input:
-# return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
 class ArgParser(CommonParser):

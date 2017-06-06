@@ -32,12 +32,20 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
+# Plugin: test
+#
+#    This plugin checks to ensure an archive file is valid.
+#
 #-----------------------------------------------------------------------
 """
 This is a bonus application for pysorcery.  PySorcery for multiple
 reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
+
+Plugin: test
+
+This plugin checks to ensure an archive file is valid.
 """
 #-----------------------------------------------------------------------
 #
@@ -65,6 +73,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -89,15 +98,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
 # archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -107,10 +109,19 @@ colortext = text.ConsoleText()
 #
 # Verify the archive file is valid and can be opened
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.files - List of files to extract
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
 def archive_test(args):
@@ -129,11 +140,20 @@ def archive_test(args):
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
