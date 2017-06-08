@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/util/files/archive/zip.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -64,24 +66,33 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions
 #
 # extract
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def listfiles(filename):
     logger.debug("Begin Function")
     
@@ -102,31 +113,50 @@ def listfiles(filename):
         
     logger.debug('End Function')
     return file_contents
-
-    
-#-------------------------------------------------------------------
+   
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def testarchive(filename):
     logger.debug("Begin Function")    
     logger.debug('End Function')
     return zipfile.is_zipfile(filename)
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def search(filename, searchstring):
     logger.debug("Begin Function")    
 
@@ -135,15 +165,25 @@ def search(filename, searchstring):
     logger.debug('End Function')
     return results
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def diff(filename):
     logger.debug("Begin Function")    
 
@@ -152,15 +192,25 @@ def diff(filename):
     logger.debug('End Function')
     return results
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def verify_extract():
     logger.debug('Begin Function')
 
@@ -169,15 +219,25 @@ def verify_extract():
     logger.debug('End Function')
     return verified
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def verify_test():
     logger.debug('Begin Function')
 
@@ -185,15 +245,25 @@ def verify_test():
     logger.debug('End Function')
     return verified
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def verify_compress():
     logger.debug("Begin Function")
 
@@ -202,15 +272,25 @@ def verify_compress():
     logger.debug('End Function')
     return verified
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def verify_list():
     logger.debug("Begin Function")
 
@@ -218,15 +298,25 @@ def verify_list():
     logger.debug('End Function')
     return verified
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
 #
-#-------------------------------------------------------------------
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def archive_support():
     logger.debug("Begin Function")
 

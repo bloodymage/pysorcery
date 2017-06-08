@@ -32,7 +32,7 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# plugin: create
+# Plugin: Create
 #
 #   This plugin adds archive/compressed file creation and the
 #   applicable command line arguments.
@@ -112,12 +112,20 @@ colortext = text.ConsoleText()
 #
 # Create archive file.
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.output_dir - Directory to create archive of
-#                           If this is a single file, compress the file
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet   - Decrease Output Verbosity
+#            args.archive - Original File
+#            args.compression_level - Compression level to recompress to.
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_create(args):
@@ -136,10 +144,22 @@ def archive_create(args):
 #
 # Function parser
 #
-# Creates the parser subcommand and
+# Create subcommand parsing options
 #
-# Input:  *args - tuple of all parent parsers
-# Return: cmd
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -153,7 +173,8 @@ def parser(*args, **kwargs):
                      help = 'Archive file to create')
     cmd.add_argument('filename',
                      help = 'Files / Directories to add to the archive')
-    cmd.add_argument('compression_level',
+    cmd.add_argument('-l',
+                     '--compression_level',
                      type = int,
                      choices = range(0, 9),
                      default = 9,

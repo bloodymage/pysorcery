@@ -32,7 +32,7 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# pyArchive: Search
+# Plugin: Search
 #
 #  This plugin gives the user the ability to search archives files for
 #  files with the searched naame or string.

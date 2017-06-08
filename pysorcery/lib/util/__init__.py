@@ -125,9 +125,11 @@ UrlModules = {
 #
 # Function get_cmd_types
 #
+#
+#
 # Inputs
 # ------
-#     cmd_class - I really need a new name for this...
+#     @param: cmd_class - I really need a new name for this...
 #         
 # Returns
 # -------
@@ -165,9 +167,19 @@ def get_cmd_types(cmd_class):
 #
 # Function get_module_func
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# Inputs
+# ------
+#    @param: cmd_class
+#    @param: cmd_type
+#    @param: command
+#
+# Returns
+# -------
+#    getattr()
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def get_module_func(cmd_class,

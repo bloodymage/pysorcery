@@ -72,14 +72,23 @@ logger = logging.getLogger(__name__)
 #
 #-------------------------------------------------------------------
 
-
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def listfiles(filename):
@@ -102,14 +111,23 @@ def listfiles(filename):
     logger.debug('End Function')
     return file_content
 
-    
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def testarchive(filename):
@@ -119,11 +137,21 @@ def testarchive(filename):
 
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def diff(filename1, filename2):
@@ -135,11 +163,21 @@ def diff(filename1, filename2):
 
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def search(filename, searchstring):
@@ -152,11 +190,21 @@ def search(filename, searchstring):
 
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def verify_extract():
@@ -169,11 +217,21 @@ def verify_extract():
 
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def verify_test():
@@ -185,11 +243,21 @@ def verify_test():
 
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def verify_compress():
@@ -202,11 +270,21 @@ def verify_compress():
 
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def verify_list():
@@ -218,11 +296,21 @@ def verify_list():
 
 #-------------------------------------------------------------------
 #
-# Function 
+# Function decompress
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def archive_support():

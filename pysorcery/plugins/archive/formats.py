@@ -25,14 +25,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# Plugin: Formats
 #
 #   This is a bonus application for pysorcery.  PySorcery for multiple
 #   reasons to internally extract, create, list the contents, etc.
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# Plugin: formats
+# Plugin: Formats
 #
 #    This plugin prints a list of all Sorcery supported archive and
 #    compression options along with status on underlying system
@@ -47,7 +47,7 @@ reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 
-Plugin: formats
+Plugin: Formats
 
 This plugin prints a list of all Sorcery supported archive and 
 compression options along with status on underlying system support.
@@ -116,7 +116,6 @@ colortext = text.ConsoleText()
 # Inputs
 # ------
 #    @param: args
-#
 #
 # Returns
 # -------

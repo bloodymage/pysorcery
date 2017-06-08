@@ -28,7 +28,7 @@
 #
 # This implements the archive classes
 #
-#
+# ...
 #
 #-----------------------------------------------------------------------
 """
@@ -70,14 +70,48 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
+# Archive
+# Archives
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Class Archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
 #-----------------------------------------------------------------------
 class Archive(files.BaseFile):        
     #-------------------------------------------------------------------
     #
     # Function extract
     #
-    # Input:  ...
-    # Return: None
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def extract(self, extractdir=None):
@@ -92,8 +126,19 @@ class Archive(files.BaseFile):
     #
     # Function create
     #
-    # Input:  ...
-    # Return: None
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def create(self, root_dir=None, base_dir=None, compression_lvl=9):
@@ -111,8 +156,19 @@ class Archive(files.BaseFile):
     #
     # Function listfiles
     #
-    # Input:  ...
-    # Return: None
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def listfiles(self):
@@ -144,6 +200,7 @@ class Archive(files.BaseFile):
     # Raises
     # ------
     #
+    # 
     #-------------------------------------------------------------------
     def testarchive(self):
         logger.debug('Begin Function')
@@ -178,6 +235,7 @@ class Archive(files.BaseFile):
     # Raises
     # ------
     #
+    #
     #-------------------------------------------------------------------
     def search(self, searchstring):
         logger.debug('Begin Function')
@@ -194,6 +252,20 @@ class Archive(files.BaseFile):
 #-----------------------------------------------------------------------
 #
 # Classes
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Archives(files.BaseFiles):

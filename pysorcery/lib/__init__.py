@@ -26,7 +26,7 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 # 
-# This file is the pysorcery API.  All files should reference this file.
+# This file is the pysorcery API.  All applications should reference this file.
 #
 #-----------------------------------------------------------------------
 """
@@ -108,11 +108,12 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #            self.format
     #
     # Returns
     # -------
-    #    none
+    #    content
     #
     # Raises
     # ------
@@ -137,11 +138,11 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
     #
     # Returns
     # -------
-    #    none
+    #    results
     #
     # Raises
     # ------
@@ -161,18 +162,20 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
         logger.debug('End Function')
         return results
 
-
 #-----------------------------------------------------------------------
 #
 # Class Files
 #
+# 
+#
 # Inputs
 # ------
-#    ...
+#    @param: *args
+#    @param: **kwargs
 #
 # Returns
 # -------
-#    none
+#    None
 #
 # Raises
 # ------
@@ -195,11 +198,13 @@ class Files(files.BaseFiles):
     # 
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #            self.files[0]
+    #            self.files[1]
     #
     # Returns
     # -------
-    #    none
+    #    Results
     #
     # Raises
     # ------
@@ -231,6 +236,17 @@ class Files(files.BaseFiles):
 #
 # Class Directory
 # 
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Directory(files.BaseDirectory):
@@ -240,6 +256,17 @@ class Directory(files.BaseDirectory):
 #
 # Class Directories
 # 
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Directories(files.BaseFiles):

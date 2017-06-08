@@ -32,7 +32,7 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# Plugin: test
+# Plugin: Test
 #
 #    This plugin checks to ensure an archive file is valid.
 #
@@ -43,7 +43,7 @@ reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 
-Plugin: test
+Plugin: Test
 
 This plugin checks to ensure an archive file is valid.
 """

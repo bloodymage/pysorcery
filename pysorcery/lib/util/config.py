@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -11,9 +11,9 @@
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU General Public License as published
+#    by the Free Software Foundation, either version 3 of the License,
+#    or (at your option) any later version.
 #
 #    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,20 +27,19 @@
 #
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 import sys
 import os
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
@@ -50,28 +49,43 @@ from pysorcery.lib.system import logging
 
 # Other Optional Libraries
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
 consolehandler = logging.ColorizingStreamHandler()
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Classes
 #
-#-------------------------------------------------------------------------------
+# SorceryConfig
+#
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Class ConfigFiles
+# Class SorceryConfig
 # 
+# ...
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class SorceryConfig():
     def __init__(self):
         self.logging_config = { "loglevel": "info",
@@ -139,7 +153,7 @@ class SorceryConfig():
          PROMPT_DELAY=${PROMPT_DELAY:=150}
         PAGER_TIMEOUT=${PAGER_TIMEOUT:=150}
            MAX_CABALS=${MAX_CABALS:=16}
-           NET_SELECT=${NET_SELECT:=off}
+    NET_SELECT=${NET_SELECT:=off}
             MD5SUM_DL=${MD5SUM_DL:=ask_risky}
          CLEAN_SOURCE=${CLEAN_SOURCE:=off}
            ARCHIVEBIN=${ARCHIVEBIN:=tar}
@@ -298,14 +312,35 @@ CASTFS_UNSTAGED_PATHS="/dev /proc /tmp /var/tmp /sys ${BUILD_DIRECTORY} ${SGL_LI
 CASTFS_DEBUG_LEVEL=${CASTFS_DEBUG_LEVEL:=255}
 """
 
+#-----------------------------------------------------------------------
+#
+# Functions
+#
+# configure_logging
+# defConfiguration
+# main_configuration
+#
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # configure_logging
 #
 # Configure the logger.
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def configure_logging(args,config):
     global logger
     global consolhandler
@@ -356,13 +391,25 @@ def configure_logging(args,config):
     logger.debug("End Function")
     return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # defConfiguration
 #
 # Gather the default plugins
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def defConfiguration():
     logging_config = { "loglevel": "info",
                        "verbosity": 0
@@ -515,7 +562,7 @@ GRIMOIRE_MANIFEST_ALGORITHM=${GRIMOIRE_MANIFEST_ALGORITHM:-sha1}
   SGL_LIBRARY_MODULES=${SGL_LIBRARY}/modules
            # system archspecs are still considered part of sorcery
            # and are deliberatly not in INSTALL_ROOT
-           ARCH_SPECS=${ARCH_SPECS:-"/usr/share/archspecs"}
+    ARCH_SPECS=${ARCH_SPECS:-"/usr/share/archspecs"}
              EXCLUDED=${SGL_LIBRARY}/excluded
             PROTECTED=${SGL_LIBRARY}/protected
             VOLATILES=${SGL_LIBRARY}/volatiles
@@ -589,7 +636,7 @@ CASTFS_DEBUG_LEVEL=${CASTFS_DEBUG_LEVEL:=255}
 
     return config
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # configure
 #
@@ -602,7 +649,19 @@ CASTFS_DEBUG_LEVEL=${CASTFS_DEBUG_LEVEL:=255}
 # As each configuartion is loaded, it will overwrite any previosly set
 # configuration option.
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def main_configure(args):
     logger.debug("Begin Function")
 
