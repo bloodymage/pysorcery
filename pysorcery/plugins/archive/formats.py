@@ -181,7 +181,7 @@ def parser(*args, **kwargs):
 
     cmd = subparsers.add_parser('formats',
                                 parents = parent_parsers,
-                                help = 'Formats files')
+                                help = 'Display supported file formats and functions')
     cmd.set_defaults(func = archive_formats)
 
     return cmd

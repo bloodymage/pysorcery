@@ -132,14 +132,16 @@ colortext = text.ConsoleText()
 def archive_create(args):
     logger.debug('Begin Function')
 
-    try:
-        cfile = lib.File(args.archive)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.create(os.getcwd(), args.filename)
-        else:
-            cfile.compress(args.filename)
-    except:
-        logger.error('Archive creation failed')
+    print(args)
+    
+    #try:
+    #    cfile = lib.File(args.archive)
+    #    if cfile.mimetype in mimetypes.ArchiveMimetypes:
+    #        cfile.create(os.getcwd(), args.filename)
+    #    else:
+    #        cfile.compress(args.filename)
+    #except:
+    #    logger.error('Archive creation failed')
 
     logger.debug('End Function')
     return
@@ -174,16 +176,54 @@ def parser(*args, **kwargs):
                                 aliases = ['c'],
                                 parents = parent_parsers,
                                 help = 'Create files')
-    cmd.add_argument('archive',
+    cmd.add_argument('-a',
+                     '--archive',
                      help = 'Archive file to create')
-    cmd.add_argument('filename',
+    cmd.add_argument('pathname',
                      help = 'Files / Directories to add to the archive')
     cmd.add_argument('-l',
-                     '--compression_level',
+                     '--level',
                      type = int,
                      choices = range(0, 10),
                      default = 9,
-                     help = 'Set new compression level')
+                     help = 'Set compression level')
+
+    exclude = cmd.add_argument_group('Exclusion Options')
+    exclude.add_argument('--exclude',
+                         metavar = 'PATTERN',
+                         help = 'Exclude files matching PATTERN')
+    exclude.add_argument('--exclude-caches',
+                         nargs = '?',
+                         choices = ['all', 'under'],
+                         default = True,
+                         help = 'Exclude cache files')
+    cmd.add_argument('--exclude-tag',
+                     metavar = 'FILE',
+                     help = 'Exclude directories containing FILE')
+    exclude.add_argument('--exclude-backups',
+                         action = 'store_true',
+                         help = 'Exclude backup and lock files')
+    exclude.add_argument('--exclude-vcs',
+                         action = 'store_true',
+                         help = 'Exclude version control files.')
+    exclude.add_argument('--exclude-vcs-ignore',
+                         action = 'store_true',
+                         help = 'Exclude Files listed within version control ignore files.')
+    
+    permission = cmd.add_argument_group('File Permission Options')
+    permission.add_argument('-p',
+                            '--preserve',
+                            action = 'store_true',
+                            help = 'Preserve file permissions')
+    permission.add_argument('-o',
+                            '--owner',
+                            action = 'store_true',
+                            help = 'Set owner to OWNER')
+    permission.add_argument('-g',
+                            '--group',
+                            action = 'store_true',
+                            help = 'Set group to GROUP.')
+    
     cmd.set_defaults(func = archive_create)
 
     return cmd

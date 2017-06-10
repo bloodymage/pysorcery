@@ -192,30 +192,25 @@ class CommonParser(ArgumentParser):
                                   '--quiet',
                                   action = 'count',
                                   default = 0,
-                                  help = quiet_help
-        )
+                                  help = quiet_help)
+        # Verbose Options
+        self.logging.add_argument('-v',
+                                  '--verbosity',
+                                  action = 'count',
+                                  default = 0,
+                                  help = verbose_help)
 
         # If debugging is enabled
         if DEBUG:
-            # Verbose Options
-            self.logging.add_argument('-v',
-                                      '--verbosity',
-                                      action = 'count',
-                                      default = 0,
-                                      help = verbose_help
-            )
             # Set Loglevel
             self.logging.add_argument('--loglevel',
                                       choices = loglevel_choices,
                                       default = 'INFO',
-                                      help = loglevel_help
-            )
-
+                                      help = loglevel_help)
             # Maximize logging
             self.logging.add_argument('--debug',
                                       action = 'store_true',
-                                      help = debug_help
-            )
+                                      help = debug_help)
 
         return self.parent
         

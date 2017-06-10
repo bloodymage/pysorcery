@@ -10,7 +10,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/plugins/archive/create.py
+# File: pysorcery/plugins/archive/add.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,7 +32,7 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# Plugin: Create
+# Plugin: Add
 #
 #   This plugin adds archive/compressed file creation and the
 #   applicable command line arguments.
@@ -46,7 +46,7 @@ reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 
-Plugin: create
+Plugin: Create
 
 This plugin adds archive/compressed file creation and the applicable 
 command line arguments.
@@ -101,16 +101,16 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_create
+# archive_add
 # parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Function archive_create
+# Function archive_add
 #
-# Create archive file from named files/directories.
+# Add files/directories to an archive file.
 #
 # Inputs
 # ------
@@ -129,7 +129,7 @@ colortext = text.ConsoleText()
 #    ...
 #
 #-----------------------------------------------------------------------
-def archive_create(args):
+def archive_add(args):
     logger.debug('Begin Function')
 
     try:
@@ -139,7 +139,7 @@ def archive_create(args):
         else:
             cfile.compress(args.filename)
     except:
-        logger.error('Archive creation failed')
+        logger.error('File add to Archive failed')
 
     logger.debug('End Function')
     return
@@ -170,8 +170,8 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('create',
-                                aliases = ['c'],
+    cmd = subparsers.add_parser('add',
+                                aliases = ['a', 'append'],
                                 parents = parent_parsers,
                                 help = 'Create files')
     cmd.add_argument('archive',
@@ -184,6 +184,6 @@ def parser(*args, **kwargs):
                      choices = range(0, 10),
                      default = 9,
                      help = 'Set new compression level')
-    cmd.set_defaults(func = archive_create)
+    cmd.set_defaults(func = archive_add)
 
     return cmd
