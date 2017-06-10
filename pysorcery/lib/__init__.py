@@ -92,7 +92,7 @@ logger = logging.getLogger(__name__)
 #
 # Returns
 # -------
-#    none
+#    None
 #
 # Raises
 # ------

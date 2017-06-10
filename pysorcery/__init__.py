@@ -8,7 +8,12 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
+# Additional code from 'patool'
+# Copyright (C) 2010-2015 Bastian Kleineidam
+#
 # This file is part of Sorcery.
+#
+# File: pysorcery/__init__.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -37,6 +42,11 @@ Python rewrite
 Copyright 2017 Geoff S Derber
 
 This file is part of Sorcery.
+
+File: pysorcery/__init__.py
+
+Additional code from 'patool'
+Copyright (C) 2010-2015 Bastian Kleineidam
 
 Sorcery is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published
@@ -106,7 +116,7 @@ consolehandler = logging.ColorizingStreamHandler()
 consoleformatter = logging.ConsoleLvlFormatter("%(name)s:%(funcName)s:%(lineno)d - %(levelname)s - %(message)s")
 
 # Set handler ...
-consolehandler.setLevel(0)
+consolehandler.setLevel(20)
 consolehandler.setFormatter(consoleformatter)
 
 # Add handlers to logger

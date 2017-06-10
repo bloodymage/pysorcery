@@ -8,9 +8,12 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# Additional code from 'patool'
+# Copyright (C) 2010-2015 Bastian Kleineidam
 #
 # This file is part of Sorcery.
+#
+# File: pysorcery/cli/archive.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -97,7 +100,7 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Real_Main
+# Function Real_Main
 #
 # 1. Creates the argument parser
 # 2. Eshablishes configuration
@@ -105,14 +108,11 @@ colortext = text.ConsoleText()
 #
 # Inputs
 # ------
-#    @param: *args    - tuple of all subparsers and parent parsers
-#                       args[0]: the subparser
-#                       args[1:] the parent parsers
-#    @param: **kwargs - Not used Future?
+#    @param: args
 #
 # Returns
 # -------
-#    cmd - the subcommand parsing options
+#    None
 #
 # Raises
 # ------
@@ -136,8 +136,6 @@ Report bugs to ...
 
     parser.add_version_option()
     parent_parser = parser.add_logging_option()
-
-    # Create subcommands
     subparsers = parser.create_subparsers()
 
     # Get list of subcommands
@@ -160,13 +158,11 @@ Report bugs to ...
     logger.debug3('Arguments: ' + str(args))
 
     # 'application' code
-    args.func(args)
-    
-    #try:
-    #    args.func(args)
-    #except:
-    #    parser.print_help()
-    #    logger.error('No command was given')
+    try:
+        args.func(args)
+    except:
+        parser.print_help()
+        logger.error('No command was given')
 
     #logging.verifydebuglevels()
     logger.debug('End Function')
@@ -177,14 +173,12 @@ Report bugs to ...
 #
 # Main
 #
-# The First function, initalizes everything else.
+# The First function, initalizes everything else.  Attempts to execute
+# everything through exception handlers with easy to read messages.
 #
 # Inputs
 # ------
-#    @param: *args    - tuple of all subparsers and parent parsers
-#                       args[0]: the subparser
-#                       args[1:] the parent parsers
-#    @param: **kwargs - Not used Future?
+#    @param: args
 #
 # Returns
 # -------
@@ -201,9 +195,12 @@ def main(args=None):
     """
     logger.debug('Begin Application')
 
+    
     if DEBUG is False:
         try:         
             real_main(args)
+        except KeyboardInterrupt:
+            log_error("aborted")
         except:
             logger.critical('You Fucked Up')
     else:

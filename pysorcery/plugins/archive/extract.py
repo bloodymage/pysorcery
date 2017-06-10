@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/archive/extract.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/extract.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -25,14 +25,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Plugin: Extract
+# pyArchive
 #
 #   This is a bonus application for pysorcery.  PySorcery for multiple
 #   reasons to internally extract, create, list the contents, etc.
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# Plugin: extract
+# Plugin: Extract
 #
 #   This plugin provides the extraction interface...
 #

@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/archive/recompress.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/recompress.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -105,7 +105,7 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_recompress
+# Function archive_recompress
 #
 # Recompresses a file.
 #

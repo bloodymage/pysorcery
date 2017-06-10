@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/archive/formats.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/formats.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -25,7 +25,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Plugin: Formats
+# pyArchive
 #
 #   This is a bonus application for pysorcery.  PySorcery for multiple
 #   reasons to internally extract, create, list the contents, etc.

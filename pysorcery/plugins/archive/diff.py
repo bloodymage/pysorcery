@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/archive/diff.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/diff.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -25,7 +25,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Plugin: Diff
+# pyArchive
 #
 #   This is a bonus application for pysorcery.  PySorcery for multiple
 #   reasons to internally extract, create, list the contents, etc.
@@ -107,7 +107,7 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_diff
+# Function archive_diff
 #
 # Find and display all differences between two archive filesxs
 #
@@ -156,7 +156,7 @@ def archive_diff(args):
 #
 # Returns
 # -------
-#    cmd   - the subcommand parsing options
+#    cmd - the subcommand parsing options
 #
 # Raises
 # ------

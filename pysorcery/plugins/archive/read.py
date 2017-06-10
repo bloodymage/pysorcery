@@ -10,7 +10,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/plugins/archive/repack.py
+# File: pysorcery/plugin/archive/list.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,9 +32,11 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# Plugin: Repack
+# Plugin: read
 #
-#   Repacks an archive file from one format to another.
+#    This plugin reads the contents of a file within archive file.
+#    If the file is a compressed file, it will read the contents
+#    of the file.
 #
 #-----------------------------------------------------------------------
 """
@@ -43,9 +45,10 @@ reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 
-Plugin: Repack
+Plugin: read
 
-Repacks an archive file from one format to another.
+This plugin lists the contents of an archive file.  If the file is
+a compressed file, it will read the contents of the file.
 """
 #-----------------------------------------------------------------------
 #
@@ -97,22 +100,23 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_repack
+# archive_list
 # parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Function archive_repack
+# Function archive_list
 #
-# Convert files from one archive or compression format to another
+# List all files in an archive.
+# If a compressed file, read the files contents
 #
 # Inputs
+# ------
 #    @param: args
 #            args.quiet - Decrease Output Verbosity
-#            args.srcfile
-#            args.dstfile
+#            args.files - List of files to extract
 #
 # Returns
 # -------
@@ -121,12 +125,22 @@ colortext = text.ConsoleText()
 # Raises
 # ------
 #    ...
+#
 #-----------------------------------------------------------------------
-def archive_repack(args):
+def archive_read(args):
     logger.debug('Begin Function')
 
-    lib.repack(args.srcfile, args.dstfile)
-    
+    for i in args.files:
+        cfile = lib.Files(i)
+        if cfile.mimetype in mimetypes.ArchiveMimetypes:
+            content = cfile.listfiles()
+        else:
+            content = cfile.read()
+
+
+    for line in content:
+        print(line)
+
     logger.debug('End Function')
     return
 
@@ -145,7 +159,7 @@ def archive_repack(args):
 #
 # Returns
 # -------
-#    cmd - the subcommand parsing options
+#    cmd   - the subcommand parsing options
 #
 # Raises
 # ------
@@ -153,21 +167,19 @@ def archive_repack(args):
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
+
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('repack',
-                                parents = parent_parsers,
-                                help = 'Repack files')
-    cmd.add_argument('srcfile',
-                     help = 'Original File')
-    cmd.add_argument('dstfile',
-                               help = 'Destination File')
-    cmd.add_argument('compression_level',
-                     type = int,
-                     choices = range(0, 9),
-                     default = 9,
-                     help = 'Set new compression level')
-    cmd.set_defaults(func = archive_repack)
+    cmd= subparsers.add_parser('read',
+                               parents = parent_parsers,
+                               help = 'Read file within an archive')
+    cmd.add_argument('files',
+                     nargs = '+',
+                     help = 'List files')
+    cmd.add_argument('-r', '--recursive',
+                     action = 'store_true',
+                     help = 'Recursive')
+    cmd.set_defaults(func = archive_read) 
 
     return cmd
