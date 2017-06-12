@@ -656,7 +656,7 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
     mimetypes.check_type(format_, compression)
     program = find_archive_program(format_, 'extract', program=program)
     check_program_compression(archive, 'extract', program, compression)
-    get_archive_cmdlist = get_archive_cmdlist_func(program, 'extract', format_)
+    get_archive_cmdlist = util.get_module_func(program, 'extract', format_)
     if outdir is None:
         outdir = util.tmpdir(dir=".")
         do_cleanup_outdir = True

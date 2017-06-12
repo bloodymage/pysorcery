@@ -13,21 +13,34 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the lzop program."""
+from . import extract_singlefile_standard
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+
+extract_lzop = extract_singlefile_standard
+
+
+def list_lzop (archive, compression, cmd, verbosity, interactive):
+    """List a LZOP archive."""
+    cmdlist = [cmd, '--list']
     if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
+        cmdlist.append('--verbose')
+    cmdlist.extend(['--', archive])
     return cmdlist
 
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
+def test_lzop (archive, compression, cmd, verbosity, interactive):
+    """Test a LZOP archive."""
     cmdlist = [cmd, '--test']
     if verbosity > 1:
+        cmdlist.append('--verbose')
+    cmdlist.extend(['--', archive])
+    return cmdlist
+
+def create_lzop (archive, compression, cmd, verbosity, interactive, filenames):
+    """Create a LZOP archive."""
+    cmdlist = [cmd]
+    if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
+    cmdlist.extend(['-o', archive, '--'])
+    cmdlist.extend(filenames)
     return cmdlist

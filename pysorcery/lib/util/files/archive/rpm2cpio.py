@@ -13,21 +13,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the rpm2cpio program."""
+import os
+from .. import util
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+def extract_rpm (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a RPM archive."""
+    # also check cpio
+    cpio = util.find_program("cpio")
+    if not cpio:
+        raise util.PatoolError("cpio(1) is required for rpm2cpio extraction; please install it")
+    path = util.shell_quote(os.path.abspath(archive))
+    cmdlist = [util.shell_quote(cmd), path, "|", util.shell_quote(cpio),
+        '--extract', '--make-directories', '--preserve-modification-time',
+        '--no-absolute-filenames', '--force-local', '--nonmatching',
+        r'"*\.\.*"']
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
-    return cmdlist
-
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    return cmdlist
+    return (cmdlist, {'cwd': outdir, 'shell': True})

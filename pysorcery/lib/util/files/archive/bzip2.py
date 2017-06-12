@@ -13,21 +13,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the bzip2 program."""
+from .. import util
+from . import extract_singlefile_standard, test_singlefile_standard
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+extract_bzip2 = extract_singlefile_standard
+test_bzip2 = test_singlefile_standard
+
+def create_bzip2 (archive, compression, cmd, verbosity, interactive, filenames):
+    """Create a BZIP2 archive."""
+    cmdlist = [util.shell_quote(cmd)]
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
-    return cmdlist
-
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    return cmdlist
+    cmdlist.extend(['-c', '-z', '-9', '--'])
+    cmdlist.extend([util.shell_quote(x) for x in filenames])
+    cmdlist.extend(['>', util.shell_quote(archive)])
+    return (cmdlist, {'shell': True})

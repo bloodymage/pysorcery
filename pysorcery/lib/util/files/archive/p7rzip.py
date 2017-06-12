@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2015 Bastian Kleineidam
+# Copyright (C) 2016 Bastian Kleineidam
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,21 +13,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the 7zr program.
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
-    return cmdlist
+7zr is a light executable supporting only the 7z archive format.
+"""
 
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    return cmdlist
+from .p7zip import \
+  extract_7z, \
+  list_7z, \
+  test_7z, \
+  create_7z

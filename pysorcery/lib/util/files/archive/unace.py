@@ -13,21 +13,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the unace program."""
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
+def extract_ace (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract an ACE archive."""
+    cmdlist = [cmd, 'x']
+    if not outdir.endswith('/'):
+        outdir += '/'
+    cmdlist.extend([archive, outdir])
     return cmdlist
 
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
+def list_ace (archive, compression, cmd, verbosity, interactive):
+    """List an ACE archive."""
+    cmdlist = [cmd]
     if verbosity > 1:
-        cmdlist.append('-v')
+        cmdlist.append('v')
+    else:
+        cmdlist.append('l')
     cmdlist.append(archive)
     return cmdlist
+
+def test_ace (archive, compression, cmd, verbosity, interactive):
+    """Test an ACE archive."""
+    return [cmd, 't', archive]

@@ -163,11 +163,14 @@ Report bugs to ...
     logger.debug3('Arguments: ' + str(args))
 
     # 'application' code
-    try:
-        args.func(args)
-    except:
-        parser.print_help()
-        logger.error('No command was given')
+    if DEBUG is False:
+        try:
+            args.func(args)
+        except:
+            parser.print_help()
+            logger.error('No command was given')
+    else:
+        args.func(args)    
 
     #logging.verifydebuglevels()
     logger.debug('End Function')

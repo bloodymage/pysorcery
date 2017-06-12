@@ -13,21 +13,31 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the ar program."""
+import os
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+def extract_ar (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a AR archive."""
+    opts = 'x'
     if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
+        opts += 'v'
+    cmdlist = [cmd, opts, os.path.abspath(archive)]
+    return (cmdlist, {'cwd': outdir})
+
+def list_ar (archive, compression, cmd, verbosity, interactive):
+    """List a AR archive."""
+    opts = 't'
+    if verbosity > 1:
+        opts += 'v'
+    return [cmd, opts, archive]
+
+test_ar = list_ar
+
+def create_ar (archive, compression, cmd, verbosity, interactive, filenames):
+    """Create a AR archive."""
+    opts = 'rc'
+    if verbosity > 1:
+        opts += 'v'
+    cmdlist = [cmd, opts, archive]
     cmdlist.extend(filenames)
-    return cmdlist
-
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
     return cmdlist

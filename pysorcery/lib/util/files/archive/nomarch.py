@@ -13,21 +13,24 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the nomarch program."""
+import os
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+def extract_arc (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract an ARC archive."""
+    # Since extracted files will be placed in the current directory,
+    # the cwd argument has to be the output directory.
+    cmdlist = [cmd, os.path.abspath(archive)]
+    return (cmdlist, {'cwd': outdir})
+
+def list_arc (archive, compression, cmd, verbosity, interactive):
+    """List an ARC archive."""
+    cmdlist = [cmd, '-l']
     if verbosity > 1:
         cmdlist.append('-v')
     cmdlist.append(archive)
-    cmdlist.extend(filenames)
     return cmdlist
 
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    return cmdlist
+def test_arc (archive, compression, cmd, verbosity, interactive):
+    """Test an ARC archive."""
+    return [cmd, '-t', archive]

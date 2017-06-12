@@ -13,21 +13,22 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the rzip program."""
+from .. import util
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+def extract_rzip (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract an RZIP archive."""
+    cmdlist = [cmd, '-d', '-k']
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
+    outfile = util.get_single_outfile(outdir, archive)
+    cmdlist.extend(["-o", outfile, archive])
     return cmdlist
 
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
+def create_rzip (archive, compression, cmd, verbosity, interactive, filenames):
+    """Create an RZIP archive."""
+    cmdlist = [cmd, '-k', '-9', '-o', archive]
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
+    cmdlist.extend(filenames)
     return cmdlist

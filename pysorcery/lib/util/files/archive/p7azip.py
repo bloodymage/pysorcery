@@ -13,21 +13,37 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the 7za program.
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
-    return cmdlist
+From the man page:
+7za is a stand-alone executable. 7za handles less archive formats than 7z,
+but does not need any others.
+"""
 
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    return cmdlist
+from .p7zip import \
+  extract_bzip2, \
+  extract_gzip, \
+  extract_zip, \
+  extract_compress, \
+  extract_rar, \
+  extract_cab, \
+  extract_7z, \
+  list_bzip2, \
+  list_gzip, \
+  list_zip, \
+  list_compress, \
+  list_rar, \
+  list_cab, \
+  list_rpm, \
+  list_7z, \
+  test_bzip2, \
+  test_gzip, \
+  test_zip, \
+  test_compress, \
+  test_rar, \
+  test_cab, \
+  test_7z, \
+  create_7z, \
+  create_zip, \
+  create_gzip, \
+  create_bzip2

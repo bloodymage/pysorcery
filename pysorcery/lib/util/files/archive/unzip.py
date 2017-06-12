@@ -13,21 +13,28 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the unzip program."""
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+def extract_zip (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a ZIP archive."""
+    cmdlist = [cmd]
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
+    cmdlist.extend(['--', archive, '-d', outdir])
+    return cmdlist
+
+def list_zip (archive, compression, cmd, verbosity, interactive):
+    """List a ZIP archive."""
+    cmdlist = [cmd, '-l']
+    if verbosity > 1:
+        cmdlist.append('-v')
+    cmdlist.extend(['--', archive])
     return cmdlist
 
 def test_zip (archive, compression, cmd, verbosity, interactive):
     """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
+    cmdlist = [cmd, '-t']
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
+    cmdlist.extend(['--', archive])
     return cmdlist

@@ -105,6 +105,12 @@ import_path = {
 # Used if module names can not be
 # the same as the archive format
 ArchiveModules = {
+    '7z': 'p7zip',
+    '7za': 'p7azip',
+    '7zr': 'p7rzip',
+    'uncompress.real': 'uncompress',
+    'dpkg-deb': 'dpkg',
+    'extract_chmlib': 'chmlib',
     }
 
 CompressedModules = {
@@ -216,10 +222,14 @@ def get_module_func(cmd_class,
                     command):
     logger.debug('Begun Function')
 
-    basemodname = import_path[cmd_class]
+    if cmd_class in import_path:
+        basemodname = import_path[cmd_class]
+    else:
+        key = util.stripext(os.path.basename(program).lower())
+        modulename = basemodname + ArchiveModules.get(cmd_type, cmd_type)
 
     if cmd_class == 'util_archive':
-        modulename = basemodname + ArchiveModules.get(cmd_type, cmd_type)
+        modulename = 
     elif cmd_class == 'util_compressed':
         modulename = basemodname + CompressedModules.get(cmd_type, cmd_type)
     else:

@@ -13,21 +13,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the zip program."""
+"""Archive commands for the uncompress.real program."""
+from .. import util
 
-def create_zip (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ZIP archive."""
-    cmdlist = [cmd, '-r', '-9']
+
+def create_compress (archive, compression, cmd, verbosity, interactive, filenames):
+    """Create a compressed archive."""
+    cmdlist = [util.shell_quote(cmd)]
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.append(archive)
-    cmdlist.extend(filenames)
-    return cmdlist
-
-def test_zip (archive, compression, cmd, verbosity, interactive):
-    """Test a ZIP archive."""
-    cmdlist = [cmd, '--test']
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.append(archive)
-    return cmdlist
+    cmdlist.append('-c')
+    cmdlist.extend([util.shell_quote(x) for x in filenames])
+    cmdlist.extend(['>', util.shell_quote(archive)])
+    return (cmdlist, {'shell': True})

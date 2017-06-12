@@ -8,12 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# Additional code from 'patool'
-# Copyright (C) 2010-2015 Bastian Kleineidam
-#
 # This file is part of Sorcery.
 #
-# File: pysorcery/plugins/archive/extract.py
+# File: pysorcery/plugins/archive/add.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -35,15 +32,24 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# Plugin: Extract
+# Plugin: Add
 #
-#   This plugin provides the extraction interface...
+#   This plugin adds archive/compressed file creation and the
+#   applicable command line arguments.
 #
 #-----------------------------------------------------------------------
 """
-Plugin: Extract
+pyArchive
 
-This plugin provides the extraction interface...
+This is a bonus application for pysorcery.  PySorcery for multiple
+reasons to internally extract, create, list the contents, etc.
+archive files of multiple formats.  To test the capabilities of the
+underlying code, this application was developed.
+
+Plugin: Create
+
+This plugin adds archive/compressed file creation and the applicable 
+command line arguments.
 """
 #-----------------------------------------------------------------------
 #
@@ -71,7 +77,6 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
-
 # Conditional Libraries
 
 
@@ -96,25 +101,24 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
+# archive_add
 # parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function archive_add
 #
-# Extract files listed.
+# Add files/directories to an archive file.
 #
 # Inputs
 # ------
 #    @param: args
-#            args.quiet - Decrease Output Verbosity
-#            args.files - List of files to extract
-#            args.recursive - Extract all files in all subfolders
-#            args.depth (Add me) - if recursive, limit to depth #
-#            args.output_dir - Directory to extract to
+#            args.quiet    - Decrease Output Verbosity
+#            args.archive  - File to create
+#            args.filename - File or Directory to add to the archive
+#            args.compression_level - Compression level to recompress to.
 #
 # Returns
 # -------
@@ -125,26 +129,20 @@ colortext = text.ConsoleText()
 #    ...
 #
 #-----------------------------------------------------------------------
-def archive_extract(args):
+def archive_concatenate(args):
     logger.debug('Begin Function')
 
-    for file_ in args.files:
-        cfile = lib.File(file_)
+    try:
+        cfile = lib.File(args.archive)
         if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(verbosity=args.verbosity,
-                          interactive=args.interactive,
-                          outdir=args.outdir)
-        elif cfile.mimetype in mimetypes.CompressedMimetypes:
-            cfile.decompress(verbosity=args.verbosity,
-                             interactive=args.interactive,
-                             outdir=args.outdir)
+            cfile.create(os.getcwd(), args.filename)
         else:
-            logger.error('Not an archive file')
-            
+            cfile.compress(args.filename)
+    except:
+        logger.error('File add to Archive failed')
 
     logger.debug('End Function')
     return
-
 
 #-----------------------------------------------------------------------
 #
@@ -153,6 +151,7 @@ def archive_extract(args):
 # Create subcommand parsing options
 #
 # Inputs
+# ------
 #    @param: *args    - tuple of all subparsers and parent parsers
 #                       args[0]: the subparser
 #                       args[1:] the parent parsers
@@ -160,7 +159,7 @@ def archive_extract(args):
 #
 # Returns
 # -------
-#    cmd   - the subcommand parsing options
+#    cmd - the subcommand parsing options
 #
 # Raises
 # ------
@@ -168,46 +167,23 @@ def archive_extract(args):
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
-
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('extract',
-                                aliases = ['x'],
+    cmd = subparsers.add_parser('concatenate',
+                                aliases = ['C'],
                                 parents = parent_parsers,
-                                help = 'Extract files'
-    )
-    cmd.add_argument('files',
-                     nargs = '+',
-                     help = 'File(s) to extract'
-    )
-    cmd.add_argument('-o',
-                     '--outdir',
-                     metavar = 'DIRECTORY',
-                     help = 'Output Directory'
-    )
-    cmd.add_argument('-n',
-                     '--non-interactive',
-                     dest = 'interactive',
-                     default = False,
-                     action = 'store_false',
-                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
-    )
-    cmd.add_argument('-r',
-                     '--recursive',
-                     action = 'store_true',
-                     help = 'Recursive'
-    )
-    cmd.add_argument('-d',
-                     '--depth',
-                     action = 'store_true',
-                     help = 'limit recursion to specified depth'
-    )
-    cmd.add_argument('-e',
-                     '--exclude',
-                     action = 'store_true',
-                     help = 'List files to exclude'
-    )
-    cmd.set_defaults(func=archive_extract)
+                                help = 'Create files')
+    cmd.add_argument('archive',
+                     help = 'Archive file to create')
+    cmd.add_argument('filename',
+                     help = 'Files / Directories to add to the archive')
+    cmd.add_argument('-l',
+                     '--compression_level',
+                     type = int,
+                     choices = range(0, 10),
+                     default = 9,
+                     help = 'Set new compression level')
+    cmd.set_defaults(func = archive_concatenate)
 
     return cmd
