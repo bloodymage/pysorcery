@@ -54,7 +54,12 @@ import os
 import sys
 
 # 3rd Party Libraries
-
+try:
+    import argcomplete
+    BASHCOMPLETE = True
+except ImportError:
+    BASHCOMPLETE = False
+    
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
@@ -68,9 +73,6 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
-
-# Conditional Libraries
-
 
 #-----------------------------------------------------------------------
 #
@@ -146,6 +148,9 @@ Report bugs to ...
         subcommand = util.get_module_func('archive',i,'parser')
         subcommand(subparsers, parent_parser)
 
+    # This doesn't work...
+    if BASHCOMPLETE:
+        argcomplete.autocomplete(parser)
     #
     args = parser.parse_args()
 

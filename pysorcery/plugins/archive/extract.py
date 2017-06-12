@@ -8,6 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
+# Additional code from 'patool'
+# Copyright (C) 2010-2015 Bastian Kleineidam
+#
 # This file is part of Sorcery.
 #
 # File: pysorcery/plugins/archive/extract.py
@@ -38,11 +41,6 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
 Plugin: Extract
 
 This plugin provides the extraction interface...
@@ -130,29 +128,23 @@ colortext = text.ConsoleText()
 def archive_extract(args):
     logger.debug('Begin Function')
 
-    for i in args.files:
-        # Check for recursive extraction
-        if args.recursive:
-            # If True, extract all compressed files within a directory and
-            # its sub directories
-            #
-            # Fix me! Add max depth option
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.File(sfile)
-                    logger.debug3(cfile.mimetype)
-                    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-                        cfile.extract(args.output_dir)
-                    else:
-                        cfile.decompress(args.output_dir)
+    for file_ in args.files:
+        try:
+            cfile = lib.File(file_)
+            if cfile.mimetype in mimetypes.ArchiveMimetypes:
+                cfile.extract(verbosity=args.verbosity,
+                              interactive=args.interactive,
+                              outdir=args.outdir)
+            elif cfile.mimetype in mimetypes.CompressedMimetypes:
+                cfile.decompress(verbosity=args.verbosity,
+                                 interactive=args.interactive,
+                                 outdir=args.outdir)
+            else:
+                logger.error('Not an archive file')
 
-        # Always extract what is explicitly listed
-        #logger.info('Archive file: ' + i)
-        cfile = lib.File(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(args.output_dir)
-        else:
-            cfile.decompress(args.output_dir)
+        except Exception as msg:
+            logger.error('Error extracting %s: %s' % (file_, msg)) 
+            
 
     logger.debug('End Function')
     return
@@ -194,9 +186,16 @@ def parser(*args, **kwargs):
                      help = 'File(s) to extract'
     )
     cmd.add_argument('-o',
-                     '--output-dir',
+                     '--outdir',
                      metavar = 'DIRECTORY',
                      help = 'Output Directory'
+    )
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
     )
     cmd.add_argument('-r',
                      '--recursive',

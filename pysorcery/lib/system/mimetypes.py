@@ -63,24 +63,54 @@ CompressedMimetypes = {
     'application/x-7z-compressed': '7z',
     'application/x-bzip2': 'bzip2',
     'application/x-compress': 'compress',
-    'application/x-gzip': 'gzip',    
+     'application/x-gzip': 'gzip',    
     'application/x-lzma': 'lzma',
     'application/x-xz': 'xz'
 }
 
+# Map MIME types to archive format
 ArchiveMimetypes = {
+    'application/gzip': 'gzip',
     'application/java-archive': 'zip',
     'application/rar': 'rar',
+    'application/vnd.ms-cab-compressed': 'cab',
+    'application/x-7z-compressed': '7z',
     'application/x-ace': 'ace',
+    'application/x-adf': 'adf',
+    'application/x-alzip': 'alzip',
+    'application/x-archive': 'ar',
+    'application/x-arc': 'arc',
+    'application/x-arj': 'arj',
+    'application/x-bzip2': 'bzip2',
+    'application/x-cab': 'cab',
+    'application/x-chm': 'chm',
+    'application/x-compress': 'compress',
     'application/x-cpio': 'cpio',
     'application/x-debian-package': 'deb',
+    'application/x-dms': 'dms',
+    'application/x-gzip': 'gzip',
     'application/x-iso9660-image': 'iso',
+    'application/x-lzop': 'lzop',
+    'application/x-lzma': 'lzma',
+    'application/x-lzip': 'lzip',
+    'application/x-lha': 'lzh',
+    'application/x-lrzip': 'lrzip',
+    'application/x-lzh': 'lzh',
     'application/x-rar': 'rar',
     'application/x-redhat-package-manager': 'rpm',
     'application/x-rpm': 'rpm',
+    'application/x-rzip': 'rzip',
+    'application/x-shar': 'shar',
     'application/x-tar': 'tar',
+    'application/x-vhd': 'vhd',
+    'application/x-xz': 'xz',
     'application/x-zip-compressed': 'zip',
-    'application/zip': 'zip'
+    'application/x-zoo': 'zoo',
+    'application/zip': 'zip',
+    'application/zpaq': 'zpaq',
+    'audio/x-ape': 'ape',
+    'audio/x-shn': 'shn',
+    'audio/flac': 'flac',
 }
 
 VerifyMimetypes = {
@@ -97,6 +127,85 @@ encoding_methods = {
     'bzip2': 'bzip2'
 }
 
+# Supported archive formats
+ArchiveFormats = (
+    '7z', 'ace', 'adf', 'alzip', 'ape', 'ar', 'arc', 'arj',
+    'bzip2', 'cab', 'chm', 'compress', 'cpio', 'deb', 'dms',
+    'flac', 'gzip', 'iso', 'lrzip', 'lzh', 'lzip', 'lzma', 'lzop',
+    'rar', 'rpm', 'rzip', 'shar', 'shn', 'tar', 'vhd', 'xz',
+    'zip', 'zoo', 'zpaq')
+
+# Supported compressions (used with tar for example)
+# Note that all compressions must also be archive formats
+ArchiveCompressions = ('bzip2', 'compress', 'gzip', 'lzip', 'lzma', 'xz')
+
+
+# internal MIME database
+mimedb = None
+
+def init_mimedb():
+    """Initialize the internal MIME database."""
+    global mimedb
+    try:
+        mimedb = mimetypes.MimeTypes(strict=False)
+    except Exception as msg:
+        log_error("could not initialize MIME database: %s" % msg)
+        return
+    add_mimedb_data(mimedb)
+
+
+def add_mimedb_data(mimedb):
+    """Add missing encodings and mimetypes to MIME database."""
+    mimedb.encodings_map['.bz2'] = 'bzip2'
+    mimedb.encodings_map['.lzma'] = 'lzma'
+    mimedb.encodings_map['.xz'] = 'xz'
+    mimedb.encodings_map['.lz'] = 'lzip'
+    mimedb.suffix_map['.tbz2'] = '.tar.bz2'
+    add_mimetype(mimedb, 'application/x-lzop', '.lzo')
+    add_mimetype(mimedb, 'application/x-adf', '.adf')
+    add_mimetype(mimedb, 'application/x-arj', '.arj')
+    add_mimetype(mimedb, 'application/x-lzma', '.lzma')
+    add_mimetype(mimedb, 'application/x-xz', '.xz')
+    add_mimetype(mimedb, 'application/java-archive', '.jar')
+    add_mimetype(mimedb, 'application/x-rar', '.rar')
+    add_mimetype(mimedb, 'application/x-rar', '.cbr')
+    add_mimetype(mimedb, 'application/x-7z-compressed', '.7z')
+    add_mimetype(mimedb, 'application/x-7z-compressed', '.cb7')
+    add_mimetype(mimedb, 'application/x-cab', '.cab')
+    add_mimetype(mimedb, 'application/x-rpm', '.rpm')
+    add_mimetype(mimedb, 'application/x-debian-package', '.deb')
+    add_mimetype(mimedb, 'application/x-ace', '.ace')
+    add_mimetype(mimedb, 'application/x-ace', '.cba')
+    add_mimetype(mimedb, 'application/x-archive', '.a')
+    add_mimetype(mimedb, 'application/x-alzip', '.alz')
+    add_mimetype(mimedb, 'application/x-arc', '.arc')
+    add_mimetype(mimedb, 'application/x-lrzip', '.lrz')
+    add_mimetype(mimedb, 'application/x-lha', '.lha')
+    add_mimetype(mimedb, 'application/x-lzh', '.lzh')
+    add_mimetype(mimedb, 'application/x-rzip', '.rz')
+    add_mimetype(mimedb, 'application/x-zoo', '.zoo')
+    add_mimetype(mimedb, 'application/x-dms', '.dms')
+    add_mimetype(mimedb, 'application/x-zip-compressed', '.crx')
+    add_mimetype(mimedb, 'application/x-shar', '.shar')
+    add_mimetype(mimedb, 'application/x-tar', '.cbt')
+    add_mimetype(mimedb, 'application/x-vhd', '.vhd')
+    add_mimetype(mimedb, 'audio/x-ape', '.ape')
+    add_mimetype(mimedb, 'audio/x-shn', '.shn')
+    add_mimetype(mimedb, 'audio/flac', '.flac')
+    add_mimetype(mimedb, 'application/x-chm', '.chm')
+    add_mimetype(mimedb, 'application/x-iso9660-image', '.iso')
+    add_mimetype(mimedb, 'application/zip', '.cbz')
+    add_mimetype(mimedb, 'application/zip', '.epub')
+    add_mimetype(mimedb, 'application/zip', '.apk')
+    add_mimetype(mimedb, 'application/zpaq', '.zpaq')
+
+
+def add_mimetype(mimedb, mimetype, extension):
+    """Add or replace a mimetype to be used with the given extension."""
+    # If extension is already a common type, strict=True must be used.
+    strict = extension in mimedb.types_map[True]
+    mimedb.add_type(mimetype, extension, strict=strict)
+
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -112,3 +221,9 @@ encoding_methods = {
 # 
 #
 #-----------------------------------------------------------------------
+def check_type(format_, encoding):
+    """Make sure format and compression is known."""
+    if format_ not in ArchiveFormats:
+        raise Exception("Unknown archive format `%s'" % format_)
+    if encoding is not None and encoding not in ArchiveCompressions:
+        raise Exception("Unkonwn archive compression `%s'" % encoding)
