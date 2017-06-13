@@ -145,7 +145,7 @@ Report bugs to ...
 
     # Create the subcommand arguments
     for i in subcommands:
-        subcommand = util.get_module_func('archive',i,'parser')
+        subcommand = util.get_module_func(scmd='archive',program=i,cmd='parser')
         subcommand(subparsers, parent_parser)
 
     # This doesn't work...

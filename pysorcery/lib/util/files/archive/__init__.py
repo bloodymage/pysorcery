@@ -44,6 +44,7 @@ Impliments classes for working with archive files.
 #-----------------------------------------------------------------------
 # System Libraries
 import os
+import stat
 
 # 3rd Party Libraries
 
@@ -520,6 +521,25 @@ def program_supports_compression (program, compression):
     return False
 
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def get_archive_format (filename):
     """Detect filename archive format and optional compression."""
     mime, compression = mimetypes.guess_type(filename)
@@ -612,6 +632,25 @@ def find_archive_program (format_, command, program=None):
     # no programs found
     raise Exception("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def check_program_compression(archive, command, program, compression):
     """Check if a program supports the given compression."""
     program = os.path.basename(program)
@@ -629,7 +668,181 @@ def check_program_compression(archive, command, program, compression):
 
 #-----------------------------------------------------------------------
 #
-# Class Archive
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def move_outdir_orphan (outdir):
+    """Move a single file or directory inside outdir a level up.
+    Never overwrite files.
+    Return (True, outfile) if successful, (False, reason) if not."""
+    entries = os.listdir(outdir)
+    if len(entries) == 1:
+        src = os.path.join(outdir, entries[0])
+        dst = os.path.join(os.path.dirname(outdir), entries[0])
+        if os.path.exists(dst) or os.path.islink(dst):
+            return (False, "local file exists")
+        shutil.move(src, dst)
+        os.rmdir(outdir)
+        return (True, entries[0])
+    return (False, "multiple files in root")
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def run_archive_cmdlist (archive_cmdlist, verbosity=0):
+    """Run archive command."""
+    # archive_cmdlist is a command list with optional keyword arguments
+    if isinstance(archive_cmdlist, tuple):
+        cmdlist, runkwargs = archive_cmdlist
+    else:
+        cmdlist, runkwargs = archive_cmdlist, {}
+    return util.run_checked(cmdlist, verbosity=verbosity, **runkwargs)
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def make_file_readable (filename):
+    """Make file user readable if it is not a link."""
+    if not os.path.islink(filename):
+        util.set_mode(filename, stat.S_IRUSR)
+
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def make_dir_readable (filename):
+    """Make directory user readable and executable."""
+    util.set_mode(filename, stat.S_IRUSR|stat.S_IXUSR)
+
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def make_user_readable (directory):
+    """Make all files in given directory user readable. Also recurse into
+    subdirectories."""
+    for root, dirs, files in os.walk(directory, onerror=logger.error):
+        for filename in files:
+            make_file_readable(os.path.join(root, filename))
+        for dirname in dirs:
+            make_dir_readable(os.path.join(root, dirname))
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def cleanup_outdir (outdir, archive):
+    """Cleanup outdir after extraction and return target file name and
+    result string."""
+    make_user_readable(outdir)
+    # move single directory or file in outdir
+    (success, msg) = move_outdir_orphan(outdir)
+    if success:
+        # msg is a single directory or filename
+        return msg, "`%s'" % msg
+    # outdir remains unchanged
+    # rename it to something more user-friendly (basically the archive
+    # name without extension)
+    outdir2 = util.get_single_outfile("", archive)
+    os.rename(outdir, outdir2)
+    return outdir2, "`%s' (%s)" % (outdir2, msg)
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
 #
 # This is the base File Class
 #
@@ -655,8 +868,10 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
         format_, compression = get_archive_format(archive)
     mimetypes.check_type(format_, compression)
     program = find_archive_program(format_, 'extract', program=program)
+
+    print(program + format_)
     check_program_compression(archive, 'extract', program, compression)
-    get_archive_cmdlist = util.get_module_func(program, 'extract', format_)
+    get_archive_cmdlist = util.get_module_func(scmd='util_archive', program=program, cmd='extract', format_=format_)
     if outdir is None:
         outdir = util.tmpdir(dir=".")
         do_cleanup_outdir = True
@@ -674,7 +889,7 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
         else:
             target, msg = outdir, "`%s'" % outdir
         if verbosity >= 0:
-            util.log_info("... %s extracted to %s." % (archive, msg))
+            logger.info("... %s extracted to %s." % (archive, msg))
         return target
     finally:
         # try to remove an empty temporary output directory
@@ -683,3 +898,90 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
                 os.rmdir(outdir)
             except OSError:
                 pass
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def extract_singlefile_standard (archive, compression, cmd, verbosity, interactive, outdir):
+    """Standard routine to extract a singlefile archive (like gzip)."""
+    cmdlist = [util.shell_quote(cmd)]
+    if verbosity > 1:
+        cmdlist.append('-v')
+    outfile = util.get_single_outfile(outdir, archive)
+    cmdlist.extend(['-c', '-d', '--', util.shell_quote(archive), '>',
+        util.shell_quote(outfile)])
+    return (cmdlist, {'shell': True})
+
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def test_singlefile_standard (archive, compression, cmd, verbosity, interactive):
+    """Standard routine to test a singlefile archive (like gzip)."""
+    cmdlist = [cmd]
+    if verbosity > 1:
+        cmdlist.append('-v')
+    cmdlist.extend(['-t', '--', archive])
+    return cmdlist
+
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def create_singlefile_standard (archive, compression, cmd, verbosity, interactive, filenames):
+    """Standard routine to create a singlefile archive (like gzip)."""
+    cmdlist = [util.shell_quote(cmd)]
+    if verbosity > 1:
+        cmdlist.append('-v')
+    cmdlist.extend(['-c', '--'])
+    cmdlist.extend([util.shell_quote(x) for x in filenames])
+    cmdlist.extend(['>', util.shell_quote(archive)])
+    return (cmdlist, {'shell': True})

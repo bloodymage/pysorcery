@@ -41,6 +41,8 @@ import importlib
 import os
 import pkg_resources
 from shutil import which
+import subprocess
+import tempfile
 # 3rd Party Libraries
 
 
@@ -155,6 +157,85 @@ class memoized (object):
 # get_cmd_func
 #
 #-----------------------------------------------------------------------
+def get_single_outfile (directory, archive, extension=""):
+    """Get output filename if archive is in a single file format like gzip."""
+    outfile = os.path.join(directory, stripext(archive))
+    if os.path.exists(outfile + extension):
+        # prevent overwriting existing files
+        i = 1
+        newfile = "%s%d" % (outfile, i)
+        while os.path.exists(newfile + extension):
+            newfile = "%s%d" % (outfile, i)
+            i += 1
+        outfile = newfile
+    return outfile + extension
+
+
+def set_mode (filename, flags):
+    """Set mode flags for given filename if not already set."""
+    try:
+        mode = os.lstat(filename).st_mode
+    except OSError:
+        # ignore
+        return
+    if not (mode & flags):
+        try:
+            os.chmod(filename, flags | mode)
+        except OSError as msg:
+            logger.error("could not set mode flags for `%s': %s" % (filename, msg))
+
+
+def shell_quote (value):
+    """Quote all shell metacharacters in given string value with strong
+    (ie. single) quotes, handling the single quote especially."""
+    if os.name == 'nt':
+        return shell_quote_nt(value)
+    return "'%s'" % value.replace("'", r"'\''")
+
+
+def shell_quote_nt (value):
+    """Quote argument for Windows system. Modeled after distutils
+    _nt_quote_args() function."""
+    if " " in value:
+        return '"%s"' % value
+    return value
+
+def run (cmd, verbosity=0, **kwargs):
+    """Run command without error checking.
+    @return: command return code"""
+    # Note that shell_quote_nt() result is not suitable for copy-paste
+    # (especially on Unix systems), but it looks nicer than shell_quote().
+    if verbosity >= 0:
+        logger.info("running %s" % " ".join(map(shell_quote_nt, cmd)))
+    if kwargs:
+        if verbosity >= 0:
+            logger.info("    with %s" % ", ".join("%s=%s" % (k, shell_quote(str(v)))\
+                                           for k, v in kwargs.items()))
+        if kwargs.get("shell"):
+            # for shell calls the command must be a string
+            cmd = " ".join(cmd)
+    if verbosity < 1:
+        # hide command output on stdout
+        with open(os.devnull, 'wb') as devnull:
+            kwargs['stdout'] = devnull
+            res = subprocess.call(cmd, **kwargs)
+    else:
+        res = subprocess.call(cmd, **kwargs)
+    return res
+
+
+def run_checked (cmd, ret_ok=(0,), **kwargs):
+    """Run command and raise PatoolError on error."""
+    retcode = run(cmd, **kwargs)
+    if retcode not in ret_ok:
+        msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
+        raise Exception(msg)
+    return retcode
+
+
+def tmpdir (dir=None):
+    """Return a temporary directory for extraction."""
+    return tempfile.mkdtemp(suffix='', prefix='Unpack_', dir=dir)
 
 #-------------------------------------------------------------------
 #
@@ -198,6 +279,10 @@ def get_cmd_types(cmd_class):
     logger.debug('End Function')
     return supformats
 
+def stripext (filename):
+    """Return the basename without extension of given filename."""
+    return os.path.splitext(os.path.basename(filename))[0]
+
 #-------------------------------------------------------------------
 #
 # Function get_module_func
@@ -217,38 +302,49 @@ def get_cmd_types(cmd_class):
 #    ...
 #
 #-------------------------------------------------------------------
-def get_module_func(cmd_class,
-                    cmd_type,
-                    command):
+def get_module_func(*args, **kwargs):
     logger.debug('Begun Function')
 
-    if cmd_class in import_path:
-        basemodname = import_path[cmd_class]
+    scmd = kwargs['scmd']
+    program = kwargs['program']
+    command = kwargs['cmd']
+    if 'format_' in kwargs:
+        format_ = kwargs['format_']
     else:
-        key = util.stripext(os.path.basename(program).lower())
-        modulename = basemodname + ArchiveModules.get(cmd_type, cmd_type)
+        format_ = False
 
-    if cmd_class == 'util_archive':
-        modulename = 
-    elif cmd_class == 'util_compressed':
-        modulename = basemodname + CompressedModules.get(cmd_type, cmd_type)
-    else:
-        modulename = basemodname + cmd_type
-
+    """Get the Python function that executes the given program."""
+    # get python module for given archive program
+    key = stripext(os.path.basename(program).lower())
+    if scmd in import_path:
+        basemodname = import_path[scmd]
+        if scmd == 'util_archive':
+            modulename = basemodname + ArchiveModules.get(key, key)            
+        elif scmd == 'util_compressed':
+            modulename = basemodname + CompressedModules.get(key, key)
+        else:
+            modulename = basemodname + program
 
     # import the module
-    module = importlib.import_module(modulename, __name__)
-    #    try:
-#        module = importlib.import_module(modulename, __name__)
-#    except ImportError as msg:
-#        logger.error(str(msg) + ' ' + str(modulename))
+    try:
+        module = importlib.import_module(modulename, __name__)
+    except ImportError as msg:
+        raise Exception(msg)
+    # get archive handler function (eg. patoolib.programs.star.extract_tar)
+    try:
+        if format_:
+            return getattr(module, '%s_%s' % (command, format_))
+        else:
+            return getattr(module, command)
+    except AttributeError as msg:
+        raise Exception(msg)
 
-    # get the function
     try:
         logger.debug('Module: ' + str(modulename))
         logger.debug('Command: ' + str(command)) 
         logger.debug('End Function')
-        return getattr(module, command)
+
+
     except AttributeError as msg:
         logger.error(msg)
         logger.debug('End Function')
