@@ -353,11 +353,11 @@ class Archive(files.BaseFile):
         util.check_new_filename(self.filename)
         util.check_archive_filelist(filenames)
         if verbosity >= 0:
-            logger.info("Creating %s ..." % archive)
+            logger.info("Creating %s ..." % self.filename)
             res = _create_archive(self.filename, filenames, verbosity=verbosity,
                                   interactive=interactive, program=program)
             if verbosity >= 0:
-                logger.info("... %s created." % archive)
+                logger.info("... %s created." % self.filename)
         return res
 
     #-------------------------------------------------------------------
@@ -1039,7 +1039,7 @@ def _create_archive(archive, filenames, verbosity=0, interactive=True,
     check_archive_format(format, compression)
     program = find_archive_program(format, 'create', program=program)
     check_program_compression(archive, 'create', program, compression)
-    get_archive_cmdlist = get_archive_cmdlist_func(program, 'create', format)
+    get_archive_cmdlist = util.get_module_func(scmd='util_archive', program=program, cmd='create', format_=format)
     origarchive = None
     if os.path.basename(program) == 'arc' and \
        ".arc" in archive and not archive.endswith(".arc"):

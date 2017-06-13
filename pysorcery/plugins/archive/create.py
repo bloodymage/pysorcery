@@ -39,14 +39,7 @@
 #
 #-----------------------------------------------------------------------
 """
-pyArchive
-
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
-Plugin: create
+Plugin: Create
 
 This plugin adds archive/compressed file creation and the applicable 
 command line arguments.
@@ -131,17 +124,12 @@ colortext = text.ConsoleText()
 #-----------------------------------------------------------------------
 def archive_create(args):
     logger.debug('Begin Function')
-
-    print(args)
     
-    #try:
-    #    cfile = lib.File(args.archive)
-    #    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-    #        cfile.create(os.getcwd(), args.filename)
-    #    else:
-    #        cfile.compress(args.filename)
-    #except:
-    #    logger.error('Archive creation failed')
+    cfile = lib.File(args.archive)
+    if cfile.mimetype in mimetypes.ArchiveMimetypes:
+        cfile.create(args.pathname, verbosity=args.verbosity, interactive=args.interactive)
+    else:
+        cfile.compress(args.pathname)
 
     logger.debug('End Function')
     return
@@ -180,6 +168,7 @@ def parser(*args, **kwargs):
                      '--archive',
                      help = 'Archive file to create')
     cmd.add_argument('pathname',
+                     nargs='+',
                      help = 'Files / Directories to add to the archive')
     cmd.add_argument('-l',
                      '--level',
@@ -188,6 +177,13 @@ def parser(*args, **kwargs):
                      default = 9,
                      help = 'Set compression level')
 
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     exclude = cmd.add_argument_group('Exclusion Options')
     exclude.add_argument('--exclude',
                          metavar = 'PATTERN',
