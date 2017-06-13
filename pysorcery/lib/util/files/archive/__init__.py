@@ -348,16 +348,17 @@ class Archive(files.BaseFile):
     #    ...
     #
     #-------------------------------------------------------------------
-    def create(self, root_dir=None, base_dir=None, compression_lvl=9):
-        logger.debug('Begin Function')
-        
-        shutil.make_archive(self.basename,
-                            self.format_,
-                            root_dir,
-                            base_dir)
-
-        logger.debug('End Function')
-        return
+    def create(self, filenames, verbosity=0, program=None, interactive=True):
+        """Create given archive with given files."""
+        util.check_new_filename(self.filename)
+        util.check_archive_filelist(filenames)
+        if verbosity >= 0:
+            logger.info("Creating %s ..." % archive)
+            res = _create_archive(self.filename, filenames, verbosity=verbosity,
+                                  interactive=interactive, program=program)
+            if verbosity >= 0:
+                logger.info("... %s created." % archive)
+        return res
 
     #-------------------------------------------------------------------
     #
@@ -378,17 +379,14 @@ class Archive(files.BaseFile):
     #    ...
     #
     #-------------------------------------------------------------------
-    def listfiles(self):
-        logger.debug('Begin Function')
-
-        archive_func = util.get_module_func('util_archive',
-                                            self.format_class,
-                                            'listfiles')
-        # We know what the format is, initialize that format's class
-        file_content = archive_func(self.filename)
-        
-        logger.debug('End Function')
-        return file_content
+    def listfiles(self, verbosity=1, program=None, interactive=True):
+        """List given archive."""
+        # Set default verbosity to 1 since the listing output should be visible.
+        util.check_existing_filename(self.filename)
+        if verbosity >= 0:
+            logger.info("Listing %s ..." % self.filename)
+            return _handle_archive(self.filename, 'list', verbosity=verbosity,
+                                   interactive=interactive, program=program)
 
     #-------------------------------------------------------------------
     #
@@ -520,6 +518,12 @@ def program_supports_compression (program, compression):
         return compression in ('gzip', 'bzip2') + py_lzma
     return False
 
+def check_archive_format (format, compression):
+    """Make sure format and compression is known."""
+    if format not in mimetypes.ArchiveFormats:
+        raise Exception("unknown archive format `%s'" % format)
+    if compression is not None and compression not in mimetypes.ArchiveCompressions:
+        raise Exception("unkonwn archive compression `%s'" % compression)
 
 #-----------------------------------------------------------------------
 #
@@ -899,6 +903,28 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
             except OSError:
                 pass
 
+def _handle_archive(archive, command, verbosity=0, interactive=True,
+                    program=None, format=None, compression=None):
+    """Test and list archives."""
+    if format is None:
+        format, compression = get_archive_format(archive)
+    check_archive_format(format, compression)
+    if command not in ('list', 'test'):
+        raise Exception("invalid archive command `%s'" % command)
+    program = find_archive_program(format, command, program=program)
+    check_program_compression(archive, command, program, compression)
+    get_archive_cmdlist = util.get_module_func(scmd='util_archive',
+                                                   program=program,
+                                                   cmd=command,
+                                                   format_=format)
+    # prepare keyword arguments for command list
+    cmdlist = get_archive_cmdlist(archive, compression, program, verbosity, interactive)
+    if cmdlist:
+        # an empty command list means the get_archive_cmdlist() function
+        # already handled the command (eg. when it's a builtin Python
+        # function)
+        run_archive_cmdlist(cmdlist, verbosity=verbosity)
+
 #-----------------------------------------------------------------------
 #
 # Function _extract_archive
@@ -985,3 +1011,46 @@ def create_singlefile_standard (archive, compression, cmd, verbosity, interactiv
     cmdlist.extend([util.shell_quote(x) for x in filenames])
     cmdlist.extend(['>', util.shell_quote(archive)])
     return (cmdlist, {'shell': True})
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def _create_archive(archive, filenames, verbosity=0, interactive=True,
+                    program=None, format=None, compression=None):
+    """Create an archive."""
+    if format is None:
+        format, compression = get_archive_format(archive)
+    check_archive_format(format, compression)
+    program = find_archive_program(format, 'create', program=program)
+    check_program_compression(archive, 'create', program, compression)
+    get_archive_cmdlist = get_archive_cmdlist_func(program, 'create', format)
+    origarchive = None
+    if os.path.basename(program) == 'arc' and \
+       ".arc" in archive and not archive.endswith(".arc"):
+        # the arc program mangles the archive name if it contains ".arc"
+        origarchive = archive
+        archive = util.tmpfile(dir=os.path.dirname(archive), suffix=".arc")
+    cmdlist = get_archive_cmdlist(archive, compression, program, verbosity, interactive, filenames)
+    if cmdlist:
+        # an empty command list means the get_archive_cmdlist() function
+        # already handled the command (eg. when it's a builtin Python
+        # function)
+        run_archive_cmdlist(cmdlist, verbosity=verbosity)
+    if origarchive:
+        shutil.move(archive, origarchive)

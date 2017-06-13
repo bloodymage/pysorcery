@@ -170,6 +170,14 @@ def get_single_outfile (directory, archive, extension=""):
         outfile = newfile
     return outfile + extension
 
+def check_existing_filename (filename, onlyfiles=True):
+    """Ensure that given filename is a valid, existing file."""
+    if not os.path.exists(filename):
+        raise PatoolError("file `%s' was not found" % filename)
+    if not os.access(filename, os.R_OK):
+        raise PatoolError("file `%s' is not readable" % filename)
+    if onlyfiles and not os.path.isfile(filename):
+        raise PatoolError("`%s' is not a file" % filename)
 
 def set_mode (filename, flags):
     """Set mode flags for given filename if not already set."""
