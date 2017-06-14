@@ -187,6 +187,12 @@ def is_same_filename (filename1, filename2):
     """Check if filename1 and filename2 are the same filename."""
     return os.path.realpath(filename1) == os.path.realpath(filename2)
 
+def strlist_with_or (alist):
+    """Return comma separated string, and last entry appended with ' or '."""
+    if len(alist) > 1:
+        return "%s or %s" % (", ".join(alist[:-1]), alist[-1])
+    return ", ".join(alist)
+
 def check_existing_filename (filename, onlyfiles=True):
     """Ensure that given filename is a valid, existing file."""
     if not os.path.exists(filename):

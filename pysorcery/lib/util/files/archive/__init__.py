@@ -535,6 +535,38 @@ def check_archive_format (format, compression):
     if compression is not None and compression not in mimetypes.ArchiveCompressions:
         raise Exception("unkonwn archive compression `%s'" % compression)
 
+def list_formats ():
+    """Print information about available archive formats to stdout."""
+    #print("Archive programs of", App)
+    print("Archive programs are searched in the following directories:")
+    print(util.system_search_path())
+    print()
+    for format in mimetypes.ArchiveFormats:
+        print(format, "files:")
+        for command in ArchiveCommands:
+            programs = ArchivePrograms[format]
+            if command not in programs and None not in programs:
+                print("   %8s: - (not supported)" % command)
+                continue
+            try:
+                program = find_archive_program(format, command)
+                print("   %8s: %s" % (command, program), end=' ')
+                if format == 'tar':
+                    encs = [x for x in mimetypes.ArchiveCompressions if util.find_program(x)]
+                    if encs:
+                        print("(supported compressions: %s)" % ", ".join(encs), end=' ')
+                elif format == '7z':
+                    if util.p7zip_supports_rar():
+                        print("(rar archives supported)", end=' ')
+                    else:
+                        print("(rar archives not supported)", end=' ')
+                print()
+            except Exception:
+                # display information what programs can handle this archive format
+                handlers = programs.get(None, programs.get(command))
+                print("   %8s: - (no program found; install %s)" %
+                      (command, util.strlist_with_or(handlers)))
+
 #-----------------------------------------------------------------------
 #
 # Function _extract_archive

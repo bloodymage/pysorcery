@@ -40,13 +40,6 @@
 #
 #-----------------------------------------------------------------------
 """
-pyArchive
-
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
 Plugin: Formats
 
 This plugin prints a list of all Sorcery supported archive and 
@@ -129,26 +122,8 @@ colortext = text.ConsoleText()
 def archive_formats(args):
     logger.debug('Begin Function')
 
-    format_groups = ['util_archive', 'util_compressed']
-
-    cmd = 'archive_support'
-
-    for group in format_groups:
-        # Obtain list of all supported formats of type 'x'
-        formats = util.get_cmd_types(group)
-
-        # 
-        for format_ in formats:
-            logger.info(format_ + ' files:')
-
-            # Identify function that displays formats support
-            archive_func = util.get_module_func(group,
-                                                format_,
-                                                cmd)
-            
-            # Execute the identified function
-            archive_func()
-
+    archive.list_formats()
+    
     logger.debug('End Function')
     return
 
