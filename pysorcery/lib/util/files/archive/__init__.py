@@ -493,13 +493,23 @@ class Archives(files.BaseFiles):
     # ------
     #
     #-------------------------------------------------------------------
-    def diff(self):
+    def diff(self, verbosity=0, interactive=True):
         logger.debug('Begin Function')
 
-        results = "A + B"
+        """Print differences between two archives."""
+        util.check_existing_filename(self.files[0])
+        util.check_existing_filename(self.files[1])
+        if verbosity >= 0:
+            logger.info("Comparing %s with %s ..." % (self.files[0], self.files[1]))
+            res = _diff_archives(self.files[0],
+                                 self.files[1],
+                                 verbosity=verbosity,
+                                 interactive=interactive)
+        if res == 0 and verbosity >= 0:
+            logger.info("... no differences found.")
         
         logger.debug('End Function')
-        return results
+        return res
 
 #-----------------------------------------------------------------------
 #
@@ -732,6 +742,11 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
         cmdlist, runkwargs = archive_cmdlist, {}
     return util.run_checked(cmdlist, verbosity=verbosity, **runkwargs)
 
+def rmtree_log_error (func, path, exc):
+    """Error function for shutil.rmtree(). Raises a PatoolError."""
+    msg = "Error in %s(%s): %s" % (func.__name__, path, str(exc[1]))
+    logger.error(msg)
+
 #-----------------------------------------------------------------------
 #
 # Function _extract_archive
@@ -924,6 +939,48 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
         # already handled the command (eg. when it's a builtin Python
         # function)
         run_archive_cmdlist(cmdlist, verbosity=verbosity)
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def _diff_archives (archive1, archive2, verbosity=0, interactive=True):
+    """Show differences between two archives.
+    @return 0 if archives are the same, else 1
+    @raises: PatoolError on errors
+    """
+    if util.is_same_file(archive1, archive2):
+        return 0
+    diff = util.find_program("diff")
+    if not diff:
+        msg = "The diff(1) program is required for showing archive differences, please install it."
+        raise Exception(msg)
+    tmpdir1 = util.tmpdir()
+    try:
+        path1 = _extract_archive(archive1, outdir=tmpdir1, verbosity=-1)
+        tmpdir2 = util.tmpdir()
+        try:
+            path2 = _extract_archive(archive2, outdir=tmpdir2, verbosity=-1)
+            return util.run_checked([diff, "-urN", path1, path2], verbosity=1, ret_ok=(0, 1))
+        finally:
+            shutil.rmtree(tmpdir2, onerror=rmtree_log_error)
+    finally:
+        shutil.rmtree(tmpdir1, onerror=rmtree_log_error)
 
 #-----------------------------------------------------------------------
 #

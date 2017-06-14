@@ -39,13 +39,6 @@
 #
 #-----------------------------------------------------------------------
 """
-pyArchive
-
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
 Plugin: Diff
 
 This plugin provides the ability to compare archive and compressed files.
@@ -132,11 +125,13 @@ colortext = text.ConsoleText()
 def archive_diff(args):
     logger.debug('Begin Function')
 
-    archives = lib.Files(filelist=args.archive)
-    result = archives.diff()
-
-    for f in result:
-        logger.info(f)
+    """Show differences between two archives."""
+    try:
+        archives = lib.Files(filelist=args.archive)
+        result = archives.diff(verbosity=args.verbosity,
+                               interactive=args.interactive)
+    except Exception as msg:
+        logger.error("error showing differences between %s and %s: %s" % (args.archive[0], args.archive[1], msg))
     
     logger.debug('End Function')
     return
@@ -184,6 +179,13 @@ def parser(*args, **kwargs):
                      '--contents',
                      action='store_true',
                      help='Compare file contents')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     cmd.set_defaults(func = archive_diff)
 
     return cmd

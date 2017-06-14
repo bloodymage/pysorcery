@@ -182,12 +182,9 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
 #    ...
 # 
 #-----------------------------------------------------------------------
-class Files(files.BaseFiles):
+class Files(archive.Archives, files.BaseFiles):
     def __init__(self, *args, **kwargs):
-        files = kwargs['filelist']
-        self.files = []
-        for f in files:
-            self.files.append(File(f))
+        self.files = kwargs['filelist']
 
         return
     #-------------------------------------------------------------------
@@ -211,25 +208,6 @@ class Files(files.BaseFiles):
     #    ...
     #
     #-------------------------------------------------------------------
-    def diff(self):
-        logger.debug("Begin Function")
-
-        file1 = self.files[0]
-        file2 = self.files[1]
-
-        if (file1.format_class in shutil.archive_formats and
-            file2.format_class in shutil.archive_formats):
-
-            list1 = file1.listfiles()
-            list2 = file2.listfiles()
-
-            results = list(set(list1) - set(list2))
-            results = results + list(set(list2) - set(list1))
-        else:
-            results = "Diff results"
-
-        logger.debug("Begin Function")
-        return results
 
 
 #-----------------------------------------------------------------------
