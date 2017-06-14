@@ -193,6 +193,11 @@ def strlist_with_or (alist):
         return "%s or %s" % (", ".join(alist[:-1]), alist[-1])
     return ", ".join(alist)
 
+def check_writable_filename(filename):
+    """Ensure that the given filename is writable."""
+    if not os.access(filename, os.W_OK):
+        raise PatoolError("file `%s' is not writable" % filename)
+
 def check_existing_filename (filename, onlyfiles=True):
     """Ensure that given filename is a valid, existing file."""
     if not os.path.exists(filename):
@@ -432,3 +437,26 @@ def find_program (program):
         # use default path
         path = None
     return which(program, path=path)
+
+def get_filesize(filename):
+    """Return file size in Bytes, or -1 on error."""
+    return os.path.getsize(filename)
+
+def strsize(b, grouping=True):
+    """Return human representation of bytes b. A negative number of bytes
+    raises a value error."""
+    if b < 0:
+        raise ValueError("Invalid negative byte number")
+    if b < 1024:
+        return u"%sB" % locale.format("%d", b, grouping)
+    if b < 1024 * 10:
+        return u"%sKB" % locale.format("%d", (b // 1024), grouping)
+    if b < 1024 * 1024:
+        return u"%sKB" % locale.format("%.2f", (float(b) / 1024), grouping)
+    if b < 1024 * 1024 * 10:
+        return u"%sMB" % locale.format("%.2f", (float(b) / (1024*1024)), grouping)
+    if b < 1024 * 1024 * 1024:
+        return u"%sMB" % locale.format("%.1f", (float(b) / (1024*1024)), grouping)
+    if b < 1024 * 1024 * 1024 * 10:
+        return u"%sGB" % locale.format("%.2f", (float(b) / (1024*1024*1024)), grouping)
+    return u"%sGB" % locale.format("%.1f", (float(b) / (1024*1024*1024)), grouping)

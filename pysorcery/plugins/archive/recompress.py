@@ -38,11 +38,6 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
 Plugin: Recompress
 
 Recompress an archive file
@@ -128,9 +123,16 @@ colortext = text.ConsoleText()
 def archive_recompress(args):
     logger.debug('Begin Function')
 
-    print('Archive = ' + str(args.archive))
-    print('Comp Lvl = ' + str(args.compression_level))
-
+    """Recompress an archive to smaller size."""
+    res = 0
+    try:
+        archive = lib.File(args.archive)
+        archive.recompress_archive(verbosity=args.verbosity,
+                                   interactive=args.interactive)
+    except Exception as msg:
+        logger.error("error recompressing %s: %s" % (args.archive, msg))
+        res = 1
+    return res
 
     logger.debug('End Function')
     return
@@ -173,6 +175,13 @@ def parser(*args, **kwargs):
                      choices = range(0, 9),
                      default = 9,
                      help = 'Set new compression level')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     cmd.set_defaults(func = archive_recompress)
 
     return cmd

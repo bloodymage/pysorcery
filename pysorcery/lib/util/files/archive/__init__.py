@@ -388,6 +388,19 @@ class Archive(files.BaseFile):
             return _handle_archive(self.filename, 'list', verbosity=verbosity,
                                    interactive=interactive, program=program)
 
+    def recompress_archive(self, verbosity=0, interactive=True):
+        """Recompress an archive to hopefully smaller size."""
+        util.check_existing_filename(self.filename)
+        util.check_writable_filename(self.filename)
+        if verbosity >= 0:
+            logger.info("Recompressing %s ..." % (self.filename,))
+        res = _recompress_archive(self.filename,
+                                  verbosity=verbosity,
+                                  interactive=interactive)
+        if res and verbosity >= 0:
+            logger.info(res)
+        return 0
+
     #-------------------------------------------------------------------
     #
     # Function testarchive
@@ -1120,6 +1133,44 @@ def create_singlefile_standard (archive, compression, cmd, verbosity, interactiv
 #    ...
 #
 #-----------------------------------------------------------------------
+def _recompress_archive(archive, verbosity=0, interactive=True):
+    """Try to recompress an archive to smaller size."""
+    format, compression = get_archive_format(archive)
+    if compression:
+        # only recompress the compression itself (eg. for .tar.xz)
+        format = compression
+    tmpdir = util.tmpdir()
+    tmpdir2 = util.tmpdir()
+    base, ext = os.path.splitext(os.path.basename(archive))
+    archive2 = util.get_single_outfile(tmpdir2, base, extension=ext)
+    try:
+        # extract
+        kwargs = dict(verbosity=verbosity, format_=format, outdir=tmpdir)
+        path = _extract_archive(archive, **kwargs)
+        # compress to new file
+        olddir = os.getcwd()
+        os.chdir(path)
+        try:
+            kwargs = dict(verbosity=verbosity, interactive=interactive, format=format)
+            files = tuple(os.listdir(path))
+            _create_archive(archive2, files, **kwargs)
+        finally:
+            os.chdir(olddir)
+        # check file sizes and replace if new file is smaller
+        filesize = util.get_filesize(archive)
+        filesize2 = util.get_filesize(archive2)
+        if filesize2 < filesize:
+            # replace file
+            os.remove(archive)
+            shutil.move(archive2, archive)
+            diffsize = filesize - filesize2
+            return "... recompressed file is now %s smaller." % util.strsize(diffsize)
+    finally:
+        shutil.rmtree(tmpdir, onerror=rmtree_log_error)
+        shutil.rmtree(tmpdir2, onerror=rmtree_log_error)
+    return "... recompressed file is not smaller, leaving archive as is."
+
+
 def _create_archive(archive, filenames, verbosity=0, interactive=True,
                     program=None, format=None, compression=None):
     """Create an archive."""
