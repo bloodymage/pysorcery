@@ -125,8 +125,16 @@ colortext = text.ConsoleText()
 def archive_repack(args):
     logger.debug('Begin Function')
 
-    lib.repack(args.srcfile, args.dstfile)
-    
+    """Repackage one archive in another format."""
+    res = 0
+    try:
+        archive = lib.File(args.srcfile)
+        
+        archive.repack_archive(args.dstfile, verbosity=args.verbosity, interactive=args.interactive)
+    except Exception as msg:
+        logging.error("error repacking %s: %s" % (args.srcfile, msg))
+        res = 1
+
     logger.debug('End Function')
     return
 
@@ -168,6 +176,13 @@ def parser(*args, **kwargs):
                      choices = range(0, 9),
                      default = 9,
                      help = 'Set new compression level')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     cmd.set_defaults(func = archive_repack)
 
     return cmd

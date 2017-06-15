@@ -401,6 +401,16 @@ class Archive(files.BaseFile):
             logger.info(res)
         return 0
 
+    def repack_archive (self, archive_new, verbosity=0, interactive=True):
+        """Repack archive to different file and/or format."""
+        util.check_existing_filename(self.filename)
+        util.check_new_filename(archive_new)
+        if verbosity >= 0:
+            logger.info("Repacking %s to %s ..." % (self.filename, archive_new))
+        res = _repack_archive(self.filename, archive_new, verbosity=verbosity, interactive=interactive)
+        if verbosity >= 0:
+            logger.info("... repacking successful.")
+        return res
     #-------------------------------------------------------------------
     #
     # Function testarchive
@@ -1194,3 +1204,34 @@ def _create_archive(archive, filenames, verbosity=0, interactive=True,
         run_archive_cmdlist(cmdlist, verbosity=verbosity)
     if origarchive:
         shutil.move(archive, origarchive)
+
+def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
+    """Repackage an archive to a different format."""
+    format1, compression1 = get_archive_format(archive1)
+    format2, compression2 = get_archive_format(archive2)
+    if format1 == format2 and compression1 == compression2:
+        # same format and compression allows to copy the file
+        util.link_or_copy(archive1, archive2, verbosity=verbosity)
+        return
+    tmpdir = util.tmpdir()
+    try:
+        kwargs = dict(verbosity=verbosity, outdir=tmpdir)
+        same_format = (format1 == format2 and compression1 and compression2)
+        if same_format:
+            # only decompress since the format is the same
+            kwargs['format'] = compression1
+        path = _extract_archive(archive1, **kwargs)
+        archive = os.path.abspath(archive2)
+        files = tuple(os.listdir(path))
+        olddir = os.getcwd()
+        os.chdir(path)
+        try:
+            kwargs = dict(verbosity=verbosity, interactive=interactive)
+            if same_format:
+                # only compress since the format is the same
+                kwargs['format'] = compression2
+            _create_archive(archive, files, **kwargs)
+        finally:
+            os.chdir(olddir)
+    finally:
+        shutil.rmtree(tmpdir, onerror=rmtree_log_error)
