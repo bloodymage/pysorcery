@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugin/archive/list.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,12 +32,22 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
+# Plugin: list
+#
+#    This plugin lists the contents of an archive file.  If the file is
+#    a compressed file, it will read the contents of the file.
+#
 #-----------------------------------------------------------------------
 """
 This is a bonus application for pysorcery.  PySorcery for multiple
 reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
+
+Plugin: list
+
+This plugin lists the contents of an archive file.  If the file is
+a compressed file, it will read the contents of the file.
 """
 #-----------------------------------------------------------------------
 #
@@ -89,15 +99,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
 # archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -108,25 +111,30 @@ colortext = text.ConsoleText()
 # List all files in an archive.
 # If a compressed file, read the files contents
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.files - List of files to extract
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_list(args):
     logger.debug('Begin Function')
 
     for i in args.files:
-        cfile = lib.Files(i)
+        cfile = lib.File(i)
         if cfile.mimetype in mimetypes.ArchiveMimetypes:
             content = cfile.listfiles()
         else:
             content = cfile.read()
-
-
-    for line in content:
-        print(line)
 
     logger.debug('End Function')
     return
@@ -137,11 +145,20 @@ def archive_list(args):
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd   - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):

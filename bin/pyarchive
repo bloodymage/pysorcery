@@ -8,9 +8,12 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# Additional code from 'patool'
+# Copyright (C) 2010-2015 Bastian Kleineidam
 #
 # This file is part of Sorcery.
+#
+# File: pysorcery/cli/archive.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -42,6 +45,7 @@ underlying code, this application was developed.
 
 # EASY-INSTALL-ENTRY-SCRIPT: 'pysorcery==0.0.1','console_scripts','pyarchive'
 __requires__ = 'pysorcery==0.1.1'
+
 import sys
 from pkg_resources import load_entry_point
 

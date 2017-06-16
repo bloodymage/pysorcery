@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/util/files/__init__.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -23,9 +25,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
-# Library for sorcery that provides for interfacing with
-# files/directories.
+# Files:
+#    Library for sorcery that provides for interfacing with
+#    files/directories.
 #
 #-----------------------------------------------------------------------
 
@@ -67,8 +69,11 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
-# BaseFile
 #
+# BaseFile
+# BaseFiles
+# BaseDirectory
+# BaseDirectories
 # 
 #-----------------------------------------------------------------------
 
@@ -77,6 +82,18 @@ logger = logging.getLogger(__name__)
 # Class BaseFile
 #
 # This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class BaseFile():
@@ -87,9 +104,6 @@ class BaseFile():
         self.mimetype, self.encoding = mimetypes.guess_type(self.filename)
         self.path, self.basename, self.extention = pne(self.filename)
 
-        self.format_class, self.format_ = get_format(self.mimetype,
-                                                     self.encoding)
-
         logger.debug("End Function")
         return
 
@@ -97,8 +111,19 @@ class BaseFile():
     #
     # Function list_from
     #
-    # Input:  ...
-    # Return: pkg_list - list of ..
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    pkg_list - list of ..
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def list_from(self):
@@ -124,8 +149,19 @@ class BaseFile():
     #
     # Function remove
     #
-    # Input:  ...
-    # Return: None
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param: ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def remove(self):
@@ -140,8 +176,19 @@ class BaseFile():
     #
     # Function read
     #
-    # Input:  ...
-    # Return: None
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def read(self):
@@ -158,8 +205,19 @@ class BaseFile():
     #
     # Function write
     #
-    # Input:  ...
-    # Return: none
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def write(self):
@@ -174,8 +232,19 @@ class BaseFile():
     #
     # Function search
     #
-    # Input:  ...
-    # Return: none
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def search(self, searchstring):
@@ -193,16 +262,37 @@ class BaseFile():
 #
 # Directories are a specific type of file
 #
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
 #-----------------------------------------------------------------------
 class BaseDirectory(BaseFile):
-
     #-------------------------------------------------------------------
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def print_name(self):
@@ -215,6 +305,20 @@ class BaseDirectory(BaseFile):
 #
 # Class BaseFiles
 # 
+# ...
+#
+# Inputs
+# ------
+#    @param: *args
+#    @param: **kwargs
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class BaseFiles():
@@ -230,8 +334,19 @@ class BaseFiles():
     #
     # Function 
     #
-    # Input:  ...
-    # Return: ...
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def list_installed_files(self):
@@ -252,8 +367,19 @@ class BaseFiles():
     #
     # Function 
     #
-    # Input:  ...
-    # Return: ...
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def list_system_files(self):
@@ -279,10 +405,19 @@ class BaseFiles():
     #
     # Function repack
     #
-    # Input:  @param: srcfile - the original file
-    #         @param: dstfile - the new file we are creating with the new
-    #                           compression method.
-    # Return: None
+    # Inputs
+    # ------
+    #    @param: srcfile - the original file
+    #    @param: dstfile - the new file we are creating with the new
+    #                      compression method. 
+    #
+    # Returns
+    # -------
+    #    None
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-----------------------------------------------------------------------
     def repack(self, componly=False):
@@ -317,9 +452,21 @@ class BaseFiles():
 #
 # Path Name Extention
 #
-# input:
-# output:
-# return: Path, Name, and Extention
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    Path
+#    Name
+#    Extention
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def pne(ifilename):
@@ -336,48 +483,3 @@ def pne(ifilename):
         ext = first_ext + ext
     return path, root, ext
 
-#-------------------------------------------------------------------
-#
-# Function id_archive_format
-#
-# Input:  ...
-# Output: ...
-# Return: archive_format
-#         encoding
-#
-#-------------------------------------------------------------------
-def get_format(mimetype=None,encoding=None):
-    logger.debug('Begin Function')
-
-    logger.debug2('Mimetype: ' + str(mimetype))
-
-    if (mimetype is None and
-        encoding is None):
-        archive_class = 'Unknown'
-        
-    elif (mimetype not in mimetypes.ArchiveMimetypes and
-        encoding in mimetypes.encoding_methods):
-        archive_class = mimetypes.encoding_methods[encoding]
-        
-    elif mimetype in mimetypes.ArchiveMimetypes:
-        archive_class = mimetypes.ArchiveMimetypes[mimetype]
-    else:
-        archive_class = mimetype
-        logger.error('Unknown archive type for mime:' + str(mimetype))
-
-    if encoding is None:
-        encoding = archive_class
-
-    logger.debug2('Archive class: ' + str(archive_class))
-
-    if archive_class in shutil.archive_formats:
-        archive_format = shutil.archive_formats[archive_class][encoding]
-        shutil.init_formats('util_archive')
-    elif archive_class in shutil.compressed_formats:
-        archive_format = shutil.compressed_formats[archive_class][encoding]
-        shutil.init_formats('util_compressed')
-    else:
-        archive_format = 'Unknown'
-        
-    logger.debug('End Function')
-    return archive_class, archive_format

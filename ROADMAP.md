@@ -226,18 +226,18 @@
 - [ ] Xubuntu
 
 
-### 0.2.1
+### 0.1.1
 ####
 - API Funtionally complete
 
-### 0.2.2
+### 0.1.2
 ####
 - Maximize native python code
 
-### 0.2.3
+### 0.1.3
 - Ensure proper exception handling
 
-### 0.2.4
+### 0.1.4
 - Setup.py
 
 ### 0.1.5
@@ -257,7 +257,7 @@
 - Framework functionally complete
 - Open to the public?
 
-### 0.3.1
+### 0.2.1
 #### Functional Scripts
 - pyxsorcery
 
@@ -286,11 +286,11 @@
 ## 0.5
 - Base Code Functional
 
-### 0.6.1
+### 0.5.1
 #### Supported Distributions
 - Kali
 
-### 0.6.2
+### 0.5.2
 #### Supported Distributions
 - Debian
   
@@ -299,20 +299,20 @@
 - Sorcery Pockage Management Complete
 - Debian APT complete
 
-### 0.7.1
+### 0.6.1
 #### New Package Manager
 - Add support for Lunar Linux '...'
   - Ensure commands are compatible with Lunar Linux commands
 
-### 0.7.2
+### 0.6.2
 #### New Package Manager
 - Add support for Arch 'pacman'
 
-### 0.7.3
+### 0.6.3
 #### New Package Manager
 -  Add support for Fedora 'yum'
 
-### 0.7.4
+### 0.6.4
 #### New Package Manager
 - Add support for Gentoo 'portage'
 

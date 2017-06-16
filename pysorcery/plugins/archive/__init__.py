@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/archive/__init__.py
 #
 # This file is part of Sorcery.
 #

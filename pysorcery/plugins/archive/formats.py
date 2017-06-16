@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/formats.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,12 +32,18 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
+# Plugin: Formats
+#
+#    This plugin prints a list of all Sorcery supported archive and
+#    compression options along with status on underlying system
+#    support.
+#
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Plugin: Formats
+
+This plugin prints a list of all Sorcery supported archive and 
+compression options along with status on underlying system support.
 """
 #-----------------------------------------------------------------------
 #
@@ -90,43 +96,34 @@ colortext = text.ConsoleText()
 # Functions
 #
 # archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_formats
-#
+# Function archive_formats
 #
 # List all archive and compression formats supported.
 #
-# Input:  @param: args
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_formats(args):
     logger.debug('Begin Function')
 
-    format_groups = ['util_archive', 'util_compressed']
-
-    cmd = 'archive_support'
-
-    for group in format_groups:
-        # Obtain list of all supported formats of type 'x'
-        formats = util.get_cmd_types(group)
-
-        # 
-        for format_ in formats:
-            logger.info(format_ + ' files:')
-
-            # Identify function that displays formats support
-            archive_func = util.get_module_func(group,
-                                                format_,
-                                                cmd)
-            
-            # Execute the identified function
-            archive_func()
-
+    archive.list_formats()
+    
     logger.debug('End Function')
     return
 
@@ -136,11 +133,20 @@ def archive_formats(args):
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -150,7 +156,7 @@ def parser(*args, **kwargs):
 
     cmd = subparsers.add_parser('formats',
                                 parents = parent_parsers,
-                                help = 'Formats files')
+                                help = 'Display supported file formats and functions')
     cmd.set_defaults(func = archive_formats)
 
     return cmd

@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/diff.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -25,13 +25,22 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Archive Diff
+# pyArchive
 #
-# This plugin provides the ability to compare archive and compressed
-# files.
+#   This is a bonus application for pysorcery.  PySorcery for multiple
+#   reasons to internally extract, create, list the contents, etc.
+#   archive files of multiple formats.  To test the capabilities of the
+#   underlying code, this application was developed.
+#
+# Plugins: Diff
+#
+#   This plugin provides the ability to compare archive and compressed
+#   files.
 #
 #-----------------------------------------------------------------------
 """
+Plugin: Diff
+
 This plugin provides the ability to compare archive and compressed files.
 """
 #-----------------------------------------------------------------------
@@ -91,27 +100,38 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_diff
+# Function archive_diff
 #
 # Find and display all differences between two archive filesxs
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.archive1 - First archive to compare
-#         args.archive2 - Second archive to compare
-#         args.size - Compare content file sizes as well (conflicts with content)
-#         args.content - Compare File Contents (conflicts with size)
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.archive1 - First archive to compare
+#            args.archive2 - Second archive to compare
+#            args.size - Compare content file sizes as well (conflicts with content)
+#            args.content - Compare File Contents (conflicts with size)
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_diff(args):
     logger.debug('Begin Function')
 
-    archives = lib.Files(filelist=args.archive)
-    result = archives.diff()
-
-    for f in result:
-        logger.info(f)
+    """Show differences between two archives."""
+    try:
+        archives = lib.Files(filelist=args.archive)
+        result = archives.diff(verbosity=args.verbosity,
+                               interactive=args.interactive)
+    except Exception as msg:
+        logger.error("error showing differences between %s and %s: %s" % (args.archive[0], args.archive[1], msg))
     
     logger.debug('End Function')
     return
@@ -122,11 +142,20 @@ def archive_diff(args):
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -150,6 +179,13 @@ def parser(*args, **kwargs):
                      '--contents',
                      action='store_true',
                      help='Compare file contents')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     cmd.set_defaults(func = archive_diff)
 
     return cmd

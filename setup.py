@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: Setup.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -37,7 +39,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='pySorcery',
-    version='0.1.1',
+    version='0.0.1',
     
     description='Sorcery Package Management System',
     long_description='Sorcery Package Management System ...',

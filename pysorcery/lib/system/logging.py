@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -27,33 +27,31 @@
 #
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 import logging
 from logging import *
 import copy
 
-# Other Libraries
+# 3rd Party Libraries
 
 # Application Libraries
-import pysorcery
+from pysorcery import __version__
 from pysorcery.lib.util import text
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
-# Seethe Roadmap for version information
-__version__ = '0.1.1'
+#-----------------------------------------------------------------------
 
 #for level in ['DEBUG','INFOV','INFO']:
     
@@ -118,299 +116,752 @@ logging.addLevelName(28, "INFO8")
 logging.addLevelName(29, "INFO9")
 
 colortext = text.ConsoleText()
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Classes part 1
+# Classes
 #
-# 
+# LocalLogger
+# ConsoleLvlFormatter
+# ColorizingStreamHandler
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class LocalLogger
 #
-# 
+# Calls the read function based on the file format.
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class LocalLogger(Logger):
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug2(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(9):
             self._log(9, message, args, **kws)
 
-    #----------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug3(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(8):
-            self._log(8, message, args, **kws) 
+            self._log(8, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug4(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(7):
-            self._log(7, message, args, **kws) 
+            self._log(7, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug5(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(6):
-            self._log(6, message, args, **kws) 
+            self._log(6, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug6(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(5):
-            self._log(5, message, args, **kws) 
+            self._log(5, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug7(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(4):
-            self._log(4, message, args, **kws) 
+            self._log(4, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug8(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(3):
-            self._log(3, message, args, **kws) 
+            self._log(3, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug9(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(2):
-            self._log(2, message, args, **kws) 
+            self._log(2, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def debug10(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(1):
             self._log(1, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo1(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(19):
             self._log(19, message, args, **kws)
 
-    #----------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo2(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(18):
-            self._log(18, message, args, **kws) 
+            self._log(18, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo3(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(17):
-            self._log(17, message, args, **kws) 
+            self._log(17, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo4(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(16):
-            self._log(16, message, args, **kws) 
+            self._log(16, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo5(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(15):
-            self._log(15, message, args, **kws) 
+            self._log(15, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo6(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(14):
-            self._log(14, message, args, **kws) 
+            self._log(14, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo7(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(13):
-            self._log(13, message, args, **kws) 
+            self._log(13, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo8(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(12):
             self._log(12, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+    #-------------------------------------------------------------------
     #
-    # debug#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def vinfo9(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(11):
             self._log(11, message, args, **kws)
 
-    #-------------------------------------------------------------------------------
+        return
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info1(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(21):
             self._log(21, message, args, **kws)
 
-    #----------------------------------------------------------------------
+        return
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info2(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(22):
             self._log(22, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info3(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(23):
             self._log(23, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info4(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(24):
             self._log(24, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info5(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(25):
             self._log(25, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info6(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(26):
             self._log(26, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info7(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(27):
             self._log(27, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+    
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info8(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(28):
             self._log(28, message, args, **kws) 
 
-    #-------------------------------------------------------------------------------
+        return
+    
+    #-------------------------------------------------------------------
     #
-    # info#
+    # Function read
     #
-    #-------------------------------------------------------------------------------
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def info9(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         if self.isEnabledFor(29):
             self._log(29, message, args, **kws)
 
-#-------------------------------------------------------------------------------
+        return
+
+#-----------------------------------------------------------------------
 #
-# Class ColorizingStreamHandler
+# Class ConsoleLvlFormatter
 #
-# 
+# Adds further functionality for the console to change the
+# format based on the logging lewel
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class ConsoleLvlFormatter(Formatter):
     def __init__(self, fmt="%(levelno)s: %(message)s"):
         Formatter.__init__(self, fmt)
@@ -421,15 +872,25 @@ class ConsoleLvlFormatter(Formatter):
         self.crit_fmt  = "%(message)s"
         return
 
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
-    # Function 
+    # Function read
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Calls the read function based on the file format.
     #
-    #-------------------------------------------------------------------------------
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def format(self, record):        
 
         # Save the original format configured by the user
@@ -461,13 +922,25 @@ class ConsoleLvlFormatter(Formatter):
 
         return result
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class ColorizingStreamHandler
 #
-# 
+# Calls the read function based on the file format.
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
     def __init__(self, *args, **kwargs):
         self._colors = {DEBUG10: "green",
@@ -503,30 +976,51 @@ class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
                         ERROR: "red",
                         CRITICAL: "magenta"}
         super(ColorizingStreamHandler, self).__init__(*args, **kwargs)
+        return
 
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
-    # Function 
+    # Function read
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Calls the read function based on the file format.
     #
-    #-------------------------------------------------------------------------------
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     @property
     def is_tty(self):
         isatty = getattr(self.stream, 'isatty', None)
         return isatty and isatty()
 
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
-    # Function 
+    # Function read
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Calls the read function based on the file format.
     #
-    #-------------------------------------------------------------------------------
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def emit(self, record):
         try:
             message = self.format(record)
@@ -543,39 +1037,71 @@ class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
         except:
             self.handleError(record)
 
-    #-------------------------------------------------------------------------------
+        return
+
+    #-------------------------------------------------------------------
     #
-    # Function 
+    # Function read
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Calls the read function based on the file format.
     #
-    #-------------------------------------------------------------------------------
+    # Inputs
+    # ------
+    #    ...
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def setLevelColor(self, logging_level, escaped_ansi_code):
         self._colors[logging_level] = escaped_ansi_code
+        return
 
 
 local_manager = copy.copy(Logger.manager)
 local_manager.loggerClass = LocalLogger
 
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# func getLogger
+# Functions
 #
-# Local implementation of 'logging.getLogger'
-# This ensures we have the added logging names, debug2..debug10
+# getLogger
+# verifydebuglevels
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Function getLogger
+#
+# Calls the read function based on the file format.
+#
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def getLogger(name=None):  # noqa
     if name:
         return local_manager.getLogger(name)
     else:
         return Logger.root
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # func verifydebuglevels
 #
@@ -583,7 +1109,19 @@ def getLogger(name=None):  # noqa
 #
 # This is for testing to ensure all debug levels display as expected.
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def verifydebuglevels():
     debug10("Holy Mothermof Fuck")
     debug9("Holy Fuck")
@@ -599,5 +1137,5 @@ def verifydebuglevels():
     warn("Warn Msg")
     error("Error Msg")
     critical("Crit Msg")
-    return 0
+    return
 

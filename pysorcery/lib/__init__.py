@@ -26,7 +26,7 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 # 
-# This file is the pysorcery API.  All files should reference this file.
+# This file is the pysorcery API.  All applications should reference this file.
 #
 #-----------------------------------------------------------------------
 """
@@ -86,6 +86,18 @@ logger = logging.getLogger(__name__)
 # 
 # The File API.  This is the class that is used for ALL file activities
 #
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
+#
 #-----------------------------------------------------------------------
 class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #-------------------------------------------------------------------
@@ -93,6 +105,19 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     # Function read
     #
     # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.format
+    #
+    # Returns
+    # -------
+    #    content
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def read(self):
@@ -111,68 +136,102 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     # Calls the read function based on the file format.
     #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    results
+    #
+    # Raises
+    # ------
+    #    ...
+    #
     #-------------------------------------------------------------------
-    def search(self, searchstring):
+    def search(self,
+               pattern,
+               verbosity=0,
+               interactive=True):
         logger.debug('Begin Function')
+
+        print(self.mimetype)
         
-        if self.format_class in shutil.archive_formats:
-            results = archive.Archive.search(self, searchstring)
-        elif self.format_ != 'Unknown':
-            results = compressed.CompressedFile.search(self, searchstring)
+        if self.mimetype in mimetypes.ArchiveMimetypes:
+            results = archive.Archive.search(self,
+                                             pattern,
+                                             verbosity=0,
+                                             interactive=True)
         else:
-            results = files.BaseFile.search(self, searchstring)
+            logger.error('BaseFile search Not implemented')
+            #results = files.BaseFile.search(self, searchstring)
 
         logger.debug('End Function')
-        return results
-
+        return
 
 #-----------------------------------------------------------------------
 #
 # Class Files
+#
 # 
+#
+# Inputs
+# ------
+#    @param: *args
+#    @param: **kwargs
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 # 
 #-----------------------------------------------------------------------
-class Files(files.BaseFiles):
+class Files(archive.Archives, files.BaseFiles):
     def __init__(self, *args, **kwargs):
-        files = kwargs['filelist']
-        self.files = []
-        for f in files:
-            self.files.append(File(f))
+        self.files = kwargs['filelist']
 
         return
     #-------------------------------------------------------------------
     #
-    # Function search
+    # Function diff
     #
-    # Input:  ...
-    # Return: none
+    # Diff ...
+    # 
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.files[0]
+    #            self.files[1]
+    #
+    # Returns
+    # -------
+    #    Results
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
-    def diff(self):
-        logger.debug("Begin Function")
-
-        file1 = self.files[0]
-        file2 = self.files[1]
-
-        if (file1.format_class in shutil.archive_formats and
-            file2.format_class in shutil.archive_formats):
-
-            list1 = file1.listfiles()
-            list2 = file2.listfiles()
-
-            results = list(set(list1) - set(list2))
-            results = results + list(set(list2) - set(list1))
-        else:
-            results = "Diff results"
-
-        logger.debug("Begin Function")
-        return results
 
 
 #-----------------------------------------------------------------------
 #
 # Class Directory
 # 
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Directory(files.BaseDirectory):
@@ -182,6 +241,17 @@ class Directory(files.BaseDirectory):
 #
 # Class Directories
 # 
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Directories(files.BaseFiles):

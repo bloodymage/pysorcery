@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/files/compressed/__init__.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -23,9 +25,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Compressed
 #
-#
-#
+#     ...
 #
 #-----------------------------------------------------------------------
 
@@ -65,15 +67,41 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
+# This is the Compressed File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
 #-----------------------------------------------------------------------
 class CompressedFile(files.BaseFile):
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function decompress
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.filename
+    #    @param: extractdir
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def decompress(self, extractdir=None):
@@ -86,11 +114,21 @@ class CompressedFile(files.BaseFile):
     
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function compress
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def compress(self,
@@ -115,9 +153,19 @@ class CompressedFile(files.BaseFile):
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def read(self):
@@ -136,9 +184,19 @@ class CompressedFile(files.BaseFile):
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def testarchive(self):
@@ -189,7 +247,21 @@ class CompressedFile(files.BaseFile):
 
 #-----------------------------------------------------------------------
 #
-# Classes
+# Class CompressedFiles
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class CompressedFiles(files.BaseFiles):

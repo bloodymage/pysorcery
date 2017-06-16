@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/archive/create.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/create.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,17 +32,14 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# plugin: create
+# Plugin: Create
 #
 #   This plugin adds archive/compressed file creation and the
 #   applicable command line arguments.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Plugin: Create
 
 This plugin adds archive/compressed file creation and the applicable 
 command line arguments.
@@ -106,24 +103,33 @@ colortext = text.ConsoleText()
 #
 # Function archive_create
 #
-# Create archive file.
+# Create archive file from named files/directories.
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.output_dir - Directory to create archive of
-#                           If this is a single file, compress the file
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet    - Decrease Output Verbosity
+#            args.archive  - File to create
+#            args.filename - File or Directory to add to the archive
+#            args.compression_level - Compression level to recompress to.
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_create(args):
     logger.debug('Begin Function')
-
+    
     cfile = lib.File(args.archive)
     if cfile.mimetype in mimetypes.ArchiveMimetypes:
-        cfile.create(os.getcwd(), args.filename)
+        cfile.create(args.pathname, verbosity=args.verbosity, interactive=args.interactive)
     else:
-        cfile.compress(args.filename)
+        cfile.compress(args.pathname)
 
     logger.debug('End Function')
     return
@@ -132,10 +138,22 @@ def archive_create(args):
 #
 # Function parser
 #
-# Creates the parser subcommand and
+# Create subcommand parsing options
 #
-# Input:  *args - tuple of all parent parsers
-# Return: cmd
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -143,17 +161,65 @@ def parser(*args, **kwargs):
     parent_parsers = list(args[1:])
 
     cmd = subparsers.add_parser('create',
+                                aliases = ['c'],
                                 parents = parent_parsers,
                                 help = 'Create files')
-    cmd.add_argument('archive',
+    cmd.add_argument('-a',
+                     '--archive',
                      help = 'Archive file to create')
-    cmd.add_argument('filename',
+    cmd.add_argument('pathname',
+                     nargs='+',
                      help = 'Files / Directories to add to the archive')
-    cmd.add_argument('compression_level',
+    cmd.add_argument('-l',
+                     '--level',
                      type = int,
-                     choices = range(0, 9),
+                     choices = range(0, 10),
                      default = 9,
-                     help = 'Set new compression level')
+                     help = 'Set compression level')
+
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
+    exclude = cmd.add_argument_group('Exclusion Options')
+    exclude.add_argument('--exclude',
+                         metavar = 'PATTERN',
+                         help = 'Exclude files matching PATTERN')
+    exclude.add_argument('--exclude-caches',
+                         nargs = '?',
+                         choices = ['all', 'under'],
+                         default = True,
+                         help = 'Exclude cache files')
+    cmd.add_argument('--exclude-tag',
+                     metavar = 'FILE',
+                     help = 'Exclude directories containing FILE')
+    exclude.add_argument('--exclude-backups',
+                         action = 'store_true',
+                         help = 'Exclude backup and lock files')
+    exclude.add_argument('--exclude-vcs',
+                         action = 'store_true',
+                         help = 'Exclude version control files.')
+    exclude.add_argument('--exclude-vcs-ignore',
+                         action = 'store_true',
+                         help = 'Exclude Files listed within version control ignore files.')
+    
+    permission = cmd.add_argument_group('File Permission Options')
+    permission.add_argument('-p',
+                            '--preserve',
+                            action = 'store_true',
+                            help = 'Preserve file permissions')
+    permission.add_argument('-o',
+                            '--owner',
+                            action = 'store_true',
+                            help = 'Set owner to OWNER')
+    permission.add_argument('-g',
+                            '--group',
+                            action = 'store_true',
+                            help = 'Set group to GROUP.')
+    
     cmd.set_defaults(func = archive_create)
 
     return cmd

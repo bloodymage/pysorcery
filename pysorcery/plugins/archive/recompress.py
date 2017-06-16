@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/archive/recompress.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/recompress.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -25,12 +25,21 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive: recompress
+# pyArchive
+#
+#   This is a bonus application for pysorcery.  PySorcery for multiple
+#   reasons to internally extract, create, list the contents, etc.
+#   archive files of multiple formats.  To test the capabilities of the
+#   underlying code, this application was developed.
+#
+# Plugin: Recompress
 #
 #   Recompresses an archive file
 #
 #-----------------------------------------------------------------------
 """
+Plugin: Recompress
+
 Recompress an archive file
 """
 #-----------------------------------------------------------------------
@@ -59,6 +68,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -90,25 +100,39 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_recompress
-#
+# Function archive_recompress
 #
 # Recompresses a file.
 #
-# Input:  args
-#         args.quiet   - Decrease Output Verbosity
-#         args.archive - Original File
-#         args.compression_level - Compression level to recompress to.
+# Inputs
+# ------
+#    @param: args
+#            args.quiet   - Decrease Output Verbosity
+#            args.archive - Original File
+#            args.compression_level - Compression level to recompress to.
 #
-# Return: None
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_recompress(args):
     logger.debug('Begin Function')
 
-    print('Archive = ' + str(args.archive))
-    print('Comp Lvl = ' + str(args.compression_level))
-
+    """Recompress an archive to smaller size."""
+    res = 0
+    try:
+        archive = lib.File(args.archive)
+        archive.recompress_archive(verbosity=args.verbosity,
+                                   interactive=args.interactive)
+    except Exception as msg:
+        logger.error("error recompressing %s: %s" % (args.archive, msg))
+        res = 1
+    return res
 
     logger.debug('End Function')
     return
@@ -119,11 +143,20 @@ def archive_recompress(args):
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -142,6 +175,13 @@ def parser(*args, **kwargs):
                      choices = range(0, 9),
                      default = 9,
                      help = 'Set new compression level')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     cmd.set_defaults(func = archive_recompress)
 
     return cmd

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -9,6 +9,8 @@
 # Copyright 2017 Geoff S Derber
 #
 # This file is part of Sorcery.
+#
+# File: pysorcery/lib/util/text.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,45 +25,65 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Text
 #
+#   ....
 #
-#
-#
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
-#
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 import sys
 import os
 import math
 
-# Other Libraries
+# 3rd Party Libraries
 
 # Application Libraries
+# Application System Overrides
 from pysorcery.lib.system import logging
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+#
+# Classes
+#
+# ConsoleText
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
 #
 # Class ConsoleText
 #
-# 
+# ...
 #
-#-------------------------------------------------------------------------------
+# Inputs
+# ------
+#    ...
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class ConsoleText():
     def __init__(self):
         self.escape = "\x1b["
@@ -107,8 +129,21 @@ class ConsoleText():
 
     #-------------------------------------------------------------------------------
     #
-    # function ConsoleText.colorize
+    # Function colorize
     #
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    textstring - 
+    #
+    # Raises
+    # ------
+    #    ...
     # 
     #
     #-------------------------------------------------------------------------------
@@ -141,14 +176,22 @@ class ConsoleText():
 # Function column_print
 #
 # Prints input list in columns
+# ...
 #
-# Input:
-#   list_to_print = List to Print
-#   cols          = The number of columns to use
-#   columnwise    = To print by row or column
-#   gap           = The gap between columns
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: list_to_print = List to Print
+#    @param: cols          = The number of columns to use
+#    @param: columnwise    = To print by row or column
+#    @param: gap           = The gap between columns
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def column_print(obj, cols=4, columnwise=True, gap=4):
