@@ -24,7 +24,7 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Gaze
+# pyGaze
 #
 # is part of the Sorcery source-based package management suite. It is a
 # general purpose command-line tool for displaying package logs, version 
@@ -41,6 +41,8 @@
 #
 #-----------------------------------------------------------------------
 """
+pyGaze
+
 Gaze is part of the Sorcery source-based package management suite. It 
 is a general purpose command-line tool for displaying package logs, 
 version information, checking for installed packages, checksums, message
@@ -105,18 +107,27 @@ colortext = text.ConsoleText()
 #
 #-------------------------------------------------------------------------------
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Real_Main
+# Function Real_Main
 #
-# 
+# 1. Creates the argument parser
+# 2. Eshablishes configuration
+# 3. Runs the function specified by the arguments
 #
-# Input:  args
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
 #
-#-------------------------------------------------------------------------------
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    Error
+#
+#-----------------------------------------------------------------------
 def real_main(args):    
     logger.debug('Entered Function')
 
@@ -218,27 +229,26 @@ Report bugs to ...
     logger.debug('End Function')
     return
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Main
 #
-# The First function, initalizes everything else.
+# The First function, initalizes everything else.  Attempts to execute
+# everything through exception handlers with easy to read messages.
 #
-# Inputs come from command line argument
+# Inputs
+# ------
+#    @param: args
 #
-# This is ugly code
+# Returns
+# -------
+#    None (Change this for error exits)
 #
+# Raises
+# ------
+#    Error
 #
-# Reads configuration files in the following order:
-#
-# Note: Any cli switches will override the settings in the config files
-#
-# Input:  args
-# Output:
-# Return: None
-#
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def main(args = None):
     """Run the main command-line interface for dionysius. Includes top-level
     exception handlers that print friendly error messages.
@@ -246,12 +256,15 @@ def main(args = None):
 
     logger.debug('Begin Application')
 
-    real_main(args)
-    
-#    try:         
-#        real_main(args)
-#    except:
-#        logger.critical('You Fucked Up')
+    if DEBUG is False:
+        try:         
+            real_main(args)
+        except KeyboardInterrupt:
+            log_error("aborted")
+        except:
+            logger.critical('You Fucked Up')
+    else:
+        real_main(args)
 
     logger.debug('End Application')
     return
