@@ -79,7 +79,7 @@ __contact__ = 'gd.smlinux@gmail.com'
 __copyright__ = 2017
 __license__ = 'GPLv3+'
 __status__ = 'Prototype'
-__version__ = 'HEAD'
+__version__ = '0.0.1'
 
 #-----------------------------------------------------------------------
 #
