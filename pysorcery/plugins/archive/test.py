@@ -125,11 +125,16 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 def archive_test(args):
+    """Test files in archive(s)."""
     logger.debug('Begin Function')
 
-    for i in args.files:
-        cfile = lib.Files(i)
-        cfile.testarchive()
+    for i in args.archive:
+        try:
+            cfile = lib.File(i)
+            cfile.test_archive(verbosity=args.verbosity,
+                               interactive=args.interactive)
+        except Exception as msg:
+            logging.error("error testing %s: %s" % (archive, msg))
 
     logger.debug('End Function')
     return
@@ -163,11 +168,18 @@ def parser(*args, **kwargs):
 
     cmd = subparsers.add_parser('test',
                                 aliases = ['verify'],
+                                parents = parent_parsers,
                                 help = 'Test files')
-    cmd.add_argument('files',
-                             nargs = 1,
-                             metavar = 'archive',
-                             help = 'Create files')
+    cmd.add_argument('archive',
+                     nargs = '+',
+                     help = 'Archive Files to test')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     cmd.set_defaults(func = archive_test)
 
     return cmd

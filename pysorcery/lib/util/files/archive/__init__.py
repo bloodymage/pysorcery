@@ -430,20 +430,19 @@ class Archive(files.BaseFile):
     #
     # 
     #-------------------------------------------------------------------
-    def testarchive(self):
-        logger.debug('Begin Function')
-
-        archive_func = util.get_module_func('util_archive',
-                                            self.format_class,
-                                            'testarchive')
-        # We know what the format is, initialize that format's class
-        if archive_func(self.filename):
-            logger.info(str(self.filename) + ' is a valid, readable archive')
-        else:
-            logger.error(str(self.filename) + ' is not a valid, readable archive')
-            
-        logger.debug('End Function')
-        return
+    def test_archive(self, verbosity=0, program=None, interactive=True):
+        """Test given archive."""
+        util.check_existing_filename(self.filename)
+        if verbosity >= 0:
+            logger.info("Testing %s ..." % self.filename)
+        res = _handle_archive(self.filename,
+                              'test',
+                              verbosity=verbosity,
+                              interactive=interactive,
+                              program=program)
+        if verbosity >= 0:
+            logger.info("... tested ok.")
+        return res
 
     #-------------------------------------------------------------------
     #
