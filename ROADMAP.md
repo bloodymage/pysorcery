@@ -65,10 +65,10 @@
     - [ ] time
     - [ ] time-system
     - [ ] url
-    - [ ] version
+    - [X] version
     - [ ] versions
     - [ ] voyeur
-    - [ ] what
+    - [X] what
     - [ ] where
     
   
