@@ -37,6 +37,8 @@
 #
 #-----------------------------------------------------------------------
 """
+pyArchive
+
 This is a bonus application for pysorcery.  PySorcery for multiple
 reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
