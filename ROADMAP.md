@@ -14,60 +14,15 @@
     - [X] search
     - [X] diff
     - [X] formats
-    - [ ] recompress    
+    - [X] recompress    
   - Archive Formats
     - [X] tar
-      - [X] extract
-      - [X] list
-      - [X] create
-      - [X] test
-      - [ ] repack
-      - [ ] search
-      - [X] diff
-      - [ ] formats
-      - [ ] recompress    
     - [X] zip
-      - [X] extract
-      - [X] list
-      - [X] create
-      - [X] test
-      - [ ] repack
-      - [ ] search
-      - [X] diff
-      - [ ] formats
-      - [ ] recompress    
-  - Compression Formats
     - [X] gz
-      - [X] extract (decompress)
-      - [X] list (read)
-      - [X] create (compress)
-      - [X] test
-      - [ ] repack
-      - [ ] search
-      - [ ] diff
-      - [ ] formats
-      - [ ] recompress    
     - [X] xz
-      - [X] extract (decompress)
-      - [X] list (read)
-      - [X] create (compress)
-      - [X] test
-      - [ ] repack
-      - [ ] search
-      - [ ] diff
-      - [ ] formats
-      - [ ] recompress    
     - [X] bz2
-      - [X] extract (decompress)
-      - [X] list (read)
-      - [X] create (compress)
-      - [X] test
-      - [ ] repack
-      - [ ] search
-      - [ ] diff
-      - [ ] formats
-      - [ ] recompress    
-
+    - [X] iso
+    - [X] others ...
 
 ### 0.0.2    
 #### Functional Scripts
@@ -110,10 +65,10 @@
     - [ ] time
     - [ ] time-system
     - [ ] url
-    - [X] version
+    - [ ] version
     - [ ] versions
     - [ ] voyeur
-    - [X] what
+    - [ ] what
     - [ ] where
     
   
