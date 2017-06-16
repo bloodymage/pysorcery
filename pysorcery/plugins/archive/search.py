@@ -124,12 +124,15 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 def archive_search(args):
+    """Search for pattern in given archive."""
     logger.debug('Begin Function')
 
-    archive = lib.File(args.archive)
-    results = archive.search(args.searchterm)
-
-    print(results)
+    try:
+        archive = lib.File(args.archive)
+        res = archive.search(args.pattern, verbosity=args.verbosity, interactive=args.interactive)
+    except Exception as msg:
+        logger.error("error searching %s: %s" % (args.archive, msg))
+        res = 2
     
     logger.debug('End Function')
     return
@@ -165,9 +168,16 @@ def parser(*args, **kwargs):
                                 help = 'Search archive')
     cmd.add_argument('archive',
                      help = 'Archive to search')
-    cmd.add_argument('searchterm',
-                     nargs = '+',
+    cmd.add_argument('pattern',
                      help = 'Term to search for')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
     cmd.set_defaults(func = archive_search)
 
     return cmd
+

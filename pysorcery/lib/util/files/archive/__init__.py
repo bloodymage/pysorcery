@@ -465,17 +465,20 @@ class Archive(files.BaseFile):
     #
     #
     #-------------------------------------------------------------------
-    def search(self, searchstring):
-        logger.debug('Begin Function')
-
-        archive_func = util.get_module_func('util_archive',
-                                            self.format_class,
-                                            'search')
-
-        results = archive_func(self.filename, searchstring)
-        
-        logger.debug('End Function')
-        return results
+    def search(self, pattern, verbosity=0, interactive=True):
+        """Search pattern in archive members."""
+        if not pattern:
+            raise Exception("empty search pattern")
+        util.check_existing_filename(self.filename)
+        if verbosity >= 0:
+            logger.info("Searching %r in %s ..." % (pattern, self.filename))
+        res = _search_archive(pattern,
+                              self.filename,
+                              verbosity=verbosity,
+                              interactive=interactive)
+        if res == 1 and verbosity >= 0:
+            logger.info("... %r not found" % pattern)
+        return res
 
 #-----------------------------------------------------------------------
 #
@@ -1233,5 +1236,18 @@ def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
             _create_archive(archive, files, **kwargs)
         finally:
             os.chdir(olddir)
+    finally:
+        shutil.rmtree(tmpdir, onerror=rmtree_log_error)
+
+def _search_archive(pattern, archive, verbosity=0, interactive=True):
+    """Search for given pattern in an archive."""
+    grep = util.find_program("grep")
+    if not grep:
+        msg = "The grep(1) program is required for searching archive contents, please install it."
+        raise Exception(msg)
+    tmpdir = util.tmpdir()
+    try:
+        path = _extract_archive(archive, outdir=tmpdir, verbosity=-1)
+        return util.run_checked([grep, "-r", "-e", pattern, "."], ret_ok=(0, 1), verbosity=1, cwd=path)
     finally:
         shutil.rmtree(tmpdir, onerror=rmtree_log_error)

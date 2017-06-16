@@ -149,18 +149,25 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #    ...
     #
     #-------------------------------------------------------------------
-    def search(self, searchstring):
+    def search(self,
+               pattern,
+               verbosity=0,
+               interactive=True):
         logger.debug('Begin Function')
+
+        print(self.mimetype)
         
-        if self.format_class in shutil.archive_formats:
-            results = archive.Archive.search(self, searchstring)
-        elif self.format_ != 'Unknown':
-            results = compressed.CompressedFile.search(self, searchstring)
+        if self.mimetype in mimetypes.ArchiveMimetypes:
+            results = archive.Archive.search(self,
+                                             pattern,
+                                             verbosity=0,
+                                             interactive=True)
         else:
-            results = files.BaseFile.search(self, searchstring)
+            logger.error('BaseFile search Not implemented')
+            #results = files.BaseFile.search(self, searchstring)
 
         logger.debug('End Function')
-        return results
+        return
 
 #-----------------------------------------------------------------------
 #
