@@ -65,6 +65,7 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
+from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
@@ -75,6 +76,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.plugins import gaze
 # Conditional Libraries
 
 
@@ -104,36 +106,6 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
-#
-# Function gaze_activity
-#
-# show the activity log.
-# (note: this is actually a log of all that happened involving sorcery,
-# such as casts, summons etc.)
-#
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-# Output: Prints the activity log to the console
-# Return: None
-#
-# Status: Works on Ubuntu (subprocess)
-#         Works on Source Mage
-#
-#-------------------------------------------------------------------------------
-def gaze_activity(args):
-    logger.debug('Begin Function')
-
-    activity_files = {
-        'deb'  : '/var/log/apt/history.log',
-        'smgl' : '/var/log/sorcery/activity'
-    }
-    
-    activity = lib.Files()
-    activity.print_activity()
-
-    logger.debug('End Function')
-    return
 
 
 #-----------------------------------------------------------------------
@@ -155,11 +127,18 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
+    activity_files = {
+        'apt'  : '/var/log/apt/history.log',
+        'sorcery' : '/var/log/sorcery/activity'
+    }
+
     activity_help = 'Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.).'
     cmd = subparsers.add_parser('activity',
                                 parents = parent_parsers,
                                 help = activity_help
     )        
-    cmd.set_defaults(func = gaze_activity)
+    cmd.set_defaults(func = gaze_activity,
+                     sudo = False,
+                     filename = activity_files[distro.distro_group[distro.distro_id]])
 
     return cmd
