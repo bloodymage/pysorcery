@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+x#! /usr/bin/env python3
 #-----------------------------------------------------------------------
 #
 # Original BASH version
@@ -202,6 +202,12 @@ Report bugs to ...
 def main(args=None):
     """Run the main command-line interface for pyarchive. Includes 
     top-level exception handlers that print friendly error messages.
+
+
+    Inputs
+    ------
+         @param
+
     """
     logger.debug('Begin Application')
 

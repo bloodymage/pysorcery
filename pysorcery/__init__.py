@@ -28,7 +28,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
+# Sorcery
 #
 #
 #
@@ -60,6 +60,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
+
+Sorcery
+
 """
 #-----------------------------------------------------------------------
 #
@@ -89,6 +92,7 @@ __version__ = '0.0.1'
 
 # System Libraries
 
+
 # 3rd Party Libraries
 
 
@@ -97,12 +101,16 @@ __version__ = '0.0.1'
 from pysorcery.lib.system import logging
 # Other Application Libraries
 
+
+# Conditional Libraries
+
+
 #-----------------------------------------------------------------------
 #
 # Global Variables
 #
 #-----------------------------------------------------------------------
-DEBUG=True
+DEBUG=False
 
 # Enable Logging
 # create logger

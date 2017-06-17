@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/system/argparse.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
 #    by the Free Software Foundation, either version 3 of the License,
@@ -23,13 +25,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Argparse:
 #
-#
-#
+#    Provides additional functionality to the Argparse library from
+#    Python.
 #
 #-----------------------------------------------------------------------
 """
-Aliases for argparse positional arguments.
+Argparse:
+
+  Provides additional functionality to the Argparse library from
+  Python.
 """
 
 #-----------------------------------------------------------------------
@@ -76,7 +82,7 @@ from pysorcery import __version__, DEBUG
 #
 # Returns
 # -------
-#    self.parser - 
+#    None
 #
 # Raises
 # ------
@@ -90,17 +96,17 @@ class CommonParser(ArgumentParser):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function create_subparsers
     #
-    # Calls the read function based on the file format.
+    # Creates the subparser for the subcommands of the program.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self - 
     #
     # Returns
     # -------
-    #    none
+    #    self.subparser -
     #
     # Raises
     # ------
@@ -117,17 +123,18 @@ class CommonParser(ArgumentParser):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function add_version_option
     #
-    # Calls the read function based on the file format.
+    # Adds the argument '--version' which is common to all Sorcery
+    # commands.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
     #
     # Returns
     # -------
-    #    none
+    #    None
     #
     # Raises
     # ------
@@ -151,11 +158,11 @@ class CommonParser(ArgumentParser):
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
     #
     # Returns
     # -------
-    #    none
+    #    self.parent
     #
     # Raises
     # ------
@@ -227,11 +234,11 @@ class CommonParser(ArgumentParser):
 #
 # Returns
 # -------
-#    cmd - the subcommand parsing options
+#    None
 #
 # Raises
 # ------
-#    Error
+#    ...
 #
 #-----------------------------------------------------------------------
 class ArgParser(CommonParser):

@@ -25,6 +25,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Util:
+#
+#  Provides common utilities.
 #
 #-----------------------------------------------------------------------
 """
@@ -122,6 +125,35 @@ UrlModules = {
 }
 
 
+#-----------------------------------------------------------------------
+#
+# Classes
+#
+# memoized
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Class memoized
+#
+# Decorator that caches a function's return value each time it is called.
+# If called later with the same arguments, the cached value is returned, and
+# not re-evaluated.
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class memoized (object):
     """Decorator that caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned, and
@@ -132,6 +164,25 @@ class memoized (object):
         self.func = func
         self.cache = {}
 
+    #-------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def __call__(self, *args):
         """Try to find result for function arguments in local cache or
         execute the function and fill the cache with the result."""
@@ -145,6 +196,25 @@ class memoized (object):
             # Better to not cache than to blow up entirely.
             return self.func(*args)
 
+    #-------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def __repr__(self):
         """Return the function's docstring."""
         return self.func.__doc__
@@ -155,6 +225,26 @@ class memoized (object):
 #
 # get_cmd_types
 # get_cmd_func
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def get_single_outfile (directory, archive, extension=""):
@@ -170,6 +260,25 @@ def get_single_outfile (directory, archive, extension=""):
         outfile = newfile
     return outfile + extension
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def is_same_file (filename1, filename2):
     """Check if filename1 and filename2 point to the same file object.
     There can be false negatives, ie. the result is False, but it is
@@ -182,22 +291,97 @@ def is_same_file (filename1, filename2):
         return os.path.samefile(filename1, filename2)
     return is_same_filename(filename1, filename2)
 
-
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def is_same_filename (filename1, filename2):
     """Check if filename1 and filename2 are the same filename."""
     return os.path.realpath(filename1) == os.path.realpath(filename2)
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def strlist_with_or (alist):
     """Return comma separated string, and last entry appended with ' or '."""
     if len(alist) > 1:
         return "%s or %s" % (", ".join(alist[:-1]), alist[-1])
     return ", ".join(alist)
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def check_writable_filename(filename):
     """Ensure that the given filename is writable."""
     if not os.access(filename, os.W_OK):
         raise PatoolError("file `%s' is not writable" % filename)
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def check_existing_filename (filename, onlyfiles=True):
     """Ensure that given filename is a valid, existing file."""
     if not os.path.exists(filename):
@@ -207,11 +391,49 @@ def check_existing_filename (filename, onlyfiles=True):
     if onlyfiles and not os.path.isfile(filename):
         raise Exception("`%s' is not a file" % filename)
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def check_new_filename (filename):
     """Check that filename does not already exist."""
     if os.path.exists(filename):
         raise Exception("cannot overwrite existing file `%s'" % filename)
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def check_archive_filelist (filenames):
     """Check that file list is not empty and contains only existing files."""
     if not filenames:
@@ -219,6 +441,25 @@ def check_archive_filelist (filenames):
     for filename in filenames:
         check_existing_filename(filename, onlyfiles=False)
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def set_mode (filename, flags):
     """Set mode flags for given filename if not already set."""
     try:
@@ -233,6 +474,25 @@ def set_mode (filename, flags):
             logger.error("could not set mode flags for `%s': %s" % (filename, msg))
 
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def shell_quote (value):
     """Quote all shell metacharacters in given string value with strong
     (ie. single) quotes, handling the single quote especially."""
@@ -241,6 +501,25 @@ def shell_quote (value):
     return "'%s'" % value.replace("'", r"'\''")
 
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def shell_quote_nt (value):
     """Quote argument for Windows system. Modeled after distutils
     _nt_quote_args() function."""
@@ -248,6 +527,25 @@ def shell_quote_nt (value):
         return '"%s"' % value
     return value
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def run (cmd, verbosity=0, **kwargs):
     """Run command without error checking.
     @return: command return code"""
@@ -272,20 +570,7 @@ def run (cmd, verbosity=0, **kwargs):
     return res
 
 
-def run_checked (cmd, ret_ok=(0,), **kwargs):
-    """Run command and raise PatoolError on error."""
-    retcode = run(cmd, **kwargs)
-    if retcode not in ret_ok:
-        msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
-        raise Exception(msg)
-    return retcode
-
-
-def tmpdir (dir=None):
-    """Return a temporary directory for extraction."""
-    return tempfile.mkdtemp(suffix='', prefix='Unpack_', dir=dir)
-
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function get_cmd_types
 #
@@ -303,7 +588,58 @@ def tmpdir (dir=None):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
+def run_checked (cmd, ret_ok=(0,), **kwargs):
+    """Run command and raise PatoolError on error."""
+    retcode = run(cmd, **kwargs)
+    if retcode not in ret_ok:
+        msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
+        raise Exception(msg)
+    return retcode
+
+
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def tmpdir (dir=None):
+    """Return a temporary directory for extraction."""
+    return tempfile.mkdtemp(suffix='', prefix='Unpack_', dir=dir)
+
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def get_cmd_types(cmd_class):
     logger.debug('Begin Function')
 
@@ -327,19 +663,37 @@ def get_cmd_types(cmd_class):
     logger.debug('End Function')
     return supformats
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def stripext (filename):
     """Return the basename without extension of given filename."""
     return os.path.splitext(os.path.basename(filename))[0]
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function get_module_func
 #
 # Inputs
 # ------
-#    @param: cmd_class
-#    @param: cmd_type
-#    @param: command
+#    @param: *args
+#    @param: *kwargs
 #
 # Returns
 # -------
@@ -349,7 +703,7 @@ def stripext (filename):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def get_module_func(*args, **kwargs):
     logger.debug('Begun Function')
 
@@ -387,20 +741,13 @@ def get_module_func(*args, **kwargs):
     except AttributeError as msg:
         raise Exception(msg)
 
-    try:
-        logger.debug('Module: ' + str(modulename))
-        logger.debug('Command: ' + str(command)) 
-        logger.debug('End Function')
-
-
-    except AttributeError as msg:
         logger.error(msg)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function get_module_func
+# Function system_search_path
 #
 # Inputs
 # ------
@@ -416,7 +763,7 @@ def get_module_func(*args, **kwargs):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def system_search_path():
     """Get the list of directories on a system to search for executable programs.
     It is either the PATH environment variable or if PATH is undefined the value
@@ -424,6 +771,25 @@ def system_search_path():
     """
     return os.environ.get("PATH", os.defpath)
 
+#-----------------------------------------------------------------------
+#
+# Function find_program
+#
+# Inputs
+# ------
+#    @param: cmd_class
+#    @param: cmd_type
+#    @param: command
+#
+# Returns
+# -------
+#    getattr()
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 @memoized
 def find_program (program):
     """Look for program in environment PATH variable."""
@@ -438,10 +804,48 @@ def find_program (program):
         path = None
     return which(program, path=path)
 
+#-----------------------------------------------------------------------
+#
+# Function get_filesize
+#
+# Inputs
+# ------
+#    @param: cmd_class
+#    @param: cmd_type
+#    @param: command
+#
+# Returns
+# -------
+#    getattr()
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def get_filesize(filename):
     """Return file size in Bytes, or -1 on error."""
     return os.path.getsize(filename)
 
+#-----------------------------------------------------------------------
+#
+# Function strsize
+#
+# Inputs
+# ------
+#    @param: cmd_class
+#    @param: cmd_type
+#    @param: command
+#
+# Returns
+# -------
+#    getattr()
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def strsize(b, grouping=True):
     """Return human representation of bytes b. A negative number of bytes
     raises a value error."""

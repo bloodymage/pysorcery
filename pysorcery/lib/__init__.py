@@ -82,7 +82,7 @@ logger = logging.getLogger(__name__)
 
 #-----------------------------------------------------------------------
 #
-# Class Files
+# Class File
 # 
 # The File API.  This is the class that is used for ALL file activities
 #
@@ -155,8 +155,6 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
                interactive=True):
         logger.debug('Begin Function')
 
-        print(self.mimetype)
-        
         if self.mimetype in mimetypes.ArchiveMimetypes:
             results = archive.Archive.search(self,
                                              pattern,
@@ -173,7 +171,8 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
 #
 # Class Files
 #
-# 
+# The Files API.  This class provides toplevel functions for working
+# with multiple files.
 #
 # Inputs
 # ------
@@ -264,4 +263,3 @@ class Directories(files.BaseFiles):
 #
 #
 #-----------------------------------------------------------------------
-

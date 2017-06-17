@@ -9,14 +9,14 @@
     - [X] create
     - [X] test
     - [X] repack
-    - [ ] recompress
-    - [ ] diff
-    - [ ] search
-    - [/] formats
+    - [X] recompress
+    - [X] diff
+    - [X] search
+    - [X] formats
   - Archive Formats
     - [X] tar
     - [X] zip
-    - [ ] iso
+    - [X] iso
   - Compression Formats
     - [X] gz
     - [X] xz
