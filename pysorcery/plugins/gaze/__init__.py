@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/__init__..py
 #
 # This file is part of Sorcery.
 #
@@ -25,19 +25,29 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+# Gaze is part of the Sorcery source-based package management suite. It is a
+# general purpose command-line tool for displaying package logs, version 
+# information, checking for installed packages, checksums, message
+# digests, maintainer information, package URL information, removing
+# obsolete packages, displaying new packages, untracked files, sections,
+# searching for files that are installed, finding when spells were
+# created and packages in the software catalogue. It can even take and
+# retrieve snap shots of currently installed packages for easy
+# duplication.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Gaze is part of the Sorcery source-based package management suite. It is a
+general purpose command-line tool for displaying package logs, version 
+information, checking for installed packages, checksums, message
+digests, maintainer information, package URL information, removing
+obsolete packages, displaying new packages, untracked files, sections,
+searching for files that are installed, finding when spells were
+created and packages in the software catalogue. It can even take and
+retrieve snap shots of currently installed packages for easy
+duplication.
 """
 #-----------------------------------------------------------------------
 #
@@ -160,7 +170,7 @@ def checksum(args):
 #         'Remove' queue does not work on Ubuntu
 #
 #-------------------------------------------------------------------------------
-def queue(args):
+def gaze_queue(args):
     logger.debug('Begin Function')
 
     # 
@@ -222,35 +232,47 @@ def gaze_version(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_logs
+# Function gaze_files
 #
 # Show the compiler output generated when the spell was built. 
 # If no optional version was given, try the installed version. 
 # If the spell is not installed use the version in the grimoire.
 #
-# Input:  args
-#         args.spell - Spell to print compile log.
-#                      Maximum 1
-#         args.quiet - decrease verbosity
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell - Spell to print compile log.
+#                         Maximum 1
+#            args.quiet - decrease verbosity
 #
-# Status: Not implimented
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
-def log(args):
+def gaze_file(args):
     logger.debug('Begin Function')
-        
-    spell = libspell.Spell(i)
-    
-    logger.debug3('Spell: ' + str(spell))
-        
-    message = colortext.colorize(spell.name, 'bold','white','black')
-    logger.info(message)
 
-    message = colortext.colorize(spell.description, 'none','white','black')
-    logger.info1(message)
+    if (not args.spell and
+        args.filename):
+        print(args.filenamex)
+    elif args.spell and args.filename:
+        spell = lib.Package(i)
     
+        logger.debug3('Spell: ' + str(spell))
+        
+        message = colortext.colorize(spell.name, 'bold','white','black')
+        logger.info(message)
+
+        message = colortext.colorize(spell.description, 'none','white','black')
+        logger.info1(message)
+    else:
+        print('Not implemented')
+        
     logger.debug('End Function')
     return
 
