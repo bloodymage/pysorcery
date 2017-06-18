@@ -388,6 +388,25 @@ class Archive(files.BaseFile):
             return _handle_archive(self.filename, 'list', verbosity=verbosity,
                                    interactive=interactive, program=program)
 
+    #-------------------------------------------------------------------
+    #
+    # Function testarchive
+    #
+    # Test to ensure the archive is a valid archive
+    #
+    # Inputs
+    # ------
+    #     self:
+    #
+    # Returns
+    # -------
+    #     None (change this to True or False?)
+    #
+    # Raises
+    # ------
+    #
+    # 
+    #-------------------------------------------------------------------
     def recompress_archive(self, verbosity=0, interactive=True):
         """Recompress an archive to hopefully smaller size."""
         util.check_existing_filename(self.filename)
@@ -401,6 +420,25 @@ class Archive(files.BaseFile):
             logger.info(res)
         return 0
 
+    #-------------------------------------------------------------------
+    #
+    # Function testarchive
+    #
+    # Test to ensure the archive is a valid archive
+    #
+    # Inputs
+    # ------
+    #     self:
+    #
+    # Returns
+    # -------
+    #     None (change this to True or False?)
+    #
+    # Raises
+    # ------
+    #
+    # 
+    #-------------------------------------------------------------------
     def repack_archive (self, archive_new, verbosity=0, interactive=True):
         """Repack archive to different file and/or format."""
         util.check_existing_filename(self.filename)
@@ -481,9 +519,9 @@ class Archive(files.BaseFile):
 
 #-----------------------------------------------------------------------
 #
-# Class Archive
+# Class Archives
 #
-# This is the base File Class
+# This is the Archives Class for working with multiple archive files.
 #
 # Inputs
 # ------
@@ -526,8 +564,7 @@ class Archives(files.BaseFiles):
         util.check_existing_filename(self.files[1])
         if verbosity >= 0:
             logger.info("Comparing %s with %s ..." % (self.files[0], self.files[1]))
-            res = _diff_archives(self.files[0],
-                                 self.files[1],
+            res = _diff_archives(self.files,
                                  verbosity=verbosity,
                                  interactive=interactive)
         if res == 0 and verbosity >= 0:
@@ -544,6 +581,26 @@ class Archives(files.BaseFiles):
 # _extract_archive
 #
 #-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def program_supports_compression (program, compression):
     """Decide if the given program supports the compression natively.
     @return: True iff the program supports the given compression format
@@ -553,6 +610,25 @@ def program_supports_compression (program, compression):
         return compression in ('gzip', 'bzip2') + py_lzma
     return False
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def check_archive_format (format, compression):
     """Make sure format and compression is known."""
     if format not in mimetypes.ArchiveFormats:
@@ -560,6 +636,25 @@ def check_archive_format (format, compression):
     if compression is not None and compression not in mimetypes.ArchiveCompressions:
         raise Exception("unkonwn archive compression `%s'" % compression)
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def list_formats ():
     """Print information about available archive formats to stdout."""
     #print("Archive programs of", App)
@@ -799,6 +894,25 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
         cmdlist, runkwargs = archive_cmdlist, {}
     return util.run_checked(cmdlist, verbosity=verbosity, **runkwargs)
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def rmtree_log_error (func, path, exc):
     """Error function for shutil.rmtree(). Raises a PatoolError."""
     msg = "Error in %s(%s): %s" % (func.__name__, path, str(exc[1]))
@@ -851,7 +965,7 @@ def make_file_readable (filename):
 def make_dir_readable (filename):
     """Make directory user readable and executable."""
     util.set_mode(filename, stat.S_IRUSR|stat.S_IXUSR)
-
+    return
 
 #-----------------------------------------------------------------------
 #
@@ -975,6 +1089,25 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
             except OSError:
                 pass
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def _handle_archive(archive, command, verbosity=0, interactive=True,
                     program=None, format=None, compression=None):
     """Test and list archives."""
@@ -1016,12 +1149,14 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
 #    ...
 #
 #-----------------------------------------------------------------------
-def _diff_archives (archive1, archive2, verbosity=0, interactive=True):
+def _diff_archives (archives, verbosity=0, interactive=True):
     """Show differences between two archives.
     @return 0 if archives are the same, else 1
     @raises: PatoolError on errors
     """
-    if util.is_same_file(archive1, archive2):
+
+    files = files.Files(archives)
+    if files.is_same_file():
         return 0
     diff = util.find_program("diff")
     if not diff:
@@ -1183,6 +1318,25 @@ def _recompress_archive(archive, verbosity=0, interactive=True):
     return "... recompressed file is not smaller, leaving archive as is."
 
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def _create_archive(archive, filenames, verbosity=0, interactive=True,
                     program=None, format=None, compression=None):
     """Create an archive."""
@@ -1207,6 +1361,25 @@ def _create_archive(archive, filenames, verbosity=0, interactive=True,
     if origarchive:
         shutil.move(archive, origarchive)
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
     """Repackage an archive to a different format."""
     format1, compression1 = get_archive_format(archive1)
@@ -1238,6 +1411,25 @@ def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
     finally:
         shutil.rmtree(tmpdir, onerror=rmtree_log_error)
 
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def _search_archive(pattern, archive, verbosity=0, interactive=True):
     """Search for given pattern in an archive."""
     grep = util.find_program("grep")

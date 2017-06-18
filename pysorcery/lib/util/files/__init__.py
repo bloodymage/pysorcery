@@ -25,7 +25,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+#
 # Files:
+#
 #    Library for sorcery that provides for interfacing with
 #    files/directories.
 #
@@ -401,48 +403,65 @@ class BaseFiles():
         logger.debug("End Function")
         return sys_files
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
-    # Function repack
+    # Function get_cmd_types
+    #
+    #
     #
     # Inputs
     # ------
-    #    @param: srcfile - the original file
-    #    @param: dstfile - the new file we are creating with the new
-    #                      compression method. 
-    #
+    #     @param: cmd_class - I really need a new name for this...
+    #         
     # Returns
     # -------
-    #    None
+    #     supformats - 'Supported Formats'
     #
     # Raises
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
-    def repack(self, componly=False):
-        logger.debug('Begin Function')
-        
-        if (self.mimetype not in mimetypes.ArchiveMimetypes or
-            componly is True):
-            source_file = Files(self.files[0])
-            source_file.decompress(None)
-            
-            dest_file = Files(self.files[1])
-            dest_file.compress(source_file.basename)
-        else:
-            print('Fix Me')
-            
-            logger.debug('End Function')
-            return
+    #-------------------------------------------------------------------
+    def is_same_file (self):
+        """Check if filename1 and filename2 point to the same file object.
+        There can be false negatives, ie. the result is False, but it is
+        the same file anyway. Reason is that network filesystems can create
+        different paths to the same physical file.
+        """
+        if self.files[0] == self.files[1]:
+            return True
+        if os.name == 'posix':
+            return os.path.samefile(self.files[0], self.files[1])
+        return is_same_filename(self.files[0], self.files[1]
 
+    #-------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def is_same_filename (self):
+        """Check if filename1 and filename2 are the same filename."""
+        return os.path.realpath(self.files[0]) == os.path.realpath(self.files[1])
 
 #-------------------------------------------------------------------
 #
 # Functions
 #
 # pne
-# get_archive_formats
 #
 #-------------------------------------------------------------------
 
@@ -456,7 +475,7 @@ class BaseFiles():
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ifilename
 #
 # Returns
 # -------
