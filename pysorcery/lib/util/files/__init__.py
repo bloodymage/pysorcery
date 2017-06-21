@@ -32,7 +32,12 @@
 #    files/directories.
 #
 #-----------------------------------------------------------------------
+"""
+Files:
 
+Library for sorcery that provides for interfacing with files and
+directories.
+"""
 #-----------------------------------------------------------------------
 #
 # Libraries
@@ -42,6 +47,7 @@
 # System Libraries
 import os
 import subprocess
+import tempfile
 
 # 3rd Party Libraries
 
@@ -87,11 +93,11 @@ logger = logging.getLogger(__name__)
 #
 # Inputs
 # ------
-#    @param:
+#    @param: filename - 
 #
 # Returns
 # -------
-#    none
+#    None
 #
 # Raises
 # ------
@@ -174,6 +180,120 @@ class BaseFile():
         logger.debug("End Function")
         return
 
+    #-----------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #    @return: None
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def check_writable_filename(self):
+        """Ensure that the given filename is writable."""
+        if not os.access(self.filename, os.W_OK):
+            raise PatoolError("file `%s' is not writable" % self.filename)
+        return
+    
+    #-----------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def check_existing_filename (self, onlyfiles=True):
+        """Ensure that given filename is a valid, existing file."""
+        if not os.path.exists(self.filename):
+            raise Exception("file `%s' was not found" % self.filename)
+        if not os.access(self.filename, os.R_OK):
+            raise Exception("file `%s' is not readable" % self.filename)
+        if onlyfiles and not os.path.isfile(self.filename):
+            raise Exception("`%s' is not a file" % self.filename)
+        return
+
+    #-----------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    
+    #
+    #-----------------------------------------------------------------------
+    def check_new_filename (self):
+        """Check that filename does not already exist."""
+        if os.path.exists(self.filename):
+            raise FileExistsError("cannot overwrite existing file `%s'"
+                                  % self.filename)
+        return
+
+    #-----------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def set_mode (self, flags):
+        """Set mode flags for given filename if not already set."""
+        try:
+            mode = os.lstat(self.filename).st_mode
+        except OSError:
+            # ignore
+            return
+        if not (mode & flags):
+            try:
+                os.chmod(self.filename, flags | mode)
+            except OSError as msg:
+                logger.error("could not set mode flags for `%s': %s"
+                             % (self.filename, msg))
+        return
+    
     #-------------------------------------------------------------------
     #
     # Function read
@@ -257,6 +377,51 @@ class BaseFile():
         logger.debug("Begin Function")
         return results
 
+    #-----------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def stripext (self):
+        """Return the basename without extension of given filename."""
+        return os.path.splitext(os.path.basename(self.filename))[0]
+    
+    #-----------------------------------------------------------------------
+    #
+    # Function get_filesize
+    #
+    # Inputs
+    # ------
+    #    @param: cmd_class
+    #    @param: cmd_type
+    #    @param: command
+    #
+    # Returns
+    # -------
+    #    getattr()
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def get_filesize(self):
+        """Return file size in Bytes, or -1 on error."""
+        return os.path.getsize(self.filename)
 
 #-----------------------------------------------------------------------
 #
@@ -302,6 +467,29 @@ class BaseDirectory(BaseFile):
         logger.info(self.filename)
         logger.debug("End Function")
         return
+
+    #-----------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #         
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def tmpdir(self, dir=None):
+        """Return a temporary directory for extraction."""
+        return tempfile.mkdtemp(suffix='', prefix='Unpack_', dir=dir)
 
 #-----------------------------------------------------------------------
 #
@@ -367,7 +555,7 @@ class BaseFiles():
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function list_system_files
     #
     # ...
     #
@@ -432,7 +620,7 @@ class BaseFiles():
             return True
         if os.name == 'posix':
             return os.path.samefile(self.files[0], self.files[1])
-        return is_same_filename(self.files[0], self.files[1]
+        return self.is_same_filename(self.files[0], self.files[1])
 
     #-------------------------------------------------------------------
     #
@@ -453,9 +641,37 @@ class BaseFiles():
     #    ...
     #
     #-------------------------------------------------------------------
-    def is_same_filename (self):
+    def is_same_filename(self):
         """Check if filename1 and filename2 are the same filename."""
         return os.path.realpath(self.files[0]) == os.path.realpath(self.files[1])
+
+    #-----------------------------------------------------------------------
+    #
+    # Function get_cmd_types
+    #
+    #
+    #
+    # Inputs
+    # ------
+    #     @param: cmd_class - I really need a new name for this...
+    #
+    # Returns
+    # -------
+    #     supformats - 'Supported Formats'
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def check_archive_filelist (self):
+        """Check that file list is not empty and contains only existing files."""
+        if not self.files:
+            raise Exception("cannot create archive with empty filelist")
+        for filename in self.files:
+            file_ = BaseFile(filename)
+            file_.check_existing_filename(filename, onlyfiles=False)
+        return
 
 #-------------------------------------------------------------------
 #
@@ -502,3 +718,35 @@ def pne(ifilename):
         ext = first_ext + ext
     return path, root, ext
 
+#-----------------------------------------------------------------------
+#
+# Function get_cmd_types
+#
+#
+#
+# Inputs
+# ------
+#     @param: cmd_class - I really need a new name for this...
+#         
+# Returns
+# -------
+#     supformats - 'Supported Formats'
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_single_outfile (directory, archive, extension=""):
+    """Get output filename if archive is in a single file format like gzip."""
+    archname = BaseFile(archive)
+    outfile = os.path.join(directory, archname.stripext())
+    if os.path.exists(outfile + extension):
+        # prevent overwriting existing files
+        i = 1
+        newfile = "%s%d" % (outfile, i)
+        while os.path.exists(newfile + extension):
+            newfile = "%s%d" % (outfile, i)
+            i += 1
+        outfile = newfile
+    return outfile + extension

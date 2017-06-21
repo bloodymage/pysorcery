@@ -31,6 +31,9 @@
 #
 #-----------------------------------------------------------------------
 """
+Util:
+
+Provides common utilities.
 """
 #-----------------------------------------------------------------------
 #
@@ -45,7 +48,6 @@ import os
 import pkg_resources
 from shutil import which
 import subprocess
-import tempfile
 # 3rd Party Libraries
 
 
@@ -56,6 +58,7 @@ from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import lib
 from pysorcery.lib.util import text
+
 
 # Conditional Libraries
 
@@ -228,37 +231,6 @@ class memoized (object):
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-#
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_single_outfile (directory, archive, extension=""):
-    """Get output filename if archive is in a single file format like gzip."""
-    outfile = os.path.join(directory, stripext(archive))
-    if os.path.exists(outfile + extension):
-        # prevent overwriting existing files
-        i = 1
-        newfile = "%s%d" % (outfile, i)
-        while os.path.exists(newfile + extension):
-            newfile = "%s%d" % (outfile, i)
-            i += 1
-        outfile = newfile
-    return outfile + extension
 
 
 #-----------------------------------------------------------------------
@@ -285,141 +257,6 @@ def strlist_with_or (alist):
     if len(alist) > 1:
         return "%s or %s" % (", ".join(alist[:-1]), alist[-1])
     return ", ".join(alist)
-
-#-----------------------------------------------------------------------
-#
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def check_writable_filename(filename):
-    """Ensure that the given filename is writable."""
-    if not os.access(filename, os.W_OK):
-        raise PatoolError("file `%s' is not writable" % filename)
-
-#-----------------------------------------------------------------------
-#
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def check_existing_filename (filename, onlyfiles=True):
-    """Ensure that given filename is a valid, existing file."""
-    if not os.path.exists(filename):
-        raise Exception("file `%s' was not found" % filename)
-    if not os.access(filename, os.R_OK):
-        raise Exception("file `%s' is not readable" % filename)
-    if onlyfiles and not os.path.isfile(filename):
-        raise Exception("`%s' is not a file" % filename)
-
-#-----------------------------------------------------------------------
-#
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def check_new_filename (filename):
-    """Check that filename does not already exist."""
-    if os.path.exists(filename):
-        raise Exception("cannot overwrite existing file `%s'" % filename)
-
-#-----------------------------------------------------------------------
-#
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def check_archive_filelist (filenames):
-    """Check that file list is not empty and contains only existing files."""
-    if not filenames:
-        raise Exception("cannot create archive with empty filelist")
-    for filename in filenames:
-        check_existing_filename(filename, onlyfiles=False)
-
-#-----------------------------------------------------------------------
-#
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def set_mode (filename, flags):
-    """Set mode flags for given filename if not already set."""
-    try:
-        mode = os.lstat(filename).st_mode
-    except OSError:
-        # ignore
-        return
-    if not (mode & flags):
-        try:
-            os.chmod(filename, flags | mode)
-        except OSError as msg:
-            logger.error("could not set mode flags for `%s': %s" % (filename, msg))
-
 
 #-----------------------------------------------------------------------
 #
@@ -476,17 +313,19 @@ def shell_quote_nt (value):
 
 #-----------------------------------------------------------------------
 #
-# Function get_cmd_types
+# Function run
 #
-#
+# Run command without error checking
 #
 # Inputs
 # ------
-#     @param: cmd_class - I really need a new name for this...
+#   @param: cmd -
+#           verbosity -
+#           **kwargs
 #         
 # Returns
 # -------
-#     supformats - 'Supported Formats'
+#   @return: res - command return code
 #
 # Raises
 # ------
@@ -502,8 +341,11 @@ def run (cmd, verbosity=0, **kwargs):
         logger.info("running %s" % " ".join(map(shell_quote_nt, cmd)))
     if kwargs:
         if verbosity >= 0:
-            logger.info("    with %s" % ", ".join("%s=%s" % (k, shell_quote(str(v)))\
-                                           for k, v in kwargs.items()))
+            logger.info("    with %s"
+                        % ", ".join("%s=%s"
+                                    % (k,
+                                       shell_quote(str(v))
+                                    ) for k, v in kwargs.items()))
         if kwargs.get("shell"):
             # for shell calls the command must be a string
             cmd = " ".join(cmd)
@@ -519,7 +361,7 @@ def run (cmd, verbosity=0, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_cmd_types
+# Function run_checked
 #
 #
 #
@@ -543,30 +385,6 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
         msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
         raise Exception(msg)
     return retcode
-
-
-#-----------------------------------------------------------------------
-#
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def tmpdir (dir=None):
-    """Return a temporary directory for extraction."""
-    return tempfile.mkdtemp(suffix='', prefix='Unpack_', dir=dir)
 
 #-----------------------------------------------------------------------
 #
@@ -612,29 +430,6 @@ def get_cmd_types(cmd_class):
 
 #-----------------------------------------------------------------------
 #
-# Function get_cmd_types
-#
-#
-#
-# Inputs
-# ------
-#     @param: cmd_class - I really need a new name for this...
-#         
-# Returns
-# -------
-#     supformats - 'Supported Formats'
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def stripext (filename):
-    """Return the basename without extension of given filename."""
-    return os.path.splitext(os.path.basename(filename))[0]
-
-#-----------------------------------------------------------------------
-#
 # Function get_module_func
 #
 # Inputs
@@ -664,7 +459,7 @@ def get_module_func(*args, **kwargs):
 
     """Get the Python function that executes the given program."""
     # get python module for given archive program
-    key = stripext(os.path.basename(program).lower())
+    key = os.path.splitext(os.path.basename(program).lower())[0]
     if scmd in import_path:
         basemodname = import_path[scmd]
         if scmd == 'util_archive':
@@ -750,29 +545,6 @@ def find_program (program):
         # use default path
         path = None
     return which(program, path=path)
-
-#-----------------------------------------------------------------------
-#
-# Function get_filesize
-#
-# Inputs
-# ------
-#    @param: cmd_class
-#    @param: cmd_type
-#    @param: command
-#
-# Returns
-# -------
-#    getattr()
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_filesize(filename):
-    """Return file size in Bytes, or -1 on error."""
-    return os.path.getsize(filename)
 
 #-----------------------------------------------------------------------
 #

@@ -109,7 +109,7 @@ colortext = text.ConsoleText()
 # ------
 #    @param: args
 #            args.archive  - File to create
-#            args.filename - File or Directory to add to the archive
+#            args.pathname - File or Directory to add to the archive
 #            args.quiet    - Decrease Output Verbosity
 #            args.compression_level - Compression level to recompress to.
 #            args.interactive - True/False, whether to allow interactive mode.

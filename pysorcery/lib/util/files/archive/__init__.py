@@ -299,15 +299,20 @@ class Archive(files.BaseFile):
     #
     # Function extract
     #
-    # This is the base File Class
+    # Extract archive
     #
     # Inputs
     # ------
-    #    @param:
+    #    @param: self
+    #            self.filename
+    #    @param: verbosity
+    #    @param: outdir
+    #    @param: program
+    #    @param: interactive
     #
     # Returns
     # -------
-    #    none
+    #    None
     #
     # Raises
     # ------
@@ -333,7 +338,7 @@ class Archive(files.BaseFile):
     #
     # Function create
     #
-    # This is the base File Class
+    # Cruate archive
     #
     # Inputs
     # ------
@@ -449,6 +454,7 @@ class Archive(files.BaseFile):
         if verbosity >= 0:
             logger.info("... repacking successful.")
         return res
+    
     #-------------------------------------------------------------------
     #
     # Function testarchive
@@ -940,7 +946,8 @@ def rmtree_log_error (func, path, exc):
 def make_file_readable (filename):
     """Make file user readable if it is not a link."""
     if not os.path.islink(filename):
-        util.set_mode(filename, stat.S_IRUSR)
+        file_ = files.BaseFile(filename)
+        file_.set_mode(stat.S_IRUSR)
 
 
 #-----------------------------------------------------------------------
@@ -964,7 +971,8 @@ def make_file_readable (filename):
 #-----------------------------------------------------------------------
 def make_dir_readable (filename):
     """Make directory user readable and executable."""
-    util.set_mode(filename, stat.S_IRUSR|stat.S_IXUSR)
+    directory = files.BaseDirectory(filename)
+    directory.set_mode(stat.S_IRUSR|stat.S_IXUSR)
     return
 
 #-----------------------------------------------------------------------
@@ -1026,7 +1034,7 @@ def cleanup_outdir (outdir, archive):
     # outdir remains unchanged
     # rename it to something more user-friendly (basically the archive
     # name without extension)
-    outdir2 = util.get_single_outfile("", archive)
+    outdir2 = files.get_single_outfile("", archive)
     os.rename(outdir, outdir2)
     return outdir2, "`%s' (%s)" % (outdir2, msg)
 
@@ -1063,7 +1071,8 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
     check_program_compression(archive, 'extract', program, compression)
     get_archive_cmdlist = util.get_module_func(scmd='util_archive', program=program, cmd='extract', format_=format_)
     if outdir is None:
-        outdir = util.tmpdir(dir=".")
+        directory = files.BaseDirectory(".")
+        outdir = directory.tmpdir(dir=".")
         do_cleanup_outdir = True
     else:
         do_cleanup_outdir = False
@@ -1162,10 +1171,10 @@ def _diff_archives (archives, verbosity=0, interactive=True):
     if not diff:
         msg = "The diff(1) program is required for showing archive differences, please install it."
         raise Exception(msg)
-    tmpdir1 = util.tmpdir()
+    tmpdir1 = files.BaseDirectory.tmpdir()
     try:
         path1 = _extract_archive(archive1, outdir=tmpdir1, verbosity=-1)
-        tmpdir2 = util.tmpdir()
+        tmpdir2 = files.Basedirectory.tmpdir()
         try:
             path2 = _extract_archive(archive2, outdir=tmpdir2, verbosity=-1)
             return util.run_checked([diff, "-urN", path1, path2], verbosity=1, ret_ok=(0, 1))
@@ -1198,7 +1207,7 @@ def extract_singlefile_standard (archive, compression, cmd, verbosity, interacti
     cmdlist = [util.shell_quote(cmd)]
     if verbosity > 1:
         cmdlist.append('-v')
-    outfile = util.get_single_outfile(outdir, archive)
+    outfile = files.get_single_outfile(outdir, archive)
     cmdlist.extend(['-c', '-d', '--', util.shell_quote(archive), '>',
         util.shell_quote(outfile)])
     return (cmdlist, {'shell': True})
@@ -1289,7 +1298,7 @@ def _recompress_archive(archive, verbosity=0, interactive=True):
     tmpdir = util.tmpdir()
     tmpdir2 = util.tmpdir()
     base, ext = os.path.splitext(os.path.basename(archive))
-    archive2 = util.get_single_outfile(tmpdir2, base, extension=ext)
+    archive2 = files.get_single_outfile(tmpdir2, base, extension=ext)
     try:
         # extract
         kwargs = dict(verbosity=verbosity, format_=format, outdir=tmpdir)
