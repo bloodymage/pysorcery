@@ -99,6 +99,7 @@ class BasePackage():
     #
     #-------------------------------------------------------------------
     def get_description(self):
+
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_description')
@@ -114,6 +115,7 @@ class BasePackage():
     #
     #-------------------------------------------------------------------
     def get_version(self):
+
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_version')
@@ -130,9 +132,9 @@ class BasePackage():
     #
     #-------------------------------------------------------------------
     def install(self,args):
-        func = util.get_module_func('packages',
-                                    pkg_mgr,
-                                    'install')
+        func = util.get_module_func(scmd='packages',
+                                    program=pkg_mgr,
+                                    cmd='install')
         func(args)
         
         return
