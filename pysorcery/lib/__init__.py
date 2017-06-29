@@ -85,10 +85,11 @@ logger = logging.getLogger(__name__)
 # Class File
 # 
 # The File API.  This is the class that is used for ALL file activities
+# Parent classes: CompressedFile, Archive, BaseFile
 #
 # Inputs
 # ------
-#    ...
+#    @param: filename - The name of the file to operate on.
 #
 # Returns
 # -------
@@ -96,7 +97,7 @@ logger = logging.getLogger(__name__)
 #
 # Raises
 # ------
-#    ...
+#    None
 #
 #-----------------------------------------------------------------------
 class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
@@ -117,16 +118,22 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     # Raises
     # ------
-    #    ...
+    #    FileNotFoundError - Fix Me
+    #    IsADirectoryError
+    #    PermissionError
     #
     #-------------------------------------------------------------------
     def read(self):
         logger.debug('Begin Function')
-        if self.format_ != 'Unknown':
-            content = compressed.CompressedFile.read(self)
-        else:
-            content = files.BaseFile.read(self)
-
+        try:
+            
+            if self.format_ != 'Unknown':
+                content = compressed.CompressedFile.read(self)
+            else:
+                content = files.BaseFile.read(self)
+        except Exception as msg:
+            logger.error(msg)
+        
         logger.debug('End Function')
         return content
 
@@ -161,11 +168,10 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
                                              verbosity=0,
                                              interactive=True)
         else:
-            logger.error('BaseFile search Not implemented')
-            #results = files.BaseFile.search(self, searchstring)
+            raise NotImplementedError('BaseFile search Not implemented')            
 
         logger.debug('End Function')
-        return
+        return results
 
 #-----------------------------------------------------------------------
 #

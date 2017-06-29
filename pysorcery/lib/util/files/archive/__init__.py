@@ -44,7 +44,7 @@ Impliments classes for working with archive files.
 #-----------------------------------------------------------------------
 # System Libraries
 import os
-import stat
+
 
 # 3rd Party Libraries
 
@@ -327,7 +327,7 @@ class Archive(files.BaseFile):
         logger.debug('Begin Function')
 
         """Extract given archive."""
-        #util.check_existing_filename(archive)
+        self.check_existing_filename(self.filename)
         logger.info("Extracting %s ..." % self.filename)
         _extract_archive(self.filename, verbosity=verbosity, interactive=interactive, outdir=outdir, program=program)
 
@@ -355,8 +355,10 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def create(self, filenames, verbosity=0, program=None, interactive=True):
         """Create given archive with given files."""
-        util.check_new_filename(self.filename)
-        util.check_archive_filelist(filenames)
+        self.check_new_filename()
+
+        check_names = files.BaseFiles(filelist = filenames)
+        check_names.check_filelist()
         if verbosity >= 0:
             logger.info("Creating %s ..." % self.filename)
             res = _create_archive(self.filename, filenames, verbosity=verbosity,
@@ -924,84 +926,6 @@ def rmtree_log_error (func, path, exc):
     msg = "Error in %s(%s): %s" % (func.__name__, path, str(exc[1]))
     logger.error(msg)
 
-#-----------------------------------------------------------------------
-#
-# Function _extract_archive
-#
-# This is the base File Class
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def make_file_readable (filename):
-    """Make file user readable if it is not a link."""
-    if not os.path.islink(filename):
-        file_ = files.BaseFile(filename)
-        file_.set_mode(stat.S_IRUSR)
-
-
-#-----------------------------------------------------------------------
-#
-# Function _extract_archive
-#
-# This is the base File Class
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def make_dir_readable (filename):
-    """Make directory user readable and executable."""
-    directory = files.BaseDirectory(filename)
-    directory.set_mode(stat.S_IRUSR|stat.S_IXUSR)
-    return
-
-#-----------------------------------------------------------------------
-#
-# Function _extract_archive
-#
-# This is the base File Class
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def make_user_readable (directory):
-    """Make all files in given directory user readable. Also recurse into
-    subdirectories."""
-    for root, dirs, files in os.walk(directory, onerror=logger.error):
-        for filename in files:
-            make_file_readable(os.path.join(root, filename))
-        for dirname in dirs:
-            make_dir_readable(os.path.join(root, dirname))
 
 #-----------------------------------------------------------------------
 #
@@ -1025,7 +949,8 @@ def make_user_readable (directory):
 def cleanup_outdir (outdir, archive):
     """Cleanup outdir after extraction and return target file name and
     result string."""
-    make_user_readable(outdir)
+    output_dir = files.BaseDirectory(outdir)
+    output_dir.make_user_readable()
     # move single directory or file in outdir
     (success, msg) = move_outdir_orphan(outdir)
     if success:

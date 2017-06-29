@@ -30,7 +30,7 @@
 #
 # Sorcery
 #
-#
+#    Sorcery is a package management suite of applucations.
 #
 #-----------------------------------------------------------------------
 """
@@ -63,6 +63,7 @@ along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 
 Sorcery
 
+Sorcery is a package management suite of applucations.
 """
 #-----------------------------------------------------------------------
 #

@@ -1,5 +1,7 @@
 # Sorcery
 
+Sorcery is a suite of applications for managing system packages...
+
 This is a complete re-write of Sorcery used by Source Mage GNU/Linux.  The original code was done in BASH, this will be in python.  This intended to be a functional dropin replacement, that will work side-by-side with the original sorcery code.  To do so, the commands have been named py<command>.  This version is designed to be flexible enough to work on non-sorcery systems such as Debian/Ubuntu.
 
 ## New Commands

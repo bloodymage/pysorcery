@@ -40,7 +40,7 @@
 pyArchive
 
 This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
+reasons needs to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 """
@@ -59,7 +59,7 @@ import sys
 try:
     import argcomplete
     BASHCOMPLETE = True
-except ImportError:
+except ImportError as msg:
     BASHCOMPLETE = False
     
 # Application Libraries
@@ -209,16 +209,15 @@ def main(args=None):
          @param
 
     """
-    logger.debug('Begin Application')
-
     
     if DEBUG is False:
         try:         
             real_main(args)
         except KeyboardInterrupt:
             log_error("aborted")
-        except:
+        except Exception as msg:
             logger.critical('You Fucked Up')
+            logger.critical(msg)
     else:
         real_main(args)
 
