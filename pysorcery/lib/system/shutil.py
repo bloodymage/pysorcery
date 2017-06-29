@@ -23,9 +23,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Shutil:
 #
-#
-#
+#    Provides additional functionality to the Shutil library from
+#    Python.
 #
 #-----------------------------------------------------------------------
 
@@ -118,11 +119,11 @@ _extensions = {
 #
 # Inputs
 # ------
-#    ...
+#    @param: format_type
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------

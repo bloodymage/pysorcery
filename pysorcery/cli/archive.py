@@ -206,7 +206,15 @@ def main(args=None):
 
     Inputs
     ------
-         @param
+         @param: args
+
+    Returns
+    -------
+         @return: None
+
+    Raises
+    ------
+         ...
 
     """
     

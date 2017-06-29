@@ -23,9 +23,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Mimetypes:
 #
-#
-#
+#    Provides additional functionality to the Mimetypes library from
+#    Python.
 #
 #-----------------------------------------------------------------------
 
@@ -143,6 +144,42 @@ ArchiveCompressions = ('bzip2', 'compress', 'gzip', 'lzip', 'lzma', 'xz')
 # internal MIME database
 mimedb = None
 
+#-----------------------------------------------------------------------
+#
+# Classes
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Functions
+#
+# init_mimedb
+# add_mimedb_data
+# add_mimetypes
+# check_types
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Function init_mimedb
+#
+# Initialize the internal MIME database.
+#
+# Inputs
+# ------
+#    @param: None
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def init_mimedb():
     """Initialize the internal MIME database."""
     global mimedb
@@ -152,8 +189,27 @@ def init_mimedb():
         log_error("could not initialize MIME database: %s" % msg)
         return
     add_mimedb_data(mimedb)
+    return
 
-
+#-----------------------------------------------------------------------
+#
+# Function add_mimedb_data
+#
+# Initialize the internal MIME database.
+#
+# Inputs
+# ------
+#    @param: mimedb
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def add_mimedb_data(mimedb):
     """Add missing encodings and mimetypes to MIME database."""
     mimedb.encodings_map['.bz2'] = 'bzip2'
@@ -198,27 +254,54 @@ def add_mimedb_data(mimedb):
     add_mimetype(mimedb, 'application/zip', '.epub')
     add_mimetype(mimedb, 'application/zip', '.apk')
     add_mimetype(mimedb, 'application/zpaq', '.zpaq')
+    return
 
-
+#-----------------------------------------------------------------------
+#
+# Function add_mimetype
+#
+# Initialize the internal MIME database.
+#
+# Inputs
+# ------
+#    @param: mimedb
+#    @param: mimetype
+#    @param: extention
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def add_mimetype(mimedb, mimetype, extension):
     """Add or replace a mimetype to be used with the given extension."""
     # If extension is already a common type, strict=True must be used.
     strict = extension in mimedb.types_map[True]
     mimedb.add_type(mimetype, extension, strict=strict)
+    return
 
 #-----------------------------------------------------------------------
 #
-# Classes
+# Function check_type
 #
-# 
+# Initialize the internal MIME database.
 #
-#-----------------------------------------------------------------------
-
-#-----------------------------------------------------------------------
+# Inputs
+# ------
+#    @param: format_
+#    @param: encoding
 #
-# Formats
+# Returns
+# -------
+#    @return: None
 #
-# 
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def check_type(format_, encoding):
@@ -227,3 +310,4 @@ def check_type(format_, encoding):
         raise Exception("Unknown archive format `%s'" % format_)
     if encoding is not None and encoding not in ArchiveCompressions:
         raise Exception("Unkonwn archive compression `%s'" % encoding)
+    return
