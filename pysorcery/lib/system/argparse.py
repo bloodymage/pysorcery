@@ -82,11 +82,11 @@ from pysorcery import __version__, DEBUG
 #
 # Returns
 # -------
-#    None
+#    @param: None
 #
 # Raises
 # ------
-#    Error
+#    ...
 #
 #-----------------------------------------------------------------------
 class CommonParser(ArgumentParser):
@@ -106,7 +106,7 @@ class CommonParser(ArgumentParser):
     #
     # Returns
     # -------
-    #    self.subparser -
+    #    @return: self.subparser -
     #
     # Raises
     # ------
@@ -134,7 +134,7 @@ class CommonParser(ArgumentParser):
     #
     # Returns
     # -------
-    #    None
+    #    @return: None
     #
     # Raises
     # ------
@@ -162,7 +162,7 @@ class CommonParser(ArgumentParser):
     #
     # Returns
     # -------
-    #    self.parent
+    #    @return: self.parent
     #
     # Raises
     # ------
@@ -234,7 +234,7 @@ class CommonParser(ArgumentParser):
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------

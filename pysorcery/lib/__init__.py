@@ -114,7 +114,7 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     # Returns
     # -------
-    #    content
+    #    @return: content
     #
     # Raises
     # ------
@@ -126,7 +126,6 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     def read(self):
         logger.debug('Begin Function')
         try:
-            
             if self.format_ != 'Unknown':
                 content = compressed.CompressedFile.read(self)
             else:
@@ -149,7 +148,7 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     # Returns
     # -------
-    #    results
+    #    @return: results
     #
     # Raises
     # ------
@@ -187,7 +186,7 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
 #
 # Returns
 # -------
-#    None
+#    @param: None
 #
 # Raises
 # ------
@@ -199,27 +198,6 @@ class Files(archive.Archives, files.BaseFiles):
         self.files = kwargs['filelist']
 
         return
-    #-------------------------------------------------------------------
-    #
-    # Function diff
-    #
-    # Diff ...
-    # 
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.files[0]
-    #            self.files[1]
-    #
-    # Returns
-    # -------
-    #    Results
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
 
 
 #-----------------------------------------------------------------------
@@ -228,11 +206,11 @@ class Files(archive.Archives, files.BaseFiles):
 # 
 # Inputs
 # ------
-#    ...
+#    @param: filename
 #
 # Returns
 # -------
-#    none
+#    @param: None
 #
 # Raises
 # ------
@@ -248,11 +226,11 @@ class Directory(files.BaseDirectory):
 # 
 # Inputs
 # ------
-#    ...
+#    @param: filelist
 #
 # Returns
 # -------
-#    none
+#    @param: None
 #
 # Raises
 # ------

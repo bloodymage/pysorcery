@@ -111,7 +111,7 @@ from pysorcery.lib.system import logging
 # Global Variables
 #
 #-----------------------------------------------------------------------
-DEBUG=True
+DEBUG=False
 
 # Enable Logging
 # create logger

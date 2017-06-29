@@ -116,11 +116,11 @@ colortext = text.ConsoleText()
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
-#    Error
+#    ...
 #
 #-----------------------------------------------------------------------
 def real_main(args):    
@@ -192,11 +192,11 @@ Report bugs to ...
 #
 # Returns
 # -------
-#    None (Change this for error exits)
+#    @param: None (Change this for error exits)
 #
 # Raises
 # ------
-#    Error
+#    ...
 #
 #-----------------------------------------------------------------------
 def main(args=None):

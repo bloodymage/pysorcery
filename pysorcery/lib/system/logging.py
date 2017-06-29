@@ -23,9 +23,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Logging:
 #
-#
-#
+#    Provides additional functionality to the Logging library from
+#    Python.
 #
 #-----------------------------------------------------------------------
 
@@ -134,11 +135,11 @@ colortext = text.ConsoleText()
 #
 # Inputs
 # ------
-#    ...
+#    @param:
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
@@ -148,17 +149,20 @@ colortext = text.ConsoleText()
 class LocalLogger(Logger):
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug2
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -174,17 +178,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug3
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -200,17 +207,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug4
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -226,17 +236,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug5
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -252,17 +265,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug6
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -278,17 +294,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug7
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -304,17 +323,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug8
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -330,17 +352,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug9
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -356,17 +381,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function debug10
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -382,17 +410,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo1
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -408,17 +439,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo2
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -434,17 +468,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo3
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -460,17 +497,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo4
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -486,17 +526,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo5
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -512,17 +555,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo6
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -538,17 +584,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo7
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -564,17 +613,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo8
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -589,17 +641,20 @@ class LocalLogger(Logger):
         return
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function vinfo9
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -614,17 +669,20 @@ class LocalLogger(Logger):
         return
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info1
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -639,17 +697,20 @@ class LocalLogger(Logger):
         return
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info2
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -665,17 +726,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info3
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -690,17 +754,20 @@ class LocalLogger(Logger):
         return
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info4
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -715,17 +782,20 @@ class LocalLogger(Logger):
         return
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info5
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -741,17 +811,20 @@ class LocalLogger(Logger):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info6
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -764,19 +837,23 @@ class LocalLogger(Logger):
             self._log(26, message, args, **kws) 
 
         return
+
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info7
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -792,17 +869,20 @@ class LocalLogger(Logger):
     
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info8
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -818,17 +898,20 @@ class LocalLogger(Logger):
     
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function info9
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: message - The error message to print.
+    #    @param: *args
+    #    @param: **kwargs
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -851,11 +934,14 @@ class LocalLogger(Logger):
 #
 # Inputs
 # ------
-#    ...
+#    @param: self
+#    @param: message - The error message to print.
+#    @param: *args
+#    @param: **kwargs
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
@@ -874,17 +960,18 @@ class ConsoleLvlFormatter(Formatter):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function format
     #
-    # Calls the read function based on the file format.
+    # ...
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: record - The error message to print.
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -930,11 +1017,13 @@ class ConsoleLvlFormatter(Formatter):
 #
 # Inputs
 # ------
-#    ...
+#    @param: self
+#    @param: *args
+#    @param: **kwargs
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
@@ -980,17 +1069,18 @@ class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function is_tty
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
     #
     # Returns
     # -------
-    #    none
+    #    @return: isatty
+    #    @return: isatty()
     #
     # Raises
     # ------
@@ -1004,17 +1094,18 @@ class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function emit
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: record - The error message to print.
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -1028,9 +1119,14 @@ class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
             if not self.is_tty:
                 stream.write(message)
             else:
-                message = colortext.colorize(message, "none", self._colors[record.levelno],"black")
+                message = colortext.colorize(message,
+                                             "none",
+                                             self._colors[record.levelno],
+                                             "black")
                 stream.write(message)
-            stream.write(getattr(self, 'terminator', '\n'))
+            stream.write(getattr(self,
+                                 'terminator',
+                                 '\n'))
             self.flush()
         except (KeyboardInterrupt, SystemExit):
             raise
@@ -1041,17 +1137,19 @@ class ColorizingStreamHandler(StreamHandler,text.ConsoleText):
 
     #-------------------------------------------------------------------
     #
-    # Function read
+    # Function setLevelColor
     #
     # Calls the read function based on the file format.
     #
     # Inputs
     # ------
-    #    ...
+    #    @param: self
+    #    @param: logging_level - The error message to print.
+    #    @param: escaped_ansi_code
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
@@ -1084,11 +1182,14 @@ local_manager.loggerClass = LocalLogger
 #
 # Inputs
 # ------
-#    ...
+#    @param: self
+#    @param: message - The error message to print.
+#    @param: *args
+#    @param: **kwargs
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
@@ -1100,42 +1201,3 @@ def getLogger(name=None):  # noqa
         return local_manager.getLogger(name)
     else:
         return Logger.root
-
-#-----------------------------------------------------------------------
-#
-# func verifydebuglevels
-#
-# Remove before final
-#
-# This is for testing to ensure all debug levels display as expected.
-#
-# Inputs
-# ------
-#    ...
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def verifydebuglevels():
-    debug10("Holy Mothermof Fuck")
-    debug9("Holy Fuck")
-    debug8("Fubar")
-    debug7("snafu")
-    debug6("fuck")
-    debug5("holy shit")
-    debug4("shit")
-    debug3("damn")
-    debug2("crap")
-    debug("Debug Msg")
-    info("Info Msg")
-    warn("Warn Msg")
-    error("Error Msg")
-    critical("Crit Msg")
-    return
-
