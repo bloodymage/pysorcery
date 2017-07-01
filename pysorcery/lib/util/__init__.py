@@ -146,11 +146,12 @@ UrlModules = {
 #
 # Inputs
 # ------
-#     @param: cmd_class - I really need a new name for this...
+#     @param: self
+#     @param: func
 #         
 # Returns
 # -------
-#     supformats - 'Supported Formats'
+#     @return: None
 #
 # Raises
 # ------
@@ -166,20 +167,25 @@ class memoized (object):
         """Set func and init cache."""
         self.func = func
         self.cache = {}
+        return
 
     #-------------------------------------------------------------------
     #
-    # Function get_cmd_types
+    # Function __call__
     #
-    #
+    # Try to find result for function arguments in local cache or
+    # execute the function and fill the cache with the result.
     #
     # Inputs
     # ------
-    #     @param: cmd_class - I really need a new name for this...
+    #     @param: self -
+    #     @param: *args -
     #         
     # Returns
     # -------
-    #     supformats - 'Supported Formats'
+    #     @return: self.cache[args]
+    #     @return: value
+    #     @return: self.func(*args)
     #
     # Raises
     # ------
@@ -201,17 +207,17 @@ class memoized (object):
 
     #-------------------------------------------------------------------
     #
-    # Function get_cmd_types
+    # Function __repr__
     #
-    #
+    # Return the function's docstring.
     #
     # Inputs
     # ------
-    #     @param: cmd_class - I really need a new name for this...
+    #     @param: self
     #         
     # Returns
     # -------
-    #     supformats - 'Supported Formats'
+    #     @return: self.func.__doc__
     #
     # Raises
     # ------
@@ -222,6 +228,7 @@ class memoized (object):
         """Return the function's docstring."""
         return self.func.__doc__
 
+
 #-----------------------------------------------------------------------
 #
 # Functions
@@ -231,21 +238,20 @@ class memoized (object):
 #
 #-----------------------------------------------------------------------
 
-
-
 #-----------------------------------------------------------------------
 #
-# Function get_cmd_types
+# Function strlist_with_or
 #
-#
+# Return comma separated string, and last entry appended with ' or '.
 #
 # Inputs
 # ------
-#     @param: cmd_class - I really need a new name for this...
+#     @param: alist
 #         
 # Returns
 # -------
-#     supformats - 'Supported Formats'
+#     @return:
+#     @return:
 #
 # Raises
 # ------
@@ -262,15 +268,17 @@ def strlist_with_or (alist):
 #
 # Function get_cmd_types
 #
-#
+# Quote all shell metacharacters in given string value with strong
+# (ie. single) quotes, handling the single quote especially.
 #
 # Inputs
 # ------
-#     @param: cmd_class - I really need a new name for this...
-#         
+#     @param: value
+#
 # Returns
 # -------
-#     supformats - 'Supported Formats'
+#     @return:
+#     @return:
 #
 # Raises
 # ------
@@ -287,17 +295,19 @@ def shell_quote (value):
 
 #-----------------------------------------------------------------------
 #
-# Function get_cmd_types
+# Function shell_quote_nt
 #
-#
+# Quote argument for Windows system. Modeled after distutils
+# _nt_quote_args() function.
 #
 # Inputs
 # ------
 #     @param: cmd_class - I really need a new name for this...
-#         
+#        
 # Returns
 # -------
-#     supformats - 'Supported Formats'
+#     @return:
+#     @return:
 #
 # Raises
 # ------
@@ -321,7 +331,7 @@ def shell_quote_nt (value):
 # ------
 #   @param: cmd -
 #           verbosity -
-#           **kwargs
+#           **kwargs -
 #         
 # Returns
 # -------
@@ -363,15 +373,17 @@ def run (cmd, verbosity=0, **kwargs):
 #
 # Function run_checked
 #
-#
+# Run command and raise PatoolError on error.
 #
 # Inputs
 # ------
-#     @param: cmd_class - I really need a new name for this...
+#     @param: cmd -
+#     @param: ret_ok -
+#     @param: **kwargs -
 #         
 # Returns
 # -------
-#     supformats - 'Supported Formats'
+#     @return: retcode
 #
 # Raises
 # ------
@@ -398,7 +410,7 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
 #         
 # Returns
 # -------
-#     supformats - 'Supported Formats'
+#     @return: supformats - 'Supported Formats'
 #
 # Raises
 # ------
@@ -491,15 +503,17 @@ def get_module_func(*args, **kwargs):
 #
 # Function system_search_path
 #
+# Get the list of directories on a system to search for executable programs.
+# It is either the PATH environment variable or if PATH is undefined the value
+# of os.defpath.
+#
 # Inputs
 # ------
-#    @param: cmd_class
-#    @param: cmd_type
-#    @param: command
+#    @param: None
 #
 # Returns
 # -------
-#    getattr()
+#    @return: os.environ.get("PATH", os.defpath)
 #
 # Raises
 # ------
@@ -517,15 +531,15 @@ def system_search_path():
 #
 # Function find_program
 #
+# Look for program in environment PATH variable.
+#
 # Inputs
 # ------
-#    @param: cmd_class
-#    @param: cmd_type
-#    @param: command
+#    @param: program
 #
 # Returns
 # -------
-#    getattr()
+#    @return: which(program, path=path)
 #
 # Raises
 # ------
@@ -552,13 +566,14 @@ def find_program (program):
 #
 # Inputs
 # ------
-#    @param: cmd_class
-#    @param: cmd_type
-#    @param: command
+#    @param: b
+#    @param: grouping
 #
 # Returns
 # -------
-#    getattr()
+#    @return:
+#    @return:
+#    @return:
 #
 # Raises
 # ------

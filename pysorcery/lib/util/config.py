@@ -23,9 +23,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Config:
 #
-#
-#
+#    Sets program configuration
 #
 #-----------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ class SorceryConfig():
                               'local_url_config' : '/etc/sorcery/local/url',
                               'grimoire_list_file' : '/etc/sorcery/local/grimoire'
         }
-
+    
         self.theme = { 'sound': 'off',
                   'commands' : []
         }
@@ -330,18 +330,19 @@ CASTFS_DEBUG_LEVEL=${CASTFS_DEBUG_LEVEL:=255}
 #
 # Inputs
 # ------
-#    ...
+#    @param: args
+#    @param: config
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
 #    ...
 #
 #-----------------------------------------------------------------------
-def configure_logging(args,config):
+def configure_logging(args, config):
     global logger
     global consolhandler
 
