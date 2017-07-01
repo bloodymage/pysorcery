@@ -104,6 +104,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
+# real_main
+# main
 #
 #-------------------------------------------------------------------------------
 
@@ -121,11 +123,11 @@ colortext = text.ConsoleText()
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
-#    Error
+#    ...
 #
 #-----------------------------------------------------------------------
 def real_main(args):    
@@ -141,7 +143,7 @@ Report bugs to ...
 
     # Parse Command Line Arguments
     parser = argparse.CommonParser(
-        description = 'Universal archive extractor. creator, etc...',
+        description = 'Display system, package information',
         epilog = epilog_text
     )
 

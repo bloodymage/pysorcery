@@ -137,7 +137,7 @@ def parser(*args, **kwargs):
                                 parents = parent_parsers,
                                 help = activity_help
     )        
-    cmd.set_defaults(func = gaze_activity,
+    cmd.set_defaults(func = gaze.gaze_file,
                      sudo = False,
                      filename = activity_files[distro.distro_group[distro.distro_id]])
 
