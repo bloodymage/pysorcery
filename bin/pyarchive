@@ -43,13 +43,22 @@ archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 """
 
-# EASY-INSTALL-ENTRY-SCRIPT: 'pysorcery==0.0.1','console_scripts','pyarchive'
-__requires__ = 'pysorcery==0.1.1'
-
 import sys
-from pkg_resources import load_entry_point
-
-if __name__ == '__main__':
-    sys.exit(
-        load_entry_point(__requires__, 'console_scripts', 'pyarchive')()
-    )
+import os
+# EASY-INSTALL-ENTRY-SCRIPT: 'pysorcery==0.0.1','console_scripts','pyarchive'
+try:
+    # added so distributors can consistently specify a private module location
+    here = os.path.abspath(os.path.dirname(__file__))
+    if here.split('/')[1] == 'home':
+        home = os.path.expanduser('~')
+        private_module_path = home + "/src/python-sorcery/"
+        if private_module_path:
+            sys.path.insert(1, private_module_path)
+            from pysorcery.cli import archive
+            sys.exit(
+                archive.main()
+            )
+    else:
+        import pysorcery
+except Exception as msg:
+    print(msg)
