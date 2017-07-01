@@ -105,7 +105,7 @@ class Spell(packages.BasePackage):
         grimoire_list = codex.list_grimoires()
 
         for i in grimoire_list:
-            spell_list_file = libfiles.Files(i + '/codex.index')
+            spell_list_file = lib.File(i + '/codex.index')
             spell_list = spell_list_file.read()
 
             for item in spell_list:
@@ -122,7 +122,7 @@ class Spell(packages.BasePackage):
         self.section = self.section_dir.split('/')[-1]
         self.spell_directory = self.section_dir + '/' + self.name
 
-        details_file = libfiles.DetailsFile(self.spell_directory)
+        details_file = bashspell.DetailsFile(self.spell_directory)
         details = details_file.read()
         
         self.description = details['description']

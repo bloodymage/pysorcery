@@ -83,7 +83,7 @@ __contact__ = 'gd.smlinux@gmail.com'
 __copyright__ = 2017
 __license__ = 'GPLv3+'
 __status__ = 'Prototype'
-__version__ = '0.0.1'
+__version__ = 'HEAD'
 
 #-----------------------------------------------------------------------
 #
@@ -111,7 +111,7 @@ from pysorcery.lib.system import logging
 # Global Variables
 #
 #-----------------------------------------------------------------------
-DEBUG=False
+DEBUG=True
 
 # Enable Logging
 # create logger

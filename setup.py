@@ -42,7 +42,7 @@ if private_module_path:
 try:
     from pysorcery import __version__
 except ImportError as msg:
-    __version__ = '0.0.1'
+    __version__ = '0.0.2'
     print(msg)
     
 # Get the long description from the README file
@@ -91,7 +91,7 @@ setup(
         'Environment :: Console :: Curses'
     ],
 
-    keywords='blah',
+    keywords='Package Management',
     
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
@@ -127,7 +127,11 @@ setup(
     # need to place data files outside of your packages. See:
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[('/usr/share/man/man1', ['docs/man/man1/pyarchive.1'])],
+    data_files=[
+        ('/usr/share/man/man1', ['docs/man/pyarchive.1',
+                                 'docs/man/pygaze.1']
+        )
+    ],
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
@@ -135,6 +139,7 @@ setup(
     entry_points={
         'console_scripts': [
             'pyarchive = pysorcery.cli.archive:main'
+            'pygaze = pysorcery.cli.gaze:main'
         ]
     }
 )

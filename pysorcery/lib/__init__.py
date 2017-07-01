@@ -126,10 +126,7 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     def read(self):
         logger.debug('Begin Function')
         try:
-            if self.format_ != 'Unknown':
-                content = compressed.CompressedFile.read(self)
-            else:
-                content = files.BaseFile.read(self)
+            content = files.BaseFile.read(self)
         except Exception as msg:
             logger.error(msg)
         

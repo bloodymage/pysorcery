@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/activity.py
 #
 # This file is part of Sorcery.
 #
@@ -25,19 +25,29 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+# Gaze is part of the Sorcery source-based package management suite. It is a
+# general purpose command-line tool for displaying package logs, version 
+# information, checking for installed packages, checksums, message
+# digests, maintainer information, package URL information, removing
+# obsolete packages, displaying new packages, untracked files, sections,
+# searching for files that are installed, finding when spells were
+# created and packages in the software catalogue. It can even take and
+# retrieve snap shots of currently installed packages for easy
+# duplication.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Gaze is part of the Sorcery source-based package management suite. It is a
+general purpose command-line tool for displaying package logs, version 
+information, checking for installed packages, checksums, message
+digests, maintainer information, package URL information, removing
+obsolete packages, displaying new packages, untracked files, sections,
+searching for files that are installed, finding when spells were
+created and packages in the software catalogue. It can even take and
+retrieve snap shots of currently installed packages for easy
+duplication.
 """
 #-----------------------------------------------------------------------
 #
@@ -55,6 +65,7 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
+from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
@@ -120,17 +131,19 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('version',
+    activity_files = {
+        'apt'  : '/var/log/apt/history.log',
+        'sorcery' : '/var/log/sorcery/activity'
+    }
+
+    activity_help = 'Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.).'
+    cmd = subparsers.add_parser('activity',
                                 parents = parent_parsers,
-                                help = 'Shows the installed version of the spell and the main grimoires version.'
-    )
-    cmd.add_argument('spell',
-                     nargs = '+',
-                     help = 'Display System Info'
-    )
-    cmd.set_defaults(func = gaze.gaze_version,
-                     multi = False,
-                     sudo = False
-    )
+                                help = activity_help
+    )        
+    cmd.set_defaults(func = gaze.gaze_file,
+                     sudo = False,
+                     spell = None,
+                     filename = activity_files[distro.distro_group[distro.distro_id]])
 
     return cmd

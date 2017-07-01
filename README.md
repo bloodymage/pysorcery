@@ -47,7 +47,15 @@ Alt genurates a new grimoire (Repository) with the latest version on the softwar
 ### pydispel
 
 ### pygaze
-
+Gaze is part of the Sorcery source-based package management suite. It is a
+general purpose command-line tool for displaying package logs, version 
+information, checking for installed packages, checksums, message
+digests, maintainer information, package URL information, removing
+obsolete packages, displaying new packages, untracked files, sections,
+searching for files that are installed, finding when spells were
+created and packages in the software catalogue. It can even take and
+retrieve snap shots of currently installed packages for easy
+duplication.
 
 
 Major changes: Removed prune (This was depreciated sometime between 2001-2005)
