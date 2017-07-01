@@ -367,7 +367,7 @@ class BaseFile():
     def read(self):
         logger.debug("Begin Function")
         line_list = []
-        
+
         for line in open(self.filename):
             line_list.append(line[:-1])
             

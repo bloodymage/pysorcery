@@ -232,7 +232,7 @@ def gaze_version(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_files
+# Function gaze_file
 #
 # Show the compiler output generated when the spell was built. 
 # If no optional version was given, try the installed version. 
@@ -247,7 +247,7 @@ def gaze_version(args):
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
@@ -259,7 +259,11 @@ def gaze_file(args):
 
     if (not args.spell and
         args.filename):
-        print(args.filenamex)
+        file_ = lib.File(args.filename)
+        content = file_.read()
+        for line in content:
+            print(line)
+
     elif args.spell and args.filename:
         spell = lib.Package(i)
     

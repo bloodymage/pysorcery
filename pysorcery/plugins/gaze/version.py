@@ -86,15 +86,34 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
+#-----------------------------------------------------------------------
+#
+# Functions
+#
+# parser
+#
+#-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
 # Function parser
 #
-# Creates the parser subcommand and
+# Create subcommand parsing options
 #
-# Input:  *args - tuple of all parent parsers
-# Return: cmd
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
+#
+# Returns
+# -------
+#    @return: cmd
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):

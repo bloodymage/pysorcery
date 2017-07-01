@@ -101,26 +101,30 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# gaze_activity
 # parser
 #
 #-----------------------------------------------------------------------
-
-
 
 #-----------------------------------------------------------------------
 #
 # Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
+#
+# Returns
+# -------
+#    @return: cmd
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -139,6 +143,7 @@ def parser(*args, **kwargs):
     )        
     cmd.set_defaults(func = gaze.gaze_file,
                      sudo = False,
+                     spell = None,
                      filename = activity_files[distro.distro_group[distro.distro_id]])
 
     return cmd

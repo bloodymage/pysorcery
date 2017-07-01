@@ -100,7 +100,7 @@ class ConflictsFile(lib.Files):
 # 
 #
 #-------------------------------------------------------------------------------
-class DetailsFile(lib.Files):
+class DetailsFile(lib.File):
     def __init__(self,spell_directory):
         logger.debug('Begin Function')
         

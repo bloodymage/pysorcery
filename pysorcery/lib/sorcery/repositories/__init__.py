@@ -163,9 +163,9 @@ class BaseRepositories():
 #
 #-------------------------------------------------------------------------------
 def get_repo_name(name=None, repo_dir=None):
-    func = util.get_module_func('repositories',
-                                pkg_mgr,
-                                'get_repo_name')
+    func = util.get_module_func(scmd='repositories',
+                                program=pkg_mgr,
+                                cmd='get_repo_name')
     name = func(name, repo_dir)
     return name
 
