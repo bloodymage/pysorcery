@@ -130,9 +130,9 @@ class BasePackage():
     #
     #-------------------------------------------------------------------
     def install(self,args):
-        func = util.get_module_func('packages',
-                                    pkg_mgr,
-                                    'install')
+        func = util.get_module_func(scmd='packages',
+                                    program=pkg_mgr,
+                                    cmd='install')
         func(args)
         
         return

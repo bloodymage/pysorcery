@@ -39,6 +39,8 @@
 #
 #-----------------------------------------------------------------------
 """
+pyGaze
+
 Gaze is part of the Sorcery source-based package management suite. It is a
 general purpose command-line tool for displaying package logs, version 
 information, checking for installed packages, checksums, message
@@ -271,7 +273,6 @@ def gaze_file(args):
         
         message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
-
         message = colortext.colorize(spell.description, 'none','white','black')
         logger.info1(message)
     else:
