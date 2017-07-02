@@ -207,7 +207,7 @@ class DebianSpell():
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_description(name, repository=None):
+def get_description(name, **kwargs):
     cache    = apt.cache.Cache()
     cache.open()
         
@@ -235,7 +235,7 @@ def get_description(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_version(name, repository=None):
+def get_version(name, **kwargs):
     cache = apt.cache.Cache()
     cache.open()
         
@@ -263,7 +263,7 @@ def get_version(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_url(name, repository=None):
+def get_url(name, **kwargs):
     cache = apt.cache.Cache()
     cache.open()
         
@@ -294,7 +294,7 @@ def get_url(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_short(name, repository=None):
+def get_short(name, **kwargs):
     cache    = apt.cache.Cache()
     cache.open()
         
@@ -325,7 +325,7 @@ def get_short(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_section(name, repository=None):
+def get_section(name, **kwargs):
     cache    = apt.cache.Cache()
     cache.open()
         
@@ -341,6 +341,30 @@ def get_section(name, repository=None):
 
     cache.close()
     return section
+
+#-----------------------------------------------------------------------
+#
+# Function get_short
+#
+# Get's a package's short description.  In apt, the package's description is
+# used as there isn't a short description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def read_file(name, **kwargs):
+    raise NotImplementedError
+    return
 
 #-----------------------------------------------------------------------
 #

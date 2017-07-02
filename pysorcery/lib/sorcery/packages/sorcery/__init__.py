@@ -244,6 +244,46 @@ def get_section(name, repository=None):
 
 #-----------------------------------------------------------------------
 #
+# Function get_section
+#
+# Gets a spell's short description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: short
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def read_file(name, **kwargs):
+
+    if 'repository' not in kwargs or kwargs['repository'] is None:
+        repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
+
+    grimoire =  sorcery.Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    spell_directory = get_spell_dir(section_dir, name)
+
+    filename = kwargs['filename']
+    classname = filename.capitalize()
+
+    fileclass = getattr(bashspell, classname + 'File')
+    file_ = fileclass(spell_directory)
+    content = file_.read()
+    
+    return content
+
+#-----------------------------------------------------------------------
+#
 # Function get_first_repo
 #
 # Get the first repository containing a spell by spell name.
@@ -262,10 +302,10 @@ def get_section(name, repository=None):
 #
 #-----------------------------------------------------------------------
 def get_first_repo(name):
-    spell_codex = sorcery.Codex()
-    grimoire_list = spell_codex.list_grimoires()
+    codex = sorcery.Codex()
+    grimoires = codex.list_grimoires()
 
-    for grimoire in grimoire_list:
+    for grimoire in grimoires:
         spell_list_file = files.BaseFile(grimoire + '/codex.index')
         spell_list = spell_list_file.read()
         
@@ -275,9 +315,9 @@ def get_first_repo(name):
                 break
             
         if name == spell:
-            grimoire = grimoire.split('/')[-1]
             break
-        
+
+    grimoire = grimoire.split('/')[-1]
     return grimoire
 
 #-----------------------------------------------------------------------
@@ -299,10 +339,9 @@ def get_first_repo(name):
 #
 #-----------------------------------------------------------------------
 def get_section_dir(grimoire, name):
-    spell_codex = sorcery.Codex()
     spell_list_file = files.BaseFile(grimoire + '/codex.index')
     spell_list = spell_list_file.read()
-    
+
     for item in spell_list:
         spell, section_dir = item.split(' ')
         if name == spell:
