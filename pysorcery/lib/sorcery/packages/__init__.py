@@ -184,6 +184,32 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
+    # Function get_short
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_short(self):
+        func = util.get_module_func(scmd='packages',
+                                    program=pkg_mgr,
+                                    cmd='get_short')
+        short_description = func(self.name)
+        return short_description
+
+    #-------------------------------------------------------------------
+    #
     # Function install
     #
     # Install a package

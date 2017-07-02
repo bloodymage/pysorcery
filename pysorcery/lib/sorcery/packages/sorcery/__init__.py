@@ -148,8 +148,7 @@ class Spell(packages.BasePackage):
         details_file = bashspell.DetailsFile(self.spell_directory)
         details = details_file.read()
         
-        self.short = details['short']
-        
+       
         self.source_files = {}
 
         #file_name = url.split('/')[-1]
@@ -327,6 +326,51 @@ def get_url(name):
     url = details['website']
 
     return url
+
+#-----------------------------------------------------------------------
+#
+# Function get_url
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: url
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_short(name):
+    spell_codex = sorcery.Codex()
+    grimoire_list = spell_codex.list_grimoires()
+
+    for grimoire in grimoire_list:
+        spell_list_file = lib.File(grimoire + '/codex.index')
+        spell_list = spell_list_file.read()
+        
+        for item in spell_list:
+            spell, section_dir = item.split(' ')
+
+            if name == spell:
+                break
+            
+        if name == spell:
+            grimoire = grimoire.split('/')[-1]
+            break
+
+    section = section_dir.split('/')[-1]
+    spell_directory = section_dir + '/' + name
+
+    details_file = bashspell.DetailsFile(spell_directory)
+    details = details_file.parse()
+        
+    short = details['short']
+
+    return short
 
 #-----------------------------------------------------------------------
 #
