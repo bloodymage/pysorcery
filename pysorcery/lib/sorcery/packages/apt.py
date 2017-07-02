@@ -193,6 +193,7 @@ class DebianSpell():
 # get_description
 # get_version
 # get_url
+# get_short
 #
 #-----------------------------------------------------------------------
 
@@ -279,6 +280,37 @@ def get_url(name):
 
     cache.close()
     return url
+
+#-------------------------------------------------------------------------------
+#
+# Function get_short
+#
+# Get's a package's short description.  In apt, the package's description is
+# used as there isn't a short description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_short(name):
+    cache    = apt.cache.Cache()
+    cache.open()
+        
+    pkg = cache[name]
+    versions = pkg.versions
+    short_description  = versions[0].description
+
+    cache.close()
+    return short_description
 
 #-------------------------------------------------------------------------------
 #

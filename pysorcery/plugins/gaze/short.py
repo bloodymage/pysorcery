@@ -129,27 +129,38 @@ def gaze_short(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
+#
+# Returns
+# -------
+#    @return: cmd
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser, repo_parent_parser=None):
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
     cmd = subparsers.add_parser('short',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 help = 'Display spell short description.'
     )
     cmd.add_argument('spell',
                      nargs = '+',
                      help='Display System Info'
     )
-    cmd.set_defaults(func = gaze_short)
+    cmd.set_defaults(func = gaze_short,
+                     sudo = False)
     return cmd
