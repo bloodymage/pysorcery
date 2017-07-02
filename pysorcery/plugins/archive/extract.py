@@ -8,9 +8,12 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# Additional code from 'patool'
+# Copyright (C) 2010-2015 Bastian Kleineidam
 #
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/extract.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,16 +35,15 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# extract
+# Plugin: Extract
 #
 #   This plugin provides the extraction interface...
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Plugin: Extract
+
+This plugin provides the extraction interface...
 """
 #-----------------------------------------------------------------------
 #
@@ -69,6 +71,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -94,6 +97,7 @@ colortext = text.ConsoleText()
 # Functions
 #
 # archive_extract
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -103,41 +107,40 @@ colortext = text.ConsoleText()
 #
 # Extract files listed.
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.files - List of files to extract
+#            args.recursive - Extract all files in all subfolders
+#            args.depth (Add me) - if recursive, limit to depth #
+#            args.output_dir - Directory to extract to
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_extract(args):
     logger.debug('Begin Function')
 
-    for i in args.files:
-        # Check for recursive extraction
-        if args.recursive:
-            # If True, extract all compressed files within a directory and
-            # its sub directories
-            #
-            # Fix me! Add max depth option
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.Files(sfile)
-                    logger.debug3(cfile.mimetype)
-                    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-                        cfile.extract(args.output_dir)
-                    else:
-                        cfile.decompress(args.output_dir)
-
-        # Always extract what is explicitly listed
-        #logger.info('Archive file: ' + i)
-        cfile = lib.Files(i)
+    for file_ in args.files:
+        cfile = lib.File(file_)
         if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(args.output_dir)
+            cfile.extract(verbosity=args.verbosity,
+                          interactive=args.interactive,
+                          outdir=args.outdir)
+        elif cfile.mimetype in mimetypes.CompressedMimetypes:
+            cfile.decompress(verbosity=args.verbosity,
+                             interactive=args.interactive,
+                             outdir=args.outdir)
         else:
-            cfile.decompress(args.output_dir)
+            logger.error('Not an archive file')
+            
 
     logger.debug('End Function')
     return
@@ -145,15 +148,23 @@ def archive_extract(args):
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
 # Create subcommand parsing options
 #
-# Input:  @param: *args    - tuple of all subparsers and parent parsers
-#                            args[0]: the subparser
-#                            args[1:] the parent parsers
-#         @param: **kwargs - Not used Future?
-# Return: cmd   - the subcommand parsing options
+# Inputs
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd   - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -162,6 +173,7 @@ def parser(*args, **kwargs):
     parent_parsers = list(args[1:])
 
     cmd = subparsers.add_parser('extract',
+                                aliases = ['x'],
                                 parents = parent_parsers,
                                 help = 'Extract files'
     )
@@ -170,9 +182,16 @@ def parser(*args, **kwargs):
                      help = 'File(s) to extract'
     )
     cmd.add_argument('-o',
-                     '--output-dir',
+                     '--outdir',
                      metavar = 'DIRECTORY',
                      help = 'Output Directory'
+    )
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
     )
     cmd.add_argument('-r',
                      '--recursive',
@@ -183,6 +202,11 @@ def parser(*args, **kwargs):
                      '--depth',
                      action = 'store_true',
                      help = 'limit recursion to specified depth'
+    )
+    cmd.add_argument('-e',
+                     '--exclude',
+                     action = 'store_true',
+                     help = 'List files to exclude'
     )
     cmd.set_defaults(func=archive_extract)
 

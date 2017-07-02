@@ -8,9 +8,12 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# Additional code from 'patool'
+# Copyright (C) 2010-2015 Bastian Kleineidam
 #
 # This file is part of Sorcery.
+#
+# File: pysorcery/cli/archive.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -34,8 +37,10 @@
 #
 #-----------------------------------------------------------------------
 """
+pyArchive
+
 This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
+reasons needs to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
 """
@@ -51,7 +56,12 @@ import os
 import sys
 
 # 3rd Party Libraries
-
+try:
+    import argcomplete
+    BASHCOMPLETE = True
+except ImportError as msg:
+    BASHCOMPLETE = False
+    
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
@@ -65,8 +75,6 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
-# Conditional Libraries
-
 
 #-----------------------------------------------------------------------
 #
@@ -96,15 +104,23 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Real_Main
+# Function Real_Main
 #
 # 1. Creates the argument parser
 # 2. Eshablishes configuration
 # 3. Runs the function specified by the arguments
 #
-# Input:  args
-# 
-# Return: None 
+# Inputs
+# ------
+#    @param: args
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def real_main(args):    
@@ -124,8 +140,6 @@ Report bugs to ...
 
     parser.add_version_option()
     parent_parser = parser.add_logging_option()
-
-    # Create subcommands
     subparsers = parser.create_subparsers()
 
     # Get list of subcommands
@@ -133,9 +147,12 @@ Report bugs to ...
 
     # Create the subcommand arguments
     for i in subcommands:
-        subcommand = util.get_module_func('archive',i,'parser')
+        subcommand = util.get_module_func(scmd='archive',program=i,cmd='parser')
         subcommand(subparsers, parent_parser)
 
+    # This doesn't work...
+    if BASHCOMPLETE:
+        argcomplete.autocomplete(parser)
     #
     args = parser.parse_args()
 
@@ -148,11 +165,14 @@ Report bugs to ...
     logger.debug3('Arguments: ' + str(args))
 
     # 'application' code
-    try:
-        args.func(args)
-    except:
-        parser.print_help()
-        logger.error('No command was given')
+    if DEBUG is False:
+        try:
+            args.func(args)
+        except:
+            parser.print_help()
+            logger.error('No command was given')
+    else:
+        args.func(args)    
 
     #logging.verifydebuglevels()
     logger.debug('End Function')
@@ -163,25 +183,49 @@ Report bugs to ...
 #
 # Main
 #
-# The First function, initalizes everything else.
+# The First function, initalizes everything else.  Attempts to execute
+# everything through exception handlers with easy to read messages.
 #
-# Inputs come from command line argument
+# Inputs
+# ------
+#    @param: args
 #
+# Returns
+# -------
+#    @param: None (Change this for error exits)
 #
-# Note: Any cli switches will override the settings in the config files
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def main(args=None):
     """Run the main command-line interface for pyarchive. Includes 
     top-level exception handlers that print friendly error messages.
-    """
-    logger.debug('Begin Application')
 
+
+    Inputs
+    ------
+         @param: args
+
+    Returns
+    -------
+         @return: None
+
+    Raises
+    ------
+         ...
+
+    """
+    
     if DEBUG is False:
         try:         
             real_main(args)
-        except:
+        except KeyboardInterrupt:
+            log_error("aborted")
+        except Exception as msg:
             logger.critical('You Fucked Up')
+            logger.critical(msg)
     else:
         real_main(args)
 

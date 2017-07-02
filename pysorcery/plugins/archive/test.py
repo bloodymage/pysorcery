@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/cli/archive.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,12 +32,20 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
+# Plugin: Test
+#
+#    This plugin checks to ensure an archive file is valid.
+#
 #-----------------------------------------------------------------------
 """
 This is a bonus application for pysorcery.  PySorcery for multiple
 reasons to internally extract, create, list the contents, etc.
 archive files of multiple formats.  To test the capabilities of the
 underlying code, this application was developed.
+
+Plugin: Test
+
+This plugin checks to ensure an archive file is valid.
 """
 #-----------------------------------------------------------------------
 #
@@ -65,6 +73,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -89,15 +98,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
 # archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -107,45 +109,77 @@ colortext = text.ConsoleText()
 #
 # Verify the archive file is valid and can be opened
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.quiet - Decrease Output Verbosity
+#            args.files - List of files to extract
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
 def archive_test(args):
+    """Test files in archive(s)."""
     logger.debug('Begin Function')
 
-    for i in args.files:
-        cfile = lib.Files(i)
-        cfile.testarchive()
+    for i in args.archive:
+        try:
+            cfile = lib.File(i)
+            cfile.test_archive(verbosity=args.verbosity,
+                               interactive=args.interactive)
+        except Exception as msg:
+            logging.error("error testing %s: %s" % (archive, msg))
 
     logger.debug('End Function')
     return
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    Error
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_test = subparsers.add_parser('test',
-                                        aliases = ['verify'],
-                                        help = 'Test files')
-    parser_test.add_argument('files',
-                             nargs = 1,
-                             metavar = 'archive',
-                             help = 'Create files')
-    parser_test.set_defaults(func = archive_test)
+def parser(*args, **kwargs):
 
-    return parser_test
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
+    cmd = subparsers.add_parser('test',
+                                aliases = ['verify'],
+                                parents = parent_parsers,
+                                help = 'Test files')
+    cmd.add_argument('archive',
+                     nargs = '+',
+                     help = 'Archive Files to test')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
+    cmd.set_defaults(func = archive_test)
+
+    return cmd

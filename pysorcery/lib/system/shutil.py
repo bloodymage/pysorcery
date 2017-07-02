@@ -11,9 +11,9 @@
 # This file is part of Sorcery.
 #
 #    Sorcery is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU General Public License as published
+#    by the Free Software Foundation, either version 3 of the License,
+#    or (at your option) any later version.
 #
 #    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,9 +23,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Shutil:
 #
-#
-#
+#    Provides additional functionality to the Shutil library from
+#    Python.
 #
 #-----------------------------------------------------------------------
 
@@ -106,18 +107,28 @@ _extensions = {
 #
 # Functions
 #
+# init_formats
+#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
 # Function init_formats
 #
+# ...
 #
+# Inputs
+# ------
+#    @param: format_type
 #
-# Input:
-# Return:
+# Returns
+# -------
+#    @return: None
 #
-# Exceptions:
+# Raises
+# ------
+#    ...
+#
 #-----------------------------------------------------------------------
 def init_formats(format_type):
     logger.debug('Begin Function')

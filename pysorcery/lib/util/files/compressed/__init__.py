@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/files/compressed/__init__.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -23,9 +25,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Compressed
 #
-#
-#
+#     ...
 #
 #-----------------------------------------------------------------------
 
@@ -65,15 +67,41 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
+# This is the Compressed File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
 #-----------------------------------------------------------------------
 class CompressedFile(files.BaseFile):
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function decompress
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.filename
+    #    @param: extractdir
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def decompress(self, extractdir=None):
@@ -86,14 +114,28 @@ class CompressedFile(files.BaseFile):
     
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function compress
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
-    def compress(self, source_file=None, root_dir=None, base_dir=None):
+    def compress(self,
+                 source_file=None,
+                 root_dir=None,
+                 base_dir=None,
+                 compression_level=9):
         logger.debug('Begin Function')
 
         if source_file is None:
@@ -111,9 +153,19 @@ class CompressedFile(files.BaseFile):
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def read(self):
@@ -132,9 +184,19 @@ class CompressedFile(files.BaseFile):
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param:
+    #
+    # Returns
+    # -------
+    #    none
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def testarchive(self):
@@ -152,4 +214,84 @@ class CompressedFile(files.BaseFile):
         logger.debug('End Function')
         return 
 
-    
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Searches archive files
+    #
+    # Inputs
+    # ------
+    #     self:
+    #     searchstring:
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #-------------------------------------------------------------------
+    def search(self, searchstring):
+        logger.debug('Begin Function')
+
+        archive_func = util.get_module_func('util_compressed',
+                                            self.format_,
+                                            'search')
+
+        results = archive_func(self.filename, searchstring)
+        
+        logger.debug('End Function')
+        return results
+
+#-----------------------------------------------------------------------
+#
+# Class CompressedFiles
+#
+# This is the base File Class
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class CompressedFiles(files.BaseFiles):
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Searches archive files
+    #
+    # Inputs
+    # ------
+    #     self:
+    #     searchstring:
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #-------------------------------------------------------------------
+    def diff(self):
+        logger.debug('Begin Function')
+
+        archive_func = util.get_module_func('util_archive',
+                                            self.format_class,
+                                            'diff')
+
+        results = archive_func(self.filename)
+        
+        logger.debug('End Function')
+        return results

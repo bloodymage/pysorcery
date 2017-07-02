@@ -8,9 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
-#
 # This file is part of Sorcery.
+#
+# File: pysorcery/plugins/archive/recompress.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,12 +32,15 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
+# Plugin: Recompress
+#
+#   Recompresses an archive file
+#
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+Plugin: Recompress
+
+Recompress an archive file
 """
 #-----------------------------------------------------------------------
 #
@@ -65,6 +68,7 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -89,64 +93,95 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
 # archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Functions archive_recompress
-#
+# Function archive_recompress
 #
 # Recompresses a file.
 #
-# Input:  args
-#         args.quiet   - Decrease Output Verbosity
-#         args.srcfile - Original File
+# Inputs
+# ------
+#    @param: args
+#            args.quiet   - Decrease Output Verbosity
+#            args.archive - Original File
+#            args.compression_level - Compression level to recompress to.
 #
-# Return: None
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def archive_recompress(args):
     logger.debug('Begin Function')
 
-
+    """Recompress an archive to smaller size."""
+    res = 0
+    try:
+        archive = lib.File(args.archive)
+        archive.recompress_archive(verbosity=args.verbosity,
+                                   interactive=args.interactive)
+    except Exception as msg:
+        logger.error("error recompressing %s: %s" % (args.archive, msg))
+        res = 1
+    return res
 
     logger.debug('End Function')
     return
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    cmd - the subcommand parsing options
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser):
-    parser_recompress = subparsers.add_parser('recompress',
-                                              parents = [parent_parser],
-                                              help = 'Recompress files'
-    )
-    parser_recompress.add_argument('srcfile',
-                                   help = 'Source file')
-    parser_recompress.add_argument('dstfile',
-                                   help = 'Destination file')
-    parser_recompress.set_defaults(func = archive_recompress)
+def parser(*args, **kwargs):
 
-    return parser_recompress
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
+    cmd = subparsers.add_parser('recompress',
+                                parents = parent_parsers,
+                                help = 'Recompress files'
+    )
+    cmd.add_argument('archive',
+                     help = 'Source file')
+    cmd.add_argument('compression_level',
+                     type = int,
+                     choices = range(0, 9),
+                     default = 9,
+                     help = 'Set new compression level')
+    cmd.add_argument('-n',
+                     '--non-interactive',
+                     dest = 'interactive',
+                     default = False,
+                     action = 'store_false',
+                     help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
+    )
+    cmd.set_defaults(func = archive_recompress)
+
+    return cmd

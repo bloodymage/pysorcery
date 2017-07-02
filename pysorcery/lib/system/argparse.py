@@ -10,6 +10,8 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/lib/system/argparse.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
 #    by the Free Software Foundation, either version 3 of the License,
@@ -23,13 +25,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Argparse:
 #
-#
-#
+#    Provides additional functionality to the Argparse library from
+#    Python.
 #
 #-----------------------------------------------------------------------
 """
-Aliases for argparse positional arguments.
+Argparse:
+
+  Provides additional functionality to the Argparse library from
+  Python.
 """
 
 #-----------------------------------------------------------------------
@@ -69,16 +75,44 @@ from pysorcery import __version__, DEBUG
 #
 # Class CommonParser
 #
-# input:
-# return: None
+# Inputs
+# ------
+#    @param: *args    - tuple 
+#    @param: **kwargs - dictionary
+#
+# Returns
+# -------
+#    @param: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class CommonParser(ArgumentParser):
     def __init__(self, *args, **kwargs):
         super(CommonParser, self).__init__(*args, **kwargs)
-
         return
 
+    #-------------------------------------------------------------------
+    #
+    # Function create_subparsers
+    #
+    # Creates the subparser for the subcommands of the program.
+    #
+    # Inputs
+    # ------
+    #    @param: self - 
+    #
+    # Returns
+    # -------
+    #    @return: self.subparser -
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def create_subparsers(self):
         self.subparser = self.add_subparsers(title = 'commands',
                             metavar = 'Command',
@@ -87,6 +121,26 @@ class CommonParser(ArgumentParser):
         return self.subparser
 
 
+    #-------------------------------------------------------------------
+    #
+    # Function add_version_option
+    #
+    # Adds the argument '--version' which is common to all Sorcery
+    # commands.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: None
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def add_version_option(self):
         self.add_argument('-V',
                           '--version',
@@ -96,6 +150,25 @@ class CommonParser(ArgumentParser):
         )
         return
 
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: self.parent
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     def add_logging_option(self):
         # Common Help Descriptions:
         quiet_help = 'Decrease output'
@@ -126,30 +199,25 @@ class CommonParser(ArgumentParser):
                                   '--quiet',
                                   action = 'count',
                                   default = 0,
-                                  help = quiet_help
-        )
+                                  help = quiet_help)
+        # Verbose Options
+        self.logging.add_argument('-v',
+                                  '--verbosity',
+                                  action = 'count',
+                                  default = 0,
+                                  help = verbose_help)
 
         # If debugging is enabled
         if DEBUG:
-            # Verbose Options
-            self.logging.add_argument('-v',
-                                      '--verbosity',
-                                      action = 'count',
-                                      default = 0,
-                                      help = verbose_help
-            )
             # Set Loglevel
             self.logging.add_argument('--loglevel',
                                       choices = loglevel_choices,
                                       default = 'INFO',
-                                      help = loglevel_help
-            )
-
+                                      help = loglevel_help)
             # Maximize logging
             self.logging.add_argument('--debug',
                                       action = 'store_true',
-                                      help = debug_help
-            )
+                                      help = debug_help)
 
         return self.parent
         
@@ -157,8 +225,20 @@ class CommonParser(ArgumentParser):
 #
 # Class ArgParser
 #
-# input:
-# return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used Future?
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class ArgParser(CommonParser):

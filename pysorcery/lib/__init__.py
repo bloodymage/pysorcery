@@ -26,7 +26,7 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 # 
-# This file is the pysorcery API.  All files should reference this file.
+# This file is the pysorcery API.  All applications should reference this file.
 #
 #-----------------------------------------------------------------------
 """
@@ -49,8 +49,9 @@ This file provides the high level Sorcery API.
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
+from pysorcery.lib.system import shutil
 # Other Application Libraries
-from pysorcery.lib.sorcery import packages
+# from pysorcery.lib.sorcery import packages
 #from pysorcery.lib.sorcery import repositories
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
@@ -81,9 +82,22 @@ logger = logging.getLogger(__name__)
 
 #-----------------------------------------------------------------------
 #
-# Class Files
+# Class File
 # 
 # The File API.  This is the class that is used for ALL file activities
+# Parent classes: CompressedFile, Archive, BaseFile
+#
+# Inputs
+# ------
+#    @param: filename - The name of the file to operate on.
+#
+# Returns
+# -------
+#    None
+#
+# Raises
+# ------
+#    None
 #
 #-----------------------------------------------------------------------
 class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
@@ -93,30 +107,114 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
     #
     # Calls the read function based on the file format.
     #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.format
+    #
+    # Returns
+    # -------
+    #    @return: content
+    #
+    # Raises
+    # ------
+    #    FileNotFoundError - Fix Me
+    #    IsADirectoryError
+    #    PermissionError
+    #
     #-------------------------------------------------------------------
     def read(self):
-        if self.format_ != 'Unknown':
-            content = compressed.CompressedFile.read(self)
-        else:
-            content = files.BaseFile.read(self)
-
+        logger.debug('Begin Function')
+        try:
+            if self.format_ != 'Unknown':
+                content = compressed.CompressedFile.read(self)
+            else:
+                content = files.BaseFile.read(self)
+        except Exception as msg:
+            logger.error(msg)
+        
         logger.debug('End Function')
         return content
 
+    #-------------------------------------------------------------------
+    #
+    # Function search
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def search(self,
+               pattern,
+               verbosity=0,
+               interactive=True):
+        logger.debug('Begin Function')
+
+        if self.mimetype in mimetypes.ArchiveMimetypes:
+            results = archive.Archive.search(self,
+                                             pattern,
+                                             verbosity=0,
+                                             interactive=True)
+        else:
+            raise NotImplementedError('BaseFile search Not implemented')            
+
+        logger.debug('End Function')
+        return results
 
 #-----------------------------------------------------------------------
 #
 # Class Files
-# 
+#
+# The Files API.  This class provides toplevel functions for working
+# with multiple files.
+#
+# Inputs
+# ------
+#    @param: *args
+#    @param: **kwargs
+#
+# Returns
+# -------
+#    @param: None
+#
+# Raises
+# ------
+#    ...
 # 
 #-----------------------------------------------------------------------
-class Files(files.BaseFiles):
-    pass
+class Files(archive.Archives, files.BaseFiles):
+    def __init__(self, *args, **kwargs):
+        self.files = kwargs['filelist']
+
+        return
+
 
 #-----------------------------------------------------------------------
 #
 # Class Directory
 # 
+# Inputs
+# ------
+#    @param: filename
+#
+# Returns
+# -------
+#    @param: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Directory(files.BaseDirectory):
@@ -126,9 +224,20 @@ class Directory(files.BaseDirectory):
 #
 # Class Directories
 # 
+# Inputs
+# ------
+#    @param: filelist
+#
+# Returns
+# -------
+#    @param: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-class Directories(files.BaseDirectories):
+class Directories(files.BaseFiles):
     pass
 
 #-----------------------------------------------------------------------
@@ -138,4 +247,3 @@ class Directories(files.BaseDirectories):
 #
 #
 #-----------------------------------------------------------------------
-
