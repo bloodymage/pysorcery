@@ -101,15 +101,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# gaze_checksum
+# gaze_queue
 #
 #-----------------------------------------------------------------------
 
@@ -263,21 +256,16 @@ def gaze_file(args):
         args.filename):
         file_ = lib.File(args.filename)
         content = file_.read()
-        for line in content:
-            print(line)
 
     elif args.spell and args.filename:
-        spell = lib.Package(i)
-    
-        logger.debug3('Spell: ' + str(spell))
-        
-        message = colortext.colorize(spell.name, 'bold','white','black')
-        logger.info(message)
-        message = colortext.colorize(spell.description, 'none','white','black')
-        logger.info1(message)
+        spell = lib.Package(args.spell[0])
+        content = spell.read_file(args.filename)
     else:
-        print('Not implemented')
-        
+        raise NotImplementedError
+
+    for line in content:
+        print(line)
+
     logger.debug('End Function')
     return
 

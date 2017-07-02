@@ -104,28 +104,37 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Create subcommand parsing options
 #
-# Extract files listed.
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Returns
+# -------
+#    @return: cmd
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser, repo_parent_parser=None):
-    cmd = subparsers.add_parser('history',
-                                parents = [parent_parser],
-                                help = 'Show history for a spell (alias for gaze HISTORY). (Not Working)'
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+    cmd = subparsers.add_parser('HISTORY',
+                                aliases = ['history'],
+                                parents = parent_parsers,
+                                help = 'Show history for a spell (alias for gaze HISTORY).'
     )
     cmd.add_argument('spell',
                      nargs = 1,
-                     help = 'Display System Info')
-    cmd.set_defaults(func = gaze.file,
-                     filename = 'HISTORY')
-
+                     help = 'Package to display history.')
+    cmd.set_defaults(func = gaze.gaze_file,
+                     filename = 'HISTORY',
+                     sudo = False)
+    
     return cmd

@@ -145,13 +145,9 @@ class ConflictsFile(lib.Files):
 #    ...
 #
 #-------------------------------------------------------------------------------
-class DetailsFile(lib.File):
+class DetailsFile(files.BaseFile):
     def __init__(self,spell_directory):
-        logger.debug('Begin Function')
-        
-        lib.File.__init__(self,spell_directory + '/DETAILS')
-        
-        logger.debug('End Function')
+        files.BaseFile.__init__(self, spell_directory + '/DETAILS')
         return
 
     #-------------------------------------------------------------------------------
@@ -316,11 +312,9 @@ class FinalFile(lib.Files):
 #    ...
 #
 #-------------------------------------------------------------------------------
-class HistoryFile(lib.Files):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
-        logger.debug('End Function')
+class HistoryFile(files.BaseFile):
+    def __init__(self, spell_directory):
+        files.BaseFile.__init__(self, spell_directory + '/HISTORY')
         return
 
 #-------------------------------------------------------------------------------

@@ -417,7 +417,7 @@ class BaseFile():
     # -------
     #    @return: None
     #
-    # Raises
+    # Raisis
     # ------
     #    NotImplementedError
     #
@@ -505,6 +505,33 @@ class BaseFile():
         if not os.path.islink(self.filename):
             self.set_mode(stat.S_IRUSR)
         return
+
+    #-----------------------------------------------------------------------
+    #
+    # Function _extract_archive
+    #
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.filename
+    #
+    # Returns
+    # -------
+    #    @return: None
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def isfile(self):
+        """Make file user readable if it is not a link."""
+        if os.path.isfile(self.filename):
+            return True
+        else:
+            return False
 
 #-----------------------------------------------------------------------
 #
@@ -631,6 +658,33 @@ class BaseDirectory(BaseFile):
                 dir_ = BaseDirectory(os.path.join(root, dirname))
                 dir_.make_dir_readable()
         return
+
+    #-----------------------------------------------------------------------
+    #
+    # Function _extract_archive
+    #
+    # This is the base File Class
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.filename
+    #
+    # Returns
+    # -------
+    #    @return: None
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def isdir(self):
+        """Make file user readable if it is not a link."""
+        if os.path.isdir(self.filename):
+            return True
+        else:
+            return False
 
 
 #-----------------------------------------------------------------------

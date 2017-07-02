@@ -52,6 +52,7 @@ from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import lib
 from pysorcery.lib.sorcery import repositories
+from pysorcery.lib.util import files
 from pysorcery.lib.util import text
 
 #-----------------------------------------------------------------------
@@ -142,8 +143,14 @@ class Grimoire(repositories.BaseRepository):
         if self.name and not grim_dir:
             grim_dir = '/var/lib/sorcery/codex/' + self.name
 
-        self.grim_dir = grim_dir
+        file_ = files.BaseDirectory(grim_dir)
 
+        if file_.isdir() is False:
+            codex = Codex()
+            grimoires = codex.list_grimoires()
+            grim_dir = [s for s in grimoires if self.name in s][0]
+
+        self.grim_dir = grim_dir
         return grim_dir
 
 #-------------------------------------------------------------------------------
