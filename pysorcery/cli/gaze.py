@@ -244,11 +244,11 @@ Report bugs to ...
 #
 # Returns
 # -------
-#    None (Change this for error exits)
+#    @return: None (Change this for error exits)
 #
 # Raises
 # ------
-#    Error
+#    ....
 #
 #-----------------------------------------------------------------------
 def main(args = None):
