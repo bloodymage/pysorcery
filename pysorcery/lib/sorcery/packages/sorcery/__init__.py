@@ -148,9 +148,6 @@ class Spell(packages.BasePackage):
         details_file = bashspell.DetailsFile(self.spell_directory)
         details = details_file.read()
         
-        self.description = details['description']
-        self.version = details['version']
-        self.url = details['website']
         self.short = details['short']
         
         self.source_files = {}
@@ -190,6 +187,9 @@ class Spell(packages.BasePackage):
 #
 # Functions
 #
+# get_description
+# get_version
+# get_url
 #
 #-----------------------------------------------------------------------
 
@@ -203,7 +203,7 @@ class Spell(packages.BasePackage):
 #
 # Returns
 # -------
-#    @return: None
+#    @return: description
 #
 # Raises
 # ------
@@ -248,7 +248,7 @@ def get_description(name):
 #
 # Returns
 # -------
-#    @return: None
+#    @return: version
 #
 # Raises
 # ------
@@ -282,6 +282,51 @@ def get_version(name):
     version = details['version']
 
     return version
+
+#-----------------------------------------------------------------------
+#
+# Function get_url
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: url
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_url(name):
+    spell_codex = sorcery.Codex()
+    grimoire_list = spell_codex.list_grimoires()
+
+    for grimoire in grimoire_list:
+        spell_list_file = lib.File(grimoire + '/codex.index')
+        spell_list = spell_list_file.read()
+        
+        for item in spell_list:
+            spell, section_dir = item.split(' ')
+
+            if name == spell:
+                break
+            
+        if name == spell:
+            grimoire = grimoire.split('/')[-1]
+            break
+
+    section = section_dir.split('/')[-1]
+    spell_directory = section_dir + '/' + name
+
+    details_file = bashspell.DetailsFile(spell_directory)
+    details = details_file.parse()
+        
+    url = details['website']
+
+    return url
 
 #-----------------------------------------------------------------------
 #

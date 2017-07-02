@@ -157,6 +157,33 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
+    # Function get_url
+    #
+    # Get a package url.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: url
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------
+    def get_url(self):
+        func = util.get_module_func(scmd='packages',
+                                    program=pkg_mgr,
+                                    cmd='get_url')
+        url = func(self.name)
+        return url
+
+    #-------------------------------------------------------------------
+    #
     # Function install
     #
     # Install a package

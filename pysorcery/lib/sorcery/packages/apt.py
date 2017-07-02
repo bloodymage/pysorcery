@@ -83,11 +83,7 @@ class DebianSpell():
 
         versions = self.pkg.versions
 
-        self.version = versions[0].version
-
         self.architecture = versions[0].architecture
-        self.description  = versions[0].description
-        self.url = versions[0].homepage
         self.short = self.description
 
         pkg_section = versions[0].section
@@ -194,6 +190,9 @@ class DebianSpell():
 #
 # Functions
 #
+# get_description
+# get_version
+# get_url
 #
 #-----------------------------------------------------------------------
 
@@ -207,7 +206,7 @@ class DebianSpell():
 #
 # Returns
 # -------
-#    @return: None
+#    @return: description
 #
 # Raises
 # ------
@@ -235,7 +234,7 @@ def get_description(name):
 #
 # Returns
 # -------
-#    @return: None
+#    @return: version
 #
 # Raises
 # ------
@@ -252,6 +251,34 @@ def get_version(name):
 
     cache.close()
     return version
+
+#-------------------------------------------------------------------------------
+#
+# Function get_url
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: url
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_url(name):
+    cache = apt.cache.Cache()
+    cache.open()
+        
+    pkg = cache[name]
+    pkg_info = pkg.versions
+    url = pkg_info[0].homepage
+
+    cache.close()
+    return url
 
 #-------------------------------------------------------------------------------
 #
