@@ -212,6 +212,35 @@ def get_short(name, repository=None):
     short = details['short']
     return short
 
+#-----------------------------------------------------------------------
+#
+# Function get_section
+#
+# Gets a spell's short description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: short
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_section(name, repository=None):
+    
+    if repository is None:
+        repository = get_first_repo(name)
+
+    grimoire =  sorcery.Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    section = section_dir.split('/')[-1]
+    return section
 
 #-----------------------------------------------------------------------
 #
@@ -300,7 +329,6 @@ def get_section_dir(grimoire, name):
 #
 #-----------------------------------------------------------------------
 def get_spell_dir(section_dir, name):
-    section = section_dir.split('/')[-1]
     spell_directory = section_dir + '/' + name
     return spell_directory
 

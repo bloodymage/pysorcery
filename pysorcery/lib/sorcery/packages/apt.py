@@ -85,12 +85,6 @@ class DebianSpell():
 
         self.architecture = versions[0].architecture
 
-        pkg_section = versions[0].section
-
-        if 'universe' in pkg_section or 'multiverse' in pkg_section:
-            self.section = str(pkg_section).split('/')[1]
-        else:
-            self.section = str(pkg_section)            
 
         self.grimoire = 'Fix Me'            
         self.dependencies = versions[0].dependencies
@@ -310,6 +304,43 @@ def get_short(name, repository=None):
 
     cache.close()
     return short_description
+
+#-----------------------------------------------------------------------
+#
+# Function get_short
+#
+# Get's a package's short description.  In apt, the package's description is
+# used as there isn't a short description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_section(name, repository=None):
+    cache    = apt.cache.Cache()
+    cache.open()
+        
+    pkg = cache[name]
+    versions = pkg.versions
+
+    pkg_section = versions[0].section
+
+    if 'universe' in pkg_section or 'multiverse' in pkg_section:
+        section = pkg_section.split('/')[1]
+    else:
+        section = pkg_section            
+
+    cache.close()
+    return section
 
 #-----------------------------------------------------------------------
 #

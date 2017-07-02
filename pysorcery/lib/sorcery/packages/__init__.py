@@ -212,6 +212,34 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_section(self):
+        func = util.get_module_func(scmd='packages',
+                                    program=pkg_mgr,
+                                    cmd='get_section')
+        section = func(self.name, self.repository)
+        return section
+
+    #-------------------------------------------------------------------
+    #
     # Function install
     #
     # Install a package
