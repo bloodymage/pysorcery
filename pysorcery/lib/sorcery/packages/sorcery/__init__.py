@@ -80,6 +80,17 @@ logger = logging.getLogger(__name__)
 #
 # Class Spell
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Spell(packages.BasePackage):
@@ -94,8 +105,20 @@ class Spell(packages.BasePackage):
     #
     # Function 
     #
-    # Input:  ...
-    # Return: ...
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
     def set_details(self):
@@ -141,8 +164,20 @@ class Spell(packages.BasePackage):
     #
     # Function 
     #
-    # Input:  ...
-    # Return: ...
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
     def install(self,args):
@@ -162,8 +197,17 @@ class Spell(packages.BasePackage):
 #
 # Function get_description
 #
-# Input:  ...
-# Return: ...
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def get_description(name):
@@ -198,9 +242,17 @@ def get_description(name):
 #
 # Function get_description
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def get_version(name):
@@ -235,8 +287,17 @@ def get_version(name):
 #
 # Function 
 #
-# Input:  ...
-# Return: ...
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def print_version(self,multi=False):

@@ -48,6 +48,7 @@ import mimetypes
 from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import lib
+from pysorcery.lib.util import files
 from pysorcery.lib.util import text
 
 # Other Optional Libraries
@@ -67,19 +68,41 @@ logger = logging.getLogger(__name__)
 #
 #-------------------------------------------------------------------------------
 
-
 #-------------------------------------------------------------------------------
 #
 # Class BuildFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class BuildFile(lib.Files):
     pass
+
 #-------------------------------------------------------------------------------
 #
 # Class ConfigureFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class ConfigureFile(lib.Files):
@@ -89,6 +112,17 @@ class ConfigureFile(lib.Files):
 #
 # Class ConflictsFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class ConflictsFile(lib.Files):
@@ -98,6 +132,17 @@ class ConflictsFile(lib.Files):
 #
 # Class DetailsFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class DetailsFile(lib.File):
@@ -113,9 +158,20 @@ class DetailsFile(lib.File):
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def parse(self):
@@ -173,6 +229,17 @@ class DetailsFile(lib.File):
 #
 # Class DependsFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class DependsFile(lib.Files):
@@ -188,6 +255,17 @@ class DependsFile(lib.Files):
 #
 # Class DownloadFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class DownloadFile(lib.Files):
@@ -201,6 +279,17 @@ class DownloadFile(lib.Files):
 #
 # Class FinalFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class FinalFile(lib.Files):
@@ -214,6 +303,17 @@ class FinalFile(lib.Files):
 #
 # Class HistoryFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class HistoryFile(lib.Files):
@@ -227,6 +327,17 @@ class HistoryFile(lib.Files):
 #
 # Class HistoryFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class InstallFile(lib.Files):
@@ -240,6 +351,17 @@ class InstallFile(lib.Files):
 #
 # Class InstallExtrasFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class InstallExtrasFile(lib.Files):
@@ -253,6 +375,17 @@ class InstallExtrasFile(lib.Files):
 #
 # Class HistoryFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PatchFile(lib.Files):
@@ -266,6 +399,17 @@ class PatchFile(lib.Files):
 #
 # Class PostBuildFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PostBuildFile(lib.Files):
@@ -279,6 +423,17 @@ class PostBuildFile(lib.Files):
 #
 # Class PostInstallFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PostInstallFile(lib.Files):
@@ -292,6 +447,17 @@ class PostInstallFile(lib.Files):
 #
 # Class PostRemoveFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PostRemoveFile(lib.Files):
@@ -305,6 +471,17 @@ class PostRemoveFile(lib.Files):
 #
 # Class HistoryFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PostResurrectFile(lib.Files):
@@ -318,6 +495,17 @@ class PostResurrectFile(lib.Files):
 #
 # Class PreBuildFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PreBuildFile(lib.Files):
@@ -331,6 +519,17 @@ class PreBuildFile(lib.Files):
 #
 # Class PreInstallFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PreInstallFile(lib.Files):
@@ -344,6 +543,17 @@ class PreInstallFile(lib.Files):
 #
 # Class PreRemoveFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PreRemoveFile(lib.Files):
@@ -357,6 +567,17 @@ class PreRemoveFile(lib.Files):
 #
 # Class PreResurrectFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PreResurrectFile(lib.Files):
@@ -370,6 +591,17 @@ class PreResurrectFile(lib.Files):
 #
 # Class PreSubDependsFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PreSubDependsFile(lib.Files):
@@ -383,6 +615,17 @@ class PreSubDependsFile(lib.Files):
 #
 # Class PrepareFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class PrepareFile(lib.Files):
@@ -396,6 +639,17 @@ class PrepareFile(lib.Files):
 #
 # Class ProvidesFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class ProvidesFile(lib.Files):
@@ -410,6 +664,17 @@ class ProvidesFile(lib.Files):
 #
 # Class SecurityFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class SecurityFile(lib.Files):
@@ -423,6 +688,17 @@ class SecurityFile(lib.Files):
 #
 # Class SubDependsFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class SubDependsFile(lib.Files):
@@ -437,6 +713,17 @@ class SubDependsFile(lib.Files):
 #
 # Class TransferFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class TransferFile(lib.Files):
@@ -450,6 +737,17 @@ class TransferFile(lib.Files):
 #
 # Class TriggerCheckFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class TriggerCheckFile(lib.Files):
@@ -464,6 +762,17 @@ class TriggerCheckFile(lib.Files):
 #
 # Class TriggersFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class TriggersFile(lib.Files):
@@ -478,6 +787,17 @@ class TriggersFile(lib.Files):
 #
 # Class UpTriggersFile
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class UpTriggersFile(lib.Files):

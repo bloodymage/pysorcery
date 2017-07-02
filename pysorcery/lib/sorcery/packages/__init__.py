@@ -25,9 +25,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Packages
 #
-#
-#
+#    This is the intermediate level package API.
 #
 #-----------------------------------------------------------------------
 
@@ -79,6 +79,17 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 # Class BasePackage
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class BasePackage():
@@ -94,7 +105,19 @@ class BasePackage():
     #
     # Function get_description
     #
-    # Input:  ...
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
     # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
@@ -107,9 +130,21 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
-    # Function get_description
+    # Function get_version
     #
-    # Input:  ...
+    # Get a package version.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
     # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
@@ -122,11 +157,22 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Function install
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Install a package
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #    @param: args
+    #
+    # Returns
+    # -------
+    #    @return: None
+    #
+    # Raises
+    # ------
+    #    ...
     #
     #-------------------------------------------------------------------
     def install(self,args):
@@ -141,6 +187,17 @@ class BasePackage():
 #
 # Class BaseSpells
 # 
+# Inputs
+# ------
+#    @param: ...
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class BasePackages():

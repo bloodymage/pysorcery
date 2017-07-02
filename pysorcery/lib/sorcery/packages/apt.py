@@ -70,12 +70,6 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
-#
-# Class DebianSpell
-# 
-#
-#-------------------------------------------------------------------------------
 class DebianSpell():
     def __init__(self,name):
         logger.debug("Begin Function")
@@ -115,9 +109,20 @@ class DebianSpell():
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ....x
-    # Return: ...
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def install(self, args):
@@ -139,9 +144,20 @@ class DebianSpell():
     #
     # Function 
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def remove(self, args):
@@ -185,9 +201,17 @@ class DebianSpell():
 #
 # Function get_description
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def get_description(name):
@@ -205,9 +229,17 @@ def get_description(name):
 #
 # Function get_version
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def get_version(name):
@@ -225,42 +257,51 @@ def get_version(name):
 #
 # Function 
 #
-# Input:  ...
-# Return: ...
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
-    def print_version(self,multi=False):
-        logger.debug("Begin Function")
+def print_version(self,multi=False):
+    logger.debug("Begin Function")
         
-        if multi:
-            grimoires = libcodex.Codex()
-            grimoire_list = grimoires.list_grimoires()
+    if multi:
+        grimoires = libcodex.Codex()
+        grimoire_list = grimoires.list_grimoires()
             
-            m = len(grimoire_list)
-        else:
-            grimoire_list = [ self.grimoire ]
-            m = 1
+        m = len(grimoire_list)
+    else:
+        grimoire_list = [ self.grimoire ]
+        m = 1
 
-        print_list = [ "Repository       " ]
-        print_list.append("Section          ")
-        print_list.append("Package          ")
-        print_list.append("Repo version     ")
-        print_list.append("Installed version")
-        print_list.append("----------       ")
-        print_list.append("-------          ")
-        print_list.append("-------          ")
-        print_list.append("------------     ")
-        print_list.append("-----------------")
+    print_list = [ "Repository       " ]
+    print_list.append("Section          ")
+    print_list.append("Package          ")
+    print_list.append("Repo version     ")
+    print_list.append("Installed version")
+    print_list.append("----------       ")
+    print_list.append("-------          ")
+    print_list.append("-------          ")
+    print_list.append("------------     ")
+    print_list.append("-----------------")
 
 
-        for i in grimoire_list:
-            print_list.append(i.split('/')[-1])
-            print_list.append(self.section)
-            print_list.append(self.name)
-            print_list.append(self.version)
-            print_list.append('-')
+    for i in grimoire_list:
+        print_list.append(i.split('/')[-1])
+        print_list.append(self.section)
+        print_list.append(self.name)
+        print_list.append(self.version)
+        print_list.append('-')
 
-        libmisc.column_print(print_list,cols=5,columnwise=False,gap=2)
+    libmisc.column_print(print_list,cols=5,columnwise=False,gap=2)
                 
-        logger.debug("End Function")
-        return
+    logger.debug("End Function")
+    return

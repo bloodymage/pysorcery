@@ -30,7 +30,7 @@
 #
 #-----------------------------------------------------------------------
 """
-This file provides the high level Sorcery API.
+This file provides the top level Sorcery API.
 """
 #-----------------------------------------------------------------------
 #
@@ -77,6 +77,7 @@ logger = logging.getLogger(__name__)
 # Files
 # Directory
 # Directories
+# Package
 #
 #-----------------------------------------------------------------------
 
@@ -93,11 +94,11 @@ logger = logging.getLogger(__name__)
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
-#    None
+#    ...
 #
 #-----------------------------------------------------------------------
 class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
@@ -183,7 +184,7 @@ class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
 #
 # Returns
 # -------
-#    @param: None
+#    @return: None
 #
 # Raises
 # ------
@@ -207,7 +208,7 @@ class Files(archive.Archives, files.BaseFiles):
 #
 # Returns
 # -------
-#    @param: None
+#    @return: None
 #
 # Raises
 # ------
@@ -227,7 +228,7 @@ class Directory(files.BaseDirectory):
 #
 # Returns
 # -------
-#    @param: None
+#    @return: None
 #
 # Raises
 # ------
@@ -239,8 +240,19 @@ class Directories(files.BaseFiles):
 
 #-----------------------------------------------------------------------
 #
-# Class Directories
+# Class Package
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Package(packages.BasePackage):
