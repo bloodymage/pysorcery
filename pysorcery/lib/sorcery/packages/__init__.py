@@ -93,10 +93,12 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 #-----------------------------------------------------------------------
 class BasePackage():
-    def __init__(self,name):
+    def __init__(self, name, repository=None):
         logger.debug("Begin Function")
+
         
         self.name = name
+        self.repository = repository
 
         logger.debug('End Function')
         return
@@ -125,7 +127,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_description')
-        description = func(self.name)
+        description = func(self.name, self.repository)
         return description
 
     #-------------------------------------------------------------------
@@ -152,7 +154,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_version')
-        version = func(self.name)
+        version = func(self.name, self.repository)
         return version
 
     #-------------------------------------------------------------------
@@ -179,7 +181,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_url')
-        url = func(self.name)
+        url = func(self.name, self.repository)
         return url
 
     #-------------------------------------------------------------------
@@ -205,7 +207,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_short')
-        short_description = func(self.name)
+        short_description = func(self.name, self.repository)
         return short_description
 
     #-------------------------------------------------------------------
@@ -235,6 +237,28 @@ class BasePackage():
         func(args)
         
         return
+
+#-----------------------------------------------------------------------
+#
+# Class BasePackageVersions
+#
+# This class is for working with mulhiple versions of the same package.
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class BasePackageVersions(BasePackage):
+    pass
 
 #-----------------------------------------------------------------------
 #

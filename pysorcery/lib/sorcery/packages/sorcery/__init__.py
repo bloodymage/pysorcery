@@ -25,9 +25,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Sorcery Spell
 #
-#
-#
+#    This provides the functions for working with sorcery spells.
 #
 #-----------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ import sys
 import subprocess
 import os
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
@@ -53,11 +53,11 @@ import os
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-from pysorcery import lib
 from pysorcery.lib.sorcery import packages
 from pysorcery.lib.sorcery.packages.sorcery import bashspell
 from pysorcery.lib.sorcery import repositories
 from pysorcery.lib.sorcery.repositories import sorcery
+from pysorcery.lib.util import files
 
 #-----------------------------------------------------------------------
 #
@@ -71,117 +71,8 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
-# Spell
-#
 #-----------------------------------------------------------------------
-
  
-#-----------------------------------------------------------------------
-#
-# Class Spell
-# 
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class Spell(packages.BasePackage):
-    def __init__(self, *args, **kwargs):
-        logger.debug("Begin Function")
-        super(Spell, self).__init__(*args, **kwargs)
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------
-    def set_details(self):
-        logger.debug('Begin Function')
-        
-        codex = repositories.Repo_Lists()
-        grimoire_list = codex.list_grimoires()
-
-        for i in grimoire_list:
-            spell_list_file = lib.File(i + '/codex.index')
-            spell_list = spell_list_file.read()
-
-            for item in spell_list:
-                spell, section_dir = item.split(' ')
-
-                if self.name == spell:
-                    self.section_dir = section_dir
-                    break
-
-            if self.name == spell:
-                self.grimoire = i.split('/')[-1]
-                break
-
-        self.section = self.section_dir.split('/')[-1]
-        self.spell_directory = self.section_dir + '/' + self.name
-
-        details_file = bashspell.DetailsFile(self.spell_directory)
-        details = details_file.read()
-        
-       
-        self.source_files = {}
-
-        #file_name = url.split('/')[-1]
-
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------
-    def install(self,args):
-        logger.debug("Begin Function")
-        print("Installing: " + self.name)
-        logger.debug("End Function")
-        return
-
 #-----------------------------------------------------------------------
 #
 # Functions
@@ -189,12 +80,15 @@ class Spell(packages.BasePackage):
 # get_description
 # get_version
 # get_url
+# get_short
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
 # Function get_description
+#
+# Gets a spell's description.
 #
 # Inputs
 # ------
@@ -209,37 +103,23 @@ class Spell(packages.BasePackage):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_description(name):
-    spell_codex = sorcery.Codex()
-    grimoire_list = spell_codex.list_grimoires()
+def get_description(name, repository=None):
+    if repository is None:
+        repository = get_first_repo(name)
 
-    for grimoire in grimoire_list:
-        spell_list_file = lib.File(grimoire + '/codex.index')
-        spell_list = spell_list_file.read()
-        
-        for item in spell_list:
-            spell, section_dir = item.split(' ')
-
-            if name == spell:
-                break
-            
-        if name == spell:
-            grimoire = grimoire.split('/')[-1]
-            break
-
-    section = section_dir.split('/')[-1]
-    spell_directory = section_dir + '/' + name
-
-    details_file = bashspell.DetailsFile(spell_directory)
+    grimoire =  sorcery.Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    spell_directory = get_spell_dir(section_dir, name)
     details = details_file.parse()
-        
     description = details['description']
-
     return description
 
 #-----------------------------------------------------------------------
 #
-# Function get_description
+# Function get_version
+#
+# Get's a spell's version.
 #
 # Inputs
 # ------
@@ -254,38 +134,25 @@ def get_description(name):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_version(name):
-    spell_codex = sorcery.Codex()
-    grimoire_list = spell_codex.list_grimoires()
+def get_version(name, repository=None):
+    if repository is None:
+        repository = get_first_repo(name)
 
-    for grimoire in grimoire_list:
-        spell_list_file = lib.File(grimoire + '/codex.index')
-        spell_list = spell_list_file.read()
-        
-        for item in spell_list:
-            spell, section_dir = item.split(' ')
-
-            if name == spell:
-                break
-            
-        if name == spell:
-            grimoire = grimoire.split('/')[-1]
-            break
-
-    section = section_dir.split('/')[-1]
-    spell_directory = section_dir + '/' + name
-
+    grimoire =  sorcery.Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    spell_directory = get_spell_dir(section_dir, name)
     details_file = bashspell.DetailsFile(spell_directory)
     details = details_file.parse()
-        
     version = details['version']
-
     return version
 
 #-----------------------------------------------------------------------
 #
 # Function get_url
 #
+# Gets a spell's url.
+#
 # Inputs
 # ------
 #    @param: name
@@ -299,37 +166,24 @@ def get_version(name):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_url(name):
-    spell_codex = sorcery.Codex()
-    grimoire_list = spell_codex.list_grimoires()
+def get_url(name, repository=None):
+    if repository is None:
+        repository = get_first_repo(name)
 
-    for grimoire in grimoire_list:
-        spell_list_file = lib.File(grimoire + '/codex.index')
-        spell_list = spell_list_file.read()
-        
-        for item in spell_list:
-            spell, section_dir = item.split(' ')
-
-            if name == spell:
-                break
-            
-        if name == spell:
-            grimoire = grimoire.split('/')[-1]
-            break
-
-    section = section_dir.split('/')[-1]
-    spell_directory = section_dir + '/' + name
-
+    grimoire =  sorcery.Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    spell_directory = get_spell_dir(section_dir, name)
     details_file = bashspell.DetailsFile(spell_directory)
     details = details_file.parse()
-        
     url = details['website']
-
     return url
 
 #-----------------------------------------------------------------------
 #
-# Function get_url
+# Function get_short
+#
+# Gets a spell's short description.
 #
 # Inputs
 # ------
@@ -337,40 +191,118 @@ def get_url(name):
 #
 # Returns
 # -------
-#    @return: url
+#    @return: short
 #
 # Raises
 # ------
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_short(name):
+def get_short(name, repository=None):
+    
+    if repository is None:
+        repository = get_first_repo(name)
+
+    grimoire =  sorcery.Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    spell_directory = get_spell_dir(section_dir, name)
+    details_file = bashspell.DetailsFile(spell_directory)
+    details = details_file.parse()
+    short = details['short']
+    return short
+
+
+#-----------------------------------------------------------------------
+#
+# Function get_first_repo
+#
+# Get the first repository containing a spell by spell name.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: grimoire
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_first_repo(name):
     spell_codex = sorcery.Codex()
     grimoire_list = spell_codex.list_grimoires()
 
     for grimoire in grimoire_list:
-        spell_list_file = lib.File(grimoire + '/codex.index')
+        spell_list_file = files.BaseFile(grimoire + '/codex.index')
         spell_list = spell_list_file.read()
         
         for item in spell_list:
             spell, section_dir = item.split(' ')
-
             if name == spell:
                 break
             
         if name == spell:
             grimoire = grimoire.split('/')[-1]
             break
+        
+    return grimoire
 
+#-----------------------------------------------------------------------
+#
+# Function get_section_dir
+#
+# Inputs
+# ------
+#    @param: grimoire
+#    @param: name
+#
+# Returns
+# -------
+#    @return: section_dir
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_section_dir(grimoire, name):
+    spell_codex = sorcery.Codex()
+    spell_list_file = files.BaseFile(grimoire + '/codex.index')
+    spell_list = spell_list_file.read()
+    
+    for item in spell_list:
+        spell, section_dir = item.split(' ')
+        if name == spell:
+            break
+
+    return section_dir
+
+#-----------------------------------------------------------------------
+#
+# Function get_spell_dir
+#
+# Inputs
+# ------
+#    @param: section_dir
+#    @param: name
+#
+# Returns
+# -------
+#    @return: spell_directory
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_spell_dir(section_dir, name):
     section = section_dir.split('/')[-1]
     spell_directory = section_dir + '/' + name
-
-    details_file = bashspell.DetailsFile(spell_directory)
-    details = details_file.parse()
-        
-    short = details['short']
-
-    return short
+    return spell_directory
 
 #-----------------------------------------------------------------------
 #

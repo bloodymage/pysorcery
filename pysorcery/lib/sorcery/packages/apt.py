@@ -23,9 +23,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Apt
 #
-#
-#
+# These functions work with apt packages.
 #
 #-----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ import sys
 import subprocess
 import os
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
@@ -84,7 +84,6 @@ class DebianSpell():
         versions = self.pkg.versions
 
         self.architecture = versions[0].architecture
-        self.short = self.description
 
         pkg_section = versions[0].section
 
@@ -197,7 +196,7 @@ class DebianSpell():
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function get_description
 #
@@ -213,8 +212,8 @@ class DebianSpell():
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-def get_description(name):
+#-----------------------------------------------------------------------
+def get_description(name, repository=None):
     cache    = apt.cache.Cache()
     cache.open()
         
@@ -225,7 +224,7 @@ def get_description(name):
     cache.close()
     return description
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function get_version
 #
@@ -241,8 +240,8 @@ def get_description(name):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-def get_version(name):
+#-----------------------------------------------------------------------
+def get_version(name, repository=None):
     cache = apt.cache.Cache()
     cache.open()
         
@@ -253,7 +252,7 @@ def get_version(name):
     cache.close()
     return version
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function get_url
 #
@@ -269,8 +268,8 @@ def get_version(name):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-def get_url(name):
+#-----------------------------------------------------------------------
+def get_url(name, repository=None):
     cache = apt.cache.Cache()
     cache.open()
         
@@ -281,7 +280,7 @@ def get_url(name):
     cache.close()
     return url
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function get_short
 #
@@ -300,8 +299,8 @@ def get_url(name):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-def get_short(name):
+#-----------------------------------------------------------------------
+def get_short(name, repository=None):
     cache    = apt.cache.Cache()
     cache.open()
         
@@ -312,7 +311,7 @@ def get_short(name):
     cache.close()
     return short_description
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function 
 #
@@ -328,7 +327,7 @@ def get_short(name):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def print_version(self,multi=False):
     logger.debug("Begin Function")
         

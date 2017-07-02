@@ -140,7 +140,7 @@ class Grimoire(repositories.BaseRepository):
     #-------------------------------------------------------------------------------
     def get_grim_dir(self, grim_dir=None):
         if self.name and not grim_dir:
-            grim_dir = '/var/lib/sorcery/codex' + name
+            grim_dir = '/var/lib/sorcery/codex/' + self.name
 
         self.grim_dir = grim_dir
 
