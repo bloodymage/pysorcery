@@ -45,6 +45,7 @@ directories.
 #-----------------------------------------------------------------------
 
 # System Libraries
+import glob
 import os
 import stat
 import subprocess
@@ -686,7 +687,30 @@ class BaseDirectory(BaseFile):
         else:
             return False
 
-
+    #-----------------------------------------------------------------------
+    #
+    # Function list_dir_contents
+    #
+    # Get output filename if archive is in a single file format like gzip.
+    #
+    # Inputs
+    # ------
+    #     @param: directory
+    #     @param: archive
+    #     @param: extention
+    #         
+    # Returns
+    # -------
+    #     @return: outfile + extention
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def listfiles(self):
+        return glob.glob(self.filename + "/[a-z]*")
+                         
 #-----------------------------------------------------------------------
 #
 # Class BaseFiles
@@ -875,6 +899,60 @@ class BaseFiles():
             file_ = BaseFile(filename)
             file_.check_existing_filename(onlyfiles=False)
         return
+
+#-----------------------------------------------------------------------
+#
+# Class BaseDirectories
+# 
+# ...
+#
+# Inputs
+# ------
+#    @param: *args
+#    @param: **kwargs
+#            kwargs['filelist'] - list of files
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class BaseDirectories(BaseFiles):
+    #-----------------------------------------------------------------------
+    #
+    # Function stripbackup
+    #
+    # Check that file list is not empty and contains only existing files.
+    #
+    # Inputs
+    # ------
+    #     @param: self
+    #
+    # Returns
+    # -------
+    #     @return: None
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-----------------------------------------------------------------------
+    def stripbackup(self):
+        newfiles = []
+        for f in self.files:
+            # Verify f is a real file
+            # skip f if f is an emacs backup
+            if (os.path.isfile(f) and
+                f.endswith('~') is False):
+                supformats.append(os.path.basename(f)[:-3])
+
+        newfiles.sort()
+        self.files = newfiles
+        return self.files
 
 #-------------------------------------------------------------------
 #
