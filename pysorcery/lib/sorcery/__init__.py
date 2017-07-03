@@ -50,6 +50,7 @@ directories.
 
 # Application Libraries
 # System Library Overrides
+from pysorcery.lib.system import logging
 
 # Other Application Libraries
 
@@ -62,7 +63,7 @@ directories.
 #-----------------------------------------------------------------------
 # Enable Logging
 # create logger
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 
 license_dir = { 'apt': '/usr/share/common-licenses',
                 'sorcery': '/etc/sorcery/licenses'
