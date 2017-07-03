@@ -127,7 +127,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_description')
-        description = func(self.name, self.repository)
+        description = func(self.name, repository=self.repository)
         return description
 
     #-------------------------------------------------------------------
@@ -154,7 +154,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_version')
-        version = func(self.name, self.repository)
+        version = func(self.name, repository=self.repository)
         return version
 
     #-------------------------------------------------------------------
@@ -181,7 +181,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_url')
-        url = func(self.name, self.repository)
+        url = func(self.name, repository=self.repository)
         return url
 
     #-------------------------------------------------------------------
@@ -207,7 +207,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_short')
-        short_description = func(self.name, self.repository)
+        short_description = func(self.name, repository=self.repository)
         return short_description
 
     #-------------------------------------------------------------------
@@ -235,7 +235,7 @@ class BasePackage():
         func = util.get_module_func(scmd='packages',
                                     program=pkg_mgr,
                                     cmd='get_section')
-        section = func(self.name, self.repository)
+        section = func(self.name, repository=self.repository)
         return section
 
     #-------------------------------------------------------------------
