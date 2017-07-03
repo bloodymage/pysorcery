@@ -709,8 +709,16 @@ class BaseDirectory(BaseFile):
     #
     #-----------------------------------------------------------------------
     def listfiles(self):
-        return glob.glob(self.filename + "/[a-z]*")
-                         
+        print(self.filename)
+        files = glob.glob(self.filename + "/*")
+
+        newfiles = []
+        for f in files:
+            file_ = f.split('/')[-1]
+            newfiles.append(file_)
+        
+        return newfiles
+
 #-----------------------------------------------------------------------
 #
 # Class BaseFiles

@@ -56,7 +56,7 @@ import sys
 # System Library Overrides
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import distro
-from pysorcery.lib.system import logging
+#from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
@@ -77,7 +77,7 @@ from pysorcery.lib.util.files import archive
 #-----------------------------------------------------------------------
 # Enable Logging
 # create logger
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
 
@@ -116,20 +116,22 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 #-------------------------------------------------------------------------------
 def gaze_license(args):
-    logger.debug('Begin Function')
+    #logger.debug('Begin Function')
 
     license_dir = sorcery.license_dir[pkg_mgr]
 
-    directory = files.BaseDirectory(license_dir)
+    directory = lib.Directory(license_dir)
     licenses = directory.listfiles()
 
-    if args.ssl in licenses:
-        license_ = files.BaseFile(directory + args.ssl)
+    if args.ssl[0] in licenses:
+        license_ = lib.File(license_dir + '/' + args.ssl[0])
         content = license_.read()
+        for line in content:
+            print(line)
     else:
         raise NotImplementedError
 
-    logger.debug('End Function')
+    #logger.debug('End Function')
     return
 
 

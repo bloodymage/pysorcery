@@ -41,19 +41,20 @@ installing for development purposes.
 import sys
 import os
 
-try:
-    # added so distributors can consistently specify a private module location
-    here = os.path.abspath(os.path.dirname(__file__))
-    if here.split('/')[1] == 'home':
-        home = os.path.expanduser('~')
-        private_module_path = home + "/src/python-sorcery/"
-        if private_module_path:
-            sys.path.insert(1, private_module_path)
-            from pysorcery.cli import gaze
-            sys.exit(
-                gaze.main()
-            )
-    else:
-        import pysorcery
-except Exception as msg:
-    print(msg)
+#try:
+# added so distributors can consistently specify a private module location
+here = os.path.abspath(os.path.dirname(__file__))
+if here.split('/')[1] == 'home':
+    home = os.path.expanduser('~')
+    private_module_path = home + "/src/python-sorcery/"
+    if private_module_path:
+        sys.path.insert(1, private_module_path)
+        from pysorcery.cli import gaze
+        sys.exit(
+            gaze.main()
+        )
+else:
+    import pysorcery
+#8except Exception as msg:
+#    print(msg)
+#    pass

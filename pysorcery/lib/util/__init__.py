@@ -57,7 +57,7 @@ from pysorcery.lib.system import logging
 
 # Other Application Libraries
 from pysorcery import lib
-from pysorcery.lib.util import files
+#from pysorcery.lib.util import files
 from pysorcery.lib.util import text
 
 
