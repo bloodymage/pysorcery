@@ -62,6 +62,36 @@ from pysorcery.lib.util import text
 # create logger
 logger = logging.getLogger(__name__)
 
+spellfiles = [ 'BUILD',
+               'CONFIGURE',
+               'CONFLICTS',
+               'DETAILS',
+               'DEPENDS',
+               'DOWNLOAD',
+               'FINAL',
+               'HISTORY',
+               'INSTALL',
+               'INSTALL_EXTRAS',
+               'PATCH',
+               'POST_BUILD',
+               'POST_INSTALL',
+               'POST_REMOVE',
+               'POST_RESURRECT',
+               'PRE_BUILD',
+               'PRE_INSTALL',
+               'PRE_REMOVE',
+               'PRE_RESURRECT',
+               'PRE_SUB_DEPENDS',
+               'PREPARE',
+               'PROVIDES',
+               'SECURITY',
+               'SUB_DEPENDS',
+               'TRANSFER',
+               'TRIGGER_CHECK',
+               'TRIGGERS',
+               'UP_TRIGGERS'
+]
+
 #-------------------------------------------------------------------------------
 #
 # Classes

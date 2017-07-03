@@ -74,6 +74,7 @@ from pysorcery.lib.system import mimetypes
 from pysorcery import *
 from pysorcery import lib
 from pysorcery.lib import util
+from pysorcery.lib.sorcery.packages.sorcery import bashspell
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
@@ -258,8 +259,11 @@ def gaze_file(args):
         content = file_.read()
 
     elif args.spell and args.filename:
-        spell = lib.Package(args.spell[0])
-        content = spell.read_file(args.filename)
+        if args.filename in bashspell.spellfiles:
+            spell = lib.Package(args.spell[0])
+            content = spell.read_file(args.filename)
+        else:
+            raise NotImplementedError
     else:
         raise NotImplementedError
 
