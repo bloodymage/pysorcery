@@ -687,7 +687,11 @@ def get_maintainer(name, **kwargs):
     else:
         repository = kwargs['repository']
 
+<<<<<<< HEAD:pysorcery/lib/sorcery/smgl/__init__.py
     grimoire =  Grimoire(repository)
+=======
+    grimoire =  sorcery.Grimoire(repository)
+>>>>>>> 313c7ceeb96613e04a98a059a2306fc4c6639579:pysorcery/lib/sorcery/packages/sorcery/__init__.py
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     maintainer_file = files.BaseFile(section_dir + '/MAINTAINER')
