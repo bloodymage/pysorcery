@@ -300,7 +300,7 @@ def get_short(name, **kwargs):
         
     pkg = cache[name]
     versions = pkg.versions
-    short_description  = versions[0].description
+    short_description  = versions[0].summary
 
     cache.close()
     return short_description
@@ -423,6 +423,36 @@ def get_license(name, **kwargs):
     cache.close()
     
     return license_
+
+#-----------------------------------------------------------------------
+#
+# Function get_description
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_maintainer(name, **kwargs):
+    cache    = apt.cache.Cache()
+    cache.open()
+        
+    pkg = cache[name]
+    versions = pkg.versions
+    maintainer = 'Not Implemented'
+
+    cache.close()
+
+    raise NotImplementedError
+    return maintainer
 
 #-----------------------------------------------------------------------
 #
