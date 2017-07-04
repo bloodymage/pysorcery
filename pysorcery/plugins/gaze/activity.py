@@ -133,7 +133,7 @@ def parser(*args, **kwargs):
 
     activity_files = {
         'apt'  : '/var/log/apt/history.log',
-        'sorcery' : '/var/log/sorcery/activity'
+        'smgl' : '/var/log/sorcery/activity'
     }
 
     activity_help = 'Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.).'

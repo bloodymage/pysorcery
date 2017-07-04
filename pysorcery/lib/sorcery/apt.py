@@ -50,7 +50,6 @@ import os
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-from pysorcery.lib.sorcery import repositories
 
 # Other Optional Libraries
 
@@ -424,6 +423,28 @@ def get_license(name, **kwargs):
     
     return license_
 
+#-----------------------------------------------------------------------
+#
+# Function get_repositories
+#
+# Inputs
+# ------
+#    @param: 
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_repositories(*args, **kwargs):
+
+    raise NotImplementedError
+    
+    return repositories
 #-----------------------------------------------------------------------
 #
 # Function 

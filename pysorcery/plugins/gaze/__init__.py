@@ -101,6 +101,8 @@ colortext = text.ConsoleText()
 #
 # gaze_checksum
 # gaze_queue
+# gaze_version
+# gaze_file
 #
 #-----------------------------------------------------------------------
 
@@ -129,7 +131,7 @@ colortext = text.ConsoleText()
 # Status: Not implimented
 #
 #-------------------------------------------------------------------------------
-def checksum(args):
+def gaze_checksum(args):
     logger.debug('Begin Function')
             
     spell = libspell.Spell(i)
@@ -302,8 +304,11 @@ def gaze_grimoire(args):
     logger.debug('Begin Function')
 
     if args.multi:
-        grimoires = libcodex.Codex()
-        grimoires.print_grimoires()
+        codex = lib.Repositories()
+        repositories = codex.repositories
+
+        for repo in repositories:
+            print(repo)
 
     elif args.grimoire:
         logger.info('Fix Me')

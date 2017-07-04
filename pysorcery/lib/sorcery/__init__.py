@@ -568,9 +568,23 @@ class BaseRepositories():
 #
 #-------------------------------------------------------------------------------
 def get_repo_name(name=None, repo_dir=None):
-    func = util.get_module_func(scmd='repositories',
+    func = util.get_module_func(scmd='sorcery',
                                 program=pkg_mgr,
                                 cmd='get_repo_name')
     name = func(name, repo_dir)
     return name
 
+#-------------------------------------------------------------------------------
+#
+# Function get_repositories
+#
+# Input:  ...
+# Return: ...
+#
+#-------------------------------------------------------------------------------
+def get_repositories(*args, **kwargs):
+    func = util.get_module_func(scmd='sorcery',
+                                program=pkg_mgr,
+                                cmd='get_repositories')
+    repositories = func()
+    return repositories

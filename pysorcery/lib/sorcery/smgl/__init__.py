@@ -73,11 +73,67 @@ logger = logging.getLogger(__name__)
 # Codex
 #
 #-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
+#
+# Class Spell
+# 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Spell(sorcery.BasePackage):
+    pass
+    
+#-----------------------------------------------------------------------
+#
+# Class Spells
+# 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Spells(sorcery.BasePackages):
+    pass
 
 #-----------------------------------------------------------------------
 #
 # Class Grimoire
 # 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 class Grimoire(sorcery.BaseRepository):
@@ -200,6 +256,7 @@ class Grimoire(sorcery.BaseRepository):
             raise NotImplementedError
 
         return self.url
+
 #-------------------------------------------------------------------------------
 #
 # Class Codex
@@ -207,10 +264,6 @@ class Grimoire(sorcery.BaseRepository):
 #
 #-------------------------------------------------------------------------------
 class Codex(sorcery.BaseRepositories):
-    def __init__(self, name=None, grim_dir=None):
-        super(Codex, self).__init__(name, grim_dir)
-        return
-
     #-------------------------------------------------------------------------------
     #
     # Calls the read function based on the file format.
@@ -229,10 +282,14 @@ class Codex(sorcery.BaseRepositories):
     # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
-    def list_grimoires(self):
+    def grimoires(self):
+        self.repositories = get_repositories()
+        self.grimoires = self.repositories
+        return self.repositories
 
-        grimoires = get_repositories()
-        return grimoires
+    def grimoire_dirs(self):
+        grimoire_dirs = get_repository_dirs()
+        return grimoire_dirs
 
 #-------------------------------------------------------------------------------
 #
@@ -293,14 +350,14 @@ def get_repo_name(name=None, grim_dir=None):
 #
 #-------------------------------------------------------------------------------
 def get_repository_dirs():
-    grimoire_file = lib.File('/etc/sorcery/local/grimoire')
+    grimoire_file = files.BaseFile('/etc/sorcery/local/grimoire')
     grimoires = grimoire_file.read()
 
-    repository_dirs = []
-    for grimoire in unedited_grimoire_list:
-        repository_dirs.append(grimoire.split('=')[1])
+    grimoire_dirs = []
+    for grimoire in grimoires:
+        grimoire_dirs.append(grimoire.split('=')[1])
 
-    return repository_dirs
+    return grimoire_dirs
 
 #-------------------------------------------------------------------------------
 #
@@ -321,7 +378,7 @@ def get_repository_dirs():
 #    ...
 #
 #-------------------------------------------------------------------------------
-def get_repositories(**kwargs):
+def get_repositories(*args, **kwargs):
     if 'repositories' not in kwargs or kwargs['repositories'] is None:
         repositories = get_repository_dirs()
     else:
@@ -359,7 +416,7 @@ def get_description(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -393,7 +450,7 @@ def get_version(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -427,7 +484,7 @@ def get_url(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire = Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -461,7 +518,7 @@ def get_short(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire = Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -495,7 +552,7 @@ def get_section(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire = Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     section = section_dir.split('/')[-1]
@@ -527,7 +584,7 @@ def read_file(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -573,7 +630,7 @@ def is_package(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_short
+# Function get_licens
 #
 # Gets a spell's short description.
 #
@@ -596,7 +653,7 @@ def get_license(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -625,11 +682,11 @@ def get_license(name, **kwargs):
 #
 #-----------------------------------------------------------------------
 def get_first_repo(name):
-    codex = sorcery.Codex()
-    grimoires = codex.list_grimoires()
+    codex = Codex()
+    grimoire_dirs = codex.grimoire_dirs()
 
     check = False
-    for grimoire in grimoires:
+    for grimoire in grimoire_dirs:
         spell_list_file = files.BaseFile(grimoire + '/codex.index')
         spell_list = spell_list_file.read()
         

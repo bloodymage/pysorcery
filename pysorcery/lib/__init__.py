@@ -51,8 +51,7 @@ from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 from pysorcery.lib.system import shutil
 # Other Application Libraries
-from pysorcery.lib.sorcery import packages
-#from pysorcery.lib.sorcery import repositories
+from pysorcery.lib import sorcery
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
