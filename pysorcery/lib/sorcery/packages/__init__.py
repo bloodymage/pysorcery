@@ -268,6 +268,62 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def is_package(self):
+        func = util.get_module_func(scmd='packages',
+                                    program=pkg_mgr,
+                                    cmd='is_package')
+        tf = func(self.name, repository=self.repository)
+        return tf
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_license(self):
+        func = util.get_module_func(scmd='packages',
+                                    program=pkg_mgr,
+                                    cmd='get_license')
+        license_ = func(self.name, repository=self.repository)
+        return license_
+
+    #-------------------------------------------------------------------
+    #
     # Function install
     #
     # Install a package

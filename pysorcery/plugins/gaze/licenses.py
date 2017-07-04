@@ -25,19 +25,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze: Licenses
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#   This plugin displays license information.  If a license is provided
+#   as input, the license will be displayed.  If a package is provided
+#   as input, the package license will be identified.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+This plugin displays license information.  If a license is provided as
+input, the license will be displayed.  If a package is provided as 
+input, the package license will be identified.
 """
 #-----------------------------------------------------------------------
 #
@@ -104,15 +102,21 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 # View the license(s) of the given spell(s), or spells in given section(s),
 # or view the information about given license(s)
 #
-# Input:  args
-#         args.spell    - Spell to print compile log.
-#                         Maximum 1
-#         args.grimoire -
-#         args.quiet    - decrease verbosity
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell    - Spell to print compile log.
+#                            Maximum 1
+#            args.grimoire -
+#            args.quiet    - decrease verbosity
 #
-# Status: Not implimented
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def gaze_license(args):
@@ -129,7 +133,11 @@ def gaze_license(args):
         for line in content:
             print(line)
     else:
-        raise NotImplementedError
+        package = lib.Package(args.ssl[0])
+        if package.is_package():
+            print(package.get_license())
+        else:
+            raise NotImplementedError
 
     #logger.debug('End Function')
     return

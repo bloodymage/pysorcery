@@ -243,6 +243,8 @@ class DetailsFile(files.BaseFile):
                     details_dict['source'] = value
                 elif 'SHORT' in key:
                     details_dict['short'] = value
+                elif 'LICENSE' in key:
+                    details_dict['license'] = value
             else:
                 logger.debug('Line: ' + line)
 

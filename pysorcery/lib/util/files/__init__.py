@@ -709,7 +709,6 @@ class BaseDirectory(BaseFile):
     #
     #-----------------------------------------------------------------------
     def listfiles(self):
-        print(self.filename)
         files = glob.glob(self.filename + "/*")
 
         newfiles = []
