@@ -356,7 +356,7 @@ class BasePackage():
     #
     #-------------------------------------------------------------------
     def get_maintainer(self):
-        func = util.get_module_func(scmd='packages',
+        func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_maintainer')
         maintainer = func(self.name, repository=self.repository)
