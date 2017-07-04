@@ -27,7 +27,7 @@
 ### 0.0.2    
 #### Functional Scripts
 - pygaze
-    - [ ] activity
+    - [X] activity
     - [ ] alien
     - [ ] checkmd5s
     - [ ] compile
@@ -36,8 +36,8 @@
     - [ ] export
     - [ ] from
     - [ ] grimoire
-    - [ ] grimoires
-    - [ ] history
+    - [X] grimoires
+    - [X] history
     - [ ] html
     - [ ] import
     - [ ] installed
@@ -45,8 +45,8 @@
     - [ ] install
     - [ ] install-queue
     - [ ] install-spell
-    - [ ] licenses
-    - [ ] maintainer
+    - [X] licenses
+    - [X] maintainer
     - [ ] md5sum
     - [ ] newer
     - [ ] older
@@ -55,7 +55,7 @@
     - [ ] remove-queue
     - [ ] search
     - [ ] section
-    - [ ] short
+    - [X] short
     - [ ] show-exiled
     - [ ] show-held
     - [ ] size
@@ -69,7 +69,7 @@
     - [ ] versions
     - [ ] voyeur
     - [X] what
-    - [ ] where
+    - [X] where
     
   
 ### 0.0.3
@@ -90,6 +90,10 @@
   - [ ] add
   - [ ] remove
   - [ ] update
+  - [ ] localize
+  - [ ] unlocalize
+  - [ ] set
+  - [ ] swap
 
 
 ### 0.0.5
