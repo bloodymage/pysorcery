@@ -52,6 +52,7 @@ from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import lib
 from pysorcery.lib.sorcery import repositories
+from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util import text
 
@@ -63,7 +64,6 @@ from pysorcery.lib.util import text
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
-
 
 #-----------------------------------------------------------------------
 #
@@ -82,27 +82,29 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 class Grimoire(repositories.BaseRepository):
     def __init__(self, name=None, grim_dir=None):
-        logger.debug('Begin Function')
         super(Grimoire, self).__init__(name, grim_dir)
-
-        logger.debug2('Name: ' + str(name))
-        
-        logger.debug('End Function')
         return
 
     #-------------------------------------------------------------------
     #
-    # Function 
+    # Calls the read function based on the file format.
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
     def add(self):
         logger.debug('Begin Function')
-
-        self.url = 'http://codex.sourcemage.org/' + self.name + '.tar.bz2'
 
 
         logger.debug('End Function')
@@ -110,11 +112,20 @@ class Grimoire(repositories.BaseRepository):
 
     #-------------------------------------------------------------------------------
     #
-    # Function 
+    # Calls the read function based on the file format.
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def list_sections(self):
@@ -132,11 +143,20 @@ class Grimoire(repositories.BaseRepository):
 
     #-------------------------------------------------------------------------------
     #
-    # Function 
+    # Calls the read function based on the file format.
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def get_grim_dir(self, grim_dir=None):
@@ -152,39 +172,74 @@ class Grimoire(repositories.BaseRepository):
 
         self.grim_dir = grim_dir
         return grim_dir
+#-------------------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------------------
+    def get_url(self):
+        config_ = config.Sorcery()
 
+        if self.name in config_.smgl_official_grimoires:
+            self.url = config.urls['codex_tarball_url'] + self.name + '.tar.bz2'
+        else:
+            raise NotImplementedError
+
+        return self.url
 #-------------------------------------------------------------------------------
 #
-# Class Grimoire
+# Class Codex
 # 
 #
 #-------------------------------------------------------------------------------
-class Codex(Grimoire):
+class Codex(repositories.BaseRepositories):
+    def __init__(self, name=None, grim_dir=None):
+        super(Codex, self).__init__(name, grim_dir)
+        return
+
     #-------------------------------------------------------------------------------
     #
-    # Function 
+    # Calls the read function based on the file format.
     #
-    # 
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def list_grimoires(self):
-        logger.debug('Begin Function')
 
-        grimoire_file = lib.File('/etc/sorcery/local/grimoire')
-        unedited_grimoire_list = grimoire_file.read()
-
-        grimoire_list = []
-        for grimoire in unedited_grimoire_list:
-            grimoire_list.append(grimoire.split('=')[1])
-        
-        logger.debug('End Function')
-        return grimoire_list
+        grimoires = get_repositories()
+        return grimoires
 
 #-------------------------------------------------------------------------------
 #
 # Functions
 #
-# Get Repo Name
+# get_repo_name
+# get_repository_dirs
+# get_repositories
 # 
 #
 #-------------------------------------------------------------------------------
@@ -193,8 +248,19 @@ class Codex(Grimoire):
 #
 # Function get_repo_name
 #
-# Input:  ...
-# Return: ...
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def get_repo_name(name=None, grim_dir=None):
@@ -202,3 +268,64 @@ def get_repo_name(name=None, grim_dir=None):
         name = grim_dir.split('/')[-1]
 
     return name
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repo_name
+#
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_repository_dirs():
+    grimoire_file = lib.File('/etc/sorcery/local/grimoire')
+    grimoires = grimoire_file.read()
+
+    repository_dirs = []
+    for grimoire in unedited_grimoire_list:
+        repository_dirs.append(grimoire.split('=')[1])
+
+    return repository_dirs
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repo_name
+#
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_repositories(**kwargs):
+    if 'repositories' not in kwargs or kwargs['repositories'] is None:
+        repositories = get_repository_dirs()
+    else:
+        repositories = kwargs['repositories']
+
+    grimoires = []
+    for grim_dir in repositories:
+        grimoire = get_repo_name(grim_dir=grim_dir)
+        grimoires.append(grimoire)
+
+    return grimoires

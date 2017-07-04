@@ -87,9 +87,7 @@ ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/archive/')
 GAZE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/gaze/')
 
 # Sorcecy
-PACKAGES_PATH = pkg_resources.resource_filename('pysorcery','lib/sorcery/packages')
-REPOSITORIES_PATH = pkg_resources.resource_filename('pysorcery',
-                                                    'lib/sorcery/packages')
+SORCERY_PATH = pkg_resources.resource_filename('pysorcery','lib/sorcery/')
 
 cmd_dir = {
     'util_archive': UTIL_ARCHIVE_PATH,
@@ -97,8 +95,7 @@ cmd_dir = {
     'util_url': UTIL_URL_PATH,
     'gaze': GAZE_PATH,
     'archive': ARCHIVE_PATH,
-    'packages': PACKAGES_PATH,
-    'repositories': REPOSITORIES_PATH
+    'sorcery': SORCERY_PATH
 }
 
 import_path = {
@@ -107,8 +104,7 @@ import_path = {
     'util_url': 'pysorcery.lib.util.url.',
     'archive': 'pysorcery.plugins.archive.',
     'gaze': 'pysorcery.plugins.gaze.',
-    'packages': 'pysorcery.lib.sorcery.packages.',
-    'repositories': 'pysorcery.lib.sorcery.repositories.'
+    'sorcery': 'pysorcery.lib.sorcery.'
     }
 
 # Used if module names can not be

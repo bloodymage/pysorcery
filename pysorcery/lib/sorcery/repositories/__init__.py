@@ -80,11 +80,21 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 #-------------------------------------------------------------------------------
 
-
 #-------------------------------------------------------------------------------
 #
 # Class BaseRepository
 # 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 class BaseRepository():
@@ -100,11 +110,20 @@ class BaseRepository():
 
     #-------------------------------------------------------------------------------
     #
-    # Function 
+    # Calls the read function based on the file format.
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def add(self):
@@ -116,11 +135,20 @@ class BaseRepository():
 
     #-------------------------------------------------------------------------------
     #
-    # Function 
+    # Calls the read function based on the file format.
     #
-    # Input:  ...
-    # Output: ...
-    # Return: ...
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
     def list_sections(self):
@@ -143,7 +171,13 @@ class BaseRepository():
 #
 #-------------------------------------------------------------------------------
 class BaseRepositories():
-    pass
+    def __init__(self, repositories=None):
+        if repositories is None:
+            self.repositories = get_repositories()
+        else:
+            self.repositories = repositories
+
+        return
 
 #-------------------------------------------------------------------------------
 #

@@ -95,7 +95,6 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 class BasePackage():
     def __init__(self, name, repository=None):
         logger.debug("Begin Function")
-
         
         self.name = name
         self.repository = repository

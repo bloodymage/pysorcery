@@ -89,7 +89,7 @@ consolehandler = logging.ColorizingStreamHandler()
 class SorceryConfig():
     def __init__(self):
         self.logging_config = { "loglevel": "info",
-                           "verbosity": 0
+                                "verbosity": 0
         }
 
         self.config_files = { 'local_config' : '/etc/sorcery/local/config',
@@ -100,28 +100,29 @@ class SorceryConfig():
         }
     
         self.theme = { 'sound': 'off',
-                  'commands' : []
+                       'commands' : []
         }
 
         self.smgl_library = '/var/lib/sorcery'
-        self.directories = { 'smgl_library' : smgl_library,
-                        'codex': smgl_library + '/codex',
-                        'source_cache': '/var/spool/sorcery',
-                        'alien': [ '/bin', '/boot', '/etc', '/lib', '/lib64',
-                               '/opt', '/sbin', '/share', '/usr','/var' ]
+        
+        self.directories = { 'smgl_library' : self.smgl_library,
+                             'codex': self.smgl_library + '/codex',
+                             'source_cache': '/var/spool/sorcery',
+                             'alien': [ '/bin', '/boot', '/etc', '/lib', '/lib64',
+                                        '/opt', '/sbin', '/share', '/usr','/var' ]
         }
 
-        self.urls = { 'codex_tarball_url' : 'http://codex.sourcemage.org',
-                 'codex_rsync_url' : 'rsync://sourcemage.org::codex',
-                 'codex_manifest_url' : 'http://codex.sourcemage.org',
-                 'codex_url' : 'codex_tarball_url'
+        self.urls = { 'codex_tarball_url' : 'http://codex.sourcemage.org/',
+                      'codex_rsync_url' : 'rsync://sourcemage.org::codex',
+                      'codex_manifest_url' : 'http://codex.sourcemage.org',
+                      'codex_url' : 'codex_tarball_url'
         }
 
         self.smgl_official_grimoires = [ 'test',
-                                    'stable',
-                                    'z-rejected',
-                                    'games',
-                                    'binary' ]
+                                         'stable',
+                                         'z-rejected',
+                                         'games',
+                                         'binary' ]
 
         
         

@@ -78,6 +78,7 @@ logger = logging.getLogger(__name__)
 # Directory
 # Directories
 # Package
+# Repositories
 #
 #-----------------------------------------------------------------------
 
@@ -255,7 +256,27 @@ class Directories(files.BaseDirectories):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Package(packages.BasePackage):
+class Package(sorcery.BasePackage):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class Repositories
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Repositories(sorcery.BaseRepositories):
     pass
 
 #-----------------------------------------------------------------------

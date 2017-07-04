@@ -73,11 +73,8 @@ from pysorcery.lib.system import mimetypes
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.sorcery.packages.sorcery import bashspell
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 # Conditional Libraries
 
 
@@ -282,20 +279,26 @@ def gaze_file(args):
 # If grimoires:
 #   Displays installed grimoires by name only
 #
-# Input:  args
-#         args.grimoire      - Spell to print compile log.
+# Inputs
+# ------
+#    @param: args
+#            args.grimoire      - Spell to print compile log.
 #                              Minimum 1
-#         args.quiet         - decrease verbosity
-#         args.multi         -
-#         args.displayformat - console or html
-#         args.columns       - have the grimoires be columns
-# Output:
-# Return: None
+#            args.quiet         - decrease verbosity
+#            args.multi         -
+#            args.displayformat - console or html
+#            args.columns       - have the grimoires be columns
 #
-# Status: Works on Source Mage
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
-def grimoire(args):
+def gaze_grimoire(args):
     logger.debug('Begin Function')
 
     if args.multi:
