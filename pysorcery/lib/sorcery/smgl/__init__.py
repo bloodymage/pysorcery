@@ -664,6 +664,42 @@ def get_license(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
+# Function get_description
+#
+# Gets a spell's description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_maintainer(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
+        repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
+
+<<<<<<< HEAD:pysorcery/lib/sorcery/smgl/__init__.py
+    grimoire =  Grimoire(repository)
+=======
+    grimoire =  sorcery.Grimoire(repository)
+>>>>>>> 313c7ceeb96613e04a98a059a2306fc4c6639579:pysorcery/lib/sorcery/packages/sorcery/__init__.py
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    maintainer_file = files.BaseFile(section_dir + '/MAINTAINER')
+    content = maintainer_file.read()
+    return content[0]
+
+#-----------------------------------------------------------------------
+#
 # Function get_first_repo
 #
 # Get the first repository containing a spell by spell name.

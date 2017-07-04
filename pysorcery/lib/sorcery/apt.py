@@ -340,7 +340,7 @@ def get_short(name, **kwargs):
         
     pkg = cache[name]
     versions = pkg.versions
-    short_description  = versions[0].description
+    short_description  = versions[0].summary
 
     cache.close()
     return short_description
@@ -474,7 +474,7 @@ def get_license(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: description
+#    @return: repositories
 #
 # Raises
 # ------
@@ -502,6 +502,37 @@ def get_repositories(*args, **kwargs):
                         repositories.append(repo)
 
     return repositories
+
+
+#-----------------------------------------------------------------------
+#
+# Function get_maintainer
+#
+# Inputs
+# ------
+#    @param: 
+#
+# Returns
+# -------
+#    @return: maintainer
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_maintainer(name, **kwargs):
+    cache    = apt.cache.Cache()
+    cache.open()
+        
+    pkg = cache[name]
+    versions = pkg.versions
+    maintainer = 'Not Implemented'
+
+    cache.close()
+
+    raise NotImplementedError
+    return maintainer
 
 #-----------------------------------------------------------------------
 #
