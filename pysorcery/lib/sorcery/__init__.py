@@ -10,7 +10,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/lib/util/files/__init__.py
+# File: pysorcery/lib/sorcery/__init__.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #
 #-----------------------------------------------------------------------
 """
-Files:
+Sorcery:
 
 Library for sorcery that provides for interfacing with files and
 directories.
@@ -41,20 +41,23 @@ directories.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-
+import sys
+import subprocess
+import os
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import logging
-
+from pysorcery.lib import distro
+from pysorcery.lib import logging
 # Other Application Libraries
+from pysorcery.lib import util
 
 # Conditional Libraries
+
 
 #-----------------------------------------------------------------------
 #
@@ -63,14 +66,525 @@ from pysorcery.lib.system import logging
 #-----------------------------------------------------------------------
 # Enable Logging
 # create logger
-#logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
+
+#
+pkg_mgr = distro.distro_group[distro.distro_id]
 
 license_dir = { 'apt': '/usr/share/common-licenses',
-                'sorcery': '/etc/sorcery/licenses'
+                'smgl': '/etc/sorcery/licenses'
                 }
                 
 #-----------------------------------------------------------------------
 #
 # Classes
 # 
+# BasePackage
+# BasePackages
+# BaseSection
+# BaseSections
+# BaseRepository
+# BaseRepositories
+#
 #-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Class BasePackage
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class BasePackage():
+    def __init__(self, name, repository=None):
+        logger.debug("Begin Function")
+        
+        self.name = name
+        self.repository = repository
+
+        logger.debug('End Function')
+        return
+    
+    #-------------------------------------------------------------------
+    #
+    # Function get_description
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------
+    def get_description(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_description')
+        description = func(self.name, repository=self.repository)
+        return description
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_version
+    #
+    # Get a package version.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------
+    def get_version(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_version')
+        version = func(self.name, repository=self.repository)
+        return version
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_url
+    #
+    # Get a package url.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: url
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------
+    def get_url(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_url')
+        url = func(self.name, repository=self.repository)
+        return url
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_short
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_short(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_short')
+        short_description = func(self.name, repository=self.repository)
+        return short_description
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_section(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_section')
+        section = func(self.name, repository=self.repository)
+        return section
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def read_file(self, filename):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='read_file')
+        section = func(self.name, repository=self.repository, filename=filename)
+        return section
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def is_package(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='is_package')
+        tf = func(self.name, repository=self.repository)
+        return tf
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_license(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_license')
+        license_ = func(self.name, repository=self.repository)
+        return license_
+
+    #-------------------------------------------------------------------
+    #
+    # Function install
+    #
+    # Install a package
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #    @param: args
+    #
+    # Returns
+    # -------
+    #    @return: None
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def install(self,args):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='install')
+        func(args)
+        
+        return
+
+#-----------------------------------------------------------------------
+#
+# Class BasePackageVersions
+#
+# This class is for working with mulhiple versions of the same package.
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class BasePackageVersions(BasePackage):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class BaseSpells
+# 
+# Inputs
+# ------
+#    @param: ...
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class BasePackages():
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class BaseSection
+# 
+# Inputs
+# ------
+#    @param: ...
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class BaseSection():
+    def __init__(self, name, repository=None):
+        logger.debug("Begin Function")
+        
+        self.name = name
+        self.repository = repository
+
+        logger.debug('End Function')
+        return
+
+#-----------------------------------------------------------------------
+#
+# Class BaseSection
+# 
+# Inputs
+# ------
+#    @param: ...
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class BaseSections():
+    pass
+
+#-------------------------------------------------------------------------------
+#
+# Class BaseRepository
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+class BaseRepository():
+    def __init__(self,name=None,repo_dir=None):
+        logger.debug('Begin Function')
+
+        logger.debug2('Name: ' + str(name))
+
+        self.name = get_repo_name(name, repo_dir)
+
+        logger.debug('End Function')
+        return
+
+    #-------------------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------------------
+    def add(self):
+        logger.debug('Begin Function')
+
+
+        logger.debug('End Function')
+        return
+
+    #-------------------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------------------
+    def list_sections(self):
+        logger.debug('Begin Function')
+
+        dir_list = os.scandir(self.grim_dir)
+        section_list = []
+        for item in dir_list:
+            if item.is_dir():
+                if 'git' not in item.name:
+                    section_list.append(item.name)
+
+        logger.debug('End Function')
+        return section_list
+
+#-------------------------------------------------------------------------------
+#
+# Class Repositories
+# 
+#
+#-------------------------------------------------------------------------------
+class BaseRepositories():
+    def __init__(self, repositories=None):
+        if repositories is None:
+            self.repositories = get_repositories()
+        else:
+            self.repositories = repositories
+
+        return
+
+#-------------------------------------------------------------------------------
+#
+# Functions
+#
+# Get Repo Name
+# 
+#
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Return: ...
+#
+#-------------------------------------------------------------------------------
+def get_repo_name(name=None, repo_dir=None):
+    func = util.get_module_func(scmd='sorcery',
+                                program=pkg_mgr,
+                                cmd='get_repo_name')
+    name = func(name, repo_dir)
+    return name
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repositories
+#
+# Input:  ...
+# Return: ...
+#
+#-------------------------------------------------------------------------------
+def get_repositories(*args, **kwargs):
+    func = util.get_module_func(scmd='sorcery',
+                                program=pkg_mgr,
+                                cmd='get_repositories')
+    repositories = func()
+    return repositories

@@ -47,10 +47,9 @@ import os
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib import distro
-from pysorcery.lib import logging
+from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery.lib.sorcery import repositories
+from pysorcery.lib import sorcery
 
 # Other Optional Libraries
 
@@ -70,7 +69,26 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 
-class DebianSpell():
+#-----------------------------------------------------------------------
+#
+# Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class AptPackage(sorcery.BasePackage):
     def __init__(self,name):
         logger.debug("Begin Function")
         BaseSpell.__init__(self,name)
@@ -178,6 +196,28 @@ class DebianSpell():
                     
         logger.debug("End Function")
         return
+
+#-----------------------------------------------------------------------
+#
+# Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class AptRepositories(sorcery.BaseRepositories):
+    pass
 
 #-----------------------------------------------------------------------
 #
@@ -423,6 +463,45 @@ def get_license(name, **kwargs):
     cache.close()
     
     return license_
+
+#-----------------------------------------------------------------------
+#
+# Function get_repositories
+#
+# Inputs
+# ------
+#    @param: 
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_repositories(*args, **kwargs):
+    var = subprocess.check_output(['apt-cache', 'policy'])
+    repositories = []
+    
+    for line in var.splitlines():
+        if 'l=' in str(line):
+            line_list=str(line).split(',')
+            
+            repo_main=''
+            repo_sub=''
+            for item in line_list:
+                if 'l=' in item:
+                    repo_main = item.split('=')[1]
+                if 'c=' in item:
+                    repo_sub = item.split('=')[1]
+                if len(repo_main) > 0 and len(repo_sub) > 0:
+                    repo = repo_main + ' : ' + repo_sub
+                    if repo not in repositories:
+                        repositories.append(repo)
+
+    return repositories
 
 #-----------------------------------------------------------------------
 #

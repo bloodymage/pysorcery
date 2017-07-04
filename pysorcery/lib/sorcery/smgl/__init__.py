@@ -31,8 +31,6 @@
 #
 #-----------------------------------------------------------------------
 
-
-
 #-----------------------------------------------------------------------
 #
 # Libraries
@@ -53,10 +51,8 @@ import os
 from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
-from pysorcery.lib.sorcery import packages
-from pysorcery.lib.sorcery.packages.sorcery import bashspell
-from pysorcery.lib.sorcery import repositories
-from pysorcery.lib.sorcery.repositories import sorcery
+from pysorcery.lib import sorcery
+from pysorcery.lib.sorcery.smgl import bashspell
 from pysorcery.lib.util import files
 
 #-----------------------------------------------------------------------
@@ -71,18 +67,329 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
+# Spell
+# Spells
+# Grimoire
+# Codex
+#
 #-----------------------------------------------------------------------
- 
 #-----------------------------------------------------------------------
+#
+# Class Spell
+# 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Spell(sorcery.BasePackage):
+    pass
+    
+#-----------------------------------------------------------------------
+#
+# Class Spells
+# 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Spells(sorcery.BasePackages):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class Grimoire
+# 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Grimoire(sorcery.BaseRepository):
+    def __init__(self, name=None, grim_dir=None):
+        super(Grimoire, self).__init__(name, grim_dir)
+        return
+
+    #-------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------
+    def add(self):
+        logger.debug('Begin Function')
+
+
+        logger.debug('End Function')
+        return
+
+    #-------------------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------------------
+    def list_sections(self):
+        logger.debug('Begin Function')
+
+        dir_list = os.scandir(self.grim_dir)
+        section_list = []
+        for item in dir_list:
+            if item.is_dir():
+                if 'git' not in item.name:
+                    section_list.append(item.name)
+
+        logger.debug('End Function')
+        return section_list
+
+    #-------------------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------------------
+    def get_grim_dir(self, grim_dir=None):
+        if self.name and not grim_dir:
+            grim_dir = '/var/lib/sorcery/codex/' + self.name
+
+        file_ = files.BaseDirectory(grim_dir)
+
+        if file_.isdir() is False:
+            codex = Codex()
+            grimoires = codex.list_grimoires()
+            grim_dir = [s for s in grimoires if self.name in s][0]
+
+        self.grim_dir = grim_dir
+        return grim_dir
+
+    #-------------------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------------------
+    def get_url(self):
+        config_ = config.Sorcery()
+
+        if self.name in config_.smgl_official_grimoires:
+            self.url = config.urls['codex_tarball_url'] + self.name + '.tar.bz2'
+        else:
+            raise NotImplementedError
+
+        return self.url
+
+#-------------------------------------------------------------------------------
+#
+# Class Codex
+# 
+#
+#-------------------------------------------------------------------------------
+class Codex(sorcery.BaseRepositories):
+    #-------------------------------------------------------------------------------
+    #
+    # Calls the read function based on the file format.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description
+    #
+    # Raises
+    # ------
+    #    ...
+    # Return: description - The description of the package
+    #
+    #-------------------------------------------------------------------------------
+    def grimoires(self):
+        self.repositories = get_repositories()
+        self.grimoires = self.repositories
+        return self.repositories
+
+    def grimoire_dirs(self):
+        grimoire_dirs = get_repository_dirs()
+        return grimoire_dirs
+
+#-------------------------------------------------------------------------------
 #
 # Functions
 #
+# get_repo_name
+# get_repository_dirs
+# get_repositories
 # get_description
 # get_version
 # get_url
 # get_short
 #
 #-----------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repo_name
+#
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_repo_name(name=None, grim_dir=None):
+    if grim_dir and not name:
+        name = grim_dir.split('/')[-1]
+
+    return name
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repository_dirs
+#
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_repository_dirs():
+    grimoire_file = files.BaseFile('/etc/sorcery/local/grimoire')
+    grimoires = grimoire_file.read()
+
+    grimoire_dirs = []
+    for grimoire in grimoires:
+        grimoire_dirs.append(grimoire.split('=')[1])
+
+    return grimoire_dirs
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repositories
+#
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_repositories(*args, **kwargs):
+    if 'repositories' not in kwargs or kwargs['repositories'] is None:
+        repositories = get_repository_dirs()
+    else:
+        repositories = kwargs['repositories']
+
+    grimoires = []
+    for grim_dir in repositories:
+        grimoire = get_repo_name(grim_dir=grim_dir)
+        grimoires.append(grimoire)
+
+    return grimoires
 
 #-----------------------------------------------------------------------
 #
@@ -109,7 +416,7 @@ def get_description(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -143,7 +450,7 @@ def get_version(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -177,7 +484,7 @@ def get_url(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire = Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -211,7 +518,7 @@ def get_short(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire = Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -245,7 +552,7 @@ def get_section(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire = Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     section = section_dir.split('/')[-1]
@@ -277,7 +584,7 @@ def read_file(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -323,7 +630,7 @@ def is_package(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_short
+# Function get_licens
 #
 # Gets a spell's short description.
 #
@@ -346,7 +653,7 @@ def get_license(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire =  sorcery.Grimoire(repository)
+    grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
@@ -375,11 +682,11 @@ def get_license(name, **kwargs):
 #
 #-----------------------------------------------------------------------
 def get_first_repo(name):
-    codex = sorcery.Codex()
-    grimoires = codex.list_grimoires()
+    codex = Codex()
+    grimoire_dirs = codex.grimoire_dirs()
 
     check = False
-    for grimoire in grimoires:
+    for grimoire in grimoire_dirs:
         spell_list_file = files.BaseFile(grimoire + '/codex.index')
         spell_list = spell_list_file.read()
         

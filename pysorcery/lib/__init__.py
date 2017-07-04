@@ -51,8 +51,7 @@ from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 from pysorcery.lib.system import shutil
 # Other Application Libraries
-from pysorcery.lib.sorcery import packages
-#from pysorcery.lib.sorcery import repositories
+from pysorcery.lib import sorcery
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
@@ -78,6 +77,7 @@ logger = logging.getLogger(__name__)
 # Directory
 # Directories
 # Package
+# Repositories
 #
 #-----------------------------------------------------------------------
 
@@ -255,7 +255,27 @@ class Directories(files.BaseDirectories):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Package(packages.BasePackage):
+class Package(sorcery.BasePackage):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class Repositories
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Repositories(sorcery.BaseRepositories):
     pass
 
 #-----------------------------------------------------------------------
