@@ -235,7 +235,7 @@ class Directory(files.BaseDirectory):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Directories(files.BaseFiles):
+class Directories(files.BaseDirectories):
     pass
 
 #-----------------------------------------------------------------------

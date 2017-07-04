@@ -57,6 +57,7 @@ from pysorcery.lib.system import logging
 
 # Other Application Libraries
 from pysorcery import lib
+#from pysorcery.lib.util import files
 from pysorcery.lib.util import text
 
 
@@ -423,6 +424,7 @@ def get_cmd_types(cmd_class):
     # Use [a-z] to allow finding directories, but ignoring
     # '__pycache__', etc
     modules = glob.glob(os.path.dirname(cmd_dir[cmd_class]) + "/[a-z]*")
+    
     logger.debug(modules)
 
     supformats = []
@@ -432,7 +434,7 @@ def get_cmd_types(cmd_class):
         # skip f if f is an emacs backup
         if (os.path.isfile(f) and
             f.split('/')[-1] != '__init__.py' and
-            f.split('.')[-1] != 'py~'):
+            f.endswith('~') is False):
             supformats.append(os.path.basename(f)[:-3])
 
     supformats.sort()

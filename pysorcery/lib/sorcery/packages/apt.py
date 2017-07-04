@@ -368,6 +368,64 @@ def read_file(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
+# Function get_description
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def is_package(name, **kwargs):
+    #cache = apt.cache.Cache()
+    #cache.open()
+    
+    #pkg = cache[name]
+    #versions = pkg.versions
+    #description  = versions[0].description
+
+    #cache.close()
+    return True
+
+#-----------------------------------------------------------------------
+#
+# Function get_description
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_license(name, **kwargs):
+    cache = apt.cache.Cache()
+    cache.open()
+
+    pkg = cache[name]
+    versions = pkg.versions
+    license_ = 'Not Implemented'
+
+    raise NotImplementedError
+    cache.close()
+    
+    return license_
+
+#-----------------------------------------------------------------------
+#
 # Function 
 #
 # Inputs

@@ -103,14 +103,17 @@ logger = logging.getLogger(__name__)
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_description(name, repository=None):
-    if repository is None:
+def get_description(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
         repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
 
     grimoire =  sorcery.Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
+    details_file = bashspell.DetailsFile(spell_directory)
     details = details_file.parse()
     description = details['description']
     return description
@@ -134,9 +137,11 @@ def get_description(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_version(name, repository=None):
-    if repository is None:
+def get_version(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
         repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
 
     grimoire =  sorcery.Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
@@ -166,9 +171,11 @@ def get_version(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_url(name, repository=None):
-    if repository is None:
+def get_url(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
         repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
 
     grimoire =  sorcery.Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
@@ -198,10 +205,11 @@ def get_url(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_short(name, repository=None):
-    
-    if repository is None:
+def get_short(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
         repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
 
     grimoire =  sorcery.Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
@@ -231,10 +239,11 @@ def get_short(name, repository=None):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_section(name, repository=None):
-    
-    if repository is None:
+def get_section(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
         repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
 
     grimoire =  sorcery.Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
@@ -284,6 +293,70 @@ def read_file(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
+# Function is_package
+#
+# Gets a spell's short description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: short
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def is_package(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
+        repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
+
+    if repository == False:
+        return False
+    else:
+        return True
+
+#-----------------------------------------------------------------------
+#
+# Function get_short
+#
+# Gets a spell's short description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: short
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_license(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
+        repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
+
+    grimoire =  sorcery.Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = get_section_dir(grimoire_dir, name)
+    spell_directory = get_spell_dir(section_dir, name)
+    details_file = bashspell.DetailsFile(spell_directory)
+    details = details_file.parse()
+    short = details['license']
+    return short
+
+#-----------------------------------------------------------------------
+#
 # Function get_first_repo
 #
 # Get the first repository containing a spell by spell name.
@@ -305,6 +378,7 @@ def get_first_repo(name):
     codex = sorcery.Codex()
     grimoires = codex.list_grimoires()
 
+    check = False
     for grimoire in grimoires:
         spell_list_file = files.BaseFile(grimoire + '/codex.index')
         spell_list = spell_list_file.read()
@@ -312,13 +386,17 @@ def get_first_repo(name):
         for item in spell_list:
             spell, section_dir = item.split(' ')
             if name == spell:
+                check = True
                 break
             
         if name == spell:
             break
 
-    grimoire = grimoire.split('/')[-1]
-    return grimoire
+    if check:
+        grimoire = grimoire.split('/')[-1]
+        return grimoire
+    else:
+        return False
 
 #-----------------------------------------------------------------------
 #
