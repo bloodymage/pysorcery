@@ -106,31 +106,36 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function gaze_checksum
 #
 # print CRC checksums for spells(s). If no spell is given it default to all.
 #
 # If md5sum
-#   print spell MD5 message digests (fingerprints). If no spell is given it default 
-#   to all
+#   print spell MD5 message digests (fingerprints). If no spell is given
+# it default to all
 #
 # If checkmd5s
 #   computes the md5sum on spell sources based on passed spell(s),
 #   section(s) or entire grimoire(s) if left blank.
 #
-# Input:  args
-#         args.spell    - Spell to print compile log.
-#                         Maximum 1
-#         args.grimoire -
-#         args.quiet    - decrease verbosity
-# Output:
-# Return: None
+# Inputs
+#    @param: args
+#            args.spell    - Spell to print compile log.
+#                            Maximum 1
+#            args.grimoire -
+#            args.quiet    - decrease verbosity
 #
-# Status: Not implimented
+# Returns
+# -------
+#    @return: None
 #
-#-------------------------------------------------------------------------------
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 def gaze_checksum(args):
     logger.debug('Begin Function')
             
@@ -154,8 +159,10 @@ def gaze_checksum(args):
 # Shows the queue of spells waiting to be Installed
 # Shows the queue of spells waiting to be Removed
 #
-# Input:  args
-#         args.queue - sets which queue to print (install or remove)
+# Inputs
+# ------
+#    @param: args
+#            args.queue - sets which queue to print (install or remove)
 #         args.quiet - decrease verbosity
 # Output: Prints the queue
 # Return: None
@@ -169,7 +176,7 @@ def gaze_queue(args):
     logger.debug('Begin Function')
 
     # 
-    queue = libspell.SpellList()
+    queue = lib.Packages()
     spell_queue = queue.list_queue(args.queue)
 
     queue.print_list(spell_queue)

@@ -582,7 +582,7 @@ class BaseRepositories():
 #
 # Functions
 #
-# Get Repo Name
+# Get_repo_name
 # 
 #
 #-------------------------------------------------------------------------------
@@ -606,8 +606,18 @@ def get_repo_name(name=None, repo_dir=None):
 #
 # Function get_repositories
 #
-# Input:  ...
-# Return: ...
+# Inputs
+# ------
+#    @param: *args
+#    @param: **kwargs
+#
+# Returns
+# -------
+#    @return: repositories
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def get_repositories(*args, **kwargs):

@@ -92,25 +92,36 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
+#
+# Returns
+# -------
+#    @return: cmd
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser, repo_parent_parser=None):
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
     install_help = 'Show spells waiting to be installed.'
     cmd = subparsers.add_parser('install-queue',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 help = install_help)
-    cmd.set_defaults(func = gaze.queue,
-                     queue = 'install'
+    cmd.set_defaults(func = gaze.gaze_queue,
+                     queue = 'install',
+                     sudo = False
     )
     return cmd
