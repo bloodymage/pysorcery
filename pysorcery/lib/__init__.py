@@ -260,6 +260,26 @@ class Package(sorcery.BasePackage):
 
 #-----------------------------------------------------------------------
 #
+# Class Package
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Packages(sorcery.BasePackages):
+    pass
+
+#-----------------------------------------------------------------------
+#
 # Class Repositories
 # 
 # Inputs

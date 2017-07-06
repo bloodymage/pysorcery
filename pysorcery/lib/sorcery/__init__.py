@@ -55,6 +55,7 @@ from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
 from pysorcery.lib import util
+from pysorcery.lib.util import config
 
 # Conditional Libraries
 
@@ -70,11 +71,10 @@ logger = logging.getLogger(__name__)
 
 #
 pkg_mgr = distro.distro_group[distro.distro_id]
-
-license_dir = { 'apt': '/usr/share/common-licenses',
-                'smgl': '/etc/sorcery/licenses'
-                }
                 
+config_ = config.SorceryConfig()
+license_dir = config_.license_dir[pkg_mgr]
+
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -430,7 +430,37 @@ class BasePackageVersions(BasePackage):
 #
 #-----------------------------------------------------------------------
 class BasePackages():
-    pass
+    def __init__(self, packages=[]):
+        self.packages = packages
+        return
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_queue(self, which_queue):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_queue')
+        self.packages = func(which_queue)
+        return self.packages
 
 #-----------------------------------------------------------------------
 #
@@ -582,7 +612,7 @@ class BaseRepositories():
 #
 # Functions
 #
-# Get Repo Name
+# Get_repo_name
 # 
 #
 #-------------------------------------------------------------------------------
@@ -606,8 +636,18 @@ def get_repo_name(name=None, repo_dir=None):
 #
 # Function get_repositories
 #
-# Input:  ...
-# Return: ...
+# Inputs
+# ------
+#    @param: *args
+#    @param: **kwargs
+#
+# Returns
+# -------
+#    @return: repositories
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def get_repositories(*args, **kwargs):

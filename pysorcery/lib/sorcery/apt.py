@@ -534,6 +534,19 @@ def get_maintainer(name, **kwargs):
     raise NotImplementedError
     return maintainer
 
+#---------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def get_queue(which_queue):
+    raise NotImplementedError
+    return queue
+
 #-----------------------------------------------------------------------
 #
 # Function 

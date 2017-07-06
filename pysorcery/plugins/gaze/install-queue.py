@@ -25,17 +25,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyGaze: Licenses
+# pyGaze: install-queue
 #
-#   This plugin displays license information.  If a license is provided
-#   as input, the license will be displayed.  If a package is provided
-#   as input, the package license will be identified.
+#    Prints the install-queue
 #
 #-----------------------------------------------------------------------
 """
-This plugin displays license information.  If a license is provided as
-input, the license will be displayed.  If a package is provided as 
-input, the package license will be identified.
+This is a bonus application for pysorcery.  PySorcery for multiple
+reasons to internally extract, create, list the contents, etc.
+archive files of multiple formats.  To test the capabilities of the
+underlying code, this application was developed.
 """
 #-----------------------------------------------------------------------
 #
@@ -53,18 +52,16 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
-from pysorcery.lib.system import distro
-#from pysorcery.lib.system import logging
+from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
 from pysorcery.lib import util
-from pysorcery.lib import sorcery
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+from pysorcery.plugins import gaze
 # Conditional Libraries
 
 
@@ -75,11 +72,10 @@ from pysorcery.lib.util.files import archive
 #-----------------------------------------------------------------------
 # Enable Logging
 # create logger
-#logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
 
-pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -90,59 +86,9 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 # Functions
 #
-# gaze_licenses
 # parser
 #
 #-----------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-#
-# Function gaze_license
-#
-# View the license(s) of the given spell(s), or spells in given section(s),
-# or view the information about given license(s)
-#
-# Inputs
-# ------
-#    @param: args
-#            args.spell    - Spell to print compile log.
-#                            Maximum 1
-#            args.grimoire -
-#            args.quiet    - decrease verbosity
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------------------
-def gaze_license(args):
-    #logger.debug('Begin Function')
-
-    license_dir = sorcery.license_dir
-    print(license_dir)
-
-    directory = lib.Directory(license_dir)
-    licenses = directory.listfiles()
-
-    if args.ssl[0] in licenses:
-        license_ = lib.File(license_dir + '/' + args.ssl[0])
-        content = license_.read()
-        for line in content:
-            print(line)
-    else:
-        package = lib.Package(args.ssl[0])
-        if package.is_package():
-            print(package.get_license())
-        else:
-            raise NotImplementedError
-
-    #logger.debug('End Function')
-    return
-
 
 #-----------------------------------------------------------------------
 #
@@ -169,15 +115,13 @@ def gaze_license(args):
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
-    cmd = subparsers.add_parser('license',
-                                parents = parent_parsers,
-                                help = 'View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s) (Not Working)'
-    )
-    cmd.add_argument('ssl',
-                     nargs = '+',
-                     help = 'Spell, Section, or License to view'
-    )
-    cmd.set_defaults(func = gaze_license,
-                     sudo = False)
 
+    install_help = 'Show spells waiting to be installed.'
+    cmd = subparsers.add_parser('install-queue',
+                                parents = parent_parsers,
+                                help = install_help)
+    cmd.set_defaults(func = gaze.gaze_queue,
+                     queue = 'install',
+                     sudo = False
+    )
     return cmd

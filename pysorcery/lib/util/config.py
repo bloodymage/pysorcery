@@ -126,15 +126,19 @@ class SorceryConfig():
 
         
         
-        self.config = { 'logging': logging_config,
-                   'config_files': config_files,
-                   'sorcery_branch': 'stable',
-                   'directories': directories,
-                   'urls': urls,
-                   'official_grimoires' : smgl_official_grimoires,
-                   'theme': theme
+        self.config = { 'logging': self.logging_config,
+                        'config_files': self.config_files,
+                        'sorcery_branch': 'stable',
+                        'directories': self.directories,
+                        'urls': self.urls,
+                        'official_grimoires' : self.smgl_official_grimoires,
+                        'theme': self.theme
         }
-    
+
+        self.license_dir = { 'apt': '/usr/share/common-licenses',
+                             'smgl': '/etc/sorcery/licenses'
+        }
+
     """
                   CAST=${CAST:-cast}
               ARCHIVE=${ARCHIVE:=on}
@@ -207,7 +211,6 @@ FORCE_BASESYSTEM_DEPENDS=${FORCE_BASESYSTEM_DEPENDS:-off}
    SORCERY_INSTALL_LOG=${SORCERY_INSTALL_LOG:-/etc/sorcery/install.log}
        INSTALLWATCH_SO=${INSTALLWATCH_SO:-/usr/lib/installwatch.so}
 
-  SM_LICENSE_DIRECTORY=${SM_LICENSE_DIRECTORY:-/etc/sorcery/licenses}
 SM_CONFIG_OPTION_CACHE=${SM_CONFIG_OPTION_CACHE:-/etc/sorcery/local/config_option_cache}
           ACCOUNT_LIST=${ACCOUNT_LIST:-/etc/sorcery/accounts}
             GROUP_LIST=${GROUP_LIST:-/etc/sorcery/groups}
