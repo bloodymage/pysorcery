@@ -462,6 +462,35 @@ class BasePackages():
         self.packages = func(which_queue)
         return self.packages
 
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_installed(self, status=None):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_installed')
+        self.packages = func(status)
+        return self.packages
+
 #-----------------------------------------------------------------------
 #
 # Class BaseSection

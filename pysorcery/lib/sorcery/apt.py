@@ -66,6 +66,8 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
+# AptPackage
+# AptPackages
 #
 #-----------------------------------------------------------------------
 
@@ -200,6 +202,50 @@ class AptPackage(sorcery.BasePackage):
 #-----------------------------------------------------------------------
 #
 # Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class AptPackages(sorcery.BasePackages):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class AptRepository(sorcery.BaseRepository):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class AptRepositories
 #
 # AptPackage
 #
@@ -544,8 +590,43 @@ def get_maintainer(name, **kwargs):
 #
 #-------------------------------------------------------------------
 def get_queue(which_queue):
-    raise NotImplementedError
+    if which_queue == 'install':
+        cache = apt.cache.Cache()
+        cache.open(None)
+        cache.upgrade()
+        queue = cache.get_changes()
+    elif which_queue == 'remove':
+        queue = []
+        logger.error('Not Implimented')
+        raise NotImplementedError
+    else:
+        queue = []
+        logger.critical('We Fucked Up')
     return queue
+
+#---------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def get_installed(status):
+    var = subprocess.check_output(['apt', 'list','--installed'])
+    
+    packages = []
+    for line in var.splitlines():
+        tmpline = str(line).split("'")[1]
+        name = tmpline.split('/')[0]
+
+        if 'Listi' not in name:
+            spell_list.append(name)
+            spell_list.append('-')
+            spell_list.append('-')
+
+    return packages
 
 #-----------------------------------------------------------------------
 #
