@@ -815,7 +815,7 @@ def get_queue(which_queue):
 # Return: ...
 #
 #-------------------------------------------------------------------
-def list_installed(self,status=None):
+def get_installed(status):
     logger.debug("Begin Function")
     
     spell_list = []

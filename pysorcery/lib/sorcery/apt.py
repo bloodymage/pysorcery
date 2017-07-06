@@ -66,6 +66,8 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
+# AptPackage
+# AptPackages
 #
 #-----------------------------------------------------------------------
 
@@ -200,6 +202,50 @@ class AptPackage(sorcery.BasePackage):
 #-----------------------------------------------------------------------
 #
 # Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class AptPackages(sorcery.BasePackages):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class AptRepository(sorcery.BaseRepository):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class AptRepositories
 #
 # AptPackage
 #
@@ -546,6 +592,19 @@ def get_maintainer(name, **kwargs):
 def get_queue(which_queue):
     raise NotImplementedError
     return queue
+
+#---------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def get_installed(status):
+    raise NotImplementedError
+    return packages
 
 #-----------------------------------------------------------------------
 #
