@@ -369,8 +369,11 @@ class BaseFile():
         logger.debug("Begin Function")
         line_list = []
 
-        for line in open(self.filename):
-            line_list.append(line[:-1])
+        try:
+            for line in open(self.filename):
+                line_list.append(line[:-1])
+        except FileNotFoundError as msg:
+            line_list.append(msg)
             
         logger.debug("End Function")
         return line_list

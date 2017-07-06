@@ -272,7 +272,7 @@ class Codex(sorcery.BaseRepositories):
     # ------
     #    @param: self
     #
-x    # Returns
+    # Returns
     # -------
     #    @return: description
     #
