@@ -177,9 +177,10 @@ def gaze_queue(args):
 
     # 
     queue = lib.Packages()
-    spell_queue = queue.list_queue(args.queue)
+    spells = queue.get_queue(args.queue)
 
-    queue.print_list(spell_queue)
+    for spell in spells:
+        print(spell)
     
     logger.debug('End Function')
     return

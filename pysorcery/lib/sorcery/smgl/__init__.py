@@ -272,7 +272,7 @@ class Codex(sorcery.BaseRepositories):
     # ------
     #    @param: self
     #
-    # Returns
+x    # Returns
     # -------
     #    @return: description
     #
@@ -687,11 +687,7 @@ def get_maintainer(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-<<<<<<< HEAD:pysorcery/lib/sorcery/smgl/__init__.py
     grimoire =  Grimoire(repository)
-=======
-    grimoire =  sorcery.Grimoire(repository)
->>>>>>> 313c7ceeb96613e04a98a059a2306fc4c6639579:pysorcery/lib/sorcery/packages/sorcery/__init__.py
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     maintainer_file = files.BaseFile(section_dir + '/MAINTAINER')
@@ -791,6 +787,107 @@ def get_section_dir(grimoire, name):
 def get_spell_dir(section_dir, name):
     spell_directory = section_dir + '/' + name
     return spell_directory
+
+#---------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def get_queue(which_queue):
+    logger.debug("Begin Function")
+    queue_file = files.BaseFile('/var/log/sorcery/queue/' + which_queue)
+    
+    queue = queue_file.read()
+    
+    logger.debug("End Function")
+    return queue
+    
+#-------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def list_installed(self,status=None):
+    logger.debug("Begin Function")
+    
+    spell_list = []
+    
+    for line in open('/var/state/sorcery/packages'):
+        spell = line.split(':')
+        
+        name = spell[0]
+        date = spell[1]
+        spellstatus = spell[2]
+        version = spell[3]
+
+        if not status and spellstatus != 'exiled':
+            spell_list.append(name)
+            spell_list.append(date)
+            spell_list.append(version)
+        elif status == spellstatus:
+            spell_list.append(name)
+            spell_list.append(date)
+            spell_list.append(version)
+        else:
+            logger.error('We fucked up')
+
+    logger.debug('End Function')
+    return spell_list
+
+#-------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def list_orphans(self):
+    logger.debug('Begin Function')
+    
+    var = subprocess.check_output(['gaze','orphans'])
+
+    orphan_list = []
+    for line in var.splitlines():
+        line_list = str(line).split(',')
+        item = line_list[0].split("'")[1]
+        orphan_list.append(item)
+
+    logger.debug2(orphan_list)
+    logger.debug('End Function')
+    return orphan_list
+
+#-------------------------------------------------------------------
+#
+# Function 
+#
+# Input:  ...
+# Output: ...
+# Return: ...
+#
+#-------------------------------------------------------------------
+def list_provides(self, feature):
+    logger.debug('Begin Function')
+    
+    grimoires =  libcodex.Codex()
+    
+    providers = []
+    for grimoire in grimoires.list_grimoires():
+        for line in open(grimoire + '/provides.index'):
+            if feature.upper() == line.split(' ')[0]:
+                providers.append(line.split('/')[-1][:-1])
+                
+    logger.debug('End Function')
+    return providers
 
 #-----------------------------------------------------------------------
 #

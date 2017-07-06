@@ -122,7 +122,8 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 def gaze_license(args):
     #logger.debug('Begin Function')
 
-    license_dir = sorcery.license_dir[pkg_mgr]
+    license_dir = sorcery.license_dir
+    print(license_dir)
 
     directory = lib.Directory(license_dir)
     licenses = directory.listfiles()
