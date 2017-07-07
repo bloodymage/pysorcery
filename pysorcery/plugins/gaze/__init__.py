@@ -387,3 +387,43 @@ def time(args):
     
     logger.debug('End Function')
     return
+
+#-------------------------------------------------------------------------------
+#
+# Function gaze_grimoire
+#
+# Prints specified grimoire's spells or all grimoires if grimoire-name is omitted
+#
+# If grimoires:
+#   Displays installed grimoires by name only
+#
+# Inputs
+# ------
+#    @param: args
+#            args.grimoire      - Spell to print compile log.
+#                              Minimum 1
+#            args.quiet         - decrease verbosity
+#            args.multi         -
+#            args.displayformat - console or html
+#            args.columns       - have the grimoires be columns
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def gaze_packages_status(args):
+    if args.spell:
+        for i in args.spell:
+            spell = lib.Package(i)
+            print(spell.get_version())
+    else:
+        spells = lib.Packages()
+        spell_status = spells.get_installed(args.spellstatus)
+
+        for spell in spell_status:
+            print(spell)

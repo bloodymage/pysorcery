@@ -837,8 +837,8 @@ def get_installed(status):
             spell_list.append(date)
             spell_list.append(version)
         else:
-            logger.error('We fucked up')
-
+            pass
+            
     logger.debug('End Function')
     return spell_list
 

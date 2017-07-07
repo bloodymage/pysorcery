@@ -119,16 +119,15 @@ colortext = text.ConsoleText()
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
-    cmd = subparsers.add_parser('installed',
+
+    show_held_help = 'Shows all spells currently held (which means they are not to be updated).'
+    cmd = subparsers.add_parser('show-held',
                                 parents = parent_parsers,
-                                help = 'View all installed packages and corresponding version numbers.'
-    )
-    cmd.add_argument('spell',
-                     nargs = '*',
-                     help = 'Check to see whether a particular package is installed and if it is installed display its version number'
-    )
+                                help = show_held_help
+    )   
     cmd.set_defaults(func = gaze.gaze_packages_status,
-                     spellstatus=None,
+                     spellstatus = 'held',
+                     spell = False,
                      sudo = False
     )
 

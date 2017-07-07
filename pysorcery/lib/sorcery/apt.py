@@ -622,9 +622,9 @@ def get_installed(status):
         name = tmpline.split('/')[0]
 
         if 'Listi' not in name:
-            spell_list.append(name)
-            spell_list.append('-')
-            spell_list.append('-')
+            packages.append(name)
+            packages.append('-')
+            packages.append('-')
 
     return packages
 
