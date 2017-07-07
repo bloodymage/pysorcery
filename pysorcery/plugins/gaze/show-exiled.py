@@ -90,93 +90,45 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
 #
-#-----------------------------------------------------------------------
-def archive_extract(args):
-    logger.debug('Begin Function')
-
-    for i in args.files:
-        # Check for recursive extraction
-        if args.recursive:
-            # If True, extract all compressed files within a directory and
-            # its sub directories
-            #
-            # Fix me! Add max depth option
-            for root, dirs, files in os.walk(i):
-                for sfile in files:
-                    cfile = lib.Files(sfile)
-                    logger.debug3(cfile.mimetype)
-                    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-                        cfile.extract(args.output_dir)
-                    else:
-                        cfile.decompress(args.output_dir)
-
-        # Always extract what is explicitly listed
-        #logger.info('Archive file: ' + i)
-        cfile = lib.Files(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(args.output_dir)
-        else:
-            cfile.decompress(args.output_dir)
-
-    logger.debug('End Function')
-    return
-
-
-#-----------------------------------------------------------------------
+# Returns
+# -------
+#    @return: cmd
 #
-# Function archive_extract
-#
-# Extract files listed.
-#
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser, repo_parent_parser=None):
-    #-------------------------------------------
-    #
-    # create the parser for the 'show-exiled' command
-    #
-    #-------------------------------------------
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
     show_exiled_help = 'Shows all spells currently exiled (which means they are not to be cast in any way).'
     cmd = subparsers.add_parser('show-exiled',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 help = show_exiled_help
     )
-    cmd.set_defaults(func = gaze.installed,
+    cmd.set_defaults(func = gaze.gaze_packages_status,
                      spellstatus = 'exiled',
-                     spell = False
+                     spell = False,
+                     sudo = False
     )
 
     return cmd
