@@ -139,8 +139,8 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_description')
-        description = func(self.name, repository=self.repository)
-        return description
+        self.description = func(self.name, repository=self.repository)
+        return self.description
 
     #-------------------------------------------------------------------
     #
@@ -166,8 +166,8 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_version')
-        version = func(self.name, repository=self.repository)
-        return version
+        self.version = func(self.name, repository=self.repository)
+        return self.version
 
     #-------------------------------------------------------------------
     #
@@ -193,8 +193,8 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_url')
-        url = func(self.name, repository=self.repository)
-        return url
+        self.url = func(self.name, repository=self.repository)
+        return self.url
 
     #-------------------------------------------------------------------
     #
@@ -219,8 +219,8 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_short')
-        short_description = func(self.name, repository=self.repository)
-        return short_description
+        self.short_description = func(self.name, repository=self.repository)
+        return self.short_description
 
     #-------------------------------------------------------------------
     #
@@ -247,8 +247,8 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_section')
-        section = func(self.name, repository=self.repository)
-        return section
+        self.section = func(self.name, repository=self.repository)
+        return self.section
 
     #-------------------------------------------------------------------
     #
@@ -331,12 +331,12 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_license')
-        license_ = func(self.name, repository=self.repository)
-        return license_
+        self.license_ = func(self.name, repository=self.repository)
+        return self.license_
 
     #-------------------------------------------------------------------
     #
-    # Function get_section
+    # Function get_maintainer
     #
     # Get a package short description.
     #
@@ -436,7 +436,7 @@ class BasePackages():
 
     #-------------------------------------------------------------------
     #
-    # Function get_section
+    # Function get_queue
     #
     # Get a package short description.
     #
@@ -536,7 +536,13 @@ class BaseSection():
 #
 #-----------------------------------------------------------------------
 class BaseSections():
-    pass
+    def __init__(self, sections=[]):
+        logger.debug("Begin Function")
+        
+        self.sections = sections
+
+        logger.debug('End Function')
+        return
 
 #-------------------------------------------------------------------------------
 #
