@@ -171,7 +171,7 @@ def parser(*args, **kwargs):
     parent_parsers = list(args[1:])
     cmd = subparsers.add_parser('license',
                                 parents = parent_parsers,
-                                help = 'View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s) (Not Working)'
+                                help = 'View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s).'
     )
     cmd.add_argument('ssl',
                      nargs = '+',

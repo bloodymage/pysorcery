@@ -161,7 +161,7 @@ def parser(*args, **kwargs):
 
     cmd = subparsers.add_parser('maintainer',
                                 parents = parent_parsers,
-                                help = 'Display the email address of the person responsible for maintaining a specified spell. (Not Working)'
+                                help = 'Display the email address of the person responsible for maintaining a specified spell.'
     )
     cmd.add_argument('spell',
                      nargs = '+',
