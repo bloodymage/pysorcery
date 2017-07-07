@@ -121,6 +121,7 @@ colortext = text.ConsoleText()
 #   section(s) or entire grimoire(s) if left blank.
 #
 # Inputs
+# ------
 #    @param: args
 #            args.spell    - Spell to print compile log.
 #                            Maximum 1
@@ -163,13 +164,15 @@ def gaze_checksum(args):
 # ------
 #    @param: args
 #            args.queue - sets which queue to print (install or remove)
-#         args.quiet - decrease verbosity
-# Output: Prints the queue
-# Return: None
+#            args.quiet - decrease verbosity
 #
-# Status: Works on Source Mage
-#         'Install' queue works on Ubuntu
-#         'Remove' queue does not work on Ubuntu
+# Returns
+# -------
+#    @return: None
+
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def gaze_queue(args):
@@ -191,20 +194,25 @@ def gaze_queue(args):
 #
 # Shows the installed version of the spell and the main grimoires version.
 # 
-# Input:  args
-#         args.spell    - Spell to print compile log.
-#                         Maximum 1
-#         args.grimoire -
-#         args.quiet    - decrease verbosity
-#         args.multi    - Shows the installed version of the spell
-#                         and lists all available versions in all
-#                         grimoires. If used without a spell name,
-#                         then lists order of available grimoires.
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell    - Spell to print compile log.
+#                            Maximum 1
+#            args.grimoire -
+#            args.quiet    - decrease verbosity
+#            args.multi    - Shows the installed version of the spell
+#                            and lists all available versions in all
+#                            grimoires. If used without a spell name,
+#                           then lists order of available grimoires.
+# 
+# Returns
+# -------
+#    @return: None
 #
-# Status: Works on Source Mage
-#         Works on Ubuntu
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def gaze_version(args):
