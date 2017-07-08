@@ -547,7 +547,7 @@ def get_repositories(*args, **kwargs):
                     if repo not in repositories:
                         repositories.append(repo)
 
-    return repositories
+    return repositories, None
 
 #-----------------------------------------------------------------------
 #

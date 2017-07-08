@@ -69,6 +69,8 @@ logger = logging.getLogger(__name__)
 #
 # Spell
 # Spells
+# Section
+# Sections
 # Grimoire
 # Codex
 #
@@ -119,6 +121,49 @@ class Spells(sorcery.BasePackages):
 
 #-----------------------------------------------------------------------
 #
+# Class Spells
+# 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Section(sorcery.BaseSection):
+    pass
+#-----------------------------------------------------------------------
+#
+# Class Spells
+# 
+# Grimoire ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Sections(sorcery.BaseSections):
+    pass
+
+#-----------------------------------------------------------------------
+#
 # Class Grimoire
 # 
 # Grimoire ...
@@ -139,31 +184,6 @@ class Spells(sorcery.BasePackages):
 class Grimoire(sorcery.BaseRepository):
     def __init__(self, name=None, grim_dir=None):
         super(Grimoire, self).__init__(name, grim_dir)
-        return
-
-    #-------------------------------------------------------------------
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------
-    def add(self):
-        logger.debug('Begin Function')
-
-
-        logger.debug('End Function')
         return
 
     #-------------------------------------------------------------------------------
@@ -264,32 +284,7 @@ class Grimoire(sorcery.BaseRepository):
 #
 #-------------------------------------------------------------------------------
 class Codex(sorcery.BaseRepositories):
-    #-------------------------------------------------------------------------------
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------------------
-    def grimoires(self):
-        self.repositories = get_repositories()
-        self.grimoires = self.repositories
-        return self.repositories
-
-    def grimoire_dirs(self):
-        grimoire_dirs = get_repository_dirs()
-        return grimoire_dirs
+    pass
 
 #-------------------------------------------------------------------------------
 #
@@ -389,7 +384,7 @@ def get_repositories(*args, **kwargs):
         grimoire = get_repo_name(grim_dir=grim_dir)
         grimoires.append(grimoire)
 
-    return grimoires
+    return grimoires, repositories
 
 #-----------------------------------------------------------------------
 #
@@ -531,7 +526,7 @@ def get_short(name, **kwargs):
 #
 # Function get_section
 #
-# Gets a spell's short description.
+# Gets a spell's section
 #
 # Inputs
 # ------
@@ -539,7 +534,7 @@ def get_short(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: short
+#    @return: section
 #
 # Raises
 # ------
@@ -874,6 +869,38 @@ def get_installed(status):
     logger.debug('End Function')
     return spell_list
 
+#-----------------------------------------------------------------------
+#
+# Function get_section
+#
+# Gets a spell's section
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: section
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_sections(grimoire=None, grim_dir=None, **kwargs):
+    logger.debug('Begin Function')
+    
+    dir_list = os.scandir(self.grim_dir)
+    sections = []
+    for item in dir_list:
+        if item.is_dir():
+            if 'git' not in item.name:
+                section_list.append(item.name)
+
+    logger.debug('End Function')
+    return sections
+
 #-------------------------------------------------------------------
 #
 # Function 
@@ -973,3 +1000,8 @@ def print_version(self,multi=False):
                 
     logger.debug("End Function")
     return
+
+
+#www.hnfs.com
+
+#kim 

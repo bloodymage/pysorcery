@@ -33,8 +33,7 @@
 """
 Sorcery:
 
-Library for sorcery that provides for interfacing with files and
-directories.
+Library for sorcery works with the package manager's packages.
 """
 #-----------------------------------------------------------------------
 #
@@ -591,7 +590,7 @@ class BaseRepository():
 
         logger.debug2('Name: ' + str(name))
 
-        self.name = get_repo_name(name, repo_dir)
+        self.name, *self.directory = get_repo_name(name, repo_dir)
 
         logger.debug('End Function')
         return
@@ -614,43 +613,12 @@ class BaseRepository():
     # Return: description - The description of the package
     #
     #-------------------------------------------------------------------------------
-    def add(self):
-        logger.debug('Begin Function')
-
-
-        logger.debug('End Function')
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------------------
-    def list_sections(self):
-        logger.debug('Begin Function')
-
-        dir_list = os.scandir(self.grim_dir)
-        section_list = []
-        for item in dir_list:
-            if item.is_dir():
-                if 'git' not in item.name:
-                    section_list.append(item.name)
-
-        logger.debug('End Function')
-        return section_list
+    def get_sections(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_sections')
+        self.sections = func(self.name, repository=self.repository)
+        return self.sections
 
 #-------------------------------------------------------------------------------
 #
@@ -661,7 +629,7 @@ class BaseRepository():
 class BaseRepositories():
     def __init__(self, repositories=None):
         if repositories is None:
-            self.repositories = get_repositories()
+            self.repositories, *self.directories = get_repositories()
         else:
             self.repositories = repositories
 
