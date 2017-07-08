@@ -33,6 +33,8 @@
 #
 #-----------------------------------------------------------------------
 """
+pyGaze: licenses
+
 This plugin displays license information.  If a license is provided as
 input, the license will be displayed.  If a package is provided as 
 input, the package license will be identified.
@@ -53,15 +55,10 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
-from pysorcery.lib.system import distro
-#from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
+from pysorcery.lib.system import logging
 
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib import sorcery
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
@@ -75,11 +72,9 @@ from pysorcery.lib.util.files import archive
 #-----------------------------------------------------------------------
 # Enable Logging
 # create logger
-#logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
-
-pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -120,9 +115,31 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 #-------------------------------------------------------------------------------
 def gaze_license(args):
-    #logger.debug('Begin Function')
+    """
+Function gaze_license
 
-    license_dir = sorcery.license_dir
+View the license(s) of the given spell(s), or spells in given section(s),
+or view the information about given license(s)
+
+Inputs
+------
+   @param: args
+           args.spell    - Spell to print compile log.
+                           Maximum 1
+           args.grimoire -
+           args.quiet    - decrease verbosity
+
+Returns
+-------
+   @return: None
+
+Raises
+------
+   ...
+"""
+
+    config_ = config.SorceryConfig()
+    license_dir = config_.license_dir
     print(license_dir)
 
     directory = lib.Directory(license_dir)

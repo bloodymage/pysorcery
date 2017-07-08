@@ -25,19 +25,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze: HISTORY (history)
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#    Show spell hisotry.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+pyGaze: HISTORY (history)
+
+Show spell hisotry.
 """
 #-----------------------------------------------------------------------
 #
@@ -56,15 +52,10 @@ import sys
 # System Library Overrides
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
-from pysorcery import *
-from pysorcery import lib
-from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 from pysorcery.plugins import gaze
 # Conditional Libraries
 
@@ -90,19 +81,13 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
+#
+# Function parser
 #
 # Create subcommand parsing options
 #

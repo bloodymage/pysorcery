@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/where.py
 #
 # This file is part of Sorcery.
 #
@@ -27,10 +27,13 @@
 #
 # pyGaze: Where
 #
-#
+#    Display the section a spell belongs to.
 #
 #-----------------------------------------------------------------------
 """
+pyGaze: where
+
+Display the section a spell belongs to.
 """
 #-----------------------------------------------------------------------
 #

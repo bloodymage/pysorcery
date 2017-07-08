@@ -25,16 +25,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# gaze whats
+# pyGaze: what
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#    View the long package description.
 #
 #-----------------------------------------------------------------------
 """
-Gaze what
+pyGaze: what
 
 View the long package description
 """
@@ -114,6 +111,7 @@ colortext = text.ConsoleText()
 def gaze_what(args):
     logger.debug('Begin Function')
 
+    
     terms = {
         'the_force': 'The Force is an energy field created by all living things. It surrounds us, penetrates us, and binds the galaxy together.',
         '42': '42 is the answer to life, the universe, and everything.',

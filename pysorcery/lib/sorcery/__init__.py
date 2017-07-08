@@ -55,7 +55,6 @@ from pysorcery.lib import distro
 from pysorcery.lib import logging
 # Other Application Libraries
 from pysorcery.lib import util
-from pysorcery.lib.util import config
 
 # Conditional Libraries
 
@@ -71,9 +70,6 @@ logger = logging.getLogger(__name__)
 
 #
 pkg_mgr = distro.distro_group[distro.distro_id]
-                
-config_ = config.SorceryConfig()
-license_dir = config_.license_dir[pkg_mgr]
 
 #-----------------------------------------------------------------------
 #
@@ -275,8 +271,8 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='read_file')
-        section = func(self.name, repository=self.repository, filename=filename)
-        return section
+        conhents = func(self.name, repository=self.repository, filename=filename)
+        return contents
 
     #-------------------------------------------------------------------
     #
@@ -292,7 +288,7 @@ class BasePackage():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: tf - True or False
     #
     # Raises
     # ------
@@ -358,9 +354,9 @@ class BasePackage():
     def get_maintainer(self):
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
-                                    cmd='get_maintainer')
-        maintainer = func(self.name, repository=self.repository)
-        return maintainer
+                                    cmd='get_pkg_maintainer')
+        self.maintainer = func(self.name, repository=self.repository)
+        return self.maintainer
 
     #-------------------------------------------------------------------
     #
@@ -517,6 +513,34 @@ class BaseSection():
 
         logger.debug('End Function')
         return
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_maintainer
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_maintainer(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_section_maintainer')
+        self.maintainer = func(self.name, repository=self.repository)
+        return self.maintainer
 
 #-----------------------------------------------------------------------
 #

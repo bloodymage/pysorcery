@@ -25,19 +25,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze: grimoires
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#    Display installed grimoires by name only.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+pyGaze: grimoires
+
+Display installed grimoires by name only.
 """
 #-----------------------------------------------------------------------
 #
@@ -46,8 +42,6 @@ underlying code, this application was developed.
 #-----------------------------------------------------------------------
 
 # System Libraries
-import os
-import sys
 
 # 3rd Party Libraries
 
@@ -56,15 +50,10 @@ import sys
 # System Library Overrides
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
-from pysorcery import *
-from pysorcery import lib
-from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 from pysorcery.plugins import gaze
 # Conditional Libraries
 

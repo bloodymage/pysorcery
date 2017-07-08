@@ -681,7 +681,7 @@ def get_license(name, **kwargs):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_maintainer(name, **kwargs):
+def get_pkg_maintainer(name, **kwargs):
     if 'repository' not in kwargs or kwargs['repository'] is None:
         repository = get_first_repo(name)
     else:
@@ -690,6 +690,38 @@ def get_maintainer(name, **kwargs):
     grimoire =  Grimoire(repository)
     grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
+    maintainer_file = files.BaseFile(section_dir + '/MAINTAINER')
+    content = maintainer_file.read()
+    return content[0]
+
+#-----------------------------------------------------------------------
+#
+# Function get_description
+#
+# Gets a spell's description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_section_maintainer(name, **kwargs):
+    if 'repository' not in kwargs or kwargs['repository'] is None:
+        repository = get_first_repo(name)
+    else:
+        repository = kwargs['repository']
+
+    grimoire =  Grimoire(repository)
+    grimoire_dir = grimoire.get_grim_dir()
+    section_dir = grimoire_dir + '/' + name
     maintainer_file = files.BaseFile(section_dir + '/MAINTAINER')
     content = maintainer_file.read()
     return content[0]

@@ -27,11 +27,14 @@
 #
 # pyGaze: Maintainer
 #
-#
+#    Display the email address of the person responsible for maintaining
+#    a specified spell.
 #-----------------------------------------------------------------------
 """
 pyGaze: Maintainer
 
+Display the email address of the person responsible for maintaining a
+specified spell.
 """
 #-----------------------------------------------------------------------
 #

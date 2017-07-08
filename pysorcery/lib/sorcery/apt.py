@@ -549,6 +549,35 @@ def get_repositories(*args, **kwargs):
 
     return repositories
 
+#-----------------------------------------------------------------------
+#
+# Function get_maintainer
+#
+# Inputs
+# ------
+#    @param: 
+#
+# Returns
+# -------
+#    @return: maintainer
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_pkg_maintainer(name, **kwargs):
+    cache    = apt.cache.Cache()
+    cache.open()
+        
+    pkg = cache[name]
+    versions = pkg.versions
+    maintainer = 'Not Implemented'
+
+    cache.close()
+
+    raise NotImplementedError
+    return maintainer
 
 #-----------------------------------------------------------------------
 #
@@ -567,8 +596,8 @@ def get_repositories(*args, **kwargs):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_maintainer(name, **kwargs):
-    cache    = apt.cache.Cache()
+def get_section_maintainer(name, **kwargs):
+    cache = apt.cache.Cache()
     cache.open()
         
     pkg = cache[name]

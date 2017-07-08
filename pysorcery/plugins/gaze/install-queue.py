@@ -31,10 +31,9 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+pyGaze: install-queue
+
+Prints the install-queue
 """
 #-----------------------------------------------------------------------
 #
@@ -53,12 +52,8 @@ import sys
 # System Library Overrides
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
-from pysorcery import *
-from pysorcery import lib
-from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.plugins import gaze

@@ -44,6 +44,7 @@ import os
 
 # Application Libraries
 # System Overrides
+from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 # Other Application Libraries
 
@@ -59,6 +60,19 @@ from pysorcery.lib.system import logging
 logger = logging.getLogger(__name__)
 consolehandler = logging.ColorizingStreamHandler()
 
+license_dir = { 'apt': '/usr/share/common-licenses',
+                'smgl': '/etc/sorcery/licenses'
+}
+
+activity_log = {
+    'apt'  : '/var/log/apt/history.log',
+    'smgl' : '/var/log/sorcery/activity'
+}
+
+sound_themes = [ 'off', 'ferris', 'star trek' ]
+command_themes = [ 'sorcery', 'harry potter' ]
+
+pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -99,18 +113,16 @@ class SorceryConfig():
                               'grimoire_list_file' : '/etc/sorcery/local/grimoire'
         }
     
-        self.theme = { 'sound': 'off',
-                       'commands' : []
-        }
+        self.sound_theme = 'off'
+        self.command_theme = []
 
         self.smgl_library = '/var/lib/sorcery'
-        
-        self.directories = { 'smgl_library' : self.smgl_library,
-                             'codex': self.smgl_library + '/codex',
-                             'source_cache': '/var/spool/sorcery',
-                             'alien': [ '/bin', '/boot', '/etc', '/lib', '/lib64',
-                                        '/opt', '/sbin', '/share', '/usr','/var' ]
-        }
+        self.license_dir = license_dir[pkg_mgr]
+        self.activity_log = activity_log[pkg_mgr]
+        self.codex_dir = self.smgl_library + '/codex'
+        self.source_cache = '/var/spool/sorcery'
+        self.alien = [ '/bin', '/boot', '/etc', '/lib', '/lib64',
+                       '/opt', '/sbin', '/share', '/usr','/var' ]
 
         self.urls = { 'codex_tarball_url' : 'http://codex.sourcemage.org/',
                       'codex_rsync_url' : 'rsync://sourcemage.org::codex',
@@ -123,34 +135,20 @@ class SorceryConfig():
                                          'z-rejected',
                                          'games',
                                          'binary' ]
-
-        
-        
-        self.config = { 'logging': self.logging_config,
-                        'config_files': self.config_files,
-                        'sorcery_branch': 'stable',
-                        'directories': self.directories,
-                        'urls': self.urls,
-                        'official_grimoires' : self.smgl_official_grimoires,
-                        'theme': self.theme
-        }
-
-        self.license_dir = { 'apt': '/usr/share/common-licenses',
-                             'smgl': '/etc/sorcery/licenses'
-        }
+        self.branch = 'stable'
+        self.archive = True
+        self.autofix = True
+        self.updatefix = False
+        self.autoprune = False
+        self.mail_reports = False
+        self.patch = False
+        self.preserve = True
+        self.reap = True
+        self.store_conf_log = False
+        self.sorcerer = 'root'
+        self.cast = 'cast'
 
     """
-                  CAST=${CAST:-cast}
-              ARCHIVE=${ARCHIVE:=on}
-              AUTOFIX=${AUTOFIX:=on}
-            UPDATEFIX=${UPDATEFIX:=off}
-            AUTOPRUNE=${AUTOPRUNE:=off}
-         MAIL_REPORTS=${MAIL_REPORTS:=off}
-                PATCH=${PATCH:=off}
-             PRESERVE=${PRESERVE:=on}
-                 REAP=${REAP:=on}
-       STORE_CONF_LOG=${STORE_CONF_LOG:-off}
-             SORCERER=${SORCERER:=root}
               SUSTAIN=${SUSTAIN:=on}
                 TMPFS=${TMPFS:=off}
          VIEW_REPORTS=${VIEW_REPORTS:=off}

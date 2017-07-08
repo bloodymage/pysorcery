@@ -25,31 +25,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyGaze
+# pyGaze: plugins
 #
-# Gaze is part of the Sorcery source-based package management suite. It is a
-# general purpose command-line tool for displaying package logs, version 
-# information, checking for installed packages, checksums, message
-# digests, maintainer information, package URL information, removing
-# obsolete packages, displaying new packages, untracked files, sections,
-# searching for files that are installed, finding when spells were
-# created and packages in the software catalogue. It can even take and
-# retrieve snap shots of currently installed packages for easy
-# duplication.
+#    These functions are common to multiple gaze plugins.
 #
 #-----------------------------------------------------------------------
 """
 pyGaze
 
-Gaze is part of the Sorcery source-based package management suite. It is a
-general purpose command-line tool for displaying package logs, version 
-information, checking for installed packages, checksums, message
-digests, maintainer information, package URL information, removing
-obsolete packages, displaying new packages, untracked files, sections,
-searching for files that are installed, finding when spells were
-created and packages in the software catalogue. It can even take and
-retrieve snap shots of currently installed packages for easy
-duplication.
+These functions are common to multiple gaze plugins.
 """
 #-----------------------------------------------------------------------
 #
@@ -73,6 +57,7 @@ from pysorcery.lib.system import mimetypes
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
+from pysorcery.lib.sorcery.smgl import bashspell
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 # Conditional Libraries
@@ -103,6 +88,8 @@ colortext = text.ConsoleText()
 # gaze_queue
 # gaze_version
 # gaze_file
+# gaze_grimoire
+# gaze_time
 #
 #-----------------------------------------------------------------------
 
@@ -204,7 +191,7 @@ def gaze_queue(args):
 #            args.multi    - Shows the installed version of the spell
 #                            and lists all available versions in all
 #                            grimoires. If used without a spell name,
-#                           then lists order of available grimoires.
+#                            then lists order of available grimoires.
 # 
 # Returns
 # -------
@@ -248,6 +235,15 @@ def gaze_version(args):
 # Show the compiler output generated when the spell was built. 
 # If no optional version was given, try the installed version. 
 # If the spell is not installed use the version in the grimoire.
+#
+# show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the
+# following spell scripts:
+# 
+# BUILD | CONFIGURE | CONFLICTS | DETAILS | DEPENDS | DOWNLOAD | FINAL |
+# HISTORY | INSTALL | INSTALL_EXTRAS | PATCH | POST_BUILD | POST_INSTALL |
+# POST_REMOVE | POST_RESURRECT | PRE_BUILD | PRE_INSTALL | PRE_REMOVE |
+# PRE_RESURRECT | PRE_SUB_DEPENDS | PREPARE | PROVIDES | SECURITY |
+# SUB_DEPENDS | TRANSFER | TRIGGER_CHECK | TRIGGERS | UP_TRIGGERS
 #
 # Inputs
 # ------
@@ -337,35 +333,6 @@ def gaze_grimoire(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_file
-#
-# show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the
-# following spell scripts:
-# 
-# BUILD | CONFIGURE | CONFLICTS | DETAILS | DEPENDS | DOWNLOAD | FINAL |
-# HISTORY | INSTALL | INSTALL_EXTRAS | PATCH | POST_BUILD | POST_INSTALL |
-# POST_REMOVE | POST_RESURRECT | PRE_BUILD | PRE_INSTALL | PRE_REMOVE |
-# PRE_RESURRECT | PRE_SUB_DEPENDS | PREPARE | PROVIDES | SECURITY |
-# SUB_DEPENDS | TRANSFER | TRIGGER_CHECK | TRIGGERS | UP_TRIGGERS
-#
-# Input:  args
-#         args.spell - Spell to print compile log.
-#                      Maximum 1
-#         args.quiet - decrease verbosity
-# Output:
-# Return: None
-#
-# Status: Not implimented
-#
-#-------------------------------------------------------------------------------
-def file(args):
-    logger.debug('Begin Function')
-    
-    logger.debug('End Function')
-    return
-
-#-------------------------------------------------------------------------------
-#
 # Function gaze_time
 #
 # shows the time the spell(s) needed to get cast. By default the last casting
@@ -379,17 +346,23 @@ def file(args):
 #   shows the time the whole system needed to get cast. If --no-orphans is
 #   specified orphaned spells are skipped.
 #
-# Input:  args
-#         args.spell - Spell to print compile log.
-#                      Maximum 1
-#         args.quiet - decrease verbosity
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell - Spell to print compile log.
+#                         Maximum 1
+#            args.quiet - decrease verbosity
 #
-# Status: Not implimented
+# Returns
+# -------
+#    @param: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
-def time(args):
+def gaze_time(args):
     logger.debug('Begin Function')
 
     
@@ -398,7 +371,7 @@ def time(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_grimoire
+# Function gaze_package_status
 #
 # Prints specified grimoire's spells or all grimoires if grimoire-name is omitted
 #
