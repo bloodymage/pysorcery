@@ -359,6 +359,34 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
+    # Function get_maintainer
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_size(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_size')
+        self.size = func(self.name, repository=self.repository)
+        return self.size
+
+    #-------------------------------------------------------------------
+    #
     # Function install
     #
     # Install a package

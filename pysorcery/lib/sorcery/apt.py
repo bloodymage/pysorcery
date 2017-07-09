@@ -526,7 +526,9 @@ def is_package(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_description
+# Function get_license
+#
+# Get the package license
 #
 # Inputs
 # ------
@@ -553,6 +555,37 @@ def get_license(name, **kwargs):
     cache.close()
     
     return license_
+
+#-----------------------------------------------------------------------
+#
+# Function get_size
+#
+# Get the package size.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: size
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_size(name, **kwargs):
+    cache = apt.cache.Cache()
+    cache.open()
+
+    pkg = cache[name]
+    versions = pkg.versions
+    size = versions[0].size
+    
+    cache.close()
+    
+    return size
 
 #-------------------------------------------------------------------------------
 #

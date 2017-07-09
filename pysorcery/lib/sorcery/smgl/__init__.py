@@ -10,7 +10,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/lib/sorcery/packages/sorcery/__init__.py
+# File: pysorcery/lib/sorcery/packages/sorcery/smgl/__init__.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -591,6 +591,30 @@ def get_license(name, **kwargs):
     details = details_file.parse()
     short = details['license']
     return short
+
+#-----------------------------------------------------------------------
+#
+# Function get_size
+#
+# Get the package size.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: size
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_size(name, **kwargs):
+
+    raise NotImplementedError
+    return size
 
 #-----------------------------------------------------------------------
 #
