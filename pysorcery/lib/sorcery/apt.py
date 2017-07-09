@@ -240,6 +240,50 @@ class AptPackages(sorcery.BasePackages):
 #    ...
 #
 #-----------------------------------------------------------------------
+class AptSection(sorcery.BaseSection):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class AptSections(sorcery.BaseSections):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class AptPackage
+#
+# AptPackage
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class AptRepository(sorcery.BaseRepository):
     pass
 
@@ -509,6 +553,28 @@ def get_license(name, **kwargs):
     cache.close()
     
     return license_
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repository
+#
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_repository(name=None, directory=None):
+    return name, None
 
 #-----------------------------------------------------------------------
 #

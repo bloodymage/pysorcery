@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/gaze/maintainer.py
+# File: pysorcery/cli/archive.py
 #
 # This file is part of Sorcery.
 #
@@ -25,16 +25,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyGaze: Maintainer
+# pyGaze: section
 #
-#    Display the email address of the person responsible for maintaining
-#    a specified spell.
+#
+#
 #-----------------------------------------------------------------------
 """
-pyGaze: Maintainer
+pyGaze: section
 
-Display the email address of the person responsible for maintaining a
-specified spell.
+View ...
 """
 #-----------------------------------------------------------------------
 #
@@ -86,25 +85,24 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# gaze_maintainer
+# gaze_section
 # parser
 #
 #-----------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_maintainer
+# Function gaze_section
 #
-# display the email address of the person currently responsible for
-# maintaining a specified section
+# view a list of all sections in the software catalogue or display a list
+# of packages from a specific section
 #
 # Inputs
 # ------
 #    @param: args
-#            args.spell    - List of spells to get section.
-#                            Minimum 1
-#            args.grimoire -
-#            args.quiet    - decrease verbosity
+#            args.spell - Spell to print compile log.
+#                         Maximum 1
+#            args.quiet - decrease verbosity
 #
 # Returns
 # -------
@@ -115,29 +113,13 @@ colortext = text.ConsoleText()
 #    ...
 #
 #-------------------------------------------------------------------------------
-def gaze_maintainer(args):
-    logger.debug('Begin Function')
+def gaze_section(args):
+    section = lib.Section(args.section)
+    packages = section.get_packages()
 
-    for i in args.spell:
-        logger.debug2('Loop iteration: ' + i)
-        
-        spell = lib.Package(i)
-        tf = spell.is_package()
-        if tf == True:
-            maintainer = spell.get_maintainer()
-        else:
-            section = lib.Section(i)
-            maintainer = section.get_maintainer()
-            
-        logger.debug3('Spell: ' + str(spell))
-        
-        message = colortext.colorize(spell.name, 'bold','white','black')
-        logger.info(message)
+    for package in packages:
+        print(package.name)
 
-        message = colortext.colorize(maintainer, 'none','white','black')
-        logger.info1(message)
-    
-    logger.debug('End Function')
     return
 
 
@@ -167,15 +149,15 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('maintainer',
+    cmd = subparsers.add_parser('section',
                                 parents = parent_parsers,
-                                help = 'Display the email address of the person responsible for maintaining a specified spell.'
+                                help = 'View a list of all sections in the software catalogue or display a list of packages from a specific section. (Not Working)'
     )
-    cmd.add_argument('spell',
-                     nargs = '+',
-                     help = 'Spell'
-    )    
-    cmd.set_defaults(func = gaze_maintainer,
+    cmd.add_argument('section',
+                     nargs = '?',
+                     help = 'Display System Info'
+    )
+    cmd.set_defaults(func = gaze_section,
                      sudo = False)
 
     return cmd

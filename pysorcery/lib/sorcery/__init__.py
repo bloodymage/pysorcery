@@ -541,6 +541,34 @@ class BaseSection():
         self.maintainer = func(self.name, repository=self.repository)
         return self.maintainer
 
+    #-------------------------------------------------------------------
+    #
+    # Function get_maintainer
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_packages(self):
+        func = util.get_module_func(scmd='sorcery',
+                                    program=pkg_mgr,
+                                    cmd='get_section_packages')
+        self.spells = func(self.name, repository=self.repository)
+        return self.spells
+
 #-----------------------------------------------------------------------
 #
 # Class BaseSection
@@ -585,17 +613,17 @@ class BaseSections():
 #
 #-------------------------------------------------------------------------------
 class BaseRepository():
-    def __init__(self,name=None,repo_dir=None):
+    def __init__(self, name=None, repo_dir=None):
         logger.debug('Begin Function')
 
         logger.debug2('Name: ' + str(name))
 
-        self.name, *self.directory = get_repo_name(name, repo_dir)
+        self.name, self.directory = get_repository(name, repo_dir)
 
         logger.debug('End Function')
         return
 
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Calls the read function based on the file format.
     #
@@ -612,7 +640,7 @@ class BaseRepository():
     #    ...
     # Return: description - The description of the package
     #
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def get_sections(self):
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
@@ -620,44 +648,65 @@ class BaseRepository():
         self.sections = func(self.name, repository=self.repository)
         return self.sections
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class Repositories
 # 
+# Inputs
+# ------
+#    @param: ...
 #
-#-------------------------------------------------------------------------------
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class BaseRepositories():
     def __init__(self, repositories=None):
         if repositories is None:
-            self.repositories, *self.directories = get_repositories()
+            self.repositories, self.directories = get_repositories()
         else:
             self.repositories = repositories
 
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions
 #
-# Get_repo_name
-# 
+# get_repository
+# get_repositories
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function 
+# Funxction 
 #
-# Input:  ...
-# Return: ...
+# Inputs
+# ------
+#    @param: ...
 #
-#-------------------------------------------------------------------------------
-def get_repo_name(name=None, repo_dir=None):
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_repository(name=None, repo_dir=None):
     func = util.get_module_func(scmd='sorcery',
                                 program=pkg_mgr,
-                                cmd='get_repo_name')
-    name = func(name, repo_dir)
-    return name
+                                cmd='get_repository'
+    )
+    name, directory = func(name, repo_dir)
+    return name, directory
 
 #-------------------------------------------------------------------------------
 #
@@ -681,5 +730,5 @@ def get_repositories(*args, **kwargs):
     func = util.get_module_func(scmd='sorcery',
                                 program=pkg_mgr,
                                 cmd='get_repositories')
-    repositories = func()
-    return repositories
+    repositories, directories = func()
+    return repositories, directories

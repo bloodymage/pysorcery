@@ -295,6 +295,65 @@ class Packages(sorcery.BasePackages):
 #    ...
 #
 #-----------------------------------------------------------------------
+class Section(sorcery.BaseSection):
+    pass
+#-----------------------------------------------------------------------
+#
+# Class Repositories
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Sections(sorcery.BaseSections):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class Repositories
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Repository(sorcery.BaseRepository):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class Repositories
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
 class Repositories(sorcery.BaseRepositories):
     pass
 
