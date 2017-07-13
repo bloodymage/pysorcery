@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Original BASH version
 # Original version Copyright 2001 by Kyle Sallee
@@ -23,17 +23,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
+# SMGL: BashSpell
 #
 #
 #
-#
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Libraries
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 # System Libraries
 import os
@@ -53,11 +53,11 @@ from pysorcery.lib.util import text
 
 # Other Optional Libraries
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
@@ -92,13 +92,27 @@ spellfiles = [ 'BUILD',
                'UP_TRIGGERS'
 ]
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Classes
 #
-#-------------------------------------------------------------------------------
+# BuildFile
+# ConfigureFile
+# ConflictsFile
+# DetailsFile
+# DependsFile
+# DownloadFile
+# FinalFile
+# HistoryFile
+# InstallFile
+# InstallExtrasFile
+# PatchFile
+# PostBuildFile
+# PostInstallFile
+#
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class BuildFile
 # 
@@ -114,11 +128,11 @@ spellfiles = [ 'BUILD',
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class BuildFile(lib.Files):
+#-----------------------------------------------------------------------
+class BuildFile(files.BaseFile):
     pass
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class ConfigureFile
 # 
@@ -134,11 +148,11 @@ class BuildFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class ConfigureFile(lib.Files):
+#-----------------------------------------------------------------------
+class ConfigureFile(files.BaseFile):
     pass
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class ConflictsFile
 # 
@@ -154,11 +168,11 @@ class ConfigureFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class ConflictsFile(lib.Files):
+#-----------------------------------------------------------------------
+class ConflictsFile(files.BaseFile):
     pass
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class DetailsFile
 # 
@@ -174,13 +188,13 @@ class ConflictsFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 class DetailsFile(files.BaseFile):
     def __init__(self,spell_directory):
         files.BaseFile.__init__(self, spell_directory + '/DETAILS')
         return
 
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function 
     #
@@ -199,7 +213,7 @@ class DetailsFile(files.BaseFile):
     #    ...
     # Return: description - The description of the package
     #
-    #-------------------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def parse(self):
         logger.debug('Begin Function')
         
@@ -253,7 +267,7 @@ class DetailsFile(files.BaseFile):
         logger.debug('End Function')
         return details_dict
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class DependsFile
 # 
@@ -269,17 +283,17 @@ class DetailsFile(files.BaseFile):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class DependsFile(lib.Files):
+#-----------------------------------------------------------------------
+class DependsFile(files.BaseFile):
     def __init__(self,filename):
         logger.debug('Begin Function')
         
-        lib.Files.__init__(self,spell_directory + '/DEPENDS')
+        files.BaseFile.__init__(self,spell_directory + '/DEPENDS')
         
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class DownloadFile
 # 
@@ -295,15 +309,15 @@ class DependsFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class DownloadFile(lib.Files):
+#-----------------------------------------------------------------------
+class DownloadFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class FinalFile
 # 
@@ -319,15 +333,15 @@ class DownloadFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class FinalFile(lib.Files):
+#-----------------------------------------------------------------------
+class FinalFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class HistoryFile
 # 
@@ -343,13 +357,13 @@ class FinalFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 class HistoryFile(files.BaseFile):
     def __init__(self, spell_directory):
         files.BaseFile.__init__(self, spell_directory + '/HISTORY')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class HistoryFile
 # 
@@ -365,15 +379,15 @@ class HistoryFile(files.BaseFile):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class InstallFile(lib.Files):
+#-----------------------------------------------------------------------
+class InstallFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class InstallExtrasFile
 # 
@@ -389,15 +403,15 @@ class InstallFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class InstallExtrasFile(lib.Files):
+#-----------------------------------------------------------------------
+class InstallExtrasFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class HistoryFile
 # 
@@ -413,15 +427,15 @@ class InstallExtrasFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PatchFile(lib.Files):
+#-----------------------------------------------------------------------
+class PatchFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PostBuildFile
 # 
@@ -437,15 +451,15 @@ class PatchFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PostBuildFile(lib.Files):
+#-----------------------------------------------------------------------
+class PostBuildFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PostInstallFile
 # 
@@ -461,15 +475,15 @@ class PostBuildFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PostInstallFile(lib.Files):
+#-----------------------------------------------------------------------
+class PostInstallFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PostRemoveFile
 # 
@@ -485,15 +499,15 @@ class PostInstallFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PostRemoveFile(lib.Files):
+#-----------------------------------------------------------------------
+class PostRemoveFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class HistoryFile
 # 
@@ -509,15 +523,15 @@ class PostRemoveFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PostResurrectFile(lib.Files):
+#-----------------------------------------------------------------------
+class PostResurrectFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PreBuildFile
 # 
@@ -533,15 +547,15 @@ class PostResurrectFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PreBuildFile(lib.Files):
+#-----------------------------------------------------------------------
+class PreBuildFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PreInstallFile
 # 
@@ -557,15 +571,15 @@ class PreBuildFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PreInstallFile(lib.Files):
+#-----------------------------------------------------------------------
+class PreInstallFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PreRemoveFile
 # 
@@ -581,15 +595,15 @@ class PreInstallFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PreRemoveFile(lib.Files):
+#-----------------------------------------------------------------------
+class PreRemoveFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PreResurrectFile
 # 
@@ -605,15 +619,15 @@ class PreRemoveFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PreResurrectFile(lib.Files):
+#-----------------------------------------------------------------------
+class PreResurrectFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PreSubDependsFile
 # 
@@ -629,15 +643,15 @@ class PreResurrectFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PreSubDependsFile(lib.Files):
+#-----------------------------------------------------------------------
+class PreSubDependsFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class PrepareFile
 # 
@@ -653,15 +667,15 @@ class PreSubDependsFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class PrepareFile(lib.Files):
+#-----------------------------------------------------------------------
+class PrepareFile(files.BaseFile):
     def __init__(self,name):
         logger.debug("Begin Function")
         self.name = name
         logger.debug("End Function")
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class ProvidesFile
 # 
@@ -677,16 +691,15 @@ class PrepareFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class ProvidesFile(lib.Files):
+#-----------------------------------------------------------------------
+class ProvidesFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class SecurityFile
 # 
@@ -702,15 +715,15 @@ class ProvidesFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class SecurityFile(lib.Files):
+#-----------------------------------------------------------------------
+class SecurityFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class SubDependsFile
 # 
@@ -726,16 +739,15 @@ class SecurityFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class SubDependsFile(lib.Files):
+#-----------------------------------------------------------------------
+class SubDependsFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class TransferFile
 # 
@@ -751,15 +763,15 @@ class SubDependsFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class TransferFile(lib.Files):
+#-----------------------------------------------------------------------
+class TransferFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class TriggerCheckFile
 # 
@@ -775,16 +787,15 @@ class TransferFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class TriggerCheckFile(lib.Files):
+#-----------------------------------------------------------------------
+class TriggerCheckFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class TriggersFile
 # 
@@ -800,16 +811,15 @@ class TriggerCheckFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class TriggersFile(lib.Files):
+#-----------------------------------------------------------------------
+class TriggersFile(files.BaseFile):
     def __init__(self,name):
         logger.debug('Begin Function')
-        lib.Files.__init__(self,filename)
+        files.BaseFile.__init__(self,filename)
         logger.debug('End Function')
         return
 
-
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class UpTriggersFile
 # 
@@ -825,6 +835,6 @@ class TriggersFile(lib.Files):
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
-class UpTriggersFile(lib.Files):
+#-----------------------------------------------------------------------
+class UpTriggersFile(files.BaseFile):
     pass

@@ -260,7 +260,7 @@ class Package(sorcery.BasePackage):
 
 #-----------------------------------------------------------------------
 #
-# Class Package
+# Class Packages
 # 
 # Inputs
 # ------
@@ -280,7 +280,7 @@ class Packages(sorcery.BasePackages):
 
 #-----------------------------------------------------------------------
 #
-# Class Repositories
+# Class Section
 # 
 # Inputs
 # ------
@@ -299,7 +299,7 @@ class Section(sorcery.BaseSection):
     pass
 #-----------------------------------------------------------------------
 #
-# Class Repositories
+# Class Sections
 # 
 # Inputs
 # ------
@@ -319,7 +319,7 @@ class Sections(sorcery.BaseSections):
 
 #-----------------------------------------------------------------------
 #
-# Class Repositories
+# Class Repository
 # 
 # Inputs
 # ------

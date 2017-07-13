@@ -75,11 +75,12 @@ logger = logging.getLogger(__name__)
 # Codex
 #
 #-----------------------------------------------------------------------
+
 #-----------------------------------------------------------------------
 #
 # Class Spell
 # 
-# Grimoire ...
+# ...
 #
 # Inputs
 # ------
@@ -101,7 +102,7 @@ class Spell(sorcery.BasePackage):
 #
 # Class Spells
 # 
-# Grimoire ...
+# ...
 #
 # Inputs
 # ------
@@ -123,7 +124,29 @@ class Spells(sorcery.BasePackages):
 #
 # Class Spells
 # 
-# Grimoire ...
+# ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class SpellVersion(sorcery.BasePackageVersions):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class Section
+# 
+# ...
 #
 # Inputs
 # ------
@@ -142,9 +165,9 @@ class Section(sorcery.BaseSection):
     pass
 #-----------------------------------------------------------------------
 #
-# Class Spells
+# Class Sections
 # 
-# Grimoire ...
+# ...
 #
 # Inputs
 # ------
@@ -237,7 +260,7 @@ class Codex(sorcery.BaseRepositories):
 #
 # Function get_repository
 #
-# Get's a spell's version.
+# Get ...
 #
 # Inputs
 # ------
@@ -301,15 +324,17 @@ def get_repository_dirs():
 #
 # Function get_repositories
 #
-# Get's a spell's version.
+# Get's a list of grimoires and a list of grimoire directories.
 #
 # Inputs
 # ------
-#    @param: name
+#    @param: *args
+#    @param: **kwargs
 #
 # Returns
 # -------
-#    @return: version
+#    @return: grimoires
+#    @return: directories
 #
 # Raises
 # ------
@@ -486,7 +511,7 @@ def get_section(name, **kwargs):
 #
 # Function get_section
 #
-# Gets a spell's short description.
+# Read a spells FILE.
 #
 # Inputs
 # ------
@@ -494,7 +519,7 @@ def get_section(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: short
+#    @return: content
 #
 # Raises
 # ------
@@ -525,7 +550,7 @@ def read_file(name, **kwargs):
 #
 # Function is_package
 #
-# Gets a spell's short description.
+# ...
 #
 # Inputs
 # ------
@@ -533,7 +558,7 @@ def read_file(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: short
+#    @return: check
 #
 # Raises
 # ------
@@ -562,9 +587,9 @@ def is_package(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_licens
+# Function get_license
 #
-# Gets a spell's short description.
+# ...
 #
 # Inputs
 # ------
@@ -572,7 +597,7 @@ def is_package(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: short
+#    @return: license
 #
 # Raises
 # ------
@@ -618,9 +643,9 @@ def get_size(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_description
+# Function get_pkg_maintainer
 #
-# Gets a spell's description.
+# Gets a spell's maintainer
 #
 # Inputs
 # ------
@@ -628,7 +653,7 @@ def get_size(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: description
+#    @return: maintainer
 #
 # Raises
 # ------
@@ -652,7 +677,7 @@ def get_pkg_maintainer(name, **kwargs):
 #
 # Function get_section_maintainer
 #
-# Gets a spell's description.
+# Gets a section's maintainer.
 #
 # Inputs
 # ------
@@ -660,7 +685,7 @@ def get_pkg_maintainer(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: description
+#    @return: maintainer
 #
 # Raises
 # ------
@@ -677,13 +702,14 @@ def get_section_maintainer(name, **kwargs):
     
     maintainer_file = files.BaseFile(section_dir + '/MAINTAINER')
     content = maintainer_file.read()
-    return content[0]
+    maintainer = content[0]
+    return maintainer
 
 #-----------------------------------------------------------------------
 #
-# Function get_section_maintainer
+# Function get_section_packages
 #
-# Gets a spell's description.
+# Gets a section's description.
 #
 # Inputs
 # ------
@@ -691,7 +717,7 @@ def get_section_maintainer(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: description
+#    @return: packages
 #
 # Raises
 # ------
@@ -805,11 +831,22 @@ def get_spell_dir(section_dir, name):
 
 #---------------------------------------------------------------
 #
-# Function 
+# Function get_queue
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# Get a list of spells in a queue.
+#
+# Inputs
+# ------
+#    @param: which-queue
+#
+#
+# Returns
+# -------
+#    @return: queue
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def get_queue(which_queue):
@@ -821,13 +858,23 @@ def get_queue(which_queue):
     logger.debug("End Function")
     return queue
     
-#-------------------------------------------------------------------
+#---------------------------------------------------------------
 #
-# Function 
+# Function get_installed
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def get_installed(status):
@@ -859,13 +906,13 @@ def get_installed(status):
 
 #-----------------------------------------------------------------------
 #
-# Function get_section
+# Function get_sections
 #
-# Gets a spell's section
+# Gets ...
 #
 # Inputs
 # ------
-#    @param: name
+#    @param: grimoire
 #
 # Returns
 # -------
@@ -879,7 +926,7 @@ def get_installed(status):
 def get_sections(grimoire=None, grim_dir=None, **kwargs):
     logger.debug('Begin Function')
     
-    dir_list = os.scandir(self.grim_dir)
+    dir_list = os.scandir(grim_dir)
     sections = []
     for item in dir_list:
         if item.is_dir():
@@ -889,16 +936,26 @@ def get_sections(grimoire=None, grim_dir=None, **kwargs):
     logger.debug('End Function')
     return sections
 
+#---------------------------------------------------------------
+#
+# Function get_orphans
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
+#
 #-------------------------------------------------------------------
-#
-# Function 
-#
-# Input:  ...
-# Output: ...
-# Return: ...
-#
-#-------------------------------------------------------------------
-def list_orphans(self):
+def get_orphans():
     logger.debug('Begin Function')
     
     var = subprocess.check_output(['gaze','orphans'])
@@ -913,22 +970,32 @@ def list_orphans(self):
     logger.debug('End Function')
     return orphan_list
 
+#---------------------------------------------------------------
+#
+# Function get_providers
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
+#
 #-------------------------------------------------------------------
-#
-# Function 
-#
-# Input:  ...
-# Output: ...
-# Return: ...
-#
-#-------------------------------------------------------------------
-def list_provides(self, feature):
+def get_providers(feature):
     logger.debug('Begin Function')
     
-    grimoires =  libcodex.Codex()
+    grimoires = Codex()
     
     providers = []
-    for grimoire in grimoires.list_grimoires():
+    for grimoire in grimoires.get_repositories():
         for line in open(grimoire + '/provides.index'):
             if feature.upper() == line.split(' ')[0]:
                 providers.append(line.split('/')[-1][:-1])

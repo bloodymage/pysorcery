@@ -23,16 +23,19 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Apt
+# Apt:
 #
-# These functions work with apt packages.
+#    These functions work with apt packages.
 #
 #-----------------------------------------------------------------------
+"""
+Apt:
 
+
+"""
 #-----------------------------------------------------------------------
 #
 # Libraries
-#
 #
 #-----------------------------------------------------------------------
 
@@ -67,7 +70,12 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 # AptPackage
+# AptPackageVersions
 # AptPackages
+# AptSection
+# AptSections
+# AptRepository
+# AptRepositories
 #
 #-----------------------------------------------------------------------
 
@@ -201,7 +209,7 @@ class AptPackage(sorcery.BasePackage):
 
 #-----------------------------------------------------------------------
 #
-# Class AptPackage
+# Class AptPackages
 #
 # AptPackage
 #
@@ -223,7 +231,7 @@ class AptPackages(sorcery.BasePackages):
 
 #-----------------------------------------------------------------------
 #
-# Class AptPackage
+# Class AptSection
 #
 # AptPackage
 #
@@ -317,6 +325,11 @@ class AptRepositories(sorcery.BaseRepositories):
 # get_version
 # get_url
 # get_short
+# get_section
+# read_file
+# is_package
+# get_license
+# get_size
 #
 #-----------------------------------------------------------------------
 
@@ -437,10 +450,9 @@ def get_short(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_short
+# Function get_section
 #
-# Get's a package's short description.  In apt, the package's description is
-# used as there isn't a short description.
+# ...
 #
 # Inputs
 # ------
@@ -448,7 +460,7 @@ def get_short(name, **kwargs):
 #
 # Returns
 # -------
-#    @return: description
+#    @return: section
 #
 # Raises
 # ------
@@ -474,7 +486,7 @@ def get_section(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_short
+# Function read_file
 #
 # Get's a package's short description.  In apt, the package's description is
 # used as there isn't a short description.
@@ -482,6 +494,7 @@ def get_section(name, **kwargs):
 # Inputs
 # ------
 #    @param: name
+#    @param: **kwargs
 #
 # Returns
 # -------
@@ -489,7 +502,7 @@ def get_section(name, **kwargs):
 #
 # Raises
 # ------
-#    ...
+#    @error: NotImplementedError
 #
 #-----------------------------------------------------------------------
 def read_file(name, **kwargs):
@@ -498,7 +511,7 @@ def read_file(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_description
+# Function is_package
 #
 # Inputs
 # ------
@@ -514,15 +527,16 @@ def read_file(name, **kwargs):
 #
 #-----------------------------------------------------------------------
 def is_package(name, **kwargs):
-    #cache = apt.cache.Cache()
-    #cache.open()
-    
-    #pkg = cache[name]
-    #versions = pkg.versions
-    #description  = versions[0].description
-
-    #cache.close()
-    return True
+    try:
+        cache = apt.cache.Cache()
+        cache.open()
+        pkg = cache[name]
+        cache.close()
+        pkg_exists = True
+    except Exception:
+        pkg_exists = False
+        
+    return pkg_exists
 
 #-----------------------------------------------------------------------
 #
@@ -650,11 +664,11 @@ def get_repositories(*args, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_maintainer
+# Function get_pkg_maintainer
 #
 # Inputs
 # ------
-#    @param: 
+#    @param: name
 #
 # Returns
 # -------
@@ -680,7 +694,7 @@ def get_pkg_maintainer(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function get_maintainer
+# Function get_section_maintainer
 #
 # Inputs
 # ------
@@ -710,11 +724,22 @@ def get_section_maintainer(name, **kwargs):
 
 #---------------------------------------------------------------
 #
-# Function 
+# Function get_queue
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# Get a list of spells in a queue.
+#
+# Inputs
+# ------
+#    @param: which-queue
+#
+#
+# Returns
+# -------
+#    @return: queue
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def get_queue(which_queue):
@@ -734,11 +759,21 @@ def get_queue(which_queue):
 
 #---------------------------------------------------------------
 #
-# Function 
+# Function get_installed
 #
-# Input:  ...
-# Output: ...
-# Return: ...
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------
 def get_installed(status):

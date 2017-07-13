@@ -76,6 +76,7 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 # 
 # BasePackage
 # BasePackages
+# BasePackageVersions
 # BaseSection
 # BaseSections
 # BaseRepository
@@ -86,7 +87,9 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
 #
 # Class BasePackage
-# 
+#
+# ...
+#
 # Inputs
 # ------
 #    @param: name
@@ -122,12 +125,11 @@ class BasePackage():
     #
     # Returns
     # -------
-    #    @return: description
+    #    @return: description - The description of the package
     #
     # Raises
     # ------
     #    ...
-    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
     def get_description(self):
@@ -154,7 +156,6 @@ class BasePackage():
     # Raises
     # ------
     #    ...
-    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
     def get_version(self):
@@ -181,7 +182,6 @@ class BasePackage():
     # Raises
     # ------
     #    ...
-    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
     def get_url(self):
@@ -221,7 +221,7 @@ class BasePackage():
     #
     # Function get_section
     #
-    # Get a package short description.
+    # Get a package ...
     #
     # Inputs
     # ------
@@ -231,7 +231,7 @@ class BasePackage():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: self.section
     #
     # Raises
     # ------
@@ -247,19 +247,20 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
-    # Function get_section
+    # Function read_file
     #
-    # Get a package short description.
+    # Read a package's file.
     #
     # Inputs
     # ------
     #    @param: self
     #            self.name
     #            self.repository
+    #    @param: filename
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: contents - File contents
     #
     # Raises
     # ------
@@ -275,9 +276,9 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
-    # Function get_section
+    # Function is_package
     #
-    # Get a package short description.
+    # Verify package exists.
     #
     # Inputs
     # ------
@@ -303,9 +304,9 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
-    # Function get_section
+    # Function get_license
     #
-    # Get a package short description.
+    # Get a package license.
     #
     # Inputs
     # ------
@@ -315,7 +316,7 @@ class BasePackage():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: self.license_
     #
     # Raises
     # ------
@@ -333,7 +334,7 @@ class BasePackage():
     #
     # Function get_maintainer
     #
-    # Get a package short description.
+    # Get a package maintainer
     #
     # Inputs
     # ------
@@ -343,7 +344,7 @@ class BasePackage():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: self.maintainer
     #
     # Raises
     # ------
@@ -359,7 +360,7 @@ class BasePackage():
 
     #-------------------------------------------------------------------
     #
-    # Function get_maintainer
+    # Function get_size
     #
     # Get a package short description.
     #
@@ -371,7 +372,8 @@ class BasePackage():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: size - The amount of disk space of an installed
+    #                    package.
     #
     # Raises
     # ------
@@ -437,7 +439,9 @@ class BasePackageVersions(BasePackage):
 
 #-----------------------------------------------------------------------
 #
-# Class BaseSpells
+# Class BasePackages
+#
+# ...
 # 
 # Inputs
 # ------
@@ -461,17 +465,16 @@ class BasePackages():
     #
     # Function get_queue
     #
-    # Get a package short description.
+    # Get a list of packages in a queue
     #
     # Inputs
     # ------
     #    @param: self
-    #            self.name
-    #            self.repository
+    #    @param: which_queue
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: self.packages
     #
     # Raises
     # ------
@@ -485,12 +488,11 @@ class BasePackages():
         self.packages = func(which_queue)
         return self.packages
 
-
     #-------------------------------------------------------------------
     #
-    # Function get_section
+    # Function get_installed
     #
-    # Get a package short description.
+    # Get a list of installed packages.
     #
     # Inputs
     # ------
@@ -500,7 +502,7 @@ class BasePackages():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: self.packages
     #
     # Raises
     # ------
@@ -517,10 +519,13 @@ class BasePackages():
 #-----------------------------------------------------------------------
 #
 # Class BaseSection
-# 
+#
+# ...
+#
 # Inputs
 # ------
-#    @param: ...
+#    @param: name
+#    @param: repository
 #
 # Returns
 # -------
@@ -545,7 +550,7 @@ class BaseSection():
     #
     # Function get_maintainer
     #
-    # Get a package short description.
+    # Get a section maintainer
     #
     # Inputs
     # ------
@@ -555,7 +560,7 @@ class BaseSection():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: maintainer
     #
     # Raises
     # ------
@@ -571,9 +576,9 @@ class BaseSection():
 
     #-------------------------------------------------------------------
     #
-    # Function get_maintainer
+    # Function get_packages
     #
-    # Get a package short description.
+    # Get a list of packages within a section.
     #
     # Inputs
     # ------
@@ -583,7 +588,7 @@ class BaseSection():
     #
     # Returns
     # -------
-    #    @return: description - The description of the package
+    #    @return: self.packages
     #
     # Raises
     # ------
@@ -594,16 +599,18 @@ class BaseSection():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='get_section_packages')
-        self.spells = func(self.name, repository=self.repository)
-        return self.spells
+        self.packages = func(self.name, repository=self.repository)
+        return self.packages
 
 #-----------------------------------------------------------------------
 #
-# Class BaseSection
-# 
+# Class BaseSections
+#
+# ...
+#
 # Inputs
 # ------
-#    @param: ...
+#    @param: sections
 #
 # Returns
 # -------
@@ -626,10 +633,13 @@ class BaseSections():
 #-------------------------------------------------------------------------------
 #
 # Class BaseRepository
-# 
+#
+# ...
+#
 # Inputs
 # ------
 #    @param: name
+#    @param: reepo_dir
 #
 # Returns
 # -------
@@ -653,6 +663,8 @@ class BaseRepository():
 
     #-------------------------------------------------------------------
     #
+    # Function get_repository
+    #
     # Calls the read function based on the file format.
     #
     # Inputs
@@ -661,12 +673,11 @@ class BaseRepository():
     #
     # Returns
     # -------
-    #    @return: description
+    #    @return: self.sections
     #
     # Raises
     # ------
     #    ...
-    # Return: description - The description of the package
     #
     #-------------------------------------------------------------------
     def get_sections(self):
@@ -679,10 +690,12 @@ class BaseRepository():
 #-----------------------------------------------------------------------
 #
 # Class Repositories
+#
+# Provide support for a list of repositories.
 # 
 # Inputs
 # ------
-#    @param: ...
+#    @param: repositories
 #
 # Returns
 # -------
@@ -694,7 +707,7 @@ class BaseRepository():
 #
 #-----------------------------------------------------------------------
 class BaseRepositories():
-    def __init__(self, repositories=None):
+    def __init__(self, repositories=[]):
         if repositories is None:
             self.repositories, self.directories = get_repositories()
         else:
@@ -713,15 +726,17 @@ class BaseRepositories():
 
 #-----------------------------------------------------------------------
 #
-# Funxction 
+# Function get_repository 
 #
 # Inputs
 # ------
-#    @param: ...
+#    @param: name
+#    @param: repo_dir
 #
 # Returns
 # -------
-#    @return: None
+#    @return: name
+#    @return: directory
 #
 # Raises
 # ------
@@ -748,6 +763,7 @@ def get_repository(name=None, repo_dir=None):
 # Returns
 # -------
 #    @return: repositories
+#    @return: directories
 #
 # Raises
 # ------
