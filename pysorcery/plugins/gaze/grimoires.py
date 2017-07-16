@@ -113,7 +113,7 @@ def parser(*args, **kwargs):
                                 parents = parent_parsers,
                                 help = 'Display installed grimoires by name only.'
     )
-    cmd.set_defaults(func = gaze.gaze_grimoire,
+    cmd.set_defaults(func = gaze.gaze_grimoires,
                      multi = True,
                      display_format = 'console',
                      sudo = False)

@@ -118,7 +118,7 @@ def parser(*args, **kwargs):
     cmd.add_argument('spell',
                      nargs = 1,
                      help = 'Package to display history.')
-    cmd.set_defaults(func = gaze.gaze_file,
+    cmd.set_defaults(func = gaze.gaze_spell_file,
                      filename = 'HISTORY',
                      sudo = False)
     

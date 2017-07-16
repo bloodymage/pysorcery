@@ -230,11 +230,57 @@ def gaze_version(args):
 
 #-------------------------------------------------------------------------------
 #
-# Function gaze_file
+# Function gaze_version
 #
-# Show the compiler output generated when the spell was built. 
-# If no optional version was given, try the installed version. 
-# If the spell is not installed use the version in the grimoire.
+# Shows the installed version of the spell and the main grimoires version.
+# 
+# Inputs
+# ------
+#    @param: args
+#            args.spell    - Spell to print compile log.
+#                            Maximum 1
+#            args.grimoire -
+#            args.quiet    - decrease verbosity
+#            args.multi    - Shows the installed version of the spell
+#                            and lists all available versions in all
+#                            grimoires. If used without a spell name,
+#                            then lists order of available grimoires.
+# 
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def gaze_versions(args):
+    logger.debug('Begin Function')
+
+    for i in args.spell:
+        spell = lib.Package(i)
+        version = spell.get_version()
+
+        logger.debug(spell)
+
+        if args.verbosity > 0:
+            logger.critical('Fix Me')
+        else:
+            message = colortext.colorize(spell.name, 'bold','white','black')
+            logger.info1(message)
+            
+            message = colortext.colorize(version, 'none','white','black')
+            logger.info2(message)
+
+            print()
+    
+    logger.debug('End Function')
+    return
+
+#-------------------------------------------------------------------------------
+#
+# Function gaze_spell_file
 #
 # show SCRIPT_NAME of the spell, where SCRIPT_NAME is any of the
 # following spell scripts:
@@ -261,6 +307,45 @@ def gaze_version(args):
 #    ...
 #
 #-------------------------------------------------------------------------------
+def gaze_spell_file(args):
+    logger.debug('Begin Function')
+
+    if args.filename in bashspell.spellfiles:
+        spell = lib.Package(args.spell[0])
+        content = spell.read_file(args.filename)
+    else:
+        raise NotImplementedError
+
+    for line in content:
+        print(line)
+
+    logger.debug('End Function')
+    return
+
+#-------------------------------------------------------------------------------
+#
+# Function gaze_file
+#
+# Show the compiler output generated when the spell was built. 
+# If no optional version was given, try the installed version. 
+# If the spell is not installed use the version in the grimoire.
+#
+# Inputs
+# ------
+#    @param: args
+#            args.spell - Spell to print compile log.
+#                         Maximum 1
+#            args.quiet - decrease verbosity
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
 def gaze_file(args):
     logger.debug('Begin Function')
 
@@ -269,12 +354,6 @@ def gaze_file(args):
         file_ = lib.File(args.filename)
         content = file_.read()
 
-    elif args.spell and args.filename:
-        if args.filename in bashspell.spellfiles:
-            spell = lib.Package(args.spell[0])
-            content = spell.read_file(args.filename)
-        else:
-            raise NotImplementedError
     else:
         raise NotImplementedError
 
@@ -327,6 +406,43 @@ def gaze_grimoire(args):
 
     else:
         libgaze.print_codex()          
+    
+    logger.debug('End Function')
+    return
+
+#-------------------------------------------------------------------------------
+#
+# Function gaze_grimoires
+#
+# Displays installed grimoires by name only
+#
+# Inputs
+# ------
+#    @param: args
+#            args.grimoire      - Spell to print compile log.
+#                              Minimum 1
+#            args.quiet         - decrease verbosity
+#            args.multi         -
+#            args.displayformat - console or html
+#            args.columns       - have the grimoires be columns
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def gaze_grimoires(args):
+    logger.debug('Begin Function')
+
+    codex = lib.Repositories()
+    repositories = codex.repositories
+    
+    for repo in repositories:
+        print(repo)
     
     logger.debug('End Function')
     return

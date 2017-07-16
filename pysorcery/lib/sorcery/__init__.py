@@ -708,7 +708,7 @@ class BaseRepository():
 #-----------------------------------------------------------------------
 class BaseRepositories():
     def __init__(self, repositories=[]):
-        if repositories is None:
+        if len(repositories) == 0:
             self.repositories, self.directories = get_repositories()
         else:
             self.repositories = repositories

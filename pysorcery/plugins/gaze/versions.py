@@ -124,7 +124,7 @@ def parser(*args, **kwargs):
                      nargs = 1,
                      help = 'Display System Info'
     )
-    cmd.set_defaults(func = gaze.gaze_version,
+    cmd.set_defaults(func = gaze.gaze_versions,
                      sudo = False,
                      multi = True
     )
