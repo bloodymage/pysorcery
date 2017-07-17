@@ -68,6 +68,7 @@ logger = logging.getLogger(__name__)
 # Classes
 #
 # Spell
+# SpellVersions
 # Spells
 # Section
 # Sections
@@ -139,7 +140,7 @@ class Spells(sorcery.BasePackages):
 #    ...
 #
 #-----------------------------------------------------------------------
-class SpellVersion(sorcery.BasePackageVersions):
+class SpellVersions(sorcery.BasePackageVersions):
     pass
 
 #-----------------------------------------------------------------------
@@ -163,6 +164,7 @@ class SpellVersion(sorcery.BasePackageVersions):
 #-----------------------------------------------------------------------
 class Section(sorcery.BaseSection):
     pass
+
 #-----------------------------------------------------------------------
 #
 # Class Sections
@@ -533,12 +535,14 @@ def read_file(name, **kwargs):
     else:
         repository = kwargs['repository']
 
-    grimoire_dir = grimoire.get_grim_dir()
     section_dir = get_section_dir(grimoire_dir, name)
     spell_directory = get_spell_dir(section_dir, name)
 
     filename = kwargs['filename']
-    classname = filename.capitalize()
+    
+    # What I really need is camelcase.
+    #classname = filename.capitalize()
+    classname = filename
 
     fileclass = getattr(bashspell, classname + 'File')
     file_ = fileclass(spell_directory)

@@ -23,10 +23,12 @@
     - [X] bz2
     - [X] iso
     - [X] others ...
+- setup.py
 
 ### 0.0.2    
 #### Functional Scripts
 - pygaze
+ - Functions
     - [X] activity
     - [ ] alien
     - [ ] checkmd5s
@@ -43,7 +45,7 @@
     - [ ] installed
     - [ ] install-full
     - [ ] install
-    - [ ] install-queue
+    - [X] install-queue
     - [ ] install-spell
     - [X] licenses
     - [X] maintainer
@@ -52,74 +54,154 @@
     - [ ] older
     - [ ] orphans
     - [ ] provides
-    - [ ] remove-queue
+    - [X] remove-queue - Theoretical, haven't had data to truly test with.
     - [ ] search
     - [ ] section
     - [X] short
-    - [ ] show-exiled
-    - [ ] show-held
+    - [X] show-exiled
+    - [X] show-held
     - [ ] size
     - [ ] sources
     - [ ] source_urls
     - [ ] sum
     - [ ] time
     - [ ] time-system
-    - [ ] url
+    - [X] url
     - [X] version
     - [ ] versions
     - [ ] voyeur
     - [X] what
     - [X] where
-    
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] read (for compressed files, ex. txtfile.gz)
   
 ### 0.0.3
 #### Functional Scripts
 - pysummon
-  - [ ] http
-  - [ ] ftp
-  - [ ] git
-  - [ ] svn
-  - [ ] cvs
-  - [ ] rsync
-  - [ ] bzr
-  - [ ] file (Include Directories)
-  
+  - URI formats:
+    - [ ] http
+    - [ ] ftp
+    - [ ] git
+    - [ ] svn
+    - [ ] cvs
+    - [ ] rsync
+    - [ ] bzr
+    - [ ] file (Include Directories)
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] add (file)
+    
 ### 0.0.4
 #### Functional Scripts
 - pyscribe
-  - [ ] add
-  - [ ] remove
-  - [ ] update
-  - [ ] localize
-  - [ ] unlocalize
-  - [ ] set
-  - [ ] swap
-
+  - Functions
+    - [ ] add
+    - [ ] remove
+    - [ ] update
+    - [ ] localize
+    - [ ] unlocalize
+    - [ ] set
+    - [ ] swap
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] append (concatenate two archives, ex. tar1.tar.gz + tar2.tar.gz = tar3.tar.gz)
 
 ### 0.0.5
 #### Functional Scripts
 - pycast
-
-
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] delete (file from archive)
+    
 ### 0.0.6
 #### Functional Scripts
 - pydispel
-
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] update
 
 ### 0.0.7
 #### Functional Scripts
 - pycleanse
 
-
 ### 0.0.8
 #### Functional Scripts
 - pyscribbler
-
+  - Functions
+    - [ ] add
+    - [ ] remove
+    - [ ] add-grimoire
 
 ### 0.0.9
 #### Functional Scripts
 - pysorcery
-
+  - Functions
+    - [ ] system-update
+    - [ ] update
+    - [ ] upgrade
+    - [ ] rebuild
+    - [ ] queue
+    - [ ] queue-security
+    - [ ] review-queue
+    - [ ] add-queue
+    - [ ] remove-queue
+    - [ ] hold
+    - [ ] unhold
+    - [ ] exile
+    - [ ] unexile
+    - [ ] default ...
+  - Menus
+    - [ ] Spell
+      - [ ] Add
+      - [ ] Rebuild (same as 'sorcery rebuild')
+      - [ ] Hold
+      - [ ] Remove
+      - [ ] Select
+      - [ ] Update
+    - [ ] Option
+      - [ ] Sorcery Branch
+      - [ ] Color Scheme
+      - [ ] Prompt Delay
+      - [ ] Download Rate
+      - [ ] Nice Level
+      - [ ] Umask Value
+      - [ ] Email of Sorcerer (SysAdmin)
+      - [ ] Feature Menu
+      - [ ] Integrity Checking
+      - [ ] Parallel / Cached / Distributed Compiling
+      - [ ] Dependency Following
+      - [ ] Software Mirrors
+      - [ ] Optimize Architecture
+      - [ ] Compression Type
+      - [ ] Sorcery Development
+      - [ ] Summon Timeout
+      - [ ] Default Download Tool
+      - [ ] init.d and xinet.d defaults
+      - [ ] Themes
+        - [ ] Sound Scheme (only one at a time)
+	  - [ ] Star Trek
+	  - [ ] Ferris
+	  - [ ] Misc
+	  - [ ] Simpsons
+	  - [ ] Off
+	- [ ] Command Theme (multiple allowed)
+	  - [ ] Sorcery (only if bash sorcery is not installed)
+	  - [ ] Harry Potter
+	  - [ ] Lunar (only if bash lunar not installed)
+	  - [ ] ...
+    - [ ] Log
+    - [ ] Queue
+    - [ ] Install Root
+  - Execute (Menu Options for Execution)
+    - [ ] Foreground
+    - [ ] Background
+  
 
 ### 0.0.10
 #### Functional Scripts
@@ -140,7 +222,7 @@
 - pyupstream
   - Check Debian Upstream
   - Create Spell From Debian Upstream
-
+#### Sorcery Spell API 3
 
 ### 0.0.12
 #### Script Modifications
@@ -179,11 +261,10 @@
 
 ## 0.1
 
-- Sorcery CLI functional replacement for BASH version
+~- Sorcery CLI functional replacement for BASH version
 #### Supported Distributions
 - [ ] Source Mage
 - [ ] Xubuntu
-
 
 ### 0.1.1
 ####
@@ -191,23 +272,16 @@
 
 ### 0.1.2
 ####
-- Maximize native python code
+- Maximize native python code (minimize calls to outside programs).
 
 ### 0.1.3
 - Ensure proper exception handling
 
 ### 0.1.4
-- Setup.py
-
-### 0.1.5
 #### Functional Scripts
 - pyenchant
-#### Script Modifications
-- pyarchive
-  - formats
-    - [ ] iso
  
-### 0.1.6
+### 0.1.5
 #### Functional Scripts
 - pycauldron
 
@@ -229,7 +303,7 @@
 
 ### 0.4.1
 #### Modified Scripts
-- Guru toolsr
+- Guru tools
   - [ ] Fix History
   - [ ] Report
     - [ ] Grimoire Image
@@ -241,6 +315,7 @@
 ### 0.4.2
 #### Functional Scripts
 - pysmgl-ledger
+
 
 ## 0.5
 - Base Code Functional
@@ -262,6 +337,7 @@
 #### New Package Manager
 - Add support for Lunar Linux '...'
   - Ensure commands are compatible with Lunar Linux commands
+  - Add Lunar 'Theme' for commands.
 
 ### 0.6.2
 #### New Package Manager
@@ -279,11 +355,11 @@
 ## 0.7
 - Major Linux distributions package managers supported
 
+
 ## 0.8
 - Add support for 'pip' package manager
 
 ### 0.8.1
-
 
 
 ## 0.9
@@ -293,16 +369,23 @@
 Debug, debug, debug
 
 
+
 ## 1.0
 - Release 1
+
+
+### 1.1.0
+#### New Package Manager
+- Add support for MacOS 'Homebrew'
+
 
 
 ## 2.0
 - Release 2
 
-### 2.0.1
-#### New Package Manager
-- Add support for MacOS 'Homebrew'
+
+### 2.1.0
 
 
 ## 3.0
+####

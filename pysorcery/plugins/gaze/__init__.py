@@ -310,8 +310,8 @@ def gaze_versions(args):
 def gaze_spell_file(args):
     logger.debug('Begin Function')
 
-    if args.filename in bashspell.spellfiles:
-        spell = lib.Package(args.spell[0])
+    if args.filename.upper() in bashspell.spellfiles:
+        spell = lib.Package(args.spell)
         content = spell.read_file(args.filename)
     else:
         raise NotImplementedError

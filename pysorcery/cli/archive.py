@@ -57,7 +57,8 @@ import sys
 
 # 3rd Party Libraries
 try:
-    import argcomplete
+    # to all bash completion, doesn't seem to work
+    import argcomplete 
     BASHCOMPLETE = True
 except ImportError as msg:
     BASHCOMPLETE = False
@@ -147,7 +148,9 @@ Report bugs to ...
 
     # Create the subcommand arguments
     for i in subcommands:
-        subcommand = util.get_module_func(scmd='archive',program=i,cmd='parser')
+        subcommand = util.get_module_func(scmd='archive',
+                                          program=i,
+                                          cmd='parser')
         subcommand(subparsers, parent_parser)
 
     # This doesn't work...

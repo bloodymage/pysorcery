@@ -110,10 +110,9 @@ colortext = text.ConsoleText()
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
-    cmd = subparsers.add_parser('HISTORY',
-                                aliases = ['history'],
+    cmd = subparsers.add_parser('DETAILS',
                                 parents = parent_parsers,
-                                help = 'Show spell HISTORY file'
+                                help = 'Show spell DETAILS file.'
     )
     cmd.add_argument('spell',
                      help = 'Package to display history.')
@@ -123,7 +122,7 @@ def parser(*args, **kwargs):
     # for the file.  eg. class: PreBuildFile becomes
     # PreBuild, class: HistoryFile becomes History.
     cmd.set_defaults(func = gaze.gaze_spell_file,
-                     filename = 'History',
+                     filename = 'Details',
                      sudo = False)
     
     return cmd

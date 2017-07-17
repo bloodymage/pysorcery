@@ -130,7 +130,9 @@ spellfiles = [ 'BUILD',
 #
 #-----------------------------------------------------------------------
 class BuildFile(files.BaseFile):
-    pass
+    def __init__(self, spell_directory):
+        super(BuildFile, self).__init__(spell_directory + '/BUILD')
+        return
 
 #-----------------------------------------------------------------------
 #
@@ -150,7 +152,10 @@ class BuildFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class ConfigureFile(files.BaseFile):
-    pass
+    def __init__(self, spell_directory):
+        super(ConfigureFile, self).__init__(spell_directory + '/CONFIGURE')
+        return
+
 
 #-----------------------------------------------------------------------
 #
@@ -170,7 +175,10 @@ class ConfigureFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class ConflictsFile(files.BaseFile):
-    pass
+    def __init__(self, spell_directory):
+        super(ConflictFile, self).__init__(spell_directory + '/CONFLICTS')
+        return
+
 
 #-----------------------------------------------------------------------
 #
@@ -190,8 +198,8 @@ class ConflictsFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class DetailsFile(files.BaseFile):
-    def __init__(self,spell_directory):
-        files.BaseFile.__init__(self, spell_directory + '/DETAILS')
+    def __init__(self, spell_directory):
+        super(DetailsFile, self).__init__(spell_directory + '/DETAILS')
         return
 
     #-------------------------------------------------------------------
@@ -285,12 +293,8 @@ class DetailsFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class DependsFile(files.BaseFile):
-    def __init__(self,filename):
-        logger.debug('Begin Function')
-        
-        files.BaseFile.__init__(self,spell_directory + '/DEPENDS')
-        
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(DependsFile, self).__init__(spell_directory + '/DEPENDS')
         return
 
 #-----------------------------------------------------------------------
@@ -311,10 +315,8 @@ class DependsFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class DownloadFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(DownloadFile, self).__init__(spell_directory + '/DOWNLOAD')
         return
 
 #-----------------------------------------------------------------------
@@ -335,10 +337,8 @@ class DownloadFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class FinalFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(FinalFile, self).__init__(spell_directory + '/FINAL')
         return
 
 #-----------------------------------------------------------------------
@@ -360,12 +360,12 @@ class FinalFile(files.BaseFile):
 #-----------------------------------------------------------------------
 class HistoryFile(files.BaseFile):
     def __init__(self, spell_directory):
-        files.BaseFile.__init__(self, spell_directory + '/HISTORY')
+        super(HistoryFile, self).__init__(spell_directory + '/HISTORY')
         return
 
 #-----------------------------------------------------------------------
 #
-# Class HistoryFile
+# Class InstallFile
 # 
 # Inputs
 # ------
@@ -381,10 +381,8 @@ class HistoryFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class InstallFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(InstallFile, self).__init__(spell_directory + '/INSTALL')
         return
 
 #-----------------------------------------------------------------------
@@ -405,10 +403,8 @@ class InstallFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class InstallExtrasFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(InstallExtrasFile, self).__init__(spell_directory + '/INSTALLEXTRAS')
         return
 
 #-----------------------------------------------------------------------
@@ -429,10 +425,8 @@ class InstallExtrasFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PatchFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PatchFile, self).__init__(spell_directory + '/PATCH')
         return
 
 #-----------------------------------------------------------------------
@@ -453,10 +447,8 @@ class PatchFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PostBuildFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PostBuildFile, self).__init__(spell_directory + '/POST_BUILD')
         return
 
 #-----------------------------------------------------------------------
@@ -477,10 +469,8 @@ class PostBuildFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PostInstallFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PostInstallFile, self).__init__(spell_directory + '/POST_INSTALL')
         return
 
 #-----------------------------------------------------------------------
@@ -501,10 +491,8 @@ class PostInstallFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PostRemoveFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PostRemoveFile, self).__init__(spell_directory + '/POST_REMOVE')
         return
 
 #-----------------------------------------------------------------------
@@ -525,10 +513,8 @@ class PostRemoveFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PostResurrectFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PostResurrectFile, self).__init__(spell_directory + '/POST_RESURRECT')
         return
 
 #-----------------------------------------------------------------------
@@ -549,10 +535,8 @@ class PostResurrectFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PreBuildFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(Pre_buildFile, self).__init__(spell_directory + '/PRE_BUILD')
         return
 
 #-----------------------------------------------------------------------
@@ -573,10 +557,8 @@ class PreBuildFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PreInstallFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PreInstallFile, self).__init__(spell_directory + '/PRE_INSTALL')
         return
 
 #-----------------------------------------------------------------------
@@ -597,10 +579,8 @@ class PreInstallFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PreRemoveFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PreRemoveFile, self).__init__(spell_directory + '/PREREMOVE')
         return
 
 #-----------------------------------------------------------------------
@@ -621,10 +601,8 @@ class PreRemoveFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PreResurrectFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PreResurrectFile, self).__init__(spell_directory + '/PRERESURRECT')
         return
 
 #-----------------------------------------------------------------------
@@ -645,10 +623,8 @@ class PreResurrectFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PreSubDependsFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(PreSubDependsFile, self).__init__(spell_directory + '/PRESUBDEPENDS')
         return
 
 #-----------------------------------------------------------------------
@@ -669,10 +645,8 @@ class PreSubDependsFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class PrepareFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug("Begin Function")
-        self.name = name
-        logger.debug("End Function")
+    def __init__(self, spell_directory):
+        super(PrepareFile, self).__init__(spell_directory + '/PREPARE')
         return
 
 #-----------------------------------------------------------------------
@@ -693,10 +667,8 @@ class PrepareFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class ProvidesFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(ProvidesFile, self).__init__(spell_directory + '/PROVIDES')
         return
 
 #-----------------------------------------------------------------------
@@ -717,10 +689,8 @@ class ProvidesFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class SecurityFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(SecurityFile, self).__init__(spell_directory + '/SECURITY')
         return
 
 #-----------------------------------------------------------------------
@@ -741,10 +711,8 @@ class SecurityFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class SubDependsFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(SubDependsFile, self).__init__(spell_directory + '/SUBDEPENDS')
         return
 
 #-----------------------------------------------------------------------
@@ -765,10 +733,8 @@ class SubDependsFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class TransferFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(TransferFile, self).__init__(spell_directory + '/TRANSFER')
         return
 
 #-----------------------------------------------------------------------
@@ -789,10 +755,8 @@ class TransferFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class TriggerCheckFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(TriggersCheckFile, self).__init__(spell_directory + '/TRIGGERS_CHECK')
         return
 
 #-----------------------------------------------------------------------
@@ -813,10 +777,8 @@ class TriggerCheckFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class TriggersFile(files.BaseFile):
-    def __init__(self,name):
-        logger.debug('Begin Function')
-        files.BaseFile.__init__(self,filename)
-        logger.debug('End Function')
+    def __init__(self, spell_directory):
+        super(TriggersFile, self).__init__(spell_directory + '/TRIGGERS')
         return
 
 #-----------------------------------------------------------------------
@@ -837,4 +799,6 @@ class TriggersFile(files.BaseFile):
 #
 #-----------------------------------------------------------------------
 class UpTriggersFile(files.BaseFile):
-    pass
+    def __init__(self, spell_directory):
+        super(UpTriggersFile, self).__init__(spell_directory + '/UP_TRIGGERS')
+        return

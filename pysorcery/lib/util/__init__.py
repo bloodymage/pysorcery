@@ -75,6 +75,7 @@ logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
 
+# Set paths for sorcery resources:
 # Utilities
 UTIL_ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery',
                                                     'lib/util/files/archive/')
@@ -82,7 +83,7 @@ UTIL_COMPRESSED_PATH = pkg_resources.resource_filename('pysorcery',
                                                        'lib/util/files/compressed/')
 UTIL_URL_PATH = pkg_resources.resource_filename('pysorcery', 'lib/util/url/')
 
-# Cemmand Plugins
+# Command Plugins
 ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/archive/')
 GAZE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/gaze/')
 
@@ -137,9 +138,9 @@ UrlModules = {
 #
 # Class memoized
 #
-# Decorator that caches a function's return value each time it is called.
-# If called later with the same arguments, the cached value is returned, and
-# not re-evaluated.
+# Decorator that caches a function's return value each time it is
+# called.  If called later with the same arguments, the cached value is
+# returned, and not re-evaluated.
 #
 # Inputs
 # ------
@@ -230,6 +231,9 @@ class memoized (object):
 #
 # Functions
 #
+# strlist_with_or
+# shell_quote
+# shell_quote_nt
 # get_cmd_types
 # get_cmd_func
 #
@@ -263,7 +267,7 @@ def strlist_with_or (alist):
 
 #-----------------------------------------------------------------------
 #
-# Function get_cmd_types
+# Function shell_quote
 #
 # Quote all shell metacharacters in given string value with strong
 # (ie. single) quotes, handling the single quote especially.
@@ -399,11 +403,11 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
 #
 # Function get_cmd_types
 #
-#
+# Get a list of supported formats for the command classification
 #
 # Inputs
 # ------
-#     @param: cmd_class - I really need a new name for this...
+#     @param: cmd_class - Command classification to check on.
 #         
 # Returns
 # -------
@@ -446,6 +450,10 @@ def get_cmd_types(cmd_class):
 # ------
 #    @param: *args
 #    @param: *kwargs
+#            *kwargs['scmd'] - Sorcery Command
+#            *kwargs['program'] - Program
+#            *kwargs['cmd'] - Command
+#            *kwargs['format_'] - 
 #
 # Returns
 # -------
@@ -453,7 +461,8 @@ def get_cmd_types(cmd_class):
 #
 # Raises
 # ------
-#    ...
+#    ImportError
+#    AttributeError
 #
 #-----------------------------------------------------------------------
 def get_module_func(*args, **kwargs):
@@ -483,7 +492,7 @@ def get_module_func(*args, **kwargs):
     try:
         module = importlib.import_module(modulename, __name__)
     except ImportError as msg:
-        raise Exception(msg)
+        raise ImportError(msg)
     # get archive handler function (eg. patoolib.programs.star.extract_tar)
     try:
         if format_:
@@ -491,7 +500,7 @@ def get_module_func(*args, **kwargs):
         else:
             return getattr(module, command)
     except AttributeError as msg:
-        raise Exception(msg)
+        raise AttributeError(msg)
 
         logger.error(msg)
         logger.debug('End Function')
@@ -501,9 +510,9 @@ def get_module_func(*args, **kwargs):
 #
 # Function system_search_path
 #
-# Get the list of directories on a system to search for executable programs.
-# It is either the PATH environment variable or if PATH is undefined the value
-# of os.defpath.
+# Get the list of directories on a system to search for executable
+# programs.  It is either the PATH environment variable or if PATH is
+# undefined the value of os.defpath.
 #
 # Inputs
 # ------
@@ -561,6 +570,10 @@ def find_program (program):
 #-----------------------------------------------------------------------
 #
 # Function strsize
+#
+# ...
+#
+# To be replaced by datasize.py info somehow...
 #
 # Inputs
 # ------

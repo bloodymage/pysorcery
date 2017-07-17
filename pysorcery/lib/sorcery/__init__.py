@@ -271,7 +271,7 @@ class BasePackage():
         func = util.get_module_func(scmd='sorcery',
                                     program=pkg_mgr,
                                     cmd='read_file')
-        conhents = func(self.name, repository=self.repository, filename=filename)
+        contents = func(self.name, repository=self.repository, filename=filename)
         return contents
 
     #-------------------------------------------------------------------

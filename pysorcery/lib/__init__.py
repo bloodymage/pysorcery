@@ -260,6 +260,26 @@ class Package(sorcery.BasePackage):
 
 #-----------------------------------------------------------------------
 #
+# Class Package
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class PackageVersions(sorcery.BasePackageVersions):
+    pass
+
+#-----------------------------------------------------------------------
+#
 # Class Packages
 # 
 # Inputs
@@ -297,6 +317,7 @@ class Packages(sorcery.BasePackages):
 #-----------------------------------------------------------------------
 class Section(sorcery.BaseSection):
     pass
+
 #-----------------------------------------------------------------------
 #
 # Class Sections
