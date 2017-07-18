@@ -200,8 +200,7 @@
     - [ ] Install Root
   - Execute (Menu Options for Execution)
     - [ ] Foreground
-    - [ ] Background
-  
+    - [ ] Background  
 
 ### 0.0.10
 #### Functional Scripts
@@ -288,7 +287,6 @@
 
 ## 0.2
 - Framework functionally complete
-- Open to the public?
 
 ### 0.2.1
 #### Functional Scripts
@@ -308,7 +306,6 @@
   - [ ] Report
     - [ ] Grimoire Image
     - [ ] Compare Images
-  - [ ] MD5unpack - Obtain MD5/SHA256/SHA512 for a tarball
   - [ ] Rebuild packages (Repairs /var/state/sorcery/packages
   - [ ] Cherry-pick
 
@@ -319,6 +316,7 @@
 
 ## 0.5
 - Base Code Functional
+- Open to the public?
 
 ### 0.5.1
 #### Supported Distributions
