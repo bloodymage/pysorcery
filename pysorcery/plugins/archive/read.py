@@ -10,7 +10,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/plugin/archive/list.py
+# File: pysorcery/plugin/archive/read.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -100,14 +100,14 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_list
+# archive_read
 # parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Function archive_list
+# Function archive_read
 #
 # List all files in an archive.
 # If a compressed file, read the files contents
@@ -136,7 +136,6 @@ def archive_read(args):
             content = cfile.listfiles()
         else:
             content = cfile.read()
-
 
     for line in content:
         print(line)
@@ -167,7 +166,6 @@ def archive_read(args):
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
-
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
@@ -177,9 +175,6 @@ def parser(*args, **kwargs):
     cmd.add_argument('files',
                      nargs = '+',
                      help = 'List files')
-    cmd.add_argument('-r', '--recursive',
-                     action = 'store_true',
-                     help = 'Recursive')
     cmd.set_defaults(func = archive_read) 
 
     return cmd
