@@ -692,15 +692,13 @@ class BaseDirectory(BaseFile):
 
     #-----------------------------------------------------------------------
     #
-    # Function list_dir_contents
+    # Function listfiles
     #
     # Get output filename if archive is in a single file format like gzip.
     #
     # Inputs
     # ------
-    #     @param: directory
-    #     @param: archive
-    #     @param: extention
+    #     @param: self
     #         
     # Returns
     # -------

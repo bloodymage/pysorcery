@@ -326,10 +326,15 @@ class Archive(files.BaseFile):
                 interactive=True):
         logger.debug('Begin Function')
 
-        """Extract given archive."""
+        """Verify given archive exists."""
         self.check_existing_filename(self.filename)
         logger.info("Extracting %s ..." % self.filename)
-        _extract_archive(self.filename, verbosity=verbosity, interactive=interactive, outdir=outdir, program=program)
+        """Extract given archive."""
+        _extract_archive(self.filename,
+                         verbosity=verbosity,
+                         interactive=interactive,
+                         outdir=outdir,
+                         program=program)
 
         logger.debug('End Function')
         return
@@ -353,7 +358,8 @@ class Archive(files.BaseFile):
     #    ...
     #
     #-------------------------------------------------------------------
-    def create(self, filenames, verbosity=0, program=None, interactive=True):
+    def create(self, filenames, verbosity=0,
+               program=None, interactive=True):
         """Create given archive with given files."""
         self.check_new_filename()
 
@@ -361,8 +367,11 @@ class Archive(files.BaseFile):
         check_names.check_filelist()
         if verbosity >= 0:
             logger.info("Creating %s ..." % self.filename)
-            res = _create_archive(self.filename, filenames, verbosity=verbosity,
-                                  interactive=interactive, program=program)
+            res = _create_archive(self.filename,
+                                  filenames,
+                                  verbosity=verbosity,
+                                  interactive=interactive,
+                                  program=program)
             if verbosity >= 0:
                 logger.info("... %s created." % self.filename)
         return res
@@ -392,8 +401,11 @@ class Archive(files.BaseFile):
         util.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Listing %s ..." % self.filename)
-            return _handle_archive(self.filename, 'list', verbosity=verbosity,
-                                   interactive=interactive, program=program)
+            return _handle_archive(self.filename,
+                                   'list',
+                                   verbosity=verbosity,
+                                   interactive=interactive,
+                                   program=program)
 
     #-------------------------------------------------------------------
     #
@@ -452,7 +464,10 @@ class Archive(files.BaseFile):
         util.check_new_filename(archive_new)
         if verbosity >= 0:
             logger.info("Repacking %s to %s ..." % (self.filename, archive_new))
-        res = _repack_archive(self.filename, archive_new, verbosity=verbosity, interactive=interactive)
+        res = _repack_archive(self.filename,
+                              archive_new,
+                              verbosity=verbosity,
+                              interactive=interactive)
         if verbosity >= 0:
             logger.info("... repacking successful.")
         return res
@@ -592,9 +607,9 @@ class Archives(files.BaseFiles):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function program_supports_compression
 #
-# This is the base File Class
+# Decide if the given program supports the compression natively.
 #
 # Inputs
 # ------
@@ -602,8 +617,10 @@ class Archives(files.BaseFiles):
 #
 # Returns
 # -------
-#    none
-#
+#    @return: True  - if the program supports the given compression
+#                     format natively.
+#    @return: False - if the program does not support the given
+#                     compression.
 # Raises
 # ------
 #    ...
@@ -611,7 +628,7 @@ class Archives(files.BaseFiles):
 #-----------------------------------------------------------------------
 def program_supports_compression (program, compression):
     """Decide if the given program supports the compression natively.
-    @return: True iff the program supports the given compression format
+    @return: True if the program supports the given compression format
       natively, else False.
     """
     if program in ('tar', 'star', 'bsdtar', 'py_tarfile'):
@@ -620,13 +637,14 @@ def program_supports_compression (program, compression):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function check_archive_format
 #
-# This is the base File Class
+# Make sure format and compression is known.
 #
 # Inputs
 # ------
-#    @param:
+#    @param: format_
+#    @param: compression
 #
 # Returns
 # -------
@@ -637,9 +655,9 @@ def program_supports_compression (program, compression):
 #    ...
 #
 #-----------------------------------------------------------------------
-def check_archive_format (format, compression):
+def check_archive_format (format_, compression):
     """Make sure format and compression is known."""
-    if format not in mimetypes.ArchiveFormats:
+    if format_ not in mimetypes.ArchiveFormats:
         raise Exception("unknown archive format `%s'" % format)
     if compression is not None and compression not in mimetypes.ArchiveCompressions:
         raise Exception("unkonwn archive compression `%s'" % compression)
@@ -669,21 +687,21 @@ def list_formats ():
     print("Archive programs are searched in the following directories:")
     print(util.system_search_path())
     print()
-    for format in mimetypes.ArchiveFormats:
-        print(format, "files:")
+    for format_ in mimetypes.ArchiveFormats:
+        print(format_, "files:")
         for command in ArchiveCommands:
-            programs = ArchivePrograms[format]
+            programs = ArchivePrograms[format_]
             if command not in programs and None not in programs:
                 print("   %8s: - (not supported)" % command)
                 continue
             try:
-                program = find_archive_program(format, command)
+                program = find_archive_program(format_, command)
                 print("   %8s: %s" % (command, program), end=' ')
-                if format == 'tar':
+                if format_ == 'tar':
                     encs = [x for x in mimetypes.ArchiveCompressions if util.find_program(x)]
                     if encs:
                         print("(supported compressions: %s)" % ", ".join(encs), end=' ')
-                elif format == '7z':
+                elif format_ == '7z':
                     if util.p7zip_supports_rar():
                         print("(rar archives supported)", end=' ')
                     else:
@@ -697,13 +715,13 @@ def list_formats ():
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function get_archive_format
 #
 # This is the base File Class
 #
 # Inputs
 # ------
-#    @param:
+#    @param: filename
 #
 # Returns
 # -------
@@ -720,23 +738,23 @@ def get_archive_format (filename):
     if not (mime or compression):
         raise Exception("unknown archive format for file `%s'" % filename)
     if mime in mimetypes.ArchiveMimetypes:
-        format = mimetypes.ArchiveMimetypes[mime]
+        format_ = mimetypes.ArchiveMimetypes[mime]
     else:
         raise Exception("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
-    if format == compression:
+    if format_ == compression:
         # file cannot be in same format compressed
         compression = None
-    return format, compression
+    return format_, compression
 
 #-----------------------------------------------------------------------
 #
-# Class Archive
+# function p7zip_supports_rar
 #
-# This is the base File Class
+# Determine if the RAR codec is installed for 7z program.
 #
 # Inputs
 # ------
-#    @param:
+#    @param: None
 #
 # Returns
 # -------
@@ -763,9 +781,9 @@ def p7zip_supports_rar():
 
 #-----------------------------------------------------------------------
 #
-# Class Archive
+# Function find_archive_program
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
@@ -808,9 +826,9 @@ def find_archive_program (format_, command, program=None):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function check_program_compression
 #
-# This is the base File Class
+# Check if a program supports the given compression.
 #
 # Inputs
 # ------
@@ -842,13 +860,13 @@ def check_program_compression(archive, command, program, compression):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function move_outdir_orphan
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
-#    @param:
+#    @param: outdir
 #
 # Returns
 # -------
@@ -876,9 +894,9 @@ def move_outdir_orphan (outdir):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function run_archive_cmdlist
 #
-# This is the base File Class
+# Run archive command.
 #
 # Inputs
 # ------
@@ -904,9 +922,9 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function rmtree_log_error
 #
-# This is the base File Class
+# 
 #
 # Inputs
 # ------
@@ -929,9 +947,9 @@ def rmtree_log_error (func, path, exc):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function cleanup_outdir
 #
-# This is the base File Class
+# 
 #
 # Inputs
 # ------
@@ -971,11 +989,18 @@ def cleanup_outdir (outdir, archive):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive
+#    @param: verbosity
+#    @param: interactive
+#    @param: outdir
+#    @param: program
+#    @param: format_
+#    @param: compression
 #
 # Returns
 # -------
-#    none
+#    @return: outdir
+#    @return: none
 #
 # Raises
 # ------
@@ -994,7 +1019,10 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
 
     print(program + format_)
     check_program_compression(archive, 'extract', program, compression)
-    get_archive_cmdlist = util.get_module_func(scmd='util_archive', program=program, cmd='extract', format_=format_)
+    get_archive_cmdlist = util.get_module_func(scmd='util_archive',
+                                               program=program,
+                                               cmd='extract',
+                                               format_=format_)
     if outdir is None:
         directory = files.BaseDirectory(".")
         outdir = directory.tmpdir(dir=".")
@@ -1002,7 +1030,12 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
     else:
         do_cleanup_outdir = False
     try:
-        cmdlist = get_archive_cmdlist(archive, compression, program, verbosity, interactive, outdir)
+        cmdlist = get_archive_cmdlist(archive,
+                                      compression,
+                                      program,
+                                      verbosity,
+                                      interactive,
+                                      outdir)
         if cmdlist:
             # an empty command list means the get_archive_cmdlist() function
             # already handled the command (eg. when it's a builtin Python
@@ -1025,13 +1058,19 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _handle_archive
 #
-# This is the base File Class
+# Test and list archives.
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive
+#    @param: verbosity
+#    @param: interactive
+#    @param: outdir
+#    @param: program
+#    @param: format_
+#    @param: compression
 #
 # Returns
 # -------
