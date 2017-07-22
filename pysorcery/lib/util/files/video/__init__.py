@@ -11,7 +11,7 @@
 # Additional code from 'patool'
 # Copyright (C) 2010-2015 Bastian Kleineidam
 #
-# File: pysorcery/lib/util/files/archive/__init__.py
+# File: pysorcery/lib/util/files/video/__init__.py
 #
 # This file is part of Sorcery.
 #
@@ -35,7 +35,7 @@
 #
 #-----------------------------------------------------------------------
 """
-Impliments classes for working with archive files.
+Impliments classes for working with video files.
 """
 #-----------------------------------------------------------------------
 #
@@ -58,12 +58,6 @@ from pysorcery.lib import util
 from pysorcery.lib.util import files
 
 # Condiional Libraries
-try:
-    # use Python 3 lzma module if available
-    import lzma
-    py_lzma = ('py_lzma',)
-except ImportError:
-    py_lzma = ()
 
 
 #-----------------------------------------------------------------------
