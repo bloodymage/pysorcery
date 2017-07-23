@@ -64,9 +64,12 @@ CompressedMimetypes = {
     'application/x-7z-compressed': '7z',
     'application/x-bzip2': 'bzip2',
     'application/x-compress': 'compress',
-     'application/x-gzip': 'gzip',    
+    'application/x-gzip': 'gzip',    
     'application/x-lzma': 'lzma',
-    'application/x-xz': 'xz'
+    'application/x-xz': 'xz',
+    'gzip': 'gzip',
+    'bzip2': 'bzip2',
+    'xz': 'lzma'
 }
 
 # Map MIME types to archive format
@@ -109,6 +112,9 @@ ArchiveMimetypes = {
     'application/x-zoo': 'zoo',
     'application/zip': 'zip',
     'application/zpaq': 'zpaq',
+}
+
+AudioMimetypes = {
     'audio/x-ape': 'ape',
     'audio/x-shn': 'shn',
     'audio/flac': 'flac',
@@ -130,11 +136,13 @@ encoding_methods = {
 
 # Supported archive formats
 ArchiveFormats = (
-    '7z', 'ace', 'adf', 'alzip', 'ape', 'ar', 'arc', 'arj',
+    '7z', 'ace', 'adf', 'alzip', 'ar', 'arc', 'arj',
     'bzip2', 'cab', 'chm', 'compress', 'cpio', 'deb', 'dms',
-    'flac', 'gzip', 'iso', 'lrzip', 'lzh', 'lzip', 'lzma', 'lzop',
-    'rar', 'rpm', 'rzip', 'shar', 'shn', 'tar', 'vhd', 'xz',
+    'gzip', 'iso', 'lrzip', 'lzh', 'lzip', 'lzma', 'lzop',
+    'rar', 'rpm', 'rzip', 'shar', 'tar', 'vhd', 'xz',
     'zip', 'zoo', 'zpaq')
+
+AudioFormats = ( 'ape', 'flac', 'shn' )
 
 # Supported compressions (used with tar for example)
 # Note that all compressions must also be archive formats

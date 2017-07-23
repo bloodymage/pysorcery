@@ -127,12 +127,10 @@ def archive_create(args):
     logger.debug('Begin Function')
     
     cfile = lib.File(args.archive)
-    if cfile.mimetype in mimetypes.ArchiveMimetypes:
-        cfile.create(args.pathname,
-                     verbosity=args.verbosity,
-                     interactive=args.interactive)
-    else:
-        cfile.compress(args.pathname)
+
+    cfile.create(args.pathname,
+                 verbosity=args.verbosity,
+                 interactive=args.interactive)
 
     logger.debug('End Function')
     return

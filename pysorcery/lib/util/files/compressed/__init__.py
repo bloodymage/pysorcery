@@ -294,7 +294,7 @@ ProgramModules = {
 #    ...
 #
 #-----------------------------------------------------------------------
-class Archive(files.BaseFile):        
+class CompressedFile(files.BaseFile):
     #-------------------------------------------------------------------
     #
     # Function extract
@@ -1019,7 +1019,7 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
 
     print(program + format_)
     check_program_compression(archive, 'extract', program, compression)
-    get_archive_cmdlist = util.get_module_func(scmd='util_archive',
+    get_archive_cmdlist = util.get_module_func(scmd='util_compressed',
                                                program=program,
                                                cmd='extract',
                                                format_=format_)

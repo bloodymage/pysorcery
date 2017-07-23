@@ -129,17 +129,10 @@ def archive_extract(args):
     logger.debug('Begin Function')
 
     for file_ in args.files:
-        cfile = lib.File(file_)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            cfile.extract(verbosity=args.verbosity,
-                          interactive=args.interactive,
-                          outdir=args.outdir)
-        elif cfile.mimetype in mimetypes.CompressedMimetypes:
-            cfile.decompress(verbosity=args.verbosity,
-                             interactive=args.interactive,
-                             outdir=args.outdir)
-        else:
-            logger.error('Not an archive file')
+        cfile = lib.File.getcls('archive', file_)
+        cfile.extract(verbosity=args.verbosity,
+                      interactive=args.interactive,
+                      outdir=args.outdir)
             
 
     logger.debug('End Function')

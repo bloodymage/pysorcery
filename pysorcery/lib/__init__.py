@@ -80,7 +80,7 @@ logger = logging.getLogger(__name__)
 # Repositories
 #
 #-----------------------------------------------------------------------
-
+    
 #-----------------------------------------------------------------------
 #
 # Class File
@@ -101,74 +101,32 @@ logger = logging.getLogger(__name__)
 #    ...
 #
 #-----------------------------------------------------------------------
-class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
-    #-------------------------------------------------------------------
-    #
-    # Function read
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.format
-    #
-    # Returns
-    # -------
-    #    @return: content
-    #
-    # Raises
-    # ------
-    #    FileNotFoundError - Fix Me
-    #    IsADirectoryError
-    #    PermissionError
-    #
-    #-------------------------------------------------------------------
-    def read(self):
-        logger.debug('Begin Function')
-        try:
-            content = files.BaseFile.read(self)
-        except Exception as msg:
-            logger.error(msg)
-        
-        logger.debug('End Function')
-        return content
+class File():
+    __file_classes = {
+        'archive': archive.Archive,
+        'compressed': compressed.CompressedFile,
+        'default': files.BaseFile
+    }
 
-    #-------------------------------------------------------------------
-    #
-    # Function search
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: results
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def search(self,
-               pattern,
-               verbosity=0,
-               interactive=True):
-        logger.debug('Begin Function')
-
-        if self.mimetype in mimetypes.ArchiveMimetypes:
-            results = archive.Archive.search(self,
-                                             pattern,
-                                             verbosity=0,
-                                             interactive=True)
+    @staticmethod
+    def id_file_class(filename):
+        mimetype, encoding = mimetypes.guess_type(filename)
+        if mimetype in mimetypes.ArchiveMimetypes:
+            return 'archive'
+        elif encoding in mimetypes.CompressedMimetypes:
+            return 'compressed'
         else:
-            raise NotImplementedError('BaseFile search Not implemented')            
+            return 'default'
+        
+    @staticmethod
+    def getcls(name, filename, *args, **kwargs):
+        name = File.id_file_class(filename)
 
-        logger.debug('End Function')
-        return results
+        share_class = File.__file_classes.get(name.lower(), None)        
+        if share_class:
+            return share_class(filename, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 #-----------------------------------------------------------------------
 #
