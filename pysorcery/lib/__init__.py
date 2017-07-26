@@ -85,8 +85,16 @@ logger = logging.getLogger(__name__)
 #
 # Class File
 # 
-# The File API.  This is the class that is used for ALL file activities
-# Parent classes: CompressedFile, Archive, BaseFile
+# The File API.  This is a factory class that determines which class
+# is used for each of the different file types.
+#
+# Supported File types
+# --------------------
+#   Text
+#   Archive
+#   Compressed
+#   Audio
+# 
 #
 # Inputs
 # ------
@@ -108,6 +116,28 @@ class File():
         'default': files.BaseFile
     }
 
+    #-------------------------------------------------------------------
+    #
+    # Function id_file_classes
+    #
+    # Do we have a text file, archive, compressed, or audio file?
+    #
+    # Inputs
+    # ------
+    #    @param: filename - 
+    #
+    # Returns
+    # -------
+    #    @return: 'archive'
+    #    @return: 'compressed'
+    #    @return: 'default'
+    #    @return: 'audio' - Not yet implemented
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     @staticmethod
     def id_file_class(filename):
         mimetype, encoding = mimetypes.guess_type(filename)
@@ -118,8 +148,29 @@ class File():
         else:
             return 'default'
         
+    #-------------------------------------------------------------------
+    #
+    # Function getcls
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
     @staticmethod
-    def getcls(name, filename, *args, **kwargs):
+    def getcls(filename, *args, **kwargs):
         name = File.id_file_class(filename)
 
         share_class = File.__file_classes.get(name.lower(), None)        

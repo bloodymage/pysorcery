@@ -328,7 +328,7 @@ class Archive(files.BaseFile):
 
         """Verify given archive exists."""
         self.check_existing_filename(self.filename)
-        logger.info("Extracting %s ..." % self.filename)
+        logger.info(f"Extracting {self.filename} ...")
         """Extract given archive."""
         _extract_archive(self.filename,
                          verbosity=verbosity,
@@ -366,14 +366,14 @@ class Archive(files.BaseFile):
         check_names = files.BaseFiles(filelist = filenames)
         check_names.check_filelist()
         if verbosity >= 0:
-            logger.info("Creating %s ..." % self.filename)
+            logger.info(f"Creating {self.filename} ...")
             res = _create_archive(self.filename,
                                   filenames,
                                   verbosity=verbosity,
                                   interactive=interactive,
                                   program=program)
             if verbosity >= 0:
-                logger.info("... %s created." % self.filename)
+                logger.info(f'... {self.filename} created.')
         return res
 
     #-------------------------------------------------------------------
@@ -400,7 +400,7 @@ class Archive(files.BaseFile):
         # Set default verbosity to 1 since the listing output should be visible.
         util.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Listing %s ..." % self.filename)
+            logger.info(f'Listing {self.filename} ...')
             return _handle_archive(self.filename,
                                    'list',
                                    verbosity=verbosity,
@@ -415,11 +415,13 @@ class Archive(files.BaseFile):
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self
+    #     @param: verbosity
+    #     @param: interactive
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
@@ -431,7 +433,7 @@ class Archive(files.BaseFile):
         util.check_existing_filename(self.filename)
         util.check_writable_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Recompressing %s ..." % (self.filename,))
+            logger.info(f'Recompressing {self.filename} ...')
         res = _recompress_archive(self.filename,
                                   verbosity=verbosity,
                                   interactive=interactive)

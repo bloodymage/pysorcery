@@ -129,7 +129,7 @@ def archive_extract(args):
     logger.debug('Begin Function')
 
     for file_ in args.files:
-        cfile = lib.File.getcls('archive', file_)
+        cfile = lib.File.getcls(file_)
         cfile.extract(verbosity=args.verbosity,
                       interactive=args.interactive,
                       outdir=args.outdir)
