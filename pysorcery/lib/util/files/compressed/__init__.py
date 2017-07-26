@@ -1176,7 +1176,6 @@ def extract_singlefile_standard (archive, compression, cmd, verbosity, interacti
         util.shell_quote(outfile)])
     return (cmdlist, {'shell': True})
 
-
 #-----------------------------------------------------------------------
 #
 # Function _extract_archive
@@ -1203,7 +1202,6 @@ def test_singlefile_standard (archive, compression, cmd, verbosity, interactive)
         cmdlist.append('-v')
     cmdlist.extend(['-t', '--', archive])
     return cmdlist
-
 
 #-----------------------------------------------------------------------
 #
@@ -1289,7 +1287,6 @@ def _recompress_archive(archive, verbosity=0, interactive=True):
         shutil.rmtree(tmpdir, onerror=rmtree_log_error)
         shutil.rmtree(tmpdir2, onerror=rmtree_log_error)
     return "... recompressed file is not smaller, leaving archive as is."
-
 
 #-----------------------------------------------------------------------
 #
