@@ -376,6 +376,32 @@ class AudioFile(files.BaseFile):
             logger.info("... %r not found" % pattern)
         return res
 
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Read the content of a file within an archive
+    #
+    # Inputs
+    # ------
+    #     @param: self
+    #     @param: filename
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #
+    #-------------------------------------------------------------------
+    def read(self, filename, verbosity=0, interactive=True):
+        """Print the content of a file within an archive"""
+        content = 'Audio Read is not implemented'
+        raise NotImplementedError
+        return content
+
 #-----------------------------------------------------------------------
 #
 # Class Archives

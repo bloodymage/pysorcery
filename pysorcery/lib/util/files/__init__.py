@@ -220,7 +220,7 @@ class BaseFile():
         logger.debug("End Function")
         return
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function check_writable_filename
     #
@@ -239,14 +239,15 @@ class BaseFile():
     # ------
     #    PermissionError
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def check_writable_filename(self):
         """Ensure that the given filename is writable."""
         if not os.access(self.filename, os.W_OK):
-            raise PermissionError("file `%s' is not writable" % self.filename)
+            raise PermissionError("file `%s' is not writable"
+                                  % self.filename)
         return
     
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function check_existing_filename
     #
@@ -270,7 +271,7 @@ class BaseFile():
     #    PermissionError
     #    NotAFileError
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def check_existing_filename (self, onlyfiles=True):
         """Ensure that given filename is a valid, existing file."""
         if not os.path.exists(self.filename):
@@ -281,7 +282,7 @@ class BaseFile():
             raise NotAFileError("`%s' is not a file" % self.filename)
         return 
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function check_new_filename
     #
@@ -300,7 +301,7 @@ class BaseFile():
     # ------
     #    FileExistsError
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def check_new_filename (self):
         """Check that filename does not already exist."""
         if os.path.exists(self.filename):
@@ -308,7 +309,7 @@ class BaseFile():
                                   % self.filename)
         return
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function set_mode
     #
@@ -328,7 +329,7 @@ class BaseFile():
     # ------
     #    OSError
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def set_mode (self, flags):
         """Set mode flags for given filename if not already set."""
         try:

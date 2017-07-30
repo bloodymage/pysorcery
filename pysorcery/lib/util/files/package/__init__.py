@@ -127,7 +127,7 @@ PackagePrograms = {
 #    ...
 #
 #-----------------------------------------------------------------------
-class Package(files.BaseFile):        
+class PackageFile(files.BaseFile):
     #-------------------------------------------------------------------
     #
     # Function extract
@@ -375,6 +375,32 @@ class Package(files.BaseFile):
             logger.info("... %r not found" % pattern)
         return res
 
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Read the content of a file within an archive
+    #
+    # Inputs
+    # ------
+    #     @param: self
+    #     @param: filename
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #
+    #-------------------------------------------------------------------
+    def read(self, filename, verbosity=0, interactive=True):
+        """Print the content of a file within an archive"""
+        content = 'Package Read is not implemented'
+        raise NotImplementedError
+        return content
+
 #-----------------------------------------------------------------------
 #
 # Class Packages
@@ -394,7 +420,7 @@ class Package(files.BaseFile):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Packages(files.BaseFiles):
+class PackageFiles(files.BaseFiles):
     #-------------------------------------------------------------------
     #
     # Function search

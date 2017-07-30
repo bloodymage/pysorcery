@@ -77,7 +77,8 @@ logger = logging.getLogger(__name__)
 ArchiveCommands = ('list', 'extract', 'test', 'create', 'read')
 
 # List of programs supporting the given archive format and command.
-# If command is None, the program supports all commands (list, extract, ...)
+# If command is None, the program supports all commands (list, extract,
+# ...)
 # Programs starting with "py_" are Python modules.
 ArchivePrograms = {
     '7z': {
@@ -343,8 +344,9 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def listfiles(self, verbosity=1, program=None, interactive=True):
         """List given archive."""
-        # Set default verbosity to 1 since the listing output should be visible.
-        util.check_existing_filename(self.filename)
+        # Set default verbosity to 1 since the listing output should
+        # be visible.
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info('Listing {self.filename} ...')
             return _handle_archive(self.filename,
@@ -376,8 +378,8 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def recompress_archive(self, verbosity=0, interactive=True):
         """Recompress an archive to hopefully smaller size."""
-        util.check_existing_filename(self.filename)
-        util.check_writable_filename(self.filename)
+        self.check_existing_filename(self.filename)
+        self.check_writable_filename(self.filename)
         if verbosity >= 0:
             logger.info('Recompressing {self.filename} ...')
         res = _recompress_archive(self.filename,
@@ -408,8 +410,8 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def repack_archive (self, archive_new, verbosity=0, interactive=True):
         """Repack archive to different file and/or format."""
-        util.check_existing_filename(self.filename)
-        util.check_new_filename(archive_new)
+        self.check_existing_filename(self.filename)
+        self.check_new_filename(archive_new)
         if verbosity >= 0:
             logger.info("Repacking %s to %s ..." % (self.filename, archive_new))
         res = _repack_archive(self.filename,
@@ -441,7 +443,7 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def test_archive(self, verbosity=0, program=None, interactive=True):
         """Test given archive."""
-        util.check_existing_filename(self.filename)
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Testing %s ..." % self.filename)
         res = _handle_archive(self.filename,
@@ -477,9 +479,10 @@ class Archive(files.BaseFile):
         """Search pattern in archive members."""
         if not pattern:
             raise Exception("empty search pattern")
-        util.check_existing_filename(self.filename)
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Searching %r in %s ..." % (pattern, self.filename))
+            logger.info("Searching %r in %s ..."
+                        % (pattern, self.filename))
         res = _search_archive(pattern,
                               self.filename,
                               verbosity=verbosity,
@@ -487,6 +490,32 @@ class Archive(files.BaseFile):
         if res == 1 and verbosity >= 0:
             logger.info("... %r not found" % pattern)
         return res
+
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Read the content of a file within an archive
+    #
+    # Inputs
+    # ------
+    #     @param: self
+    #     @param: filename
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #
+    #-------------------------------------------------------------------
+    def read(self, filename, verbosity=0, interactive=True):
+        """Print the content of a file within an archive"""
+        content = 'Archive Read is not implemented'
+        raise NotImplementedError
+        return content
 
 #-----------------------------------------------------------------------
 #
@@ -531,8 +560,8 @@ class Archives(files.BaseFiles):
         logger.debug('Begin Function')
 
         """Print differences between two archives."""
-        util.check_existing_filename(self.files[0])
-        util.check_existing_filename(self.files[1])
+        self.check_existing_filename(self.files[0])
+        self.check_existing_filename(self.files[1])
         if verbosity >= 0:
             logger.info("Comparing %s with %s ..." % (self.files[0], self.files[1]))
             res = _diff_archives(self.files,
@@ -888,7 +917,6 @@ def rmtree_log_error (func, path, exc):
     """Error function for shutil.rmtree(). Raises a PatoolError."""
     msg = "Error in %s(%s): %s" % (func.__name__, path, str(exc[1]))
     logger.error(msg)
-
 
 #-----------------------------------------------------------------------
 #

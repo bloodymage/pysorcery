@@ -57,6 +57,7 @@ from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
 from pysorcery.lib.util.files import audio
 from pysorcery.lib.util.files import compressed
+from pysorcery.lib.util.files import package
 
 # Other Optional Libraries
 
@@ -120,6 +121,7 @@ class File():
         'archive': archive.Archive,
         'compressed': compressed.CompressedFile,
         'audio': audio.AudioFile,
+        'package': package.PackageFile,
         'default': files.BaseFile
     }
 
@@ -148,13 +150,10 @@ class File():
     @staticmethod
     def id_file_class(filename):
         mimetype, encoding = mimetypes.guess_type(filename)
-        if mimetype in mimetypes.ArchiveMimetypes:
-            return 'archive'
-        elif encoding in mimetypes.CompressedMimetypes:
-            return 'compressed'
-        else:
-            return 'default'
         
+        id_ = mimetypes.fileclasstypes[mimetype]
+        return id_
+                
     #-------------------------------------------------------------------
     #
     # Function getcls
@@ -179,7 +178,7 @@ class File():
     @staticmethod
     def getcls(filename, *args, **kwargs):
         name = File.id_file_class(filename)
-
+        
         share_class = File.__file_classes.get(name.lower(), None)        
         if share_class:
             return share_class(filename, *args, **kwargs)

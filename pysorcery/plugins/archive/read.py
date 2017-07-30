@@ -40,11 +40,6 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
 Plugin: read
 
 This plugin lists the contents of an archive file.  If the file is
@@ -131,14 +126,11 @@ def archive_read(args):
     logger.debug('Begin Function')
 
     for i in args.files:
-        cfile = lib.Files(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            content = cfile.listfiles()
-        else:
-            content = cfile.read()
+        cfile = lib.Files.getcls(i)
+        content = cfile.read()
 
-    for line in content:
-        print(line)
+        for line in content:
+            print(line)
 
     logger.debug('End Function')
     return
@@ -170,11 +162,12 @@ def parser(*args, **kwargs):
     parent_parsers = list(args[1:])
 
     cmd= subparsers.add_parser('read',
+                               aliases = ['play'],
                                parents = parent_parsers,
-                               help = 'Read file within an archive')
+                               help = 'Read file within an archive.\nRead compressed file.\nRead Package information.\nPlay audio file.')
     cmd.add_argument('files',
                      nargs = '+',
                      help = 'List files')
-    cmd.set_defaults(func = archive_read) 
+    cmd.set_defaults(func = archive_read)
 
     return cmd

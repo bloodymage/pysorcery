@@ -504,7 +504,8 @@ class CompressedFile(files.BaseFile):
             raise Exception("empty search pattern")
         util.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Searching %r in %s ..." % (pattern, self.filename))
+            logger.info("Searching %r in %s ..."
+                        % (pattern, self.filename))
         res = _search_archive(pattern,
                               self.filename,
                               verbosity=verbosity,
@@ -512,6 +513,32 @@ class CompressedFile(files.BaseFile):
         if res == 1 and verbosity >= 0:
             logger.info("... %r not found" % pattern)
         return res
+
+    #-------------------------------------------------------------------
+    #
+    # Function read
+    #
+    # Read the content of a file within an archive
+    #
+    # Inputs
+    # ------
+    #     @param: self
+    #     @param: filename
+    #
+    # Returns
+    # -------
+    #     result
+    #
+    # Raises
+    # ------
+    #
+    #
+    #-------------------------------------------------------------------
+    def read(self, filename, verbosity=0, interactive=True):
+        """Print the content of a file within an archive"""
+        content = 'Compressed Read is not implemented'
+        raise NotImplementedError
+        return content
 
 #-----------------------------------------------------------------------
 #

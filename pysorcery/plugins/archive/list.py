@@ -39,11 +39,6 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
 Plugin: list
 
 This plugin lists the contents of an archive file.  If the file is
@@ -74,7 +69,6 @@ from pysorcery import lib
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 # Conditional Libraries
 
 
@@ -130,12 +124,9 @@ def archive_list(args):
     logger.debug('Begin Function')
 
     for i in args.files:
-        cfile = lib.File(i)
-        if cfile.mimetype in mimetypes.ArchiveMimetypes:
-            content = cfile.listfiles()
-        else:
-            content = cfile.read()
-
+        cfile = lib.File.getcls(i)    
+        content = cfile.listfiles()
+    
     logger.debug('End Function')
     return
 
