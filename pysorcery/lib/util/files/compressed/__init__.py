@@ -29,13 +29,13 @@
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# This implements the archive classes
+# This implements classes for working with compressed files
 #
 # ...
 #
 #-----------------------------------------------------------------------
 """
-Impliments classes for working with archive files.
+Impliments classes for working with compressed files.
 """
 #-----------------------------------------------------------------------
 #
@@ -76,12 +76,12 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 # Supported archive commands
-ArchiveCommands = ('list', 'extract', 'test', 'create')
+CompressionCommands = ('list', 'extract', 'test', 'create', 'read')
 
 # List of programs supporting the given archive format and command.
 # If command is None, the program supports all commands (list, extract, ...)
 # Programs starting with "py_" are Python modules.
-ArchivePrograms = {
+CompressionPrograms = {
     'ace': {
         'extract': ('unace',),
         'test': ('unace',),
@@ -150,12 +150,6 @@ ArchivePrograms = {
         'extract': ('py_gzip',),
         'create': ('zopfli', 'py_gzip'),
     },
-    'iso': {
-        'extract': ('7z',),
-        'list': ('7z', 'isoinfo'),
-        'test': ('7z',),
-        'create': ('genisoimage',),
-    },
     'lzh': {
         None: ('lha',),
         'extract': ('lhasa',),
@@ -204,11 +198,6 @@ ArchivePrograms = {
         'list': ('rpm', '7z', '7za'),
         'test': ('rpm', '7z'),
     },
-    'deb': {
-        'extract': ('dpkg-deb', '7z'),
-        'list': ('dpkg-deb', '7z'),
-        'test': ('dpkg-deb', '7z'),
-    },
     'dms': {
         'extract': ('xdms',),
         'list': ('xdms',),
@@ -232,11 +221,6 @@ ArchivePrograms = {
         'create': ('shar',),
         'extract': ('unshar',),
     },
-    'shn': {
-        'extract': ('shorten',),
-        'list': ('py_echo',),
-        'create': ('shorten',),
-    },
     'vhd': {
         'extract': ('7z',),
         'list': ('7z',),
@@ -255,29 +239,18 @@ ArchivePrograms = {
     },
 }
 
-# List those programs that have different python module names because of
-# Python module naming restrictions.
-ProgramModules = {
-    '7z': 'p7zip',
-    '7za': 'p7azip',
-    '7zr': 'p7rzip',
-    'uncompress.real': 'uncompress',
-    'dpkg-deb': 'dpkg',
-    'extract_chmlib': 'chmlib',
-}
-
 #-----------------------------------------------------------------------
 #
 # Classes
 #
-# Archive
-# Archives
+# Compression
+# Compressions
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Class Archive
+# Class Compression
 #
 # This is the base File Class
 #
@@ -542,9 +515,9 @@ class CompressedFile(files.BaseFile):
 
 #-----------------------------------------------------------------------
 #
-# Class Archives
+# Class Compressions
 #
-# This is the Archives Class for working with multiple archive files.
+# This is the Compressions Class for working with multiple archive files.
 #
 # Inputs
 # ------
@@ -559,7 +532,7 @@ class CompressedFile(files.BaseFile):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Archives(files.BaseFiles):
+class Compressions(files.BaseFiles):
     #-------------------------------------------------------------------
     #
     # Function search
@@ -657,9 +630,9 @@ def program_supports_compression (program, compression):
 #-----------------------------------------------------------------------
 def check_archive_format (format_, compression):
     """Make sure format and compression is known."""
-    if format_ not in mimetypes.ArchiveFormats:
+    if format_ not in mimetypes.CompressionFormats:
         raise Exception("unknown archive format `%s'" % format_)
-    if compression is not None and compression not in mimetypes.ArchiveCompressions:
+    if compression is not None and compression not in mimetypes.CompressionCompressions:
         raise Exception("unkonwn archive compression `%s'" % compression)
 
 #-----------------------------------------------------------------------
@@ -683,29 +656,16 @@ def check_archive_format (format_, compression):
 #-----------------------------------------------------------------------
 def list_formats ():
     """Print information about available archive formats to stdout."""
-    #print("Archive programs of", App)
-    print("Archive programs are searched in the following directories:")
-    print(util.system_search_path())
-    print()
-    for format_ in mimetypes.ArchiveFormats:
+    for format_ in mimetypes.CompressionFormats:
         print(format_, "files:")
-        for command in ArchiveCommands:
-            programs = ArchivePrograms[format_]
+        for command in CompressionCommands:
+            programs = CompressionPrograms[format_]
             if command not in programs and None not in programs:
                 print("   %8s: - (not supported)" % command)
                 continue
             try:
                 program = find_archive_program(format_, command)
                 print("   %8s: %s" % (command, program), end=' ')
-                if format_ == 'tar':
-                    encs = [x for x in mimetypes.ArchiveCompressions if util.find_program(x)]
-                    if encs:
-                        print("(supported compressions: %s)" % ", ".join(encs), end=' ')
-                elif format_ == '7z':
-                    if util.p7zip_supports_rar():
-                        print("(rar archives supported)", end=' ')
-                    else:
-                        print("(rar archives not supported)", end=' ')
                 print()
             except Exception:
                 # display information what programs can handle this archive format
@@ -739,8 +699,8 @@ def get_archive_format (filename):
     mime, compression = mimetypes.guess_type(filename)
     if not (mime or compression):
         raise Exception("unknown archive format for file `%s'" % filename)
-    if mime in mimetypes.ArchiveMimetypes:
-        format_ = mimetypes.ArchiveMimetypes[mime]
+    if mime in mimetypes.CompressionMimetypes:
+        format_ = mimetypes.CompressionMimetypes[mime]
     else:
         raise Exception("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
     if format_ == compression:
@@ -807,7 +767,7 @@ def p7zip_supports_rar():
 #-----------------------------------------------------------------------
 def find_archive_program (format_, command, program=None):
     """Find suitable archive program for given format and mode."""
-    commands = ArchivePrograms[format_]
+    commands = CompressionPrograms[format_]
     programs = []
     if program is not None:
         # try a specific program first

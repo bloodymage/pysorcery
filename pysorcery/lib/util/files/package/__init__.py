@@ -45,7 +45,6 @@ Impliments classes for working with archive files.
 # System Libraries
 import os
 
-
 # 3rd Party Libraries
 
 # Application Libraries
@@ -65,7 +64,6 @@ try:
 except ImportError:
     py_lzma = ()
 
-
 #-----------------------------------------------------------------------
 #
 # Global Variables
@@ -76,46 +74,45 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 # Supported archive commands
-ArchiveCommands = ('list', 'extract', 'test', 'create', 'play')
+PackageCommands = ('list', 'extract', 'test', 'create', 'read')
 
 # List of programs supporting the given archive format and command.
 # If command is None, the program supports all commands (list, extract, ...)
 # Programs starting with "py_" are Python modules.
-ArchivePrograms = {
-    'ape': {
-        'create': ('mac',),
-        'extract': ('mac',),
-        'list': ('py_echo',),
-        'test': ('mac',),
+PackagePrograms = {
+    'cpio': {
+        'extract': ('cpio', 'bsdcpio', '7z'),
+        'list': ('cpio', 'bsdcpio', '7z'),
+        'test': ('cpio', 'bsdcpio', '7z',),
+        'create': ('cpio', 'bsdcpio'),
     },
-    'flac': {
-        'extract': ('flac',),
-        'test': ('flac',),
-        'create': ('flac',),
-        'list': ('py_echo',),
-        'play': ('sox',)
+    'deb': {
+        'extract': ('dpkg-deb', '7z'),
+        'list': ('dpkg-deb', '7z'),
+        'test': ('dpkg-deb', '7z'),
     },
-    'shn': {
-        'extract': ('shorten',),
-        'list': ('py_echo',),
-        'create': ('shorten',)
+    'rpm': {
+        'extract': ('rpm2cpio', '7z'),
+        'list': ('rpm', '7z', '7za'),
+        'test': ('rpm', '7z'),
     }
 }
+
 
 #-----------------------------------------------------------------------
 #
 # Classes
 #
-# AudioFile
-# AudioFiles
+# Package
+# Packages
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Class AudioFile
+# Class Package
 #
-# This is the base File Class
+# This is the Package File Class
 #
 # Inputs
 # ------
@@ -130,7 +127,7 @@ ArchivePrograms = {
 #    ...
 #
 #-----------------------------------------------------------------------
-class AudioFile(files.BaseFile):        
+class Package(files.BaseFile):        
     #-------------------------------------------------------------------
     #
     # Function extract
@@ -202,14 +199,14 @@ class AudioFile(files.BaseFile):
         check_names = files.BaseFiles(filelist = filenames)
         check_names.check_filelist()
         if verbosity >= 0:
-            logger.info("Creating %s ..." % self.filename)
+            logger.info("Creating {self.filename} ...")
             res = _create_archive(self.filename,
                                   filenames,
                                   verbosity=verbosity,
                                   interactive=interactive,
                                   program=program)
             if verbosity >= 0:
-                logger.info("... %s created." % self.filename)
+                logger.info('... {self.filename} created.')
         return res
 
     #-------------------------------------------------------------------
@@ -236,7 +233,7 @@ class AudioFile(files.BaseFile):
         # Set default verbosity to 1 since the listing output should be visible.
         util.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Listing %s ..." % self.filename)
+            logger.info('Listing {self.filename} ...')
             return _handle_archive(self.filename,
                                    'list',
                                    verbosity=verbosity,
@@ -251,11 +248,13 @@ class AudioFile(files.BaseFile):
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self
+    #     @param: verbosity
+    #     @param: interactive
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
@@ -267,7 +266,7 @@ class AudioFile(files.BaseFile):
         util.check_existing_filename(self.filename)
         util.check_writable_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Recompressing %s ..." % (self.filename,))
+            logger.info('Recompressing {self.filename} ...')
         res = _recompress_archive(self.filename,
                                   verbosity=verbosity,
                                   interactive=interactive)
@@ -378,9 +377,9 @@ class AudioFile(files.BaseFile):
 
 #-----------------------------------------------------------------------
 #
-# Class Archives
+# Class Packages
 #
-# This is the Archives Class for working with multiple archive files.
+# This is the Packages Class for working with multiple archive files.
 #
 # Inputs
 # ------
@@ -395,7 +394,7 @@ class AudioFile(files.BaseFile):
 #    ...
 #
 #-----------------------------------------------------------------------
-class AudioFiles(files.BaseFiles):
+class Packages(files.BaseFiles):
     #-------------------------------------------------------------------
     #
     # Function search
@@ -436,6 +435,7 @@ class AudioFiles(files.BaseFiles):
 #
 # Functions
 #
+# program_supports_compression
 # find_archive_program
 # _extract_archive
 #
@@ -493,14 +493,14 @@ def program_supports_compression (program, compression):
 #-----------------------------------------------------------------------
 def check_archive_format (format_, compression):
     """Make sure format and compression is known."""
-    if format_ not in mimetypes.ArchiveFormats:
+    if format_ not in mimetypes.PackageFormats:
         raise Exception("unknown archive format `%s'" % format)
-    if compression is not None and compression not in mimetypes.ArchiveCompressions:
+    if compression is not None and compression not in mimetypes.PackageCompressions:
         raise Exception("unkonwn archive compression `%s'" % compression)
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function list_formats
 #
 # This is the base File Class
 #
@@ -519,10 +519,10 @@ def check_archive_format (format_, compression):
 #-----------------------------------------------------------------------
 def list_formats ():
     """Print information about available archive formats to stdout."""
-    for format_ in mimetypes.AudioFormats:
+    for format_ in mimetypes.PackageFormats:
         print(format_, "files:")
-        for command in ArchiveCommands:
-            programs = ArchivePrograms[format_]
+        for command in PackageCommands:
+            programs = PackagePrograms[format_]
             if command not in programs and None not in programs:
                 print("   %8s: - (not supported)" % command)
                 continue
@@ -560,8 +560,8 @@ def get_archive_format (filename):
     mime, compression = mimetypes.guess_type(filename)
     if not (mime or compression):
         raise Exception("unknown archive format for file `%s'" % filename)
-    if mime in mimetypes.ArchiveMimetypes:
-        format_ = mimetypes.ArchiveMimetypes[mime]
+    if mime in mimetypes.PackageMimetypes:
+        format_ = mimetypes.PackageMimetypes[mime]
     else:
         raise Exception("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
     if format_ == compression:
@@ -623,7 +623,7 @@ def p7zip_supports_rar():
 #-----------------------------------------------------------------------
 def find_archive_program (format_, command, program=None):
     """Find suitable archive program for given format and mode."""
-    commands = ArchivePrograms[format_]
+    commands = PackagePrograms[format_]
     programs = []
     if program is not None:
         # try a specific program first
@@ -972,7 +972,7 @@ def _diff_archives (archives, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _recompress_archive
 #
 # This is the base File Class
 #

@@ -76,7 +76,6 @@ filetypedefinitions = {
       'application/x-chm',
       'application/x-compress',
       'application/x-cpio',
-      'application/x-debian-package',
       'application/x-dms',
       'application/x-gzip',
       'application/x-iso9660-image',
@@ -87,8 +86,6 @@ filetypedefinitions = {
       'application/x-lrzip',
       'application/x-lzh',
       'application/x-rar',
-      'application/x-redhat-package-manager',
-      'application/x-rpm',
       'application/x-rzip',
       'application/x-shar',
       'application/x-tar',
@@ -114,7 +111,11 @@ filetypedefinitions = {
       'audio/x-shn',
       'audio/flac'
       ): 'audio',
-    None: 'default'
+    ( 'application/x-debian-package',
+      'application/x-redhat-package-manager',
+      'application/x-rpm'
+    ): 'package',
+    ( 'None' ): 'default'
     }
 
 fileclasstypes = {}
@@ -122,7 +123,48 @@ for k, v in filetypedefinitions.items():
     for key in k:
         fileclasstypes[key] = v
 
-CompressedMimetypes = {
+# Map MIME types to archive format
+ArchiveMimetypes = {
+    'application/java-archive': 'zip',
+    'application/rar': 'rar',
+    'application/vnd.ms-cab-compressed': 'cab',
+    'application/x-7z-compressed': '7z',
+    'application/x-ace': 'ace',
+    'application/x-adf': 'adf',
+    'application/x-alzip': 'alzip',
+    'application/x-archive': 'ar',
+    'application/x-arc': 'arc',
+    'application/x-arj': 'arj',
+    'application/x-cab': 'cab',
+    'application/x-chm': 'chm',
+    'application/x-compress': 'compress',
+    'application/x-cpio': 'cpio',
+    'application/x-dms': 'dms',
+    'application/x-iso9660-image': 'iso',
+    'application/x-lzop': 'lzop',
+    'application/x-lzma': 'lzma',
+    'application/x-lzip': 'lzip',
+    'application/x-lha': 'lzh',
+    'application/x-lrzip': 'lrzip',
+    'application/x-lzh': 'lzh',
+    'application/x-rar': 'rar',
+    'application/x-rzip': 'rzip',
+    'application/x-shar': 'shar',
+    'application/x-tar': 'tar',
+    'application/x-vhd': 'vhd',
+    'application/x-zip-compressed': 'zip',
+    'application/x-zoo': 'zoo',
+    'application/zip': 'zip',
+    'application/zpaq': 'zpaq'
+}
+
+AudioMimetypes = {
+    'audio/x-ape': 'ape',
+    'audio/x-shn': 'shn',
+    'audio/flac': 'flac'
+}
+
+CompressionMimetypes = {
     'application/gzip': 'gzip',    
     'application/x-7z-compressed': '7z',
     'application/x-bzip2': 'bzip2',
@@ -135,82 +177,29 @@ CompressedMimetypes = {
     'xz': 'lzma'
 }
 
-# Map MIME types to archive format
-ArchiveMimetypes = {
-    'application/gzip': 'gzip',
-    'application/java-archive': 'zip',
-    'application/rar': 'rar',
-    'application/vnd.ms-cab-compressed': 'cab',
-    'application/x-7z-compressed': '7z',
-    'application/x-ace': 'ace',
-    'application/x-adf': 'adf',
-    'application/x-alzip': 'alzip',
-    'application/x-archive': 'ar',
-    'application/x-arc': 'arc',
-    'application/x-arj': 'arj',
-    'application/x-bzip2': 'bzip2',
-    'application/x-cab': 'cab',
-    'application/x-chm': 'chm',
-    'application/x-compress': 'compress',
-    'application/x-cpio': 'cpio',
-    'application/x-debian-package': 'deb',
-    'application/x-dms': 'dms',
-    'application/x-gzip': 'gzip',
-    'application/x-iso9660-image': 'iso',
-    'application/x-lzop': 'lzop',
-    'application/x-lzma': 'lzma',
-    'application/x-lzip': 'lzip',
-    'application/x-lha': 'lzh',
-    'application/x-lrzip': 'lrzip',
-    'application/x-lzh': 'lzh',
-    'application/x-rar': 'rar',
+PackageMimetypes = {
+   'application/x-debian-package': 'deb',
     'application/x-redhat-package-manager': 'rpm',
-    'application/x-rpm': 'rpm',
-    'application/x-rzip': 'rzip',
-    'application/x-shar': 'shar',
-    'application/x-tar': 'tar',
-    'application/x-vhd': 'vhd',
-    'application/x-xz': 'xz',
-    'application/x-zip-compressed': 'zip',
-    'application/x-zoo': 'zoo',
-    'application/zip': 'zip',
-    'application/zpaq': 'zpaq',
-}
-
-AudioMimetypes = {
-    'audio/x-ape': 'ape',
-    'audio/x-shn': 'shn',
-    'audio/flac': 'flac',
-}
-
-VerifyMimetypes = {
-    'application/x-lzop': 'lzop',
-    'application/x-lzip': 'lzip',
-    'application/x-lha': 'lzh',
-    'application/x-lrzip': 'lrzip',
-    'application/x-lzh': 'lzh'
-}
-
-encoding_methods = {
-    'gzip': 'gzip',
-    'xz': 'lzma',
-    'bzip2': 'bzip2'
+    'application/x-rpm': 'rpm'
 }
 
 # Supported archive formats
 ArchiveFormats = (
     '7z', 'ace', 'adf', 'alzip', 'ar', 'arc', 'arj',
-    'bzip2', 'cab', 'chm', 'compress', 'cpio', 'deb', 'dms',
-    'gzip', 'iso', 'lrzip', 'lzh', 'lzip', 'lzma', 'lzop',
-    'rar', 'rpm', 'rzip', 'shar', 'tar', 'vhd', 'xz',
+    'cab', 'chm', 'compress', 'cpio', 'dms',
+    'iso', 'lrzip', 'lzh', 'lzip', 'lzma',
+    'rar', 'rzip', 'shar', 'tar', 'vhd',
     'zip', 'zoo', 'zpaq')
 
 AudioFormats = ( 'ape', 'flac', 'shn' )
 
+CompressionFormats = ( 'bzip2', 'gzip', 'lzop', 'xz' )
+
+PackageFormats = ( 'rpm', 'deb' )
+
 # Supported compressions (used with tar for example)
 # Note that all compressions must also be archive formats
 ArchiveCompressions = ('bzip2', 'compress', 'gzip', 'lzip', 'lzma', 'xz')
-
 
 # internal MIME database
 mimedb = None

@@ -71,6 +71,9 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.lib.util.files import audio
+from pysorcery.lib.util.files import compressed
+from pysorcery.lib.util.files import package
 # Conditional Libraries
 
 
@@ -120,11 +123,30 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 def archive_formats(args):
-    logger.debug('Begin Function')
 
-    archive.list_formats()
-    
-    logger.debug('End Function')
+    try:
+        print("Programs are searched in the following directories:")
+        print(util.system_search_path())
+        print()
+
+        App = 'pySorcery ' + __version__
+        print("Archive programs of", App)
+        archive.list_formats()
+        print()
+        App = 'pySorcery ' + __version__
+        print("Audio programs of", App)
+        audio.list_formats()
+        print()
+        App = 'pySorcery ' + __version__
+        print("Compression programs of", App)
+        compressed.list_formats()
+        print()
+        App = 'pySorcery ' + __version__
+        print("Package programs of", App)
+        package.list_formats()
+    except Exception as msg:
+        logger.critical(msg)
+
     return
 
 #-----------------------------------------------------------------------

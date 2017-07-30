@@ -64,7 +64,6 @@ try:
 except ImportError:
     py_lzma = ()
 
-
 #-----------------------------------------------------------------------
 #
 # Global Variables
@@ -75,12 +74,15 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 # Supported archive commands
-ArchiveCommands = ('list', 'extract', 'test', 'create')
+ArchiveCommands = ('list', 'extract', 'test', 'create', 'read')
 
 # List of programs supporting the given archive format and command.
 # If command is None, the program supports all commands (list, extract, ...)
 # Programs starting with "py_" are Python modules.
 ArchivePrograms = {
+    '7z': {
+        None: ('7z', '7za', '7zr'),
+    },
     'ace': {
         'extract': ('unace',),
         'test': ('unace',),
@@ -96,12 +98,6 @@ ArchivePrograms = {
         'test': ('unalz',),
         'list': ('unalz',),
     },
-    'ape': {
-        'create': ('mac',),
-        'extract': ('mac',),
-        'list': ('py_echo',),
-        'test': ('mac',),
-    },
     'ar': {
         None: ('ar',),
     },
@@ -111,12 +107,11 @@ ArchivePrograms = {
         'test': ('nomarch',),
         'list': ('nomarch',),
     },
-    'bzip2': {
-        None: ('7z', '7za'),
-        'extract': ('pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
-        'test': ('pbzip2', 'lbzip2', 'bzip2'),
-        'create': ('pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
-        'list': ('py_echo'),
+    'arj': {
+        None: ('arj',),
+        'extract': ('7z',),
+        'list': ('7z',),
+        'test': ('7z',),
     },
     'cab': {
         'extract': ('cabextract', '7z'),
@@ -128,32 +123,34 @@ ArchivePrograms = {
         'extract': ('archmage', 'extract_chmLib'),
         'test': ('archmage',),
     },
-    'flac': {
-        'extract': ('flac',),
-        'test': ('flac',),
-        'create': ('flac',),
-        'list': ('py_echo',),
+    'compress': {
+        'extract': ('7z', '7za', 'uncompress.real'),
+        'list': ('7z', '7za', 'py_echo',),
+        'test': ('7z', '7za'),
+        'create': ('compress',),
     },
-    'tar': {
-        None: ('tar', 'star', 'bsdtar', 'py_tarfile'),
+    'cpio': {
+        'extract': ('cpio', 'bsdcpio', '7z'),
+        'list': ('cpio', 'bsdcpio', '7z'),
+        'test': ('cpio', 'bsdcpio', '7z',),
+        'create': ('cpio', 'bsdcpio'),
     },
-    'zip': {
-        None: ('7z', '7za', 'py_zipfile'),
-        'extract': ('unzip',),
-        'list': ('unzip',),
-        'test': ('zip', 'unzip',),
-        'create': ('zip',),
-    },
-    'gzip': {
-        None: ('7z', '7za', 'pigz', 'gzip'),
-        'extract': ('py_gzip',),
-        'create': ('zopfli', 'py_gzip'),
+    'dms': {
+        'extract': ('xdms',),
+        'list': ('xdms',),
+        'test': ('xdms',),
     },
     'iso': {
         'extract': ('7z',),
         'list': ('7z', 'isoinfo'),
         'test': ('7z',),
         'create': ('genisoimage',),
+    },
+    'lrzip': {
+        'extract': ('lrzip',),
+        'list': ('py_echo',),
+        'test': ('lrzip',),
+        'create': ('lrzip',),
     },
     'lzh': {
         None: ('lha',),
@@ -165,62 +162,17 @@ ArchivePrograms = {
         'test': ('plzip', 'lzip', 'clzip', 'pdlzip'),
         'create': ('plzip', 'lzip', 'clzip', 'pdlzip'),
     },
-    'lrzip': {
-        'extract': ('lrzip',),
-        'list': ('py_echo',),
-        'test': ('lrzip',),
-        'create': ('lrzip',),
-    },
-    'compress': {
-        'extract': ('gzip', '7z', '7za', 'uncompress.real'),
-        'list': ('7z', '7za', 'py_echo',),
-        'test': ('gzip', '7z', '7za'),
-        'create': ('compress',),
-    },
-    '7z': {
-        None: ('7z', '7za', '7zr'),
+    'lzma': {
+        'extract': ('7z', 'lzma', 'xz') + py_lzma,
+        'list': ('7z', 'py_echo'),
+        'test': ('7z', 'lzma', 'xz'),
+        'create': ('lzma', 'xz') + py_lzma,
     },
     'rar': {
         None: ('rar',),
         'extract': ('unrar', '7z'),
         'list': ('unrar', '7z'),
         'test': ('unrar', '7z'),
-    },
-    'arj': {
-        None: ('arj',),
-        'extract': ('7z',),
-        'list': ('7z',),
-        'test': ('7z',),
-    },
-    'cpio': {
-        'extract': ('cpio', 'bsdcpio', '7z'),
-        'list': ('cpio', 'bsdcpio', '7z'),
-        'test': ('cpio', 'bsdcpio', '7z',),
-        'create': ('cpio', 'bsdcpio'),
-    },
-    'rpm': {
-        'extract': ('rpm2cpio', '7z'),
-        'list': ('rpm', '7z', '7za'),
-        'test': ('rpm', '7z'),
-    },
-    'deb': {
-        'extract': ('dpkg-deb', '7z'),
-        'list': ('dpkg-deb', '7z'),
-        'test': ('dpkg-deb', '7z'),
-    },
-    'dms': {
-        'extract': ('xdms',),
-        'list': ('xdms',),
-        'test': ('xdms',),
-    },
-    'lzop': {
-        None: ('lzop',),
-    },
-    'lzma': {
-        'extract': ('7z', 'lzma', 'xz') + py_lzma,
-        'list': ('7z', 'py_echo'),
-        'test': ('7z', 'lzma', 'xz'),
-        'create': ('lzma', 'xz') + py_lzma,
     },
     'rzip': {
         'extract': ('rzip',),
@@ -236,22 +188,27 @@ ArchivePrograms = {
         'list': ('py_echo',),
         'create': ('shorten',),
     },
+    'tar': {
+        None: ('tar', 'star', 'bsdtar', 'py_tarfile'),
+    },
     'vhd': {
         'extract': ('7z',),
         'list': ('7z',),
         'test': ('7z',),
     },
-    'xz': {
-        None: ('xz', '7z'),
-        'extract': py_lzma,
-        'create': py_lzma,
-    },
-    'zoo': {
-        None: ('zoo',),
+    'zip': {
+        None: ('7z', '7za', 'py_zipfile'),
+        'extract': ('unzip',),
+        'list': ('unzip',),
+        'test': ('zip', 'unzip',),
+        'create': ('zip',),
     },
     'zpaq': {
         None: ('zpaq',),
     },
+    'zoo': {
+        None: ('zoo',),
+    }
 }
 
 
@@ -675,10 +632,6 @@ def check_archive_format (format_, compression):
 #-----------------------------------------------------------------------
 def list_formats ():
     """Print information about available archive formats to stdout."""
-    #print("Archive programs of", App)
-    print("Archive programs are searched in the following directories:")
-    print(util.system_search_path())
-    print()
     for format_ in mimetypes.ArchiveFormats:
         print(format_, "files:")
         for command in ArchiveCommands:
@@ -694,12 +647,12 @@ def list_formats ():
                     if encs:
                         print("(supported compressions: %s)" % ", ".join(encs), end=' ')
                 elif format_ == '7z':
-                    if util.p7zip_supports_rar():
+                    if p7zip_supports_rar():
                         print("(rar archives supported)", end=' ')
                     else:
                         print("(rar archives not supported)", end=' ')
                 print()
-            except Exception:
+            except Exception as msg:
                 # display information what programs can handle this archive format
                 handlers = programs.get(None, programs.get(command))
                 print("   %8s: - (no program found; install %s)" %
