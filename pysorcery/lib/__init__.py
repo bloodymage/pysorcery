@@ -55,6 +55,7 @@ from pysorcery.lib import sorcery
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
+from pysorcery.lib.util.files import audio
 from pysorcery.lib.util.files import compressed
 
 # Other Optional Libraries
@@ -77,6 +78,11 @@ logger = logging.getLogger(__name__)
 # Directory
 # Directories
 # Package
+# PackageVersions
+# Packages
+# Section
+# Sections
+# Repository
 # Repositories
 #
 #-----------------------------------------------------------------------
@@ -113,6 +119,7 @@ class File():
     __file_classes = {
         'archive': archive.Archive,
         'compressed': compressed.CompressedFile,
+        'audio': audio.AudioFile,
         'default': files.BaseFile
     }
 

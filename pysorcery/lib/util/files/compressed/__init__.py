@@ -658,15 +658,15 @@ def program_supports_compression (program, compression):
 def check_archive_format (format_, compression):
     """Make sure format and compression is known."""
     if format_ not in mimetypes.ArchiveFormats:
-        raise Exception("unknown archive format `%s'" % format)
+        raise Exception("unknown archive format `%s'" % format_)
     if compression is not None and compression not in mimetypes.ArchiveCompressions:
         raise Exception("unkonwn archive compression `%s'" % compression)
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function list_formats
 #
-# This is the base File Class
+# Print information about available archive formats to stdout.
 #
 # Inputs
 # ------
@@ -674,7 +674,7 @@ def check_archive_format (format_, compression):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
@@ -712,12 +712,13 @@ def list_formats ():
                 handlers = programs.get(None, programs.get(command))
                 print("   %8s: - (no program found; install %s)" %
                       (command, util.strlist_with_or(handlers)))
+    return
 
 #-----------------------------------------------------------------------
 #
 # Function get_archive_format
 #
-# This is the base File Class
+# Detect filename archive format and optional compression.
 #
 # Inputs
 # ------
@@ -725,7 +726,8 @@ def list_formats ():
 #
 # Returns
 # -------
-#    none
+#    @return: format_
+#    @return: compression
 #
 # Raises
 # ------
@@ -758,7 +760,9 @@ def get_archive_format (filename):
 #
 # Returns
 # -------
-#    none
+#    @return: True
+#    @return: True
+#    @return: False
 #
 # Raises
 # ------
@@ -787,11 +791,14 @@ def p7zip_supports_rar():
 #
 # Inputs
 # ------
-#    @param:
+#    @param: format_ - 
+#    @param: command -
+#    @param: program - ... , default = None
 #
 # Returns
 # -------
-#    none
+#    @return: program
+#    @return: exe
 #
 # Raises
 # ------
@@ -832,11 +839,14 @@ def find_archive_program (format_, command, program=None):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive
+#    @param: command
+#    @param: program
+#    @param: compression
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
@@ -862,7 +872,9 @@ def check_program_compression(archive, command, program, compression):
 #
 # Function move_outdir_orphan
 #
-# ...
+# Move a single file or directory inside outdir a level up.
+# Never overwrite files.
+#
 #
 # Inputs
 # ------
@@ -870,7 +882,12 @@ def check_program_compression(archive, command, program, compression):
 #
 # Returns
 # -------
-#    none
+#    if successful:
+#        @return:
+#        @return: outfile
+#    else:
+#        @return: False
+#        @return: reason
 #
 # Raises
 # ------
@@ -900,11 +917,12 @@ def move_outdir_orphan (outdir):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive_cmdlist
+#    @param: verbosity - ... , default = 0
 #
 # Returns
 # -------
-#    none
+#    @return: util.run_checked()
 #
 # Raises
 # ------
@@ -924,15 +942,20 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
 #
 # Function rmtree_log_error
 #
-# 
+# Error function for shutil.rmtree().
+#
+# In Patool, this raised a PatoolError according t the original
+# documentation?
 #
 # Inputs
 # ------
-#    @param:
+#    @param: func
+#    @param: path
+#    @param: exc
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
@@ -940,24 +963,27 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
 #
 #-----------------------------------------------------------------------
 def rmtree_log_error (func, path, exc):
-    """Error function for shutil.rmtree(). Raises a PatoolError."""
+    """Error function for shutil.rmtree()."""
     msg = "Error in %s(%s): %s" % (func.__name__, path, str(exc[1]))
     logger.error(msg)
-
+    return
 
 #-----------------------------------------------------------------------
 #
 # Function cleanup_outdir
 #
-# 
+# Cleanup outdir after extraction and return target file name and
+# result string.
 #
 # Inputs
 # ------
-#    @param:
+#    @param: outdir
+#    @param: archive
 #
 # Returns
 # -------
-#    none
+#    @return: msg
+#    @return: outdir2
 #
 # Raises
 # ------
@@ -985,7 +1011,7 @@ def cleanup_outdir (outdir, archive):
 #
 # Function _extract_archive
 #
-# This is the base File Class
+# Extract an archive
 #
 # Inputs
 # ------
@@ -999,7 +1025,7 @@ def cleanup_outdir (outdir, archive):
 #
 # Returns
 # -------
-#    @return: outdir
+#    @return: target
 #    @return: none
 #
 # Raises
@@ -1103,11 +1129,13 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
         # function)
         run_archive_cmdlist(cmdlist, verbosity=verbosity)
 
+    return
+
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _diff_archive
 #
-# This is the base File Class
+# Show differences between two archives.
 #
 # Inputs
 # ------
@@ -1115,7 +1143,8 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
 #
 # Returns
 # -------
-#    none
+#    @return: 0 -
+#    @return: 1 - 
 #
 # Raises
 # ------
@@ -1149,9 +1178,11 @@ def _diff_archives (archives, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function extract_singlefile_standard
 #
-# This is the base File Class
+# Standard routine to extract a singlefile archive (like gzip).
+#
+# This is what Compressed format is for...
 #
 # Inputs
 # ------
@@ -1178,9 +1209,11 @@ def extract_singlefile_standard (archive, compression, cmd, verbosity, interacti
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function test_singlefile_standard
 #
-# This is the base File Class
+# Standard routine to test a singlefile archive (like gzip).
+#
+# This is what Compressed file format is for...
 #
 # Inputs
 # ------

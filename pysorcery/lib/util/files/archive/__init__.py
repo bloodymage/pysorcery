@@ -45,7 +45,6 @@ Impliments classes for working with archive files.
 # System Libraries
 import os
 
-
 # 3rd Party Libraries
 
 # Application Libraries
@@ -255,16 +254,6 @@ ArchivePrograms = {
     },
 }
 
-# List those programs that have different python module names because of
-# Python module naming restrictions.
-ProgramModules = {
-    '7z': 'p7zip',
-    '7za': 'p7azip',
-    '7zr': 'p7rzip',
-    'uncompress.real': 'uncompress',
-    'dpkg-deb': 'dpkg',
-    'extract_chmlib': 'chmlib',
-}
 
 #-----------------------------------------------------------------------
 #
@@ -279,7 +268,7 @@ ProgramModules = {
 #
 # Class Archive
 #
-# This is the base File Class
+# This is the Archive File Class
 #
 # Inputs
 # ------
@@ -602,6 +591,7 @@ class Archives(files.BaseFiles):
 #
 # Functions
 #
+# program_supports_compression
 # find_archive_program
 # _extract_archive
 #
@@ -666,7 +656,7 @@ def check_archive_format (format_, compression):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function list_formats
 #
 # This is the base File Class
 #
@@ -1151,94 +1141,7 @@ def _diff_archives (archives, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
-#
-# This is the base File Class
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def extract_singlefile_standard (archive, compression, cmd, verbosity, interactive, outdir):
-    """Standard routine to extract a singlefile archive (like gzip)."""
-    cmdlist = [util.shell_quote(cmd)]
-    if verbosity > 1:
-        cmdlist.append('-v')
-    outfile = files.get_single_outfile(outdir, archive)
-    cmdlist.extend(['-c', '-d', '--', util.shell_quote(archive), '>',
-        util.shell_quote(outfile)])
-    return (cmdlist, {'shell': True})
-
-
-#-----------------------------------------------------------------------
-#
-# Function _extract_archive
-#
-# This is the base File Class
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def test_singlefile_standard (archive, compression, cmd, verbosity, interactive):
-    """Standard routine to test a singlefile archive (like gzip)."""
-    cmdlist = [cmd]
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.extend(['-t', '--', archive])
-    return cmdlist
-
-
-#-----------------------------------------------------------------------
-#
-# Function _extract_archive
-#
-# This is the base File Class
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def create_singlefile_standard (archive, compression, cmd, verbosity, interactive, filenames):
-    """Standard routine to create a singlefile archive (like gzip)."""
-    cmdlist = [util.shell_quote(cmd)]
-    if verbosity > 1:
-        cmdlist.append('-v')
-    cmdlist.extend(['-c', '--'])
-    cmdlist.extend([util.shell_quote(x) for x in filenames])
-    cmdlist.extend(['>', util.shell_quote(archive)])
-    return (cmdlist, {'shell': True})
-
-#-----------------------------------------------------------------------
-#
-# Function _extract_archive
+# Function _recompress_archive
 #
 # This is the base File Class
 #

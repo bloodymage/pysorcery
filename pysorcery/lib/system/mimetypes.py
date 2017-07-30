@@ -59,6 +59,69 @@ logger = logging.getLogger(__name__)
 
 # Map MIME types to file format
 
+filetypedefinitions = {
+    ( 'application/gzip',
+      'application/java-archive',
+      'application/rar',
+      'application/vnd.ms-cab-compressed',
+      'application/x-7z-compressed',
+      'application/x-ace',
+      'application/x-adf',
+      'application/x-alzip',
+      'application/x-archive',
+      'application/x-arc',
+      'application/x-arj',
+      'application/x-bzip2',
+      'application/x-cab',
+      'application/x-chm',
+      'application/x-compress',
+      'application/x-cpio',
+      'application/x-debian-package',
+      'application/x-dms',
+      'application/x-gzip',
+      'application/x-iso9660-image',
+      'application/x-lzop',
+      'application/x-lzma',
+      'application/x-lzip',
+      'application/x-lha',
+      'application/x-lrzip',
+      'application/x-lzh',
+      'application/x-rar',
+      'application/x-redhat-package-manager',
+      'application/x-rpm',
+      'application/x-rzip',
+      'application/x-shar',
+      'application/x-tar',
+      'application/x-vhd',
+      'application/x-xz',
+      'application/x-zip-compressed',
+      'application/x-zoo',
+      'application/zip',
+      'application/zpaq'
+    ): 'archive',
+    ( 'application/gzip',    
+      'application/x-7z-compressed',
+      'application/x-bzip2',
+      'application/x-compress',
+      'application/x-gzip',    
+      'application/x-lzma',
+      'application/x-xz',
+      'gzip',
+      'bzip2',
+      'xz'
+      ): 'compressed',
+    ( 'audio/x-ape',
+      'audio/x-shn',
+      'audio/flac'
+      ): 'audio',
+    None: 'default'
+    }
+
+fileclasstypes = {}
+for k, v in filetypedefinitions.items():
+    for key in k:
+        fileclasstypes[key] = v
+
 CompressedMimetypes = {
     'application/gzip': 'gzip',    
     'application/x-7z-compressed': '7z',
