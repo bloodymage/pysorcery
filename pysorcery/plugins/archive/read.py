@@ -65,12 +65,9 @@ from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 # Conditional Libraries
 
 
@@ -126,7 +123,8 @@ def archive_read(args):
     logger.debug('Begin Function')
 
     for i in args.files:
-        cfile = lib.Files.getcls(i)
+        print(i)
+        cfile = lib.File.getcls(i)
         content = cfile.read()
 
         for line in content:

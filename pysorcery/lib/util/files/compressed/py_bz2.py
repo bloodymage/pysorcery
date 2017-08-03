@@ -56,3 +56,15 @@ def create_bzip2 (archive, compression, cmd, verbosity, interactive, filenames):
         msg = "error creating %s: %s" % (archive, err)
         raise util.PatoolError(msg)
     return None
+
+def read_bzip2 (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a GZIP archive with the gzip Python module."""
+    try:
+        line_list = []
+        for line in bz2.open(archive, 'rt'):
+                line_list.append(line[:-1])
+    except Exception as err:
+        msg = "error readinging %s: %s" % (archive, err)
+        raise Exception(msg)
+
+    return line_list

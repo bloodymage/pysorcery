@@ -150,8 +150,15 @@ class File():
     @staticmethod
     def id_file_class(filename):
         mimetype, encoding = mimetypes.guess_type(filename)
-        
-        id_ = mimetypes.fileclasstypes[mimetype]
+
+        try:
+            id_ = mimetypes.fileclasstypes[mimetype]
+        except:
+            try:
+                id_ = mimetypes.fileclasstypes[encoding]
+            except:
+                id_ = 'default'
+
         return id_
                 
     #-------------------------------------------------------------------
@@ -177,6 +184,7 @@ class File():
     #-------------------------------------------------------------------
     @staticmethod
     def getcls(filename, *args, **kwargs):
+        
         name = File.id_file_class(filename)
         
         share_class = File.__file_classes.get(name.lower(), None)        

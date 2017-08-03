@@ -113,11 +113,11 @@ CompressionPrograms = {
         'list': ('nomarch',),
     },
     'bzip2': {
-        None: ('7z', '7za'),
-        'extract': ('pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
-        'test': ('pbzip2', 'lbzip2', 'bzip2'),
-        'create': ('pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
-        'list': ('py_echo'),
+        'extract': ('7z', '7za', 'pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
+        'test': ('7z', '7za', 'pbzip2', 'lbzip2', 'bzip2'),
+        'create': ('7z', '7za', 'pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
+        'list': ('7z', '7za', 'py_echo'),
+        'read': ('py_bz2',),
     },
     'cab': {
         'extract': ('cabextract', '7z'),
@@ -146,9 +146,11 @@ CompressionPrograms = {
         'create': ('zip',),
     },
     'gzip': {
-        None: ('7z', '7za', 'pigz', 'gzip'),
-        'extract': ('py_gzip',),
-        'create': ('zopfli', 'py_gzip'),
+        'extract': ('py_gzip','7z', '7za', 'pigz','gzip'),
+        'create': ('zopfli', 'py_gzip','7z', '7za', 'pigz','gzip'),
+        'test': ('7z', '7za', 'pigz', 'gzip'),
+        'list': ('7z', '7za', 'pigz','gzip'),
+        'read': ('py_gzip',)
     },
     'lzh': {
         None: ('lha',),
@@ -211,6 +213,7 @@ CompressionPrograms = {
         'list': ('7z', 'py_echo'),
         'test': ('7z', 'lzma', 'xz'),
         'create': ('lzma', 'xz') + py_lzma,
+        'read': py_lzma,
     },
     'rzip': {
         'extract': ('rzip',),
@@ -371,7 +374,7 @@ class CompressedFile(files.BaseFile):
     def listfiles(self, verbosity=1, program=None, interactive=True):
         """List given archive."""
         # Set default verbosity to 1 since the listing output should be visible.
-        util.check_existing_filename(self.filename)
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Listing %s ..." % self.filename)
             return _handle_archive(self.filename,
@@ -401,8 +404,8 @@ class CompressedFile(files.BaseFile):
     #-------------------------------------------------------------------
     def recompress_archive(self, verbosity=0, interactive=True):
         """Recompress an archive to hopefully smaller size."""
-        util.check_existing_filename(self.filename)
-        util.check_writable_filename(self.filename)
+        self.check_existing_filename(self.filename)
+        self.check_writable_filename(self.filename)
         if verbosity >= 0:
             logger.info("Recompressing %s ..." % (self.filename,))
         res = _recompress_archive(self.filename,
@@ -433,8 +436,8 @@ class CompressedFile(files.BaseFile):
     #-------------------------------------------------------------------
     def repack_archive (self, archive_new, verbosity=0, interactive=True):
         """Repack archive to different file and/or format."""
-        util.check_existing_filename(self.filename)
-        util.check_new_filename(archive_new)
+        self.check_existing_filename(self.filename)
+        self.check_new_filename(archive_new)
         if verbosity >= 0:
             logger.info("Repacking %s to %s ..." % (self.filename, archive_new))
         res = _repack_archive(self.filename,
@@ -466,7 +469,7 @@ class CompressedFile(files.BaseFile):
     #-------------------------------------------------------------------
     def test_archive(self, verbosity=0, program=None, interactive=True):
         """Test given archive."""
-        util.check_existing_filename(self.filename)
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Testing %s ..." % self.filename)
         res = _handle_archive(self.filename,
@@ -502,7 +505,7 @@ class CompressedFile(files.BaseFile):
         """Search pattern in archive members."""
         if not pattern:
             raise Exception("empty search pattern")
-        util.check_existing_filename(self.filename)
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Searching %r in %s ..."
                         % (pattern, self.filename))
@@ -534,10 +537,19 @@ class CompressedFile(files.BaseFile):
     #
     #
     #-------------------------------------------------------------------
-    def read(self, filename, verbosity=0, interactive=True):
+    def read(self, verbosity=0, interactive=True, program=None):
         """Print the content of a file within an archive"""
-        content = 'Compressed Read is not implemented'
-        raise NotImplementedError
+
+        """Verify given archive exists."""
+        self.check_existing_filename(self.filename)
+        logger.info("Reading %s ..." % self.filename)
+        """Read given file."""
+        content = _read_archive(self.filename,
+                         verbosity=verbosity,
+                         interactive=interactive,
+                         program=program)
+
+        logger.debug('End Function')
         return content
 
 #-----------------------------------------------------------------------
@@ -583,8 +595,8 @@ class Compressions(files.BaseFiles):
         logger.debug('Begin Function')
 
         """Print differences between two archives."""
-        util.check_existing_filename(self.files[0])
-        util.check_existing_filename(self.files[1])
+        self.check_existing_filename(self.files[0])
+        self.check_existing_filename(self.files[1])
         if verbosity >= 0:
             logger.info("Comparing %s with %s ..." % (self.files[0], self.files[1]))
             res = _diff_archives(self.files,
@@ -703,9 +715,9 @@ def list_formats ():
 
 #-----------------------------------------------------------------------
 #
-# Function get_archive_format
+# Function get_compression_format
 #
-# Detect filename archive format and optional compression.
+# Detect filename compression format.
 #
 # Inputs
 # ------
@@ -724,15 +736,18 @@ def list_formats ():
 def get_archive_format (filename):
     """Detect filename archive format and optional compression."""
     mime, compression = mimetypes.guess_type(filename)
+
     if not (mime or compression):
-        raise Exception("unknown archive format for file `%s'" % filename)
-    if mime in mimetypes.CompressionMimetypes:
-        format_ = mimetypes.CompressionMimetypes[mime]
+        raise Exception("unknown compression format for file `%s'" % filename)
+    if compression in mimetypes.CompressionMimetypes:
+        format_ = mimetypes.CompressionMimetypes[compression]
     else:
-        raise Exception("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
+        raise Exception("unknown compression format for file `%s' (mime-type is `%s')" % (filename, mime))
+
     if format_ == compression:
         # file cannot be in same format compressed
         compression = None
+
     return format_, compression
 
 #-----------------------------------------------------------------------
@@ -1432,3 +1447,59 @@ def _search_archive(pattern, archive, verbosity=0, interactive=True):
         return util.run_checked([grep, "-r", "-e", pattern, "."], ret_ok=(0, 1), verbosity=1, cwd=path)
     finally:
         shutil.rmtree(tmpdir, onerror=rmtree_log_error)
+
+#-----------------------------------------------------------------------
+#
+# Function _extract_archive
+#
+# Read the contents of a compressed file
+#
+# Inputs
+# ------
+#    @param: archive
+#    @param: verbosity
+#    @param: interactive
+#    @param: outdir
+#    @param: program
+#    @param: format_
+#    @param: compression
+#
+# Returns
+# -------
+#    @return: target
+#    @return: none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def _read_archive(archive, verbosity=0, interactive=True, outdir=None,
+                     program=None, format_=None, compression=None):
+    """Read the contents of a compressed file.
+    @return: filecontents
+    """
+
+    if format_ is None:
+        format_, compression = get_archive_format(archive)
+
+    mimetypes.check_type(format_, compression)
+    program = find_archive_program(format_, 'read', program=program)
+
+    check_program_compression(archive, 'read', program, compression)
+    get_archive_cmdlist = util.get_module_func(scmd='util_compressed',
+                                               program=program,
+                                               cmd='read',
+                                               format_=format_)
+
+
+    try:
+        lines = get_archive_cmdlist(archive,
+                                      compression,
+                                      program,
+                                      verbosity,
+                                      interactive,
+                                      outdir)
+        return lines
+    except Exception as msg:
+        logger.error(msg)

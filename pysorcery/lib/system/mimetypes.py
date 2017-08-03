@@ -366,8 +366,12 @@ def add_mimetype(mimedb, mimetype, extension):
 #-----------------------------------------------------------------------
 def check_type(format_, encoding):
     """Make sure format and compression is known."""
-    if format_ not in ArchiveFormats:
-        raise Exception("Unknown archive format `%s'" % format_)
+
+    if not (format_ in ArchiveFormats
+        or format_ in CompressionFormats
+        or format_ in AudioFormats
+        or format_ in PackageFormats):
+        raise Exception("Unknown file format `%s'" % format_)
     if encoding is not None and encoding not in ArchiveCompressions:
         raise Exception("Unkonwn archive compression `%s'" % encoding)
     return

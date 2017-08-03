@@ -67,3 +67,27 @@ def create_lzma(archive, compression, cmd, verbosity, interactive, filenames):
 def create_xz(archive, compression, cmd, verbosity, interactive, filenames):
     """Create an XZ archive with the lzma Python module."""
     return _create(archive, compression, cmd, lzma.FORMAT_XZ, verbosity, filenames)
+
+def read_xz (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a GZIP archive with the gzip Python module."""
+    try:
+        line_list = []
+        for line in lzma.open(archive, 'rt'):
+                line_list.append(line[:-1])
+    except Exception as err:
+        msg = "error readinging %s: %s" % (archive, err)
+        raise Exception(msg)
+
+    return line_list
+
+def read_lzma (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a GZIP archive with the gzip Python module."""
+    try:
+        line_list = []
+        for line in lzma.open(archive, 'rt'):
+                line_list.append(line[:-1])
+    except Exception as err:
+        msg = "error readinging %s: %s" % (archive, err)
+        raise Exception(msg)
+
+    return line_list
