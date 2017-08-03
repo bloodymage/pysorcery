@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2012 Bastian Kleineidam
+# Copyright (C) 2016 Bastian Kleineidam
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,11 +13,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the lzma program."""
-from . import extract_singlefile_standard, \
-    test_singlefile_standard, create_singlefile_standard
+"""Archive commands for the 7zr program.
 
+7zr is a light executable supporting only the 7z archive format.
+"""
 
-extract_lzma = extract_singlefile_standard
-test_lzma = test_singlefile_standard
-create_lzma = create_singlefile_standard
+from .p7zip import \
+  extract_7z, \
+  list_7z, \
+  test_7z, \
+  create_7z

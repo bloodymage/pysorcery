@@ -13,29 +13,31 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the gzip program."""
-from . import extract_singlefile_standard, test_singlefile_standard
+"""Archive commands for the lrzip program."""
+import os
 from .. import util
 
-extract_gzip = extract_compress = extract_singlefile_standard
-test_gzip = test_compress = test_singlefile_standard
-
-
-def create_gzip(archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a GZIP archive."""
-    cmdlist = [util.shell_quote(cmd)]
+def extract_lrzip (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a LRZIP archive."""
+    cmdlist = [cmd, '-d']
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.extend(['-c', '-9', '--'])
-    cmdlist.extend([util.shell_quote(x) for x in filenames])
-    cmdlist.extend(['>', util.shell_quote(archive)])
-    return (cmdlist, {'shell': True})
+    outfile = util.get_single_outfile(outdir, archive)
+    cmdlist.extend(["-o", outfile, os.path.abspath(archive)])
+    return cmdlist
 
-
-def list_gzip (archive, compression, cmd, verbosity, interactive):
-    """List a GZIP archive."""
-    cmdlist = [cmd]
-    if verbosity > 0:
+def test_lrzip (archive, compression, cmd, verbosity, interactive):
+    """Test a LRZIP archive."""
+    cmdlist = [cmd, '-t']
+    if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.extend(['-l', '--', archive])
+    cmdlist.append(archive)
+    return cmdlist
+
+def create_lrzip (archive, compression, cmd, verbosity, interactive, filenames):
+    """Create a LRZIP archive."""
+    cmdlist = [cmd, '-o', archive]
+    if verbosity > 1:
+        cmdlist.append('-v')
+    cmdlist.extend(filenames)
     return cmdlist

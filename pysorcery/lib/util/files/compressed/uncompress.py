@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2012 Bastian Kleineidam
+# Copyright (C) 2010-2015 Bastian Kleineidam
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,11 +13,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the lzma program."""
-from . import extract_singlefile_standard, \
-    test_singlefile_standard, create_singlefile_standard
+"""Archive commands for the uncompress.real program."""
+from .. import util
 
 
-extract_lzma = extract_singlefile_standard
-test_lzma = test_singlefile_standard
-create_lzma = create_singlefile_standard
+def extract_compress (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a compressed archive."""
+    cmdlist = [util.shell_quote(cmd)]
+    if verbosity > 1:
+        cmdlist.append('-v')
+    outfile = util.get_single_outfile(outdir, archive)
+    cmdlist.extend(['-c', util.shell_quote(archive), '>',
+                    util.shell_quote(outfile)])
+    return (cmdlist, {'shell': True})

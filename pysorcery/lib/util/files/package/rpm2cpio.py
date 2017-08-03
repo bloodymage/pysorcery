@@ -13,19 +13,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the bzip2 program."""
+"""Archive commands for the rpm2cpio program."""
+import os
 from .. import util
-from . import extract_singlefile_standard, test_singlefile_standard
 
-extract_bzip2 = extract_singlefile_standard
-test_bzip2 = test_singlefile_standard
-
-def create_bzip2 (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a BZIP2 archive."""
-    cmdlist = [util.shell_quote(cmd)]
+def extract_rpm (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a RPM archive."""
+    # also check cpio
+    cpio = util.find_program("cpio")
+    if not cpio:
+        raise util.PatoolError("cpio(1) is required for rpm2cpio extraction; please install it")
+    path = util.shell_quote(os.path.abspath(archive))
+    cmdlist = [util.shell_quote(cmd), path, "|", util.shell_quote(cpio),
+        '--extract', '--make-directories', '--preserve-modification-time',
+        '--no-absolute-filenames', '--force-local', '--nonmatching',
+        r'"*\.\.*"']
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.extend(['-c', '-z', '-9', '--'])
-    cmdlist.extend([util.shell_quote(x) for x in filenames])
-    cmdlist.extend(['>', util.shell_quote(archive)])
-    return (cmdlist, {'shell': True})
+    return (cmdlist, {'cwd': outdir, 'shell': True})

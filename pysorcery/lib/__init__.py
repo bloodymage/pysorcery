@@ -55,7 +55,9 @@ from pysorcery.lib import sorcery
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
+from pysorcery.lib.util.files import audio
 from pysorcery.lib.util.files import compressed
+from pysorcery.lib.util.files import package
 
 # Other Optional Libraries
 
@@ -77,16 +79,29 @@ logger = logging.getLogger(__name__)
 # Directory
 # Directories
 # Package
+# PackageVersions
+# Packages
+# Section
+# Sections
+# Repository
 # Repositories
 #
 #-----------------------------------------------------------------------
-
+    
 #-----------------------------------------------------------------------
 #
 # Class File
 # 
-# The File API.  This is the class that is used for ALL file activities
-# Parent classes: CompressedFile, Archive, BaseFile
+# The File API.  This is a factory class that determines which class
+# is used for each of the different file types.
+#
+# Supported File types
+# --------------------
+#   Text
+#   Archive
+#   Compressed
+#   Audio
+# 
 #
 # Inputs
 # ------
@@ -101,74 +116,82 @@ logger = logging.getLogger(__name__)
 #    ...
 #
 #-----------------------------------------------------------------------
-class File(compressed.CompressedFile, archive.Archive, files.BaseFile):
-    #-------------------------------------------------------------------
-    #
-    # Function read
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.format
-    #
-    # Returns
-    # -------
-    #    @return: content
-    #
-    # Raises
-    # ------
-    #    FileNotFoundError - Fix Me
-    #    IsADirectoryError
-    #    PermissionError
-    #
-    #-------------------------------------------------------------------
-    def read(self):
-        logger.debug('Begin Function')
-        try:
-            content = files.BaseFile.read(self)
-        except Exception as msg:
-            logger.error(msg)
-        
-        logger.debug('End Function')
-        return content
+class File():
+    __file_classes = {
+        'archive': archive.Archive,
+        'compressed': compressed.CompressedFile,
+        'audio': audio.AudioFile,
+        'package': package.PackageFile,
+        'default': files.BaseFile
+    }
 
     #-------------------------------------------------------------------
     #
-    # Function search
+    # Function id_file_classes
     #
-    # Calls the read function based on the file format.
+    # Do we have a text file, archive, compressed, or audio file?
     #
     # Inputs
     # ------
-    #    @param: self
+    #    @param: filename - 
     #
     # Returns
     # -------
-    #    @return: results
+    #    @return: 'archive'
+    #    @return: 'compressed'
+    #    @return: 'default'
+    #    @return: 'audio' - Not yet implemented
     #
     # Raises
     # ------
     #    ...
     #
     #-------------------------------------------------------------------
-    def search(self,
-               pattern,
-               verbosity=0,
-               interactive=True):
-        logger.debug('Begin Function')
+    @staticmethod
+    def id_file_class(filename):
+        mimetype, encoding = mimetypes.guess_type(filename)
 
-        if self.mimetype in mimetypes.ArchiveMimetypes:
-            results = archive.Archive.search(self,
-                                             pattern,
-                                             verbosity=0,
-                                             interactive=True)
+        try:
+            id_ = mimetypes.fileclasstypes[mimetype]
+        except:
+            try:
+                id_ = mimetypes.fileclasstypes[encoding]
+            except:
+                id_ = 'default'
+
+        return id_
+                
+    #-------------------------------------------------------------------
+    #
+    # Function getcls
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def getcls(filename, *args, **kwargs):
+        
+        name = File.id_file_class(filename)
+        
+        share_class = File.__file_classes.get(name.lower(), None)        
+        if share_class:
+            return share_class(filename, *args, **kwargs)
         else:
-            raise NotImplementedError('BaseFile search Not implemented')            
-
-        logger.debug('End Function')
-        return results
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 #-----------------------------------------------------------------------
 #

@@ -71,6 +71,9 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.util.files import archive
+from pysorcery.lib.util.files import audio
+from pysorcery.lib.util.files import compressed
+from pysorcery.lib.util.files import package
 # Conditional Libraries
 
 
@@ -120,11 +123,47 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 def archive_formats(args):
-    logger.debug('Begin Function')
 
-    archive.list_formats()
-    
-    logger.debug('End Function')
+    try:
+        print("Programs are searched in the following directories:")
+        print(util.system_search_path())
+        print()
+
+        if (args.archive is False
+            and args.audio is False
+            and args.compressed is False
+            and args.package is False):
+            args.archive = True
+            args.audio = True
+            args.compressed =True
+            args.package = True
+                        
+        if args.archive is True:
+            App = 'pySorcery ' + __version__
+            print("Archive programs of", App)
+            archive.list_formats()
+            print()
+
+        if args.audio is True:
+            App = 'pySorcery ' + __version__
+            print("Audio programs of", App)
+            audio.list_formats()
+            print()
+
+        if args.compressed is True:
+            App = 'pySorcery ' + __version__
+            print("Compression programs of", App)
+            compressed.list_formats()
+            print()
+
+        if args.package is True:
+            App = 'pySorcery ' + __version__
+            print("Package programs of", App)
+            package.list_formats()
+
+    except Exception as msg:
+        logger.critical(msg)
+
     return
 
 #-----------------------------------------------------------------------
@@ -157,6 +196,26 @@ def parser(*args, **kwargs):
     cmd = subparsers.add_parser('formats',
                                 parents = parent_parsers,
                                 help = 'Display supported file formats and functions')
+    cmd.add_argument('-a',
+                     '--archive',
+                     action = 'store_true',
+                     default = False,
+                     help = 'Display supported archive formats')
+    cmd.add_argument('-A',
+                     '--audio',
+                     default = False,
+                     action = 'store_true',
+                     help = 'Display supported archive formats')
+    cmd.add_argument('-c',
+                     '--compressed',
+                     default = False,
+                     action = 'store_true',
+                     help = 'Display supported archive formats')
+    cmd.add_argument('-p',
+                     '--package',
+                     default = False,
+                     action = 'store_true',
+                     help = 'Display supported archive formats')
     cmd.set_defaults(func = archive_formats)
 
     return cmd

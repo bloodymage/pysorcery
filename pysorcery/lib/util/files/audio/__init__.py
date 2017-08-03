@@ -45,6 +45,7 @@ Impliments classes for working with archive files.
 # System Libraries
 import os
 
+
 # 3rd Party Libraries
 
 # Application Libraries
@@ -64,6 +65,7 @@ try:
 except ImportError:
     py_lzma = ()
 
+
 #-----------------------------------------------------------------------
 #
 # Global Variables
@@ -74,159 +76,46 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 # Supported archive commands
-ArchiveCommands = ('list', 'extract', 'test', 'create', 'read')
+ArchiveCommands = ('list', 'extract', 'test', 'create', 'play')
 
 # List of programs supporting the given archive format and command.
-# If command is None, the program supports all commands (list, extract,
-# ...)
+# If command is None, the program supports all commands (list, extract, ...)
 # Programs starting with "py_" are Python modules.
 ArchivePrograms = {
-    '7z': {
-        None: ('7z', '7za', '7zr'),
-    },
-    'ace': {
-        'extract': ('unace',),
-        'test': ('unace',),
-        'list': ('unace',),
-    },
-    'adf': {
-        'extract': ('unadf',),
-        'test': ('unadf',),
-        'list': ('unadf',),
-    },
-    'alzip': {
-        'extract': ('unalz',),
-        'test': ('unalz',),
-        'list': ('unalz',),
-    },
-    'ar': {
-        None: ('ar',),
-    },
-    'arc': {
-        None: ('arc',),
-        'extract': ('nomarch',),
-        'test': ('nomarch',),
-        'list': ('nomarch',),
-    },
-    'arj': {
-        None: ('arj',),
-        'extract': ('7z',),
-        'list': ('7z',),
-        'test': ('7z',),
-    },
-    'cab': {
-        'extract': ('cabextract', '7z'),
-        'create': ('lcab',),
-        'list': ('cabextract', '7z'),
-        'test': ('cabextract', '7z'),
-    },
-    'chm': {
-        'extract': ('archmage', 'extract_chmLib'),
-        'test': ('archmage',),
-    },
-    'compress': {
-        'extract': ('7z', '7za', 'uncompress.real'),
-        'list': ('7z', '7za', 'py_echo',),
-        'test': ('7z', '7za'),
-        'create': ('compress',),
-    },
-    'cpio': {
-        'extract': ('cpio', 'bsdcpio', '7z'),
-        'list': ('cpio', 'bsdcpio', '7z'),
-        'test': ('cpio', 'bsdcpio', '7z',),
-        'create': ('cpio', 'bsdcpio'),
-    },
-    'dms': {
-        'extract': ('xdms',),
-        'list': ('xdms',),
-        'test': ('xdms',),
-    },
-    'iso': {
-        'extract': ('7z',),
-        'list': ('7z', 'isoinfo'),
-        'test': ('7z',),
-        'create': ('genisoimage',),
-    },
-    'lrzip': {
-        'extract': ('lrzip',),
+    'ape': {
+        'create': ('mac',),
+        'extract': ('mac',),
         'list': ('py_echo',),
-        'test': ('lrzip',),
-        'create': ('lrzip',),
+        'test': ('mac',),
     },
-    'lzh': {
-        None: ('lha',),
-        'extract': ('lhasa',),
-    },
-    'lzip': {
-        'extract': ('plzip', 'lzip', 'clzip', 'pdlzip'),
+    'flac': {
+        'extract': ('flac',),
+        'test': ('flac',),
+        'create': ('flac',),
         'list': ('py_echo',),
-        'test': ('plzip', 'lzip', 'clzip', 'pdlzip'),
-        'create': ('plzip', 'lzip', 'clzip', 'pdlzip'),
-    },
-    'lzma': {
-        'extract': ('7z', 'lzma', 'xz') + py_lzma,
-        'list': ('7z', 'py_echo'),
-        'test': ('7z', 'lzma', 'xz'),
-        'create': ('lzma', 'xz') + py_lzma,
-    },
-    'rar': {
-        None: ('rar',),
-        'extract': ('unrar', '7z'),
-        'list': ('unrar', '7z'),
-        'test': ('unrar', '7z'),
-    },
-    'rzip': {
-        'extract': ('rzip',),
-        'list': ('py_echo',),
-        'create': ('rzip',),
-    },
-    'shar': {
-        'create': ('shar',),
-        'extract': ('unshar',),
+        'play': ('sox',)
     },
     'shn': {
         'extract': ('shorten',),
         'list': ('py_echo',),
-        'create': ('shorten',),
-    },
-    'tar': {
-        None: ('tar', 'star', 'bsdtar', 'py_tarfile'),
-    },
-    'vhd': {
-        'extract': ('7z',),
-        'list': ('7z',),
-        'test': ('7z',),
-    },
-    'zip': {
-        None: ('7z', '7za', 'py_zipfile'),
-        'extract': ('unzip',),
-        'list': ('unzip',),
-        'test': ('zip', 'unzip',),
-        'create': ('zip',),
-    },
-    'zpaq': {
-        None: ('zpaq',),
-    },
-    'zoo': {
-        None: ('zoo',),
+        'create': ('shorten',)
     }
 }
-
 
 #-----------------------------------------------------------------------
 #
 # Classes
 #
-# Archive
-# Archives
+# AudioFile
+# AudioFiles
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Class Archive
+# Class AudioFile
 #
-# This is the Archive File Class
+# This is the base File Class
 #
 # Inputs
 # ------
@@ -241,7 +130,7 @@ ArchivePrograms = {
 #    ...
 #
 #-----------------------------------------------------------------------
-class Archive(files.BaseFile):        
+class AudioFile(files.BaseFile):        
     #-------------------------------------------------------------------
     #
     # Function extract
@@ -313,14 +202,14 @@ class Archive(files.BaseFile):
         check_names = files.BaseFiles(filelist = filenames)
         check_names.check_filelist()
         if verbosity >= 0:
-            logger.info("Creating {self.filename} ...")
+            logger.info("Creating %s ..." % self.filename)
             res = _create_archive(self.filename,
                                   filenames,
                                   verbosity=verbosity,
                                   interactive=interactive,
                                   program=program)
             if verbosity >= 0:
-                logger.info('... {self.filename} created.')
+                logger.info("... %s created." % self.filename)
         return res
 
     #-------------------------------------------------------------------
@@ -344,11 +233,10 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def listfiles(self, verbosity=1, program=None, interactive=True):
         """List given archive."""
-        # Set default verbosity to 1 since the listing output should
-        # be visible.
-        self.check_existing_filename(self.filename)
+        # Set default verbosity to 1 since the listing output should be visible.
+        util.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info('Listing {self.filename} ...')
+            logger.info("Listing %s ..." % self.filename)
             return _handle_archive(self.filename,
                                    'list',
                                    verbosity=verbosity,
@@ -363,13 +251,11 @@ class Archive(files.BaseFile):
     #
     # Inputs
     # ------
-    #     @param: self
-    #     @param: verbosity
-    #     @param: interactive
+    #     self:
     #
     # Returns
     # -------
-    #     @return: None (change this to True or False?)
+    #     None (change this to True or False?)
     #
     # Raises
     # ------
@@ -378,10 +264,10 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def recompress_archive(self, verbosity=0, interactive=True):
         """Recompress an archive to hopefully smaller size."""
-        self.check_existing_filename(self.filename)
-        self.check_writable_filename(self.filename)
+        util.check_existing_filename(self.filename)
+        util.check_writable_filename(self.filename)
         if verbosity >= 0:
-            logger.info('Recompressing {self.filename} ...')
+            logger.info("Recompressing %s ..." % (self.filename,))
         res = _recompress_archive(self.filename,
                                   verbosity=verbosity,
                                   interactive=interactive)
@@ -410,8 +296,8 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def repack_archive (self, archive_new, verbosity=0, interactive=True):
         """Repack archive to different file and/or format."""
-        self.check_existing_filename(self.filename)
-        self.check_new_filename(archive_new)
+        util.check_existing_filename(self.filename)
+        util.check_new_filename(archive_new)
         if verbosity >= 0:
             logger.info("Repacking %s to %s ..." % (self.filename, archive_new))
         res = _repack_archive(self.filename,
@@ -443,7 +329,7 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def test_archive(self, verbosity=0, program=None, interactive=True):
         """Test given archive."""
-        self.check_existing_filename(self.filename)
+        util.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Testing %s ..." % self.filename)
         res = _handle_archive(self.filename,
@@ -479,10 +365,9 @@ class Archive(files.BaseFile):
         """Search pattern in archive members."""
         if not pattern:
             raise Exception("empty search pattern")
-        self.check_existing_filename(self.filename)
+        util.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Searching %r in %s ..."
-                        % (pattern, self.filename))
+            logger.info("Searching %r in %s ..." % (pattern, self.filename))
         res = _search_archive(pattern,
                               self.filename,
                               verbosity=verbosity,
@@ -513,7 +398,7 @@ class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     def read(self, filename, verbosity=0, interactive=True):
         """Print the content of a file within an archive"""
-        content = 'Archive Read is not implemented'
+        content = 'Audio Read is not implemented'
         raise NotImplementedError
         return content
 
@@ -536,7 +421,7 @@ class Archive(files.BaseFile):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Archives(files.BaseFiles):
+class AudioFiles(files.BaseFiles):
     #-------------------------------------------------------------------
     #
     # Function search
@@ -560,8 +445,8 @@ class Archives(files.BaseFiles):
         logger.debug('Begin Function')
 
         """Print differences between two archives."""
-        self.check_existing_filename(self.files[0])
-        self.check_existing_filename(self.files[1])
+        util.check_existing_filename(self.files[0])
+        util.check_existing_filename(self.files[1])
         if verbosity >= 0:
             logger.info("Comparing %s with %s ..." % (self.files[0], self.files[1]))
             res = _diff_archives(self.files,
@@ -577,7 +462,6 @@ class Archives(files.BaseFiles):
 #
 # Functions
 #
-# program_supports_compression
 # find_archive_program
 # _extract_archive
 #
@@ -642,7 +526,7 @@ def check_archive_format (format_, compression):
 
 #-----------------------------------------------------------------------
 #
-# Function list_formats
+# Function _extract_archive
 #
 # This is the base File Class
 #
@@ -661,7 +545,7 @@ def check_archive_format (format_, compression):
 #-----------------------------------------------------------------------
 def list_formats ():
     """Print information about available archive formats to stdout."""
-    for format_ in mimetypes.ArchiveFormats:
+    for format_ in mimetypes.AudioFormats:
         print(format_, "files:")
         for command in ArchiveCommands:
             programs = ArchivePrograms[format_]
@@ -671,17 +555,8 @@ def list_formats ():
             try:
                 program = find_archive_program(format_, command)
                 print("   %8s: %s" % (command, program), end=' ')
-                if format_ == 'tar':
-                    encs = [x for x in mimetypes.ArchiveCompressions if util.find_program(x)]
-                    if encs:
-                        print("(supported compressions: %s)" % ", ".join(encs), end=' ')
-                elif format_ == '7z':
-                    if p7zip_supports_rar():
-                        print("(rar archives supported)", end=' ')
-                    else:
-                        print("(rar archives not supported)", end=' ')
                 print()
-            except Exception as msg:
+            except Exception:
                 # display information what programs can handle this archive format
                 handlers = programs.get(None, programs.get(command))
                 print("   %8s: - (no program found; install %s)" %
@@ -918,6 +793,7 @@ def rmtree_log_error (func, path, exc):
     msg = "Error in %s(%s): %s" % (func.__name__, path, str(exc[1]))
     logger.error(msg)
 
+
 #-----------------------------------------------------------------------
 #
 # Function cleanup_outdir
@@ -1122,7 +998,7 @@ def _diff_archives (archives, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _recompress_archive
+# Function _extract_archive
 #
 # This is the base File Class
 #

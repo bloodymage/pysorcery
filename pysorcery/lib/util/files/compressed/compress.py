@@ -13,19 +13,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the bzip2 program."""
+"""Archive commands for the uncompress.real program."""
 from .. import util
-from . import extract_singlefile_standard, test_singlefile_standard
 
-extract_bzip2 = extract_singlefile_standard
-test_bzip2 = test_singlefile_standard
 
-def create_bzip2 (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a BZIP2 archive."""
+def create_compress (archive, compression, cmd, verbosity, interactive, filenames):
+    """Create a compressed archive."""
     cmdlist = [util.shell_quote(cmd)]
     if verbosity > 1:
         cmdlist.append('-v')
-    cmdlist.extend(['-c', '-z', '-9', '--'])
+    cmdlist.append('-c')
     cmdlist.extend([util.shell_quote(x) for x in filenames])
     cmdlist.extend(['>', util.shell_quote(archive)])
     return (cmdlist, {'shell': True})

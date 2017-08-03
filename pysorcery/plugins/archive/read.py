@@ -10,7 +10,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/plugin/archive/list.py
+# File: pysorcery/plugin/archive/read.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -32,14 +32,15 @@
 #   archive files of multiple formats.  To test the capabilities of the
 #   underlying code, this application was developed.
 #
-# Plugin: list
+# Plugin: read
 #
-#    This plugin lists the contents of an archive file.  If the file is
-#    a compressed file, it will read the contents of the file.
+#    This plugin reads the contents of a file within archive file.
+#    If the file is a compressed file, it will read the contents
+#    of the file.
 #
 #-----------------------------------------------------------------------
 """
-Plugin: list
+Plugin: read
 
 This plugin lists the contents of an archive file.  If the file is
 a compressed file, it will read the contents of the file.
@@ -64,9 +65,7 @@ from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 # Conditional Libraries
@@ -93,14 +92,14 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_list
+# archive_read
 # parser
 #
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
-# Function archive_list
+# Function archive_read
 #
 # List all files in an archive.
 # If a compressed file, read the files contents
@@ -120,13 +119,17 @@ colortext = text.ConsoleText()
 #    ...
 #
 #-----------------------------------------------------------------------
-def archive_list(args):
+def archive_read(args):
     logger.debug('Begin Function')
 
     for i in args.files:
-        cfile = lib.File.getcls(i)    
-        content = cfile.listfiles()
-    
+        print(i)
+        cfile = lib.File.getcls(i)
+        content = cfile.read()
+
+        for line in content:
+            print(line)
+
     logger.debug('End Function')
     return
 
@@ -153,19 +156,16 @@ def archive_list(args):
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
-
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd= subparsers.add_parser('list',
+    cmd= subparsers.add_parser('read',
+                               aliases = ['play'],
                                parents = parent_parsers,
-                               help = 'List files')
+                               help = 'Read file within an archive.\nRead compressed file.\nRead Package information.\nPlay audio file.')
     cmd.add_argument('files',
                      nargs = '+',
                      help = 'List files')
-    cmd.add_argument('-r', '--recursive',
-                     action = 'store_true',
-                     help = 'Recursive')
-    cmd.set_defaults(func = archive_list) 
+    cmd.set_defaults(func = archive_read)
 
     return cmd

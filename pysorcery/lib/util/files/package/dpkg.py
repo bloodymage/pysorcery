@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2010-2012 Bastian Kleineidam
+# Copyright (C) 2010-2015 Bastian Kleineidam
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,11 +13,20 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""Archive commands for the lzma program."""
-from . import extract_singlefile_standard, \
-    test_singlefile_standard, create_singlefile_standard
+"""Archive commands for the dpkg-deb program."""
 
+def extract_deb (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a DEB archive."""
+    cmdlist = [cmd]
+    if verbosity > 1:
+        cmdlist.append('--vextract')
+    else:
+        cmdlist.append('--extract')
+    cmdlist.extend(['--', archive, outdir])
+    return cmdlist
 
-extract_lzma = extract_singlefile_standard
-test_lzma = test_singlefile_standard
-create_lzma = create_singlefile_standard
+def list_deb (archive, compression, cmd, verbosity, interactive):
+    """List a DEB archive."""
+    return [cmd, '--contents', '--', archive]
+
+test_deb = list_deb

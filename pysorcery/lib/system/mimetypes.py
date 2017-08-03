@@ -59,19 +59,72 @@ logger = logging.getLogger(__name__)
 
 # Map MIME types to file format
 
-CompressedMimetypes = {
-    'application/gzip': 'gzip',    
-    'application/x-7z-compressed': '7z',
-    'application/x-bzip2': 'bzip2',
-    'application/x-compress': 'compress',
-     'application/x-gzip': 'gzip',    
-    'application/x-lzma': 'lzma',
-    'application/x-xz': 'xz'
-}
+filetypedefinitions = {
+    ( 'application/gzip',
+      'application/java-archive',
+      'application/rar',
+      'application/vnd.ms-cab-compressed',
+      'application/x-7z-compressed',
+      'application/x-ace',
+      'application/x-adf',
+      'application/x-alzip',
+      'application/x-archive',
+      'application/x-arc',
+      'application/x-arj',
+      'application/x-bzip2',
+      'application/x-cab',
+      'application/x-chm',
+      'application/x-compress',
+      'application/x-cpio',
+      'application/x-dms',
+      'application/x-gzip',
+      'application/x-iso9660-image',
+      'application/x-lzop',
+      'application/x-lzma',
+      'application/x-lzip',
+      'application/x-lha',
+      'application/x-lrzip',
+      'application/x-lzh',
+      'application/x-rar',
+      'application/x-rzip',
+      'application/x-shar',
+      'application/x-tar',
+      'application/x-vhd',
+      'application/x-xz',
+      'application/x-zip-compressed',
+      'application/x-zoo',
+      'application/zip',
+      'application/zpaq'
+    ): 'archive',
+    ( 'application/gzip',    
+      'application/x-7z-compressed',
+      'application/x-bzip2',
+      'application/x-compress',
+      'application/x-gzip',    
+      'application/x-lzma',
+      'application/x-xz',
+      'gzip',
+      'bzip2',
+      'xz'
+      ): 'compressed',
+    ( 'audio/x-ape',
+      'audio/x-shn',
+      'audio/flac'
+      ): 'audio',
+    ( 'application/x-debian-package',
+      'application/x-redhat-package-manager',
+      'application/x-rpm'
+    ): 'package',
+    ( 'None' ): 'default'
+    }
+
+fileclasstypes = {}
+for k, v in filetypedefinitions.items():
+    for key in k:
+        fileclasstypes[key] = v
 
 # Map MIME types to archive format
 ArchiveMimetypes = {
-    'application/gzip': 'gzip',
     'application/java-archive': 'zip',
     'application/rar': 'rar',
     'application/vnd.ms-cab-compressed': 'cab',
@@ -82,14 +135,11 @@ ArchiveMimetypes = {
     'application/x-archive': 'ar',
     'application/x-arc': 'arc',
     'application/x-arj': 'arj',
-    'application/x-bzip2': 'bzip2',
     'application/x-cab': 'cab',
     'application/x-chm': 'chm',
     'application/x-compress': 'compress',
     'application/x-cpio': 'cpio',
-    'application/x-debian-package': 'deb',
     'application/x-dms': 'dms',
-    'application/x-gzip': 'gzip',
     'application/x-iso9660-image': 'iso',
     'application/x-lzop': 'lzop',
     'application/x-lzma': 'lzma',
@@ -98,48 +148,58 @@ ArchiveMimetypes = {
     'application/x-lrzip': 'lrzip',
     'application/x-lzh': 'lzh',
     'application/x-rar': 'rar',
-    'application/x-redhat-package-manager': 'rpm',
-    'application/x-rpm': 'rpm',
     'application/x-rzip': 'rzip',
     'application/x-shar': 'shar',
     'application/x-tar': 'tar',
     'application/x-vhd': 'vhd',
-    'application/x-xz': 'xz',
     'application/x-zip-compressed': 'zip',
     'application/x-zoo': 'zoo',
     'application/zip': 'zip',
-    'application/zpaq': 'zpaq',
+    'application/zpaq': 'zpaq'
+}
+
+AudioMimetypes = {
     'audio/x-ape': 'ape',
     'audio/x-shn': 'shn',
-    'audio/flac': 'flac',
+    'audio/flac': 'flac'
 }
 
-VerifyMimetypes = {
-    'application/x-lzop': 'lzop',
-    'application/x-lzip': 'lzip',
-    'application/x-lha': 'lzh',
-    'application/x-lrzip': 'lrzip',
-    'application/x-lzh': 'lzh'
-}
-
-encoding_methods = {
+CompressionMimetypes = {
+    'application/gzip': 'gzip',    
+    'application/x-7z-compressed': '7z',
+    'application/x-bzip2': 'bzip2',
+    'application/x-compress': 'compress',
+    'application/x-gzip': 'gzip',    
+    'application/x-lzma': 'lzma',
+    'application/x-xz': 'xz',
     'gzip': 'gzip',
-    'xz': 'lzma',
-    'bzip2': 'bzip2'
+    'bzip2': 'bzip2',
+    'xz': 'lzma'
+}
+
+PackageMimetypes = {
+   'application/x-debian-package': 'deb',
+    'application/x-redhat-package-manager': 'rpm',
+    'application/x-rpm': 'rpm'
 }
 
 # Supported archive formats
 ArchiveFormats = (
-    '7z', 'ace', 'adf', 'alzip', 'ape', 'ar', 'arc', 'arj',
-    'bzip2', 'cab', 'chm', 'compress', 'cpio', 'deb', 'dms',
-    'flac', 'gzip', 'iso', 'lrzip', 'lzh', 'lzip', 'lzma', 'lzop',
-    'rar', 'rpm', 'rzip', 'shar', 'shn', 'tar', 'vhd', 'xz',
+    '7z', 'ace', 'adf', 'alzip', 'ar', 'arc', 'arj',
+    'cab', 'chm', 'compress', 'cpio', 'dms',
+    'iso', 'lrzip', 'lzh', 'lzip', 'lzma',
+    'rar', 'rzip', 'shar', 'tar', 'vhd',
     'zip', 'zoo', 'zpaq')
+
+AudioFormats = ( 'ape', 'flac', 'shn' )
+
+CompressionFormats = ( 'bzip2', 'gzip', 'lzop', 'xz' )
+
+PackageFormats = ( 'rpm', 'deb' )
 
 # Supported compressions (used with tar for example)
 # Note that all compressions must also be archive formats
 ArchiveCompressions = ('bzip2', 'compress', 'gzip', 'lzip', 'lzma', 'xz')
-
 
 # internal MIME database
 mimedb = None
@@ -306,8 +366,12 @@ def add_mimetype(mimedb, mimetype, extension):
 #-----------------------------------------------------------------------
 def check_type(format_, encoding):
     """Make sure format and compression is known."""
-    if format_ not in ArchiveFormats:
-        raise Exception("Unknown archive format `%s'" % format_)
+
+    if not (format_ in ArchiveFormats
+        or format_ in CompressionFormats
+        or format_ in AudioFormats
+        or format_ in PackageFormats):
+        raise Exception("Unknown file format `%s'" % format_)
     if encoding is not None and encoding not in ArchiveCompressions:
         raise Exception("Unkonwn archive compression `%s'" % encoding)
     return
