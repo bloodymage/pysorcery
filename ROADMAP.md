@@ -14,7 +14,7 @@
     - [X] search
     - [X] diff
     - [X] formats
-    - [X] recompress    
+    - [X] recompress
   - Archive Formats
     - [X] tar
     - [X] zip
@@ -75,7 +75,7 @@
 #### Modified scripts
 - pyarchive
   - Functions
-    - [ ] read (for compressed files, ex. txtfile.gz)
+    - [X] read (for compressed files, ex. txtfile.gz)
   
 ### 0.0.3
 #### Functional Scripts

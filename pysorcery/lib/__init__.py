@@ -51,7 +51,8 @@ from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 from pysorcery.lib.system import shutil
 # Other Application Libraries
-from pysorcery.lib import sorcery
+from pysorcery.lib.sorcery import apt
+from pysorcery.lib.sorcery import smgl
 #from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
@@ -278,7 +279,80 @@ class Directories(files.BaseDirectories):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Package(sorcery.BasePackage):
+class Package():
+    __file_classes = {
+        'smgl': smgl.Spell,
+        'apt': apt.AptPackage
+    }
+
+    #-------------------------------------------------------------------
+    #
+    # Function id_file_classes
+    #
+    # Do we have a text file, archive, compressed, or audio file?
+    #
+    # Inputs
+    # ------
+    #    @param: filename - 
+    #
+    # Returns
+    # -------
+    #    @return: 'archive'
+    #    @return: 'compressed'
+    #    @return: 'default'
+    #    @return: 'audio' - Not yet implemented
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def id_file_class(filename):
+        mimetype, encoding = mimetypes.guess_type(filename)
+
+        try:
+            id_ = mimetypes.fileclasstypes[mimetype]
+        except:
+            try:
+                id_ = mimetypes.fileclasstypes[encoding]
+            except:
+                id_ = 'default'
+
+        return id_
+                
+    #-------------------------------------------------------------------
+    #
+    # Function getcls
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def getcls(filename, *args, **kwargs):
+        
+        name = File.id_file_class(filename)
+        
+        share_class = File.__file_classes.get(name.lower(), None)        
+        if share_class:
+            return share_class(filename, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
+
     pass
 
 #-----------------------------------------------------------------------
