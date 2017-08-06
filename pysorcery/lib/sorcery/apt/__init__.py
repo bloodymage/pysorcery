@@ -94,6 +94,22 @@ AptPrograms = {
         'get_license': ('py_apt',),
         'get_section': ('py_apt',),
         'is_package': ('py_apt',),
+        'read_file': ('apt',),
+        'install' : ('apt','apt-get'),
+    },
+    'packages': {
+        'get_installed': ('apt',),
+        'get_queue': ('py_apt',),
+    },
+    'section': {
+        'get_maintainer': ('py_apt',),
+        'get_packages': ('py_apt',),
+    },
+    'repository': {
+        'get_sections': ('py_apt',),
+    },
+    'repositories': {
+        'get_repositories': ('apt-cache',),
     }
 }
 
@@ -300,6 +316,7 @@ class Package():
     #
     #-------------------------------------------------------------------
     def read_file(self, filename):
+        program = find_package_program('package', 'read_file')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='read_file')
@@ -328,6 +345,7 @@ class Package():
     #
     #-------------------------------------------------------------------
     def is_package(self):
+        program = find_package_program('package', 'is_package')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='is_package')
@@ -356,6 +374,7 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_license(self):
+        program = find_package_program('package', 'get_license')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_license')
@@ -384,6 +403,7 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_maintainer(self):
+        program = find_package_program('package', 'get_maintainer')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_pkg_maintainer')
@@ -413,6 +433,7 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_size(self):
+        program = find_package_program('package', 'get_size')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_size')
@@ -440,6 +461,7 @@ class Package():
     #
     #-------------------------------------------------------------------
     def install(self,args):
+        program = find_package_program('package', 'install')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='install')
@@ -514,6 +536,7 @@ class Packages():
     #
     #-------------------------------------------------------------------
     def get_queue(self, which_queue):
+        program = find_package_program('packages', 'get_queue')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_queue')
@@ -542,6 +565,7 @@ class Packages():
     #
     #-------------------------------------------------------------------
     def get_installed(self, status=None):
+        program = find_package_program('packages', 'get_installed')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_installed')
@@ -600,6 +624,7 @@ class Section():
     #
     #-------------------------------------------------------------------
     def get_maintainer(self):
+        program = find_package_program('section', 'get_maintainer')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_section_maintainer')
@@ -628,6 +653,7 @@ class Section():
     #
     #-------------------------------------------------------------------
     def get_packages(self):
+        program = find_package_program('section', 'get_packages')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_section_packages')
@@ -713,6 +739,7 @@ class Repository():
     #
     #-------------------------------------------------------------------
     def get_sections(self):
+        program = find_package_program('repository', 'get_sections')
         func = util.get_module_func(scmd='sorcery_apt',
                                     program=program,
                                     cmd='get_sections')
@@ -776,6 +803,7 @@ class Repositories():
 #
 #-----------------------------------------------------------------------
 def get_repository(name=None, repo_dir=None):
+    program = find_package_program('package', 'get_description')
     func = util.get_module_func(scmd='sorcery_apt',
                                 program=program,
                                 cmd='get_repository'
@@ -803,6 +831,7 @@ def get_repository(name=None, repo_dir=None):
 #
 #-------------------------------------------------------------------------------
 def get_repositories(*args, **kwargs):
+    program = find_package_program('repositories', 'get_repositories')
     func = util.get_module_func(scmd='sorcery_apt',
                                 program=program,
                                 cmd='get_repositories')
@@ -824,60 +853,6 @@ def get_repositories(*args, **kwargs):
 # get_size
 #
 #-----------------------------------------------------------------------
-
-
-#-----------------------------------------------------------------------
-#
-# Function 
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def print_version(self,multi=False):
-    logger.debug("Begin Function")
-        
-    if multi:
-        grimoires = libcodex.Codex()
-        grimoire_list = grimoires.list_grimoires()
-            
-        m = len(grimoire_list)
-    else:
-        grimoire_list = [ self.grimoire ]
-        m = 1
-
-    print_list = [ "Repository       " ]
-    print_list.append("Section          ")
-    print_list.append("Package          ")
-    print_list.append("Repo version     ")
-    print_list.append("Installed version")
-    print_list.append("----------       ")
-    print_list.append("-------          ")
-    print_list.append("-------          ")
-    print_list.append("------------     ")
-    print_list.append("-----------------")
-
-
-    for i in grimoire_list:
-        print_list.append(i.split('/')[-1])
-        print_list.append(self.section)
-        print_list.append(self.name)
-        print_list.append(self.version)
-        print_list.append('-')
-
-    libmisc.column_print(print_list,cols=5,columnwise=False,gap=2)
-                
-    logger.debug("End Function")
-    return
 
 #-----------------------------------------------------------------------
 #

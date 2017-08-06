@@ -360,7 +360,7 @@ class PackageVersions():
     @staticmethod
     def __new__(cls, name, *args, **kwargs):
         
-        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = PackageVersions.__file_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -411,11 +411,10 @@ class Packages():
     #
     #-------------------------------------------------------------------
     @staticmethod
-    def __new__(cls, name, *args, **kwargs):
-        
-        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+    def __new__(cls, *args, **kwargs):
+        share_class = Packages.__file_classes.get(pkg_mgr.lower(), None)        
         if share_class:
-            return share_class(name, *args, **kwargs)
+            return share_class(*args, **kwargs)
         else:
             raise NotImplementedError("The requested File Class has not been implemented")
 
@@ -466,7 +465,7 @@ class Section():
     @staticmethod
     def __new__(cls, name, *args, **kwargs):
         
-        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Section.__file_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -516,11 +515,11 @@ class Sections():
     #    ...
     #
     #-------------------------------------------------------------------
-    def __new__(cls, name, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):
         
-        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Sections.__file_classes.get(pkg_mgr.lower(), None)        
         if share_class:
-            return share_class(name, *args, **kwargs)
+            return share_class(*args, **kwargs)
         else:
             raise NotImplementedError("The requested File Class has not been implemented")
 
@@ -569,8 +568,7 @@ class Repository():
     #
     #-------------------------------------------------------------------
     def __new__(cls, name, *args, **kwargs):
-        
-        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Repository.__file_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -621,11 +619,11 @@ class Repositories():
     #
     #-------------------------------------------------------------------
     @staticmethod
-    def __new__(cls, name, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):
         
-        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Repositories.__file_classes.get(pkg_mgr.lower(), None)
         if share_class:
-            return share_class(name, *args, **kwargs)
+            return share_class(*args, **kwargs)
         else:
             raise NotImplementedError("The requested File Class has not been implemented")
 
