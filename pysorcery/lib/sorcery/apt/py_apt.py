@@ -68,13 +68,6 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
-# AptPackage
-# AptPackageVersions
-# AptPackages
-# AptSection
-# AptSections
-# AptRepository
-# AptRepositories
 #
 #-----------------------------------------------------------------------
 
