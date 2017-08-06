@@ -222,6 +222,9 @@ ArchivePrograms = {
 #
 #-----------------------------------------------------------------------
 
+class ArchiveError(OSError):
+    pass
+
 #-----------------------------------------------------------------------
 #
 # Class Archive
@@ -478,7 +481,7 @@ class Archive(files.BaseFile):
     def search(self, pattern, verbosity=0, interactive=True):
         """Search pattern in archive members."""
         if not pattern:
-            raise Exception("empty search pattern")
+            raise ArchiveError("empty search pattern")
         self.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Searching %r in %s ..."
@@ -636,9 +639,9 @@ def program_supports_compression (program, compression):
 def check_archive_format (format_, compression):
     """Make sure format and compression is known."""
     if format_ not in mimetypes.ArchiveFormats:
-        raise Exception("unknown archive format `%s'" % format)
+        raise ArchiveError("unknown archive format `%s'" % format)
     if compression is not None and compression not in mimetypes.ArchiveCompressions:
-        raise Exception("unkonwn archive compression `%s'" % compression)
+        raise ArchiveError("unkonwn archive compression `%s'" % compression)
 
 #-----------------------------------------------------------------------
 #
@@ -681,7 +684,7 @@ def list_formats ():
                     else:
                         print("(rar archives not supported)", end=' ')
                 print()
-            except Exception as msg:
+            except ArchiveError as msg:
                 # display information what programs can handle this archive format
                 handlers = programs.get(None, programs.get(command))
                 print("   %8s: - (no program found; install %s)" %
@@ -710,11 +713,11 @@ def get_archive_format (filename):
     """Detect filename archive format and optional compression."""
     mime, compression = mimetypes.guess_type(filename)
     if not (mime or compression):
-        raise Exception("unknown archive format for file `%s'" % filename)
+        raise ArchiveError("unknown archive format for file `%s'" % filename)
     if mime in mimetypes.ArchiveMimetypes:
         format_ = mimetypes.ArchiveMimetypes[mime]
     else:
-        raise Exception("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
+        raise ArchiveError("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
     if format_ == compression:
         # file cannot be in same format compressed
         compression = None
@@ -784,7 +787,7 @@ def find_archive_program (format_, command, program=None):
         if key in commands:
             programs.extend(commands[key])
     if not programs:
-        raise Exception("%s archive format `%s' is not supported" % (command, format))
+        raise ArchiveError("%s archive format `%s' is not supported" % (command, format))
     # return the first existing program
     for program in programs:
         if program.startswith('py_'):
@@ -796,7 +799,7 @@ def find_archive_program (format_, command, program=None):
                 continue
             return exe
     # no programs found
-    raise Exception("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
+    raise ArchiveError("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
 
 #-----------------------------------------------------------------------
 #
@@ -830,7 +833,7 @@ def check_program_compression(archive, command, program, compression):
             comp_prog = find_archive_program(compression, comp_command)
             if not comp_prog:
                 msg = "cannot %s archive `%s': compression `%s' not supported"
-                raise util.PatoolError(msg % (command, archive, compression))
+                raise ArchiveError(msg % (command, archive, compression))
 
 #-----------------------------------------------------------------------
 #
@@ -1061,7 +1064,7 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
         format, compression = get_archive_format(archive)
     check_archive_format(format, compression)
     if command not in ('list', 'test'):
-        raise Exception("invalid archive command `%s'" % command)
+        raise ArchiveError("invalid archive command `%s'" % command)
     program = find_archive_program(format, command, program=program)
     check_program_compression(archive, command, program, compression)
     get_archive_cmdlist = util.get_module_func(scmd='util_archive',
@@ -1098,7 +1101,7 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
 def _diff_archives (archives, verbosity=0, interactive=True):
     """Show differences between two archives.
     @return 0 if archives are the same, else 1
-    @raises: PatoolError on errors
+    @raises: ArchiveError on errors
     """
 
     files = files.Files(archives)
@@ -1107,7 +1110,7 @@ def _diff_archives (archives, verbosity=0, interactive=True):
     diff = util.find_program("diff")
     if not diff:
         msg = "The diff(1) program is required for showing archive differences, please install it."
-        raise Exception(msg)
+        raise ArchiveError(msg)
     tmpdir1 = files.BaseDirectory.tmpdir()
     try:
         path1 = _extract_archive(archive1, outdir=tmpdir1, verbosity=-1)
@@ -1294,7 +1297,7 @@ def _search_archive(pattern, archive, verbosity=0, interactive=True):
     grep = util.find_program("grep")
     if not grep:
         msg = "The grep(1) program is required for searching archive contents, please install it."
-        raise Exception(msg)
+        raise ArchiveErrors(msg)
     tmpdir = util.tmpdir()
     try:
         path = _extract_archive(archive, outdir=tmpdir, verbosity=-1)

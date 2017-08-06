@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the xdms program."""
-from .. import util
+from pysorcery.lib.util.files import archive
+
+class XdmsError(archive.ArrhiveError):
+    pass
 
 
 def extract_dms (archive, compression, cmd, verbosity, interactive, outdir):
@@ -44,4 +47,4 @@ def check_archive_ext (archive):
     if not archive.lower().endswith(".dms"):
         rest = archive[-4:]
         msg = "xdms(1) archive file must end with `.dms', not `%s'" % rest
-        raise util.PatoolError(msg)
+        raise XdmsError(msg)

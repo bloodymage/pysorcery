@@ -14,13 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the zipfile Python module."""
-from __future__ import print_function
-from .. import util
+from pysorcery.lib.util.files import archive
 import zipfile
 import os
 
 READ_SIZE_BYTES = 1024*1024
 
+class ZipError(archive.ArchiveError):
+    pass
 
 def list_zip(archive, compression, cmd, verbosity, interactive):
     """List member of a ZIP archive with the zipfile Python module."""
@@ -29,9 +30,9 @@ def list_zip(archive, compression, cmd, verbosity, interactive):
             for name in zfile.namelist():
                 if verbosity >= 0:
                     print(name)
-    except Exception as err:
+    except ZipError as err:
         msg = "error listing %s: %s" % (archive, err)
-        raise util.PatoolError(msg)
+        raise ZipError(msg)
     return None
 
 test_zip = list_zip
@@ -41,9 +42,9 @@ def extract_zip(archive, compression, cmd, verbosity, interactive, outdir):
     try:
         with zipfile.ZipFile(archive) as zfile:
             zfile.extractall(outdir)
-    except Exception as err:
+    except ZipError as err:
         msg = "error extracting %s: %s" % (archive, err)
-        raise util.PatoolError(msg)
+        raise ZipError(msg)
     return None
 
 
@@ -56,9 +57,9 @@ def create_zip(archive, compression, cmd, verbosity, interactive, filenames):
                     write_directory(zfile, filename)
                 else:
                     zfile.write(filename)
-    except Exception as err:
+    except ZipError as err:
         msg = "error creating %s: %s" % (archive, err)
-        raise util.PatoolError(msg)
+        raise ZipError(msg)
     return None
 
 

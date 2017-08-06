@@ -14,20 +14,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the tarfile Python module."""
-from .. import util, py_lzma
+from pysorcery.lib import util
+from pysorcery.lib.util.files import archive
+from pysorcery.lib.util.files.compression import py_lzma
 import tarfile
 
 READ_SIZE_BYTES = 1024*1024
 
+class PyTarFileError(archive.ArchiveError):
+    pass
 
 def list_tar (archive, compression, cmd, verbosity, interactive):
     """List a TAR archive with the tarfile Python module."""
     try:
         with tarfile.open(archive) as tfile:
             tfile.list(verbose=verbosity>1)
-    except Exception as err:
+    except PyTarFileError as err:
         msg = "error listing %s: %s" % (archive, err)
-        raise util.PatoolError(msg)
+        raise PyTarFileError(msg)
     return None
 
 test_tar = list_tar
@@ -37,9 +41,9 @@ def extract_tar (archive, compression, cmd, verbosity, interactive, outdir):
     try:
         with tarfile.open(archive) as tfile:
             tfile.extractall(path=outdir)
-    except Exception as err:
+    except PyTarFileError as err:
         msg = "error extracting %s: %s" % (archive, err)
-        raise util.PatoolError(msg)
+        raise PyTarFileError(msg)
     return None
 
 
@@ -50,9 +54,9 @@ def create_tar (archive, compression, cmd, verbosity, interactive, filenames):
         with tarfile.open(archive, mode) as tfile:
             for filename in filenames:
                 tfile.add(filename)
-    except Exception as err:
+    except PyTarFileError as err:
         msg = "error creating %s: %s" % (archive, err)
-        raise util.PatoolError(msg)
+        raise PyTarFileError(msg)
     return None
 
 
@@ -66,6 +70,6 @@ def get_tar_mode (compression):
         return 'w:xz'
     if compression:
         msg = 'pytarfile does not support %s for tar compression'
-        raise util.PatoolError(msg % compression)
+        raise PyTarFileError(msg % compression)
     # no compression
     return 'w'

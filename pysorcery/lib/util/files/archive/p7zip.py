@@ -23,12 +23,14 @@ def extract_7z(archive, compression, cmd, verbosity, interactive, outdir):
     cmdlist.extend(['-o%s' % outdir, '--', archive])
     return cmdlist
 
-def extract_7z_singlefile(archive, compression, cmd, verbosity, interactive, outdir):
+def extract_7z_singlefile(archive, compression, cmd,
+                          verbosity, interactive, outdir):
     """Extract a singlefile archive (eg. gzip or bzip2) with '7z e'.
     This makes sure a single file and no subdirectories are created,
     which would cause errors with patool repack."""
     cmdlist = [cmd, 'e']
     if not interactive:
+
         cmdlist.append('-y')
     cmdlist.extend(['-o%s' % outdir, '--', archive])
     return cmdlist

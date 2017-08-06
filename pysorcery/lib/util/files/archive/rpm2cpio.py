@@ -15,14 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the rpm2cpio program."""
 import os
-from .. import util
+from pysorcery.lib import util
+from pysorcery.lib.util.files import archive
+
+class RPM2CpioError(archive.ArchiveError):
+    pass
 
 def extract_rpm (archive, compression, cmd, verbosity, interactive, outdir):
     """Extract a RPM archive."""
     # also check cpio
     cpio = util.find_program("cpio")
     if not cpio:
-        raise util.PatoolError("cpio(1) is required for rpm2cpio extraction; please install it")
+        raise RPM2CpioError("cpio(1) is required for rpm2cpio extraction; please install it")
     path = util.shell_quote(os.path.abspath(archive))
     cmdlist = [util.shell_quote(cmd), path, "|", util.shell_quote(cpio),
         '--extract', '--make-directories', '--preserve-modification-time',
