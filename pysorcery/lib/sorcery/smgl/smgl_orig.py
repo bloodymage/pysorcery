@@ -278,8 +278,14 @@ def get_repositories(*args, **kwargs):
 #
 #-----------------------------------------------------------------------
 def get_description(name, **kwargs):
-    print('Hello')
-    description = subprocess.check_output(['gaze','description', name])
+    var = subprocess.check_output(['gaze','-q', 'what', name])
+
+    description = ''
+    for line in var.splitlines():
+        line_list = str(line).split(',')
+        item = line_list[0].split("'")[1]
+        description += item
+
     return description
 
 #-----------------------------------------------------------------------

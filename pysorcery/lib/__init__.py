@@ -307,7 +307,6 @@ class Package():
     #
     #-------------------------------------------------------------------
     def __new__(cls, name, *args, **kwargs):
-        
         share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(name, *args, **kwargs)

@@ -40,7 +40,6 @@ Apt:
 #-----------------------------------------------------------------------
 
 # System Libraries
-import apt
 import sys
 import subprocess
 import os
@@ -52,7 +51,6 @@ import os
 # System Library Overrides
 from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery.lib import sorcery
 
 # Other Optional Libraries
 
@@ -79,243 +77,6 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-#
-# Class AptPackage
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptPackage(sorcery.BasePackage):
-    def __init__(self,name):
-        logger.debug("Begin Function")
-        BaseSpell.__init__(self,name)
-
-        self.cache    = apt.cache.Cache()
-#        self.cache.update()
-        self.cache.open()
-        
-        self.pkg      = self.cache[self.name]
-
-        versions = self.pkg.versions
-
-        self.architecture = versions[0].architecture
-
-
-        self.grimoire = 'Fix Me'            
-        self.dependencies = versions[0].dependencies
-        self.optional_dependencies = versions[0].suggests
-        self.size = versions[0].installed_size
-        
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------------------
-    def install(self, args):
-        logger.debug("Begin Function")
-
-        if args.reconfigure:
-            subprocess.run(['dpkg-reconfigure', self.name])
-
-            
-        if args.compile:
-            subprocess.run(['apt-build', 'install', self.name])
-        else:
-            subprocess.run(['apt-get', 'install', self.name])
-                    
-        logger.debug("End Function")
-        return
-
-    #-------------------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------------------
-    def remove(self, args):
-        logger.debug("Begin Function")
-
-        #subprocess.run(['apt-get', 'remove', self.name])
-
-        cache = apt.cache.Cache()
-        cache.open(None)
-        pkg = cache[pkg_name]
-        cache.update()
-        pkg.mark_delete(True, purge=True)
-        resolver = apt.cache.ProblemResolver(cache)
-        
-        if pkg.is_installed is False:
-            logger.error(pkg_name + " not installed so not removed")
-        else:
-            for pkg in cache.get_changes():
-                if pkg.mark_delete:
-                    logger.info(pkg_name + " is installed and will be removed")
-                    logger.info(" %d package(s) will be removed" % cache.delete_count)
-                    resolver.remove(pkg)
-                    
-        try:
-            cache.commit()
-            cache.close()
-        except Exception:
-            logger.error("Sorry, package removal failed.")
-                    
-        logger.debug("End Function")
-        return
-
-#-----------------------------------------------------------------------
-#
-# Class AptPackages
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptPackages(sorcery.BasePackages):
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class AptSection
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptSection(sorcery.BaseSection):
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class AptPackage
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptSections(sorcery.BaseSections):
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class AptPackage
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptRepository(sorcery.BaseRepository):
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class AptRepositories
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptRepositories(sorcery.BaseRepositories):
-    pass
 
 #-----------------------------------------------------------------------
 #
@@ -351,14 +112,13 @@ class AptRepositories(sorcery.BaseRepositories):
 #
 #-----------------------------------------------------------------------
 def get_description(name, **kwargs):
-    cache    = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    versions = pkg.versions
-    description  = versions[0].description
+    var = subprocess.check_output(['apt', 'show', name])
 
-    cache.close()
+    description = ''
+    for line in var.splitlines():
+        line_list = str(line).split(',')
+        item = line_list[0].split("'")[1]
+        description += item
     return description
 
 #-----------------------------------------------------------------------

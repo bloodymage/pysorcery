@@ -121,14 +121,17 @@ ArchiveModules = {
     'uncompress.real': 'uncompress',
     'dpkg-deb': 'dpkg',
     'extract_chmlib': 'chmlib',
-    }
+}
 
 CompressedModules = {
-    }
+}
+
+SMGLModules = {
+    'gaze': 'smgl_orig'
+}
 
 UrlModules = {
 }
-
 
 #-----------------------------------------------------------------------
 #
@@ -485,13 +488,16 @@ def get_module_func(*args, **kwargs):
     key = os.path.splitext(os.path.basename(program).lower())[0]
 
     if scmd in import_path:
+        # Turn this into a dictionary
         basemodname = import_path[scmd]
         if scmd == 'util_archive':
             modulename = basemodname + ArchiveModules.get(key, key)            
         elif scmd == 'util_compressed':
             modulename = basemodname + CompressedModules.get(key, key)
+        elif scmd == 'sorcery_smgl':
+            modulename = basemodname + SMGLModules.get(key, key)
         else:
-            modulename = basemodname + program
+            modulename = basemodname + key
 
     # import the module
     try:

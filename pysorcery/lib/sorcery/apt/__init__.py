@@ -87,7 +87,7 @@ PackageCommands = ('get_description',
 AptPrograms = {
     'package': {
         #None: ('apt', 'apt-get', 'apt-cache'),
-        'get_description': ('py_apt',),
+        'get_description': ('py_apt', 'apt'),
         'get_version': ('py_apt',),
         'get_url': ('py_apt',),
         'get_short': ('py_apt',),
@@ -301,7 +301,7 @@ class Package():
     #-------------------------------------------------------------------
     def read_file(self, filename):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='read_file')
         contents = func(self.name, repository=self.repository, filename=filename)
         return contents
@@ -329,7 +329,7 @@ class Package():
     #-------------------------------------------------------------------
     def is_package(self):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='is_package')
         tf = func(self.name, repository=self.repository)
         return tf
@@ -357,7 +357,7 @@ class Package():
     #-------------------------------------------------------------------
     def get_license(self):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_license')
         self.license_ = func(self.name, repository=self.repository)
         return self.license_
@@ -385,7 +385,7 @@ class Package():
     #-------------------------------------------------------------------
     def get_maintainer(self):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_pkg_maintainer')
         self.maintainer = func(self.name, repository=self.repository)
         return self.maintainer
@@ -414,7 +414,7 @@ class Package():
     #-------------------------------------------------------------------
     def get_size(self):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_size')
         self.size = func(self.name, repository=self.repository)
         return self.size
@@ -441,7 +441,7 @@ class Package():
     #-------------------------------------------------------------------
     def install(self,args):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='install')
         func(args)
         
@@ -515,7 +515,7 @@ class Packages():
     #-------------------------------------------------------------------
     def get_queue(self, which_queue):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_queue')
         self.packages = func(which_queue)
         return self.packages
@@ -543,7 +543,7 @@ class Packages():
     #-------------------------------------------------------------------
     def get_installed(self, status=None):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_installed')
         self.packages = func(status)
         return self.packages
@@ -601,7 +601,7 @@ class Section():
     #-------------------------------------------------------------------
     def get_maintainer(self):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_section_maintainer')
         self.maintainer = func(self.name, repository=self.repository)
         return self.maintainer
@@ -629,7 +629,7 @@ class Section():
     #-------------------------------------------------------------------
     def get_packages(self):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_section_packages')
         self.packages = func(self.name, repository=self.repository)
         return self.packages
@@ -714,7 +714,7 @@ class Repository():
     #-------------------------------------------------------------------
     def get_sections(self):
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_sections')
         self.sections = func(self.name, repository=self.repository)
         return self.sections
@@ -777,7 +777,7 @@ class Repositories():
 #-----------------------------------------------------------------------
 def get_repository(name=None, repo_dir=None):
     func = util.get_module_func(scmd='sorcery_apt',
-                                program=pkg_mgr,
+                                program=program,
                                 cmd='get_repository'
     )
     name, directory = func(name, repo_dir)
@@ -804,7 +804,7 @@ def get_repository(name=None, repo_dir=None):
 #-------------------------------------------------------------------------------
 def get_repositories(*args, **kwargs):
     func = util.get_module_func(scmd='sorcery_apt',
-                                program=pkg_mgr,
+                                program=program,
                                 cmd='get_repositories')
     repositories, directories = func()
     return repositories, directories

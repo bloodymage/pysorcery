@@ -165,7 +165,6 @@ class Spell():
     #-------------------------------------------------------------------
     def get_description(self):
         program = find_package_program('package', 'get_description')
-        print(program)
         func = util.get_module_func(scmd='sorcery_smgl',
                                     program=program,
                                     cmd='get_description')
@@ -850,4 +849,7 @@ def find_package_program (class_, command, program=None):
             # it's a Python module and therefore always supported
             return program
         exe = util.find_program(program)
-        return exe
+        if exe:
+            return exe
+    # no programs found
+    raise Exception("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
