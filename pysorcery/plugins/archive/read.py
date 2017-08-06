@@ -123,8 +123,7 @@ def archive_read(args):
     logger.debug('Begin Function')
 
     for i in args.files:
-        print(i)
-        cfile = lib.File.getcls(i)
+        cfile = lib.File(i)
         content = cfile.read()
 
         for line in content:

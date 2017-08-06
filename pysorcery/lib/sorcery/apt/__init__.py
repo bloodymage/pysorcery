@@ -40,7 +40,6 @@ Apt:
 #-----------------------------------------------------------------------
 
 # System Libraries
-import apt
 import sys
 import subprocess
 import os
@@ -52,9 +51,15 @@ import os
 # System Library Overrides
 from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery.lib import sorcery
 
-# Other Optional Libraries
+# Conditional Libraries
+# Condiional Libraries
+try:
+    # use Python 3 lzma module if available
+    import apt
+    py_apt = ('py_apt',)
+except ImportError:
+    py_apt = ()
 
 
 #-----------------------------------------------------------------------
@@ -64,6 +69,24 @@ from pysorcery.lib import sorcery
 #-----------------------------------------------------------------------
 # Enable Logging
 logger = logging.getLogger(__name__)
+
+# Supported packagex commands
+PackageCommands = ('get_description',
+                   'get_version',
+                   'get_url',
+                   'get_short',
+                   'get_license')
+
+# List of programs supporting the given archive format and command.
+# If command is None, the program supports all commands (list, extract,
+# ...)
+# Programs starting with "py_" are Python modules.
+AptPrograms = {
+    'package': {
+        #None: ('apt', 'apt-get', 'apt-cache'),
+        'get_description': ('py_apt',),
+    }
+}
 
 #-----------------------------------------------------------------------
 #
@@ -81,9 +104,9 @@ logger = logging.getLogger(__name__)
 
 #-----------------------------------------------------------------------
 #
-# Class AptPackage
+# Class Package
 #
-# AptPackage
+# ...
 #
 # Inputs
 # ------
@@ -92,39 +115,25 @@ logger = logging.getLogger(__name__)
 # Returns
 # -------
 #    @return: None
-#
+ #
 # Raises
 # ------
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptPackage(sorcery.BasePackage):
-    def __init__(self,name):
+class Package():
+    def __init__(self, name, repository=None):
         logger.debug("Begin Function")
-        BaseSpell.__init__(self,name)
-
-        self.cache    = apt.cache.Cache()
-#        self.cache.update()
-        self.cache.open()
         
-        self.pkg      = self.cache[self.name]
+        self.name = name
+        self.repository = repository
 
-        versions = self.pkg.versions
-
-        self.architecture = versions[0].architecture
-
-
-        self.grimoire = 'Fix Me'            
-        self.dependencies = versions[0].dependencies
-        self.optional_dependencies = versions[0].suggests
-        self.size = versions[0].installed_size
-        
-        logger.debug("End Function")
+        logger.debug('End Function')
         return
-
-    #-------------------------------------------------------------------------------
+    
+    #-------------------------------------------------------------------
     #
-    # Function 
+    # Function get_description
     #
     # Calls the read function based on the file format.
     #
@@ -134,32 +143,545 @@ class AptPackage(sorcery.BasePackage):
     #
     # Returns
     # -------
-    #    @return: description
+    #    @return: description - The description of the package
     #
     # Raises
     # ------
     #    ...
-    # Return: description - The description of the package
     #
-    #-------------------------------------------------------------------------------
-    def install(self, args):
-        logger.debug("Begin Function")
+    #-------------------------------------------------------------------
+    def get_description(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_description')
+        self.description = func(self.name, repository=self.repository)
+        return self.description
 
-        if args.reconfigure:
-            subprocess.run(['dpkg-reconfigure', self.name])
+    #-------------------------------------------------------------------
+    #
+    # Function get_version
+    #
+    # Get a package version.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_version(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_version')
+        self.version = func(self.name, repository=self.repository)
+        return self.version
 
-            
-        if args.compile:
-            subprocess.run(['apt-build', 'install', self.name])
-        else:
-            subprocess.run(['apt-get', 'install', self.name])
-                    
-        logger.debug("End Function")
+    #-------------------------------------------------------------------
+    #
+    # Function get_url
+    #
+    # Get a package url.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: url
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_url(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_url')
+        self.url = func(self.name, repository=self.repository)
+        return self.url
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_short
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: description - The description of the package
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_short(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_short')
+        self.short_description = func(self.name, repository=self.repository)
+        return self.short_description
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_section
+    #
+    # Get a package ...
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: self.section
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_section(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_section')
+        self.section = func(self.name, repository=self.repository)
+        return self.section
+
+    #-------------------------------------------------------------------
+    #
+    # Function read_file
+    #
+    # Read a package's file.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #    @param: filename
+    #
+    # Returns
+    # -------
+    #    @return: contents - File contents
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def read_file(self, filename):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='read_file')
+        contents = func(self.name, repository=self.repository, filename=filename)
+        return contents
+
+    #-------------------------------------------------------------------
+    #
+    # Function is_package
+    #
+    # Verify package exists.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: tf - True or False
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def is_package(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='is_package')
+        tf = func(self.name, repository=self.repository)
+        return tf
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_license
+    #
+    # Get a package license.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: self.license_
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_license(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_license')
+        self.license_ = func(self.name, repository=self.repository)
+        return self.license_
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_maintainer
+    #
+    # Get a package maintainer
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: self.maintainer
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_maintainer(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_pkg_maintainer')
+        self.maintainer = func(self.name, repository=self.repository)
+        return self.maintainer
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_size
+    #
+    # Get a package short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: size - The amount of disk space of an installed
+    #                    package.
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_size(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_size')
+        self.size = func(self.name, repository=self.repository)
+        return self.size
+
+    #-------------------------------------------------------------------
+    #
+    # Function install
+    #
+    # Install a package
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #    @param: args
+    #
+    # Returns
+    # -------
+    #    @return: None
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def install(self,args):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='install')
+        func(args)
+        
         return
 
-    #-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
+#
+# Class PackageVersions
+#
+# This class is for working with mulhiple versions of the same package.
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class PackageVersions(Package):
+    pass
+
+#-----------------------------------------------------------------------
+#
+# Class Packages
+#
+# ...
+# 
+# Inputs
+# ------
+#    @param: ...
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Packages():
+    def __init__(self, packages=[]):
+        self.packages = packages
+        return
+
+    #-------------------------------------------------------------------
     #
-    # Function 
+    # Function get_queue
+    #
+    # Get a list of packages in a queue
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #    @param: which_queue
+    #
+    # Returns
+    # -------
+    #    @return: self.packages
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_queue(self, which_queue):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_queue')
+        self.packages = func(which_queue)
+        return self.packages
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_installed
+    #
+    # Get a list of installed packages.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: self.packages
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_installed(self, status=None):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_installed')
+        self.packages = func(status)
+        return self.packages
+
+#-----------------------------------------------------------------------
+#
+# Class Section
+#
+# ...
+#
+# Inputs
+# ------
+#    @param: name
+#    @param: repository
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Section():
+    def __init__(self, name, repository=None):
+        logger.debug("Begin Function")
+        
+        self.name = name
+        self.repository = repository
+
+        logger.debug('End Function')
+        return
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_maintainer
+    #
+    # Get a section maintainer
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: maintainer
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_maintainer(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_section_maintainer')
+        self.maintainer = func(self.name, repository=self.repository)
+        return self.maintainer
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_packages
+    #
+    # Get a list of packages within a section.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: self.packages
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_packages(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_section_packages')
+        self.packages = func(self.name, repository=self.repository)
+        return self.packages
+
+#-----------------------------------------------------------------------
+#
+# Class Sections
+#
+# ...
+#
+# Inputs
+# ------
+#    @param: sections
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Sections():
+    def __init__(self, sections=[]):
+        logger.debug("Begin Function")
+        
+        self.sections = sections
+
+        logger.debug('End Function')
+        return
+
+#-------------------------------------------------------------------------------
+#
+# Class Repository
+#
+# ...
+#
+# Inputs
+# ------
+#    @param: name
+#    @param: reepo_dir
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+class Repository():
+    def __init__(self, name=None, repo_dir=None):
+        logger.debug('Begin Function')
+
+        logger.debug2('Name: ' + str(name))
+
+        self.name, self.directory = get_repository(name, repo_dir)
+
+        logger.debug('End Function')
+        return
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_repository
     #
     # Calls the read function based on the file format.
     #
@@ -169,153 +691,109 @@ class AptPackage(sorcery.BasePackage):
     #
     # Returns
     # -------
-    #    @return: description
+    #    @return: self.sections
     #
     # Raises
     # ------
     #    ...
-    # Return: description - The description of the package
     #
-    #-------------------------------------------------------------------------------
-    def remove(self, args):
-        logger.debug("Begin Function")
+    #-------------------------------------------------------------------
+    def get_sections(self):
+        func = util.get_module_func(scmd='sorcery_apt',
+                                    program=pkg_mgr,
+                                    cmd='get_sections')
+        self.sections = func(self.name, repository=self.repository)
+        return self.sections
 
-        #subprocess.run(['apt-get', 'remove', self.name])
-
-        cache = apt.cache.Cache()
-        cache.open(None)
-        pkg = cache[pkg_name]
-        cache.update()
-        pkg.mark_delete(True, purge=True)
-        resolver = apt.cache.ProblemResolver(cache)
-        
-        if pkg.is_installed is False:
-            logger.error(pkg_name + " not installed so not removed")
+#-----------------------------------------------------------------------
+#
+# Class Repositories
+#
+# Provide support for a list of repositories.
+# 
+# Inputs
+# ------
+#    @param: repositories
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class Repositories():
+    def __init__(self, repositories=[]):
+        if len(repositories) == 0:
+            self.repositories, self.directories = get_repositories()
         else:
-            for pkg in cache.get_changes():
-                if pkg.mark_delete:
-                    logger.info(pkg_name + " is installed and will be removed")
-                    logger.info(" %d package(s) will be removed" % cache.delete_count)
-                    resolver.remove(pkg)
-                    
-        try:
-            cache.commit()
-            cache.close()
-        except Exception:
-            logger.error("Sorry, package removal failed.")
-                    
-        logger.debug("End Function")
+            self.repositories = repositories
+
         return
 
 #-----------------------------------------------------------------------
 #
-# Class AptPackages
+# Functions
 #
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
+# get_repository
+# get_repositories
 #
 #-----------------------------------------------------------------------
-class AptPackages(sorcery.BasePackages):
-    pass
 
 #-----------------------------------------------------------------------
 #
-# Class AptSection
-#
-# AptPackage
+# Function get_repository 
 #
 # Inputs
 # ------
 #    @param: name
+#    @param: repo_dir
 #
 # Returns
 # -------
-#    @return: None
+#    @return: name
+#    @return: directory
 #
 # Raises
 # ------
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptSection(sorcery.BaseSection):
-    pass
+def get_repository(name=None, repo_dir=None):
+    func = util.get_module_func(scmd='sorcery_apt',
+                                program=pkg_mgr,
+                                cmd='get_repository'
+    )
+    name, directory = func(name, repo_dir)
+    return name, directory
 
-#-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #
-# Class AptPackage
-#
-# AptPackage
+# Function get_repositories
 #
 # Inputs
 # ------
-#    @param: name
+#    @param: *args
+#    @param: **kwargs
 #
 # Returns
 # -------
-#    @return: None
+#    @return: repositories
+#    @return: directories
 #
 # Raises
 # ------
 #    ...
 #
-#-----------------------------------------------------------------------
-class AptSections(sorcery.BaseSections):
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class AptPackage
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptRepository(sorcery.BaseRepository):
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class AptRepositories
-#
-# AptPackage
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class AptRepositories(sorcery.BaseRepositories):
-    pass
+#-------------------------------------------------------------------------------
+def get_repositories(*args, **kwargs):
+    func = util.get_module_func(scmd='sorcery_apt',
+                                program=pkg_mgr,
+                                cmd='get_repositories')
+    repositories, directories = func()
+    return repositories, directories
 
 #-----------------------------------------------------------------------
 #
@@ -333,463 +811,6 @@ class AptRepositories(sorcery.BaseRepositories):
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-#
-# Function get_description
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: description
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_description(name, **kwargs):
-    cache    = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    versions = pkg.versions
-    description  = versions[0].description
-
-    cache.close()
-    return description
-
-#-----------------------------------------------------------------------
-#
-# Function get_version
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_version(name, **kwargs):
-    cache = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    pkg_info = pkg.versions
-    version = pkg_info[0].version
-
-    cache.close()
-    return version
-
-#-----------------------------------------------------------------------
-#
-# Function get_url
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: url
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_url(name, **kwargs):
-    cache = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    pkg_info = pkg.versions
-    url = pkg_info[0].homepage
-
-    cache.close()
-    return url
-
-#-----------------------------------------------------------------------
-#
-# Function get_short
-#
-# Get's a package's short description.  In apt, the package's description is
-# used as there isn't a short description.
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: description
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_short(name, **kwargs):
-    cache    = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    versions = pkg.versions
-    short_description  = versions[0].summary
-
-    cache.close()
-    return short_description
-
-#-----------------------------------------------------------------------
-#
-# Function get_section
-#
-# ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: section
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_section(name, **kwargs):
-    cache    = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    versions = pkg.versions
-
-    pkg_section = versions[0].section
-
-    if 'universe' in pkg_section or 'multiverse' in pkg_section:
-        section = pkg_section.split('/')[1]
-    else:
-        section = pkg_section            
-
-    cache.close()
-    return section
-
-#-----------------------------------------------------------------------
-#
-# Function read_file
-#
-# Get's a package's short description.  In apt, the package's description is
-# used as there isn't a short description.
-#
-# Inputs
-# ------
-#    @param: name
-#    @param: **kwargs
-#
-# Returns
-# -------
-#    @return: description
-#
-# Raises
-# ------
-#    @error: NotImplementedError
-#
-#-----------------------------------------------------------------------
-def read_file(name, **kwargs):
-    raise NotImplementedError
-    return
-
-#-----------------------------------------------------------------------
-#
-# Function is_package
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: description
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def is_package(name, **kwargs):
-    try:
-        cache = apt.cache.Cache()
-        cache.open()
-        pkg = cache[name]
-        cache.close()
-        pkg_exists = True
-    except Exception:
-        pkg_exists = False
-        
-    return pkg_exists
-
-#-----------------------------------------------------------------------
-#
-# Function get_license
-#
-# Get the package license
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: description
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_license(name, **kwargs):
-    cache = apt.cache.Cache()
-    cache.open()
-
-    pkg = cache[name]
-    versions = pkg.versions
-    license_ = 'Not Implemented'
-
-    raise NotImplementedError
-    cache.close()
-    
-    return license_
-
-#-----------------------------------------------------------------------
-#
-# Function get_size
-#
-# Get the package size.
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: size
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_size(name, **kwargs):
-    cache = apt.cache.Cache()
-    cache.open()
-
-    pkg = cache[name]
-    versions = pkg.versions
-    size = versions[0].size
-    
-    cache.close()
-    
-    return size
-
-#-------------------------------------------------------------------------------
-#
-# Function get_repository
-#
-# Get's a spell's version.
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------------------
-def get_repository(name=None, directory=None):
-    return name, None
-
-#-----------------------------------------------------------------------
-#
-# Function get_repositories
-#
-# Inputs
-# ------
-#    @param: 
-#
-# Returns
-# -------
-#    @return: repositories
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_repositories(*args, **kwargs):
-    var = subprocess.check_output(['apt-cache', 'policy'])
-    repositories = []
-    
-    for line in var.splitlines():
-        if 'l=' in str(line):
-            line_list=str(line).split(',')
-            
-            repo_main=''
-            repo_sub=''
-            for item in line_list:
-                if 'l=' in item:
-                    repo_main = item.split('=')[1]
-                if 'c=' in item:
-                    repo_sub = item.split('=')[1]
-                if len(repo_main) > 0 and len(repo_sub) > 0:
-                    repo = repo_main + ' : ' + repo_sub
-                    if repo not in repositories:
-                        repositories.append(repo)
-
-    return repositories, None
-
-#-----------------------------------------------------------------------
-#
-# Function get_pkg_maintainer
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: maintainer
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_pkg_maintainer(name, **kwargs):
-    cache    = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    versions = pkg.versions
-    maintainer = 'Not Implemented'
-
-    cache.close()
-
-    raise NotImplementedError
-    return maintainer
-
-#-----------------------------------------------------------------------
-#
-# Function get_section_maintainer
-#
-# Inputs
-# ------
-#    @param: 
-#
-# Returns
-# -------
-#    @return: maintainer
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_section_maintainer(name, **kwargs):
-    cache = apt.cache.Cache()
-    cache.open()
-        
-    pkg = cache[name]
-    versions = pkg.versions
-    maintainer = 'Not Implemented'
-
-    cache.close()
-
-    raise NotImplementedError
-    return maintainer
-
-#---------------------------------------------------------------
-#
-# Function get_queue
-#
-# Get a list of spells in a queue.
-#
-# Inputs
-# ------
-#    @param: which-queue
-#
-#
-# Returns
-# -------
-#    @return: queue
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------
-def get_queue(which_queue):
-    if which_queue == 'install':
-        cache = apt.cache.Cache()
-        cache.open(None)
-        cache.upgrade()
-        queue = cache.get_changes()
-    elif which_queue == 'remove':
-        queue = []
-        logger.error('Not Implimented')
-        raise NotImplementedError
-    else:
-        queue = []
-        logger.critical('We Fucked Up')
-    return queue
-
-#---------------------------------------------------------------
-#
-# Function get_installed
-#
-# ...
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    @return:
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------
-def get_installed(status):
-    var = subprocess.check_output(['apt', 'list','--installed'])
-    
-    packages = []
-    for line in var.splitlines():
-        tmpline = str(line).split("'")[1]
-        name = tmpline.split('/')[0]
-
-        if 'Listi' not in name:
-            packages.append(name)
-            packages.append('-')
-            packages.append('-')
-
-    return packages
 
 #-----------------------------------------------------------------------
 #
@@ -843,3 +864,43 @@ def print_version(self,multi=False):
                 
     logger.debug("End Function")
     return
+
+#-----------------------------------------------------------------------
+#
+# Function find_archive_program
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def find_package_program (class_, command, program=None):
+    """Find suitable archive program for given format and mode."""
+    commands = AptPrograms[class_]
+    programs = []
+    if program is not None:
+        # try a specific program first
+        programs.append(program)
+    # first try the universal programs with key None
+    for key in (None, command):
+        if key in commands:
+            programs.extend(commands[key])
+    if not programs:
+        raise Exception("%s program class `%s' is not supported" % (command, class_))
+    # return the first existing program
+    for program in programs:
+        if program.startswith('py_'):
+            # it's a Python module and therefore always supported
+            return program
+        exe = util.find_program(program)
+        return exe

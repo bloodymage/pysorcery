@@ -50,8 +50,8 @@ import os
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib import distro
-from pysorcery.lib import logging
+from pysorcery.lib.system import distro
+from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery.lib import util
 
@@ -66,9 +66,6 @@ from pysorcery.lib import util
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
-
-#
-pkg_mgr = distro.distro_group[distro.distro_id]
 
 #-----------------------------------------------------------------------
 #
@@ -97,7 +94,7 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 # Returns
 # -------
 #    @return: None
-#
+ #
 # Raises
 # ------
 #    ...

@@ -71,6 +71,8 @@ from pysorcery.lib.util.files import package
 # create logger
 logger = logging.getLogger(__name__)
 
+# Get System Package Manoager
+pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -184,7 +186,7 @@ class File():
     #
     #-------------------------------------------------------------------
     @staticmethod
-    def getcls(filename, *args, **kwargs):
+    def __new__(filename, *args, **kwargs):
         
         name = File.id_file_class(filename)
         
@@ -282,44 +284,8 @@ class Directories(files.BaseDirectories):
 class Package():
     __file_classes = {
         'smgl': smgl.Spell,
-        'apt': apt.AptPackage
+        'apt': apt.Package
     }
-
-    #-------------------------------------------------------------------
-    #
-    # Function id_file_classes
-    #
-    # Do we have a text file, archive, compressed, or audio file?
-    #
-    # Inputs
-    # ------
-    #    @param: filename - 
-    #
-    # Returns
-    # -------
-    #    @return: 'archive'
-    #    @return: 'compressed'
-    #    @return: 'default'
-    #    @return: 'audio' - Not yet implemented
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    @staticmethod
-    def id_file_class(filename):
-        mimetype, encoding = mimetypes.guess_type(filename)
-
-        try:
-            id_ = mimetypes.fileclasstypes[mimetype]
-        except:
-            try:
-                id_ = mimetypes.fileclasstypes[encoding]
-            except:
-                id_ = 'default'
-
-        return id_
                 
     #-------------------------------------------------------------------
     #
@@ -343,13 +309,11 @@ class Package():
     #
     #-------------------------------------------------------------------
     @staticmethod
-    def getcls(filename, *args, **kwargs):
+    def __new__(name, *args, **kwargs):
         
-        name = File.id_file_class(filename)
-        
-        share_class = File.__file_classes.get(name.lower(), None)        
+        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
         if share_class:
-            return share_class(filename, *args, **kwargs)
+            return share_class(name, *args, **kwargs)
         else:
             raise NotImplementedError("The requested File Class has not been implemented")
 

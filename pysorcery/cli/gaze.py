@@ -69,7 +69,6 @@ import copy
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
-from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import __version__, DEBUG
