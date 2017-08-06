@@ -52,7 +52,6 @@ import os
 # System Library Overrides
 from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery.lib import sorcery
 
 # Other Optional Libraries
 
@@ -98,7 +97,7 @@ logger = logging.getLogger(__name__)
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptPackage(sorcery.BasePackage):
+class AptPackage():
     def __init__(self,name):
         logger.debug("Begin Function")
         BaseSpell.__init__(self,name)
@@ -226,7 +225,7 @@ class AptPackage(sorcery.BasePackage):
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptPackages(sorcery.BasePackages):
+class AptPackages():
     pass
 
 #-----------------------------------------------------------------------
@@ -248,7 +247,7 @@ class AptPackages(sorcery.BasePackages):
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptSection(sorcery.BaseSection):
+class AptSection():
     pass
 
 #-----------------------------------------------------------------------
@@ -270,7 +269,7 @@ class AptSection(sorcery.BaseSection):
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptSections(sorcery.BaseSections):
+class AptSections():
     pass
 
 #-----------------------------------------------------------------------
@@ -292,7 +291,7 @@ class AptSections(sorcery.BaseSections):
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptRepository(sorcery.BaseRepository):
+class AptRepository():
     pass
 
 #-----------------------------------------------------------------------
@@ -314,7 +313,7 @@ class AptRepository(sorcery.BaseRepository):
 #    ...
 #
 #-----------------------------------------------------------------------
-class AptRepositories(sorcery.BaseRepositories):
+class AptRepositories():
     pass
 
 #-----------------------------------------------------------------------

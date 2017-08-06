@@ -99,7 +99,7 @@ cmd_dir = {
     'gaze': GAZE_PATH,
     'archive': ARCHIVE_PATH,
     'sorcery_apt': SORCERY_APT_PATH,
-    'sorcery_apt': SORCERY_SMGL_PATH
+    'sorcery_smgl': SORCERY_SMGL_PATH
 }
 
 import_path = {
@@ -109,7 +109,7 @@ import_path = {
     'archive': 'pysorcery.plugins.archive.',
     'gaze': 'pysorcery.plugins.gaze.',
     'sorcery_apt': 'pysorcery.lib.sorcery.apt.',
-    'sorcery_apt': 'pysorcery.lib.sorcery.smgl.'
+    'sorcery_smgl': 'pysorcery.lib.sorcery.smgl.'
     }
 
 # Used if module names can not be
@@ -483,6 +483,7 @@ def get_module_func(*args, **kwargs):
     """Get the Python function that executes the given program."""
     # get python module for given archive program
     key = os.path.splitext(os.path.basename(program).lower())[0]
+
     if scmd in import_path:
         basemodname = import_path[scmd]
         if scmd == 'util_archive':

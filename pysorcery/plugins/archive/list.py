@@ -124,7 +124,7 @@ def archive_list(args):
     logger.debug('Begin Function')
 
     for i in args.files:
-        cfile = lib.File.getcls(i)    
+        cfile = lib.File(i)
         content = cfile.listfiles()
     
     logger.debug('End Function')

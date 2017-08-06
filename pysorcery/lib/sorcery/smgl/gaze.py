@@ -50,9 +50,6 @@ import os
 # System Library Overrides
 from pysorcery.lib import logging
 # Other Application Libraries
-from pysorcery.lib.sorcery import smgl
-from pysorcery.lib.sorcery.smgl import bashspell
-from pysorcery.lib.util import files
 
 #-----------------------------------------------------------------------
 #
@@ -95,7 +92,7 @@ logger = logging.getLogger(__name__)
 #    ...
 #
 #-----------------------------------------------------------------------
-class Spell(smgl.Spell):
+class Spell():
     pass
     
 #-----------------------------------------------------------------------
@@ -117,7 +114,7 @@ class Spell(smgl.Spell):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Spells(smgl.Spells):
+class Spells():
     pass
 
 #-----------------------------------------------------------------------
@@ -139,7 +136,7 @@ class Spells(smgl.Spells):
 #    ...
 #
 #-----------------------------------------------------------------------
-class SpellVersions(smgl.SpellVersions):
+class SpellVersions():
     pass
 
 #-----------------------------------------------------------------------
@@ -161,7 +158,7 @@ class SpellVersions(smgl.SpellVersions):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Section(smgl.Section):
+class Section():
     pass
 
 #-----------------------------------------------------------------------
@@ -183,7 +180,7 @@ class Section(smgl.Section):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Sections(smgl.Sections):
+class Sections():
     pass
 
 #-----------------------------------------------------------------------
@@ -205,34 +202,8 @@ class Sections(smgl.Sections):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Grimoire(smgl.Grimoire):
-    #-------------------------------------------------------------------------------
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description
-    #
-    # Raises
-    # ------
-    #    ...
-    # Return: description - The description of the package
-    #
-    #-------------------------------------------------------------------------------
-    def get_url(self):
-        config_ = config.Sorcery()
-
-        if self.name in config_.smgl_official_grimoires:
-            self.url = config.urls['codex_tarball_url'] + self.name + '.tar.bz2'
-        else:
-            raise NotImplementedError
-
-        return self.url
+class Grimoire():
+    pass
 
 #-------------------------------------------------------------------------------
 #
@@ -240,7 +211,7 @@ class Grimoire(smgl.Grimoire):
 # 
 #
 #-------------------------------------------------------------------------------
-class Codex(smgl.Codex):
+class Codex():
     pass
 
 #-------------------------------------------------------------------------------
@@ -256,70 +227,6 @@ class Codex(smgl.Codex):
 # get_short
 #
 #-----------------------------------------------------------------------
-
-#-------------------------------------------------------------------------------
-#
-# Function get_repository
-#
-# Get ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------------------
-def get_repository(name=None, grim_dir=None):
-    if grim_dir and not name:
-        name = grim_dir.split('/')[-1]
-    elif name and not grim_dir:
-        grimoire = Grimoire(name)
-        grim_dir = grimoire.get_grim_dir()
-    elif not name and not grim_dir:
-        raise Exception
-    else:
-        x = 1
-    
-    return name, grim_dir
-
-#-------------------------------------------------------------------------------
-#
-# Function get_repository_dirs
-#
-# Get's a spell's version.
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------------------
-def get_repository_dirs():
-    grimoire_file = files.BaseFile('/etc/sorcery/local/grimoire')
-    content = grimoire_file.read()
-
-    grimoires = []
-    directories = []
-    for grimoire in content:
-        grimoire, directory = grimoire.split('=')
-        grimoires.append(grimoire)
-        directories.append(directory)
-
-    return grimoires, directories
 
 #-------------------------------------------------------------------------------
 #
@@ -371,16 +278,8 @@ def get_repositories(*args, **kwargs):
 #
 #-----------------------------------------------------------------------
 def get_description(name, **kwargs):
-    if 'repository' not in kwargs or kwargs['repository'] is None:
-        repository, grimoire_dir = get_first_repo(name)
-    else:
-        repository = kwargs['repository']
-
-    section_dir = get_section_dir(grimoire_dir, name)
-    spell_directory = get_spell_dir(section_dir, name)
-    details_file = bashspell.DetailsFile(spell_directory)
-    details = details_file.parse()
-    description = details['description']
+    print('Hello')
+    description = subprocess.check_output(['gaze','description', name])
     return description
 
 #-----------------------------------------------------------------------
@@ -938,6 +837,40 @@ def get_sections(grimoire=None, grim_dir=None, **kwargs):
 
     logger.debug('End Function')
     return sections
+
+#---------------------------------------------------------------
+#
+# Function get_orphans
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------
+def get_orphans():
+    logger.debug('Begin Function')
+    
+    var = subprocess.check_output(['gaze','orphans'])
+
+    orphan_list = []
+    for line in var.splitlines():
+        line_list = str(line).split(',')
+        item = line_list[0].split("'")[1]
+        orphan_list.append(item)
+
+    logger.debug2(orphan_list)
+    logger.debug('End Function')
+    return orphan_list
 
 #---------------------------------------------------------------
 #

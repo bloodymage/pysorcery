@@ -1492,7 +1492,6 @@ def _read_archive(archive, verbosity=0, interactive=True, outdir=None,
                                                cmd='read',
                                                format_=format_)
 
-
     try:
         lines = get_archive_cmdlist(archive,
                                       compression,
@@ -1502,4 +1501,4 @@ def _read_archive(archive, verbosity=0, interactive=True, outdir=None,
                                       outdir)
         return lines
     except Exception as msg:
-        logger.error(msg)
+        logger.error('Read Error:', msg)

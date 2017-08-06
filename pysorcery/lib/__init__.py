@@ -49,7 +49,6 @@ This file provides the top level Sorcery API.
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
-from pysorcery.lib.system import shutil
 # Other Application Libraries
 from pysorcery.lib.sorcery import apt
 from pysorcery.lib.sorcery import smgl
@@ -60,7 +59,7 @@ from pysorcery.lib.util.files import audio
 from pysorcery.lib.util.files import compressed
 from pysorcery.lib.util.files import package
 
-# Other Optional Libraries
+# Conditional Libraries
 
 #-----------------------------------------------------------------------
 #
@@ -186,10 +185,9 @@ class File():
     #
     #-------------------------------------------------------------------
     @staticmethod
-    def __new__(filename, *args, **kwargs):
+    def __new__(cls, filename, *args, **kwargs):
         
         name = File.id_file_class(filename)
-        
         share_class = File.__file_classes.get(name.lower(), None)        
         if share_class:
             return share_class(filename, *args, **kwargs)
@@ -289,7 +287,59 @@ class Package():
                 
     #-------------------------------------------------------------------
     #
-    # Function getcls
+    # Function __new__
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def __new__(cls, name, *args, **kwargs):
+        
+        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        if share_class:
+            return share_class(name, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
+
+#-----------------------------------------------------------------------
+#
+# Class Package
+# 
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+class PackageVersions():
+    __file_classes = {
+        'smgl': smgl.SpellVersions,
+        'apt': apt.PackageVersions
+    }
+                
+    #-------------------------------------------------------------------
+    #
+    # Function __new__
     #
     # Get the class for the filetype we are working with.
     #
@@ -309,35 +359,13 @@ class Package():
     #
     #-------------------------------------------------------------------
     @staticmethod
-    def __new__(name, *args, **kwargs):
+    def __new__(cls, name, *args, **kwargs):
         
         share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
             raise NotImplementedError("The requested File Class has not been implemented")
-
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class Package
-# 
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: None
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class PackageVersions(sorcery.BasePackageVersions):
-    pass
 
 #-----------------------------------------------------------------------
 #
@@ -356,8 +384,41 @@ class PackageVersions(sorcery.BasePackageVersions):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Packages(sorcery.BasePackages):
-    pass
+class Packages():
+    __file_classes = {
+        'smgl': smgl.Spells,
+        'apt': apt.Packages
+    }
+                
+    #-------------------------------------------------------------------
+    #
+    # Function __new__
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def __new__(cls, name, *args, **kwargs):
+        
+        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        if share_class:
+            return share_class(name, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 #-----------------------------------------------------------------------
 #
@@ -376,8 +437,41 @@ class Packages(sorcery.BasePackages):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Section(sorcery.BaseSection):
-    pass
+class Section():
+    __file_classes = {
+        'smgl': smgl.Section,
+        'apt': apt.Section
+    }
+                
+    #-------------------------------------------------------------------
+    #
+    # Function __new__
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def __new__(cls, name, *args, **kwargs):
+        
+        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        if share_class:
+            return share_class(name, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 #-----------------------------------------------------------------------
 #
@@ -396,8 +490,40 @@ class Section(sorcery.BaseSection):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Sections(sorcery.BaseSections):
-    pass
+class Sections():
+    __file_classes = {
+        'smgl': smgl.Sections,
+        'apt': apt.Sections
+    }
+                
+    #-------------------------------------------------------------------
+    #
+    # Function __new__
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def __new__(cls, name, *args, **kwargs):
+        
+        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        if share_class:
+            return share_class(name, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 #-----------------------------------------------------------------------
 #
@@ -416,8 +542,40 @@ class Sections(sorcery.BaseSections):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Repository(sorcery.BaseRepository):
-    pass
+class Repository():
+    __file_classes = {
+        'smgl': smgl.Grimoire,
+        'apt': apt.Repository
+    }
+                
+    #-------------------------------------------------------------------
+    #
+    # Function __new__
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def __new__(cls, name, *args, **kwargs):
+        
+        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        if share_class:
+            return share_class(name, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 #-----------------------------------------------------------------------
 #
@@ -436,8 +594,41 @@ class Repository(sorcery.BaseRepository):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Repositories(sorcery.BaseRepositories):
-    pass
+class Repositories():
+    __file_classes = {
+        'smgl': smgl.Codex,
+        'apt': apt.Repositories
+    }
+                
+    #-------------------------------------------------------------------
+    #
+    # Function __new__
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def __new__(cls, name, *args, **kwargs):
+        
+        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        if share_class:
+            return share_class(name, *args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 #-----------------------------------------------------------------------
 #

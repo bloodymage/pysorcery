@@ -51,9 +51,9 @@ import os
 # System Library Overrides
 from pysorcery.lib.system import logging
 # Other Application Libraries
+from pysorcery.lib import util
 
 # Conditional Libraries
-# Condiional Libraries
 try:
     # use Python 3 lzma module if available
     import apt
@@ -75,7 +75,10 @@ PackageCommands = ('get_description',
                    'get_version',
                    'get_url',
                    'get_short',
-                   'get_license')
+                   'get_license',
+                   'get_section',
+                   'read_file',
+                   'is_package')
 
 # List of programs supporting the given archive format and command.
 # If command is None, the program supports all commands (list, extract,
@@ -85,6 +88,12 @@ AptPrograms = {
     'package': {
         #None: ('apt', 'apt-get', 'apt-cache'),
         'get_description': ('py_apt',),
+        'get_version': ('py_apt',),
+        'get_url': ('py_apt',),
+        'get_short': ('py_apt',),
+        'get_license': ('py_apt',),
+        'get_section': ('py_apt',),
+        'is_package': ('py_apt',),
     }
 }
 
@@ -151,8 +160,9 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_description(self):
+        program = find_package_program('package', 'get_description')
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_description')
         self.description = func(self.name, repository=self.repository)
         return self.description
@@ -177,8 +187,9 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_version(self):
+        program = find_package_program('package', 'get_version')
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_version')
         self.version = func(self.name, repository=self.repository)
         return self.version
@@ -203,8 +214,9 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_url(self):
+        program = find_package_program('package', 'get_url')
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_url')
         self.url = func(self.name, repository=self.repository)
         return self.url
@@ -229,8 +241,9 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_short(self):
+        program = find_package_program('package', 'get_short')
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_short')
         self.short_description = func(self.name, repository=self.repository)
         return self.short_description
@@ -257,8 +270,9 @@ class Package():
     #
     #-------------------------------------------------------------------
     def get_section(self):
+        program = find_package_program('package', 'get_section')
         func = util.get_module_func(scmd='sorcery_apt',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_section')
         self.section = func(self.name, repository=self.repository)
         return self.section

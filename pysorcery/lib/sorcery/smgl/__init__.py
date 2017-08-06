@@ -67,8 +67,39 @@ from pysorcery.lib import util
 # create logger
 logger = logging.getLogger(__name__)
 
-#
-pkg_mgr = distro.distro_group[distro.distro_id]
+# Supported packagex commands
+Commands = ('get_description',
+            'get_version',
+            'get_url',
+            'get_short',
+            'get_license',
+            'get_section',
+            'read_file',
+            'is_package',
+            'get_repositories')
+
+# List of programs supporting the given archive format and command.
+# If command is None, the program supports all commands (list, extract,
+# ...)
+# Programs starting with "py_" are Python modules.
+SMGLPrograms = {
+    'package': {
+        #None: ('apt', 'apt-get', 'apt-cache'),
+        'get_description': ('gaze', 'api_1',),
+        'get_version': ('api_1',),
+        'get_url': ('api_1',),
+        'get_short': ('api_1',),
+        'get_license': ('api_1',),
+        'get_section': ('api_1',),
+        'is_package': ('api_1',),
+    },
+    'repository': {
+        'get_repository': ('api_1',),
+    },
+    'repositories': {
+        'get_repositories': ('api_1',),
+    }
+}
 
 #-----------------------------------------------------------------------
 #
@@ -133,8 +164,10 @@ class Spell():
     #
     #-------------------------------------------------------------------
     def get_description(self):
+        program = find_package_program('package', 'get_description')
+        print(program)
         func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=pkg_mgr,
+                                    program=program,
                                     cmd='get_description')
         self.description = func(self.name, repository=self.repository)
         return self.description
@@ -744,8 +777,9 @@ class Codex():
 #
 #-----------------------------------------------------------------------
 def get_repository(name=None, repo_dir=None):
+    program = find_package_program('repository', 'get_repository')    
     func = util.get_module_func(scmd='sorcery_smgl',
-                                program=pkg_mgr,
+                                program=program,
                                 cmd='get_repository'
     )
     name, directory = func(name, repo_dir)
@@ -771,8 +805,49 @@ def get_repository(name=None, repo_dir=None):
 #
 #-------------------------------------------------------------------------------
 def get_repositories(*args, **kwargs):
+    program = find_package_program('repositories', 'get_repositories')
     func = util.get_module_func(scmd='sorcery_smgl',
-                                program=pkg_mgr,
+                                program=program,
                                 cmd='get_repositories')
     repositories, directories = func()
     return repositories, directories
+
+#-----------------------------------------------------------------------
+#
+# Function find_archive_program
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def find_package_program (class_, command, program=None):
+    """Find suitable archive program for given format and mode."""
+    commands = SMGLPrograms[class_]
+    programs = []
+    if program is not None:
+        # try a specific program first
+        programs.append(program)
+    # first try the universal programs with key None
+    for key in (None, command):
+        if key in commands:
+            programs.extend(commands[key])
+    if not programs:
+        raise Exception("%s program class `%s' is not supported" % (command, class_))
+    # return the first existing program
+    for program in programs:
+        if program.startswith('api_'):
+            # it's a Python module and therefore always supported
+            return program
+        exe = util.find_program(program)
+        return exe
