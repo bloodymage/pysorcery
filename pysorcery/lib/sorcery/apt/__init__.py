@@ -132,11 +132,12 @@ AptPrograms = {
 #
 # Class Package
 #
-# ...
+# The Class for working with Apt packages.
 #
 # Inputs
 # ------
 #    @param: name
+#    @param: repository
 #
 # Returns
 # -------
