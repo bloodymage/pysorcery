@@ -61,7 +61,6 @@ from pysorcery.lib.util import files
 #-----------------------------------------------------------------------
 # Enable Logging
 logger = logging.getLogger(__name__)
-
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -288,6 +287,28 @@ def get_repository(name=None, grim_dir=None):
         x = 1
     
     return name, grim_dir
+
+#-------------------------------------------------------------------------------
+#
+# Function get_repository_dirs
+#
+# Get's a spell's version.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: version
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------------------
+def get_codex():
+    return get_repository_dirs()
 
 #-------------------------------------------------------------------------------
 #
@@ -590,6 +611,28 @@ def is_package(name, **kwargs):
 
 #-----------------------------------------------------------------------
 #
+# Function is_package
+#
+# ...
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: check
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def is_spell(name, **kwargs):
+    return is_package(name)
+
+#-----------------------------------------------------------------------
+#
 # Function get_license
 #
 # ...
@@ -617,8 +660,8 @@ def get_license(name, **kwargs):
     spell_directory = get_spell_dir(section_dir, name)
     details_file = bashspell.DetailsFile(spell_directory)
     details = details_file.parse()
-    short = details['license']
-    return short
+    license_ = details['license']
+    return license_
 
 #-----------------------------------------------------------------------
 #
@@ -735,8 +778,35 @@ def get_section_packages(name, **kwargs):
 
     section_dir = grimoire_dir + '/' + name
 
-    packages = os.scandir(section_dir)
-    return packages
+    try:
+        packages = os.scandir(section_dir)
+        return packages
+    except FileNotFoundError:
+        logger.error('Section %s does not exist' % name)
+    finally:
+        return
+
+#-----------------------------------------------------------------------
+#
+# Function get_section_packages
+#
+# Gets a section's description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: packages
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_section_spells(name, **kwargs):
+    return get_section_packages(name)
 
 #-----------------------------------------------------------------------
 #

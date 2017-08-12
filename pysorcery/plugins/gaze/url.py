@@ -154,7 +154,7 @@ def parser(*args, **kwargs):
 
     cmd = subparsers.add_parser('url',
                                 parents = parent_parsers,
-                                aliases = ['website'],
+                                aliases = ['website', 'uri'],
                                 help = 'Display spell homepage'
     )
     cmd.add_argument('spell',

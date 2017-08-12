@@ -53,6 +53,7 @@ import os
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 # Other Application Libraries
+from pysorcery.lib import sorcery
 from pysorcery.lib import util
 
 # Conditional Libraries
@@ -77,40 +78,6 @@ Commands = ('get_description',
             'read_file',
             'is_package',
             'get_codex')
-
-# List of programs supporting the given archive format and command.
-# If command is None, the program supports all commands (list, extract,
-# ...)
-# Programs starting with "py_" are Python modules.
-SMGLPrograms = {
-    'spell': {
-        #None: ('apt', 'apt-get', 'apt-cache'),
-        'get_description': ('api_1', 'gaze'),
-        'get_version': ('api_1',),
-        'get_url': ('api_1',),
-        'get_short': ('api_1',),
-        'get_license': ('api_1',),
-        'get_section': ('api_1',),
-        'is_spell': ('api_1',),
-        'get_size': ('gaze',),
-    },
-    'spells': {
-        'get_queue': ('api_1',),
-        'get_installed': ('api_1',),
-    },
-    'section': {
-        'get_maintainer': ('api_1',),
-        'get_spells': ('api_1',),
-    },
-    'sections': {
-    },
-    'grimoire': {
-        'get_repository': ('api_1',),
-    },
-    'codex': {
-        'get_codex': ('api_1',),
-    }
-}
 
 #-----------------------------------------------------------------------
 #
@@ -145,182 +112,13 @@ SMGLPrograms = {
 #    ...
 #
 #-----------------------------------------------------------------------
-class Spell():
+class Spell(sorcery.BasePackage):
     def __init__(self, name, repository=None):
-        logger.debug("Begin Function")
-        
-        self.name = name
-        self.repository = repository
-
-        logger.debug('End Function')
+        self.scmd = 'sorcery_smgl'
+        self.program = 'spell'
+        self.pkg_mgr = 'smgl'
+        super(Spell, self).__init__(name, repository)
         return
-    
-    #-------------------------------------------------------------------
-    #
-    # Function get_description
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description - The description of the spell
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_description(self):
-        program = find_spell_program('spell', 'get_description')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_description')
-        self.description = func(self.name, repository=self.repository)
-        return self.description
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_version
-    #
-    # Get a spell version.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: results
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_version(self):
-        program = find_spell_program('spell', 'get_version')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_version')
-        self.version = func(self.name, repository=self.repository)
-        return self.version
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_url
-    #
-    # Get a spell url.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: url
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_url(self):
-        program = find_spell_program('spell', 'get_url')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_url')
-        self.url = func(self.name, repository=self.repository)
-        return self.url
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_short
-    #
-    # Get a spell short description.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: description - The description of the spell
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_short(self):
-        program = find_spell_program('spell', 'get_short')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_short')
-        self.short_description = func(self.name, repository=self.repository)
-        return self.short_description
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_section
-    #
-    # Get a spell ...
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: self.section
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_section(self):
-        program = find_spell_program('spell', 'get_section')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_section')
-        self.section = func(self.name, repository=self.repository)
-        return self.section
-
-    #-------------------------------------------------------------------
-    #
-    # Function read_file
-    #
-    # Read a spell's file.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #    @param: filename
-    #
-    # Returns
-    # -------
-    #    @return: contents - File contents
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def read_file(self, filename):
-        program = find_spell_program('spell', 'read_file')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='read_file')
-        contents = func(self.name, repository=self.repository, filename=filename)
-        return contents
 
     #-------------------------------------------------------------------
     #
@@ -344,159 +142,13 @@ class Spell():
     #
     #-------------------------------------------------------------------
     def is_spell(self):
-        program = find_spell_program('spell', 'is_spell')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='is_spell')
-        tf = func(self.name, repository=self.repository)
-        return tf
-
-    #-------------------------------------------------------------------
-    #
-    # Function is_package
-    #
-    # Verify spell exists.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: tf - True or False
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def is_package(self):
-        return is_spell()
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_license
-    #
-    # Get a spell license.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: self.license_
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_license(self):
-        program = find_spell_program('spell', 'get_license')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_license')
-        self.license_ = func(self.name, repository=self.repository)
-        return self.license_
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_maintainer
-    #
-    # Get a spell maintainer
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: self.maintainer
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_maintainer(self):
-        program = find_spell_program('spell', 'get_pkg_maintainer')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_pkg_maintainer')
-        self.maintainer = func(self.name, repository=self.repository)
-        return self.maintainer
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_size
-    #
-    # Get a spell short description.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: size - The amount of disk space of an installed
-    #                    spell.
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_size(self):
-        program = find_spell_program('spell', 'get_size')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_size')
-        self.size = func(self.name, repository=self.repository)
-        return self.size
-
-    #-------------------------------------------------------------------
-    #
-    # Function install
-    #
-    # Install a spell
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #    @param: args
-    #
-    # Returns
-    # -------
-    #    @return: None
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def install(self,args):
-        program = find_spell_program('spell', 'install')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='install')
-        func(args)
-        
-        return
+        return self.is_package('is_spell')
 
 #-----------------------------------------------------------------------
 #
 # Class SpellVersions
 #
-# This class is for working with mulhiple versions of the same spell.
+# This class is for working with multiple versions of the same spell.
 # 
 # Inputs
 # ------
@@ -511,8 +163,12 @@ class Spell():
 #    ...
 #
 #-----------------------------------------------------------------------
-class SpellVersions(Spell):
-    pass
+class SpellVersions(sorcery.BasePackageVersions):
+    def __init__(self, name, repositories=[]):
+        self.pkg_mgr = 'smgl'
+        self.scmd = 'sorcery_smgl'
+        self.program = 'spellversions'
+        super(SpellVersions, self).__init__(name, repositories)
 
 #-----------------------------------------------------------------------
 #
@@ -533,67 +189,14 @@ class SpellVersions(Spell):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Spells():
-    def __init__(self, spells=[]):
-        self.spells = spells
+class Spells(sorcery.BasePackages):
+    def __init__(self, packages=[]):
+        self.pkg_mgr = 'smgl'
+        self.scmd = 'sorcery_smgl'
+        self.program = 'spells'
+        super(Spells, self).__init__(packages)
+        self.spells = self.packages
         return
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_queue
-    #
-    # Get a list of spells in a queue
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #    @param: which_queue
-    #
-    # Returns
-    # -------
-    #    @return: self.spells
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_queue(self, which_queue):
-        program = find_spell_program('spells', 'get_queue')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_queue')
-        self.spells = func(which_queue)
-        return self.spells
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_installed
-    #
-    # Get a list of installed spells.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: self.spells
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_installed(self, status=None):
-        program = find_spell_program('spells', 'get_installed')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_installed')
-        self.spells = func(status)
-        return self.spells
 
 #-----------------------------------------------------------------------
 #
@@ -615,44 +218,13 @@ class Spells():
 #    ...
 #
 #-----------------------------------------------------------------------
-class Section():
+class Section(sorcery.BaseSection):
     def __init__(self, name, repository=None):
-        logger.debug("Begin Function")
-        
-        self.name = name
-        self.repository = repository
-
-        logger.debug('End Function')
+        self.pkg_mgr = 'smgl'
+        self.scmd = 'sorcery_smgl'
+        self.program = 'section'
+        super(Section, self).__init__(name, repository)
         return
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_maintainer
-    #
-    # Get a section maintainer
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: maintainer
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_maintainer(self):
-        program = find_spell_program('section', 'get_maintainer')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_section_maintainer')
-        self.maintainer = func(self.name, repository=self.repository)
-        return self.maintainer
 
     #-------------------------------------------------------------------
     #
@@ -675,37 +247,8 @@ class Section():
     #    ...
     #
     #-------------------------------------------------------------------
-    def get_spells(self):
-        program = find_spell_program('section', 'get_spells')
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_section_spells')
-        self.spells = func(self.name, repository=self.repository)
-        return self.spells
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_packages
-    #
-    # For compatability ...
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.name
-    #            self.repository
-    #
-    # Returns
-    # -------
-    #    @return: self.spells
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_packages(self):
-        return get_spells()
+    def get_section_spells(self):
+        return self.get_section_packages()
     
 #-----------------------------------------------------------------------
 #
@@ -726,13 +269,12 @@ class Section():
 #    ...
 #
 #-----------------------------------------------------------------------
-class Sections():
+class Sections(sorcery.BaseSections):
     def __init__(self, sections=[]):
-        logger.debug("Begin Function")
-        
-        self.sections = sections
-
-        logger.debug('End Function')
+        self.pkg_mgr = 'smgl'
+        self.scmd = 'sorcery_smgl'
+        self.program = 'sections'
+        super(Sections, self).__init__(sections)
         return
 
 #-------------------------------------------------------------------------------
@@ -755,42 +297,13 @@ class Sections():
 #    ...
 #
 #-------------------------------------------------------------------------------
-class Grimoire():
+class Grimoire(sorcery.BaseRepository):
     def __init__(self, name=None, repo_dir=None):
-        logger.debug('Begin Function')
-
-        logger.debug2('Name: ' + str(name))
-
-        self.name, self.directory = get_repository(name, repo_dir)
-
-        logger.debug('End Function')
+        self.pkg_mgr = 'smgl'
+        self.scmd = 'sorcery_smgl'
+        self.program = 'grimoire'
+        super(Grimoire, self).__init__(name, repo_dir)
         return
-
-    #-------------------------------------------------------------------
-    #
-    # Function get_repository
-    #
-    # Calls the read function based on the file format.
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #
-    # Returns
-    # -------
-    #    @return: self.sections
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def get_sections(self):
-        func = util.get_module_func(scmd='sorcery_smgl',
-                                    program=program,
-                                    cmd='get_sections')
-        self.sections = func(self.name, repository=self.repository)
-        return self.sections
 
 #-----------------------------------------------------------------------
 #
@@ -811,118 +324,18 @@ class Grimoire():
 #    ...
 #
 #-----------------------------------------------------------------------
-class Codex():
+class Codex(sorcery.BaseRepositories):
     def __init__(self, codex=[]):
-        if len(codex) == 0:
-            self.codex, self.directories = get_codex()
-        else:
-            self.codex = codex
-
+        self.pkg_mgr = 'smgl'
+        self.scmd = 'sorcery_smgl'
+        self.program = 'codex'
+        self.cmd = 'get_codex'
+        super(Codex, self).__init__(codex)
         return
 
 #-----------------------------------------------------------------------
 #
 # Functions
 #
-# get_repository
-# get_codex
 #
 #-----------------------------------------------------------------------
-
-#-----------------------------------------------------------------------
-#
-# Function get_repository 
-#
-# Inputs
-# ------
-#    @param: name
-#    @param: repo_dir
-#
-# Returns
-# -------
-#    @return: name
-#    @return: directory
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def get_repository(name=None, repo_dir=None):
-    program = find_spell_program('repository', 'get_repository')    
-    func = util.get_module_func(scmd='sorcery_smgl',
-                                program=program,
-                                cmd='get_repository'
-    )
-    name, directory = func(name, repo_dir)
-    return name, directory
-
-#-------------------------------------------------------------------------------
-#
-# Function get_codex
-#
-# Inputs
-# ------
-#    @param: *args
-#    @param: **kwargs
-#
-# Returns
-# -------
-#    @return: codex
-#    @return: directories
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------------------
-def get_codex(*args, **kwargs):
-    program = find_spell_program('codex', 'get_codex')
-    func = util.get_module_func(scmd='sorcery_smgl',
-                                program=program,
-                                cmd='get_codex')
-    codex, directories = func()
-    return codex, directories
-
-#-----------------------------------------------------------------------
-#
-# Function find_archive_program
-#
-# ...
-#
-# Inputs
-# ------
-#    @param:
-#
-# Returns
-# -------
-#    none
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-def find_spell_program (class_, command, program=None):
-    """Find suitable archive program for given format and mode."""
-    commands = SMGLPrograms[class_]
-    programs = []
-    if program is not None:
-        # try a specific program first
-        programs.append(program)
-    # first try the universal programs with key None
-    for key in (None, command):
-        if key in commands:
-            programs.extend(commands[key])
-    if not programs:
-        raise Exception("%s program class `%s' is not supported" % (command, class_))
-    # return the first existing program
-    for program in programs:
-        if program.startswith('api_'):
-            # it's a Python module and therefore always supported
-            return program
-        exe = util.find_program(program)
-        if exe:
-            return exe
-    # no programs found
-    raise Exception("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))

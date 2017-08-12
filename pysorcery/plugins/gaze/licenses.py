@@ -140,7 +140,6 @@ Raises
 
     config_ = config.SorceryConfig()
     license_dir = config_.license_dir
-    print(license_dir)
 
     directory = lib.Directory(license_dir)
     licenses = directory.listfiles()
