@@ -69,6 +69,18 @@ activity_log = {
     'smgl' : '/var/log/sorcery/activity'
 }
 
+log_dirs = {
+    'apt': {
+        'compile': 'tbd',
+        'install': 'tbd',
+        'md5': 'tbd',
+        },
+    'smgl': {
+        'compile': '/var/log/sorcery/compile/',
+        'install': '/var/log/sorcery/install/',
+    },
+}
+        
 sound_themes = [ 'off', 'ferris', 'star trek' ]
 command_themes = [ 'sorcery', 'harry potter' ]
 
@@ -147,7 +159,8 @@ class SorceryConfig():
         self.store_conf_log = False
         self.sorcerer = 'root'
         self.cast = 'cast'
-
+        self.compression = 'lzma'
+        self.extension = '.xz'
     """
               SUSTAIN=${SUSTAIN:=on}
                 TMPFS=${TMPFS:=off}
