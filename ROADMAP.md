@@ -28,23 +28,23 @@
 ### 0.0.2    
 #### Functional Scripts
 - pygaze
- - Functions
+  - Functions
     - [X] activity
-    - [ ] alien
+    - [X] alien
     - [ ] checkmd5s
-    - [ ] compile
+    - [X] compile
     - [ ] dependencies
     - [ ] depends
     - [ ] export
-    - [ ] from
+    - [X] from
     - [ ] grimoire
     - [X] grimoires
     - [X] history
     - [ ] html
     - [ ] import
-    - [ ] installed
+    - [X] installed
     - [ ] install-full
-    - [ ] install
+    - [X] install
     - [X] install-queue
     - [ ] install-spell
     - [X] licenses
@@ -52,17 +52,17 @@
     - [ ] md5sum
     - [ ] newer
     - [ ] older
-    - [ ] orphans
+    - [X] orphans
     - [ ] provides
     - [X] remove-queue - Theoretical, haven't had data to truly test with.
     - [ ] search
-    - [ ] section
+    - [X] section
     - [X] short
     - [X] show-exiled
     - [X] show-held
-    - [ ] size
-    - [ ] sources
-    - [ ] source_urls
+    - [X] size
+    - [X] sources
+    - [X] source_urls
     - [ ] sum
     - [ ] time
     - [ ] time-system
