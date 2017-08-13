@@ -25,16 +25,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyGaze: sources
+# pyGaze: source_urls
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
 #
 #-----------------------------------------------------------------------
 """
-pyGaze: sources
+pyGaze: source_urls
 
 
 """
@@ -54,10 +50,14 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
+from pysorcery.lib.system import mimetypes
 
 # Other Application Libraries
 from pysorcery import lib
+from pysorcery.lib import util
+from pysorcery.lib.util import config
 from pysorcery.lib.util import text
+from pysorcery.lib.util.files import archive
 # Conditional Libraries
 
 
@@ -87,39 +87,36 @@ colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
 #
-# Function gaze_sources
+# Function gaze_source_urls
 #
-# list all source files contained in a spell
+# lists the urls to all files contained in a spell
 #
 # Input:  args
-#         args.spell - List of spells to get section.
-#                      Minimum 1
-#         args.quiet - decrease verbosity
+#         args.spell    - List of spells to get section.
+#                         Minimum 1
+#         args.grimoire -
+#         args.quiet    - decrease verbosity
 # Output:
 # Return: None
 #
 # Status: Not implimented
 #
 #-----------------------------------------------------------------------
-def gaze_sources(args):
+def gaze_source_urls(args):
     logger.debug('Begin Function')
-
     for i in args.spell:
         logger.debug2('Loop iteration: ' + i)
         
         spell = lib.Package(i)
-
-        sources = spell.get_sources()
-
-        
+        uris = spell.get_source_uris()
         logger.debug3('Spell: ' + str(spell))
         
         message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
 
-        for source in sources:
-            print(source)
-
+        for uri in uris:
+            print(uri)
+    
     logger.debug('End Function')
     return
 
@@ -149,16 +146,15 @@ def gaze_sources(args):
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
-
-    cmd = subparsers.add_parser('sources',
+    cmd = subparsers.add_parser('source_urls',
                                 parents = parent_parsers,
-                                help = 'List all source files contained in a spell.'
+                                help = 'Lists the urls to all files contained in a spell.'
     )
     cmd.add_argument('spell',
                      nargs = '+',
-                     help = 'Display System Info'
-    )        
-    cmd.set_defaults(func = gaze_sources,
+                     help = 'Spell'
+    )
+    cmd.set_defaults(func = gaze_source_urls,
                      sudo = False)
 
     return cmd

@@ -103,6 +103,7 @@ Programs = {
             'get_size': ('gaze',),
             'get_log': ('py_api_01',),
             'get_sources': ('gaze',),
+            'get_source_uris': ('gaze',),
         },
         'spellversions': {
         },
@@ -540,6 +541,29 @@ class BasePackage:
     def get_sources(self):
         self.sources = self.get_info('get_sources')
         return self.sources
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_version
+    #
+    # Get a spell version.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_source_uris(self):
+        self.source_uris = self.get_info('get_source_uris')
+        return self.source_uris
 
     #-------------------------------------------------------------------
     #

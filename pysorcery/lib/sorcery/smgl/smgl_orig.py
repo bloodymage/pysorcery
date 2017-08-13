@@ -205,16 +205,16 @@ class Sections():
 class Grimoire():
     pass
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Class Codex
 # 
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 class Codex():
     pass
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions
 #
@@ -356,3 +356,37 @@ def get_sources(spell, **kwargs):
     logger.debug2(sources)
     logger.debug('End Function')
     return sources
+
+#---------------------------------------------------------------
+#
+# Function get_orphans
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------
+def get_source_uris(spell, **kwargs):
+    logger.debug('Begin Function')
+    
+    var = subprocess.check_output(['gaze','source_urls', spell])
+
+    source_uris = []
+    for line in var.splitlines():
+        line_list = str(line).split(',')
+        item = line_list[0].split("'")[1]
+        source_uris.append(item)
+
+    logger.debug2(source_uris)
+    logger.debug('End Function')
+    return source_uris
