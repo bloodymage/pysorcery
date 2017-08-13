@@ -799,7 +799,8 @@ def find_archive_program (format_, command, program=None):
                 continue
             return exe
     # no programs found
-    raise ArchiveError("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
+    raise ArchiveError("could not find an executable program to %s format %s; candidates are (%s),"
+                       % (command, format, ",".join(programs)))
 
 #-----------------------------------------------------------------------
 #

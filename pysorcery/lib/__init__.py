@@ -215,11 +215,87 @@ class File():
 #    ...
 # 
 #-----------------------------------------------------------------------
-class Files(archive.Archives, files.BaseFiles):
-    def __init__(self, *args, **kwargs):
-        self.files = kwargs['filelist']
+class Files():
+    __file_classes = {
+        'archive': archive.Archives,
+        'compressed': compressed.CompressedFiles,
+        'audio': audio.AudioFiles,
+        'package': package.PackageFiles,
+        'default': files.BaseFiles
+    }
 
-        return
+    #-------------------------------------------------------------------
+    #
+    # Function id_file_classes
+    #
+    # Do we have a text file, archive, compressed, or audio file?
+    #
+    # Inputs
+    # ------
+    #    @param: filename - 
+    #
+    # Returns
+    # -------
+    #    @return: 'archive'
+    #    @return: 'compressed'
+    #    @return: 'default'
+    #    @return: 'audio' - Not yet implemented
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def id_file_class(filename):
+        mimetype, encoding = mimetypes.guess_type(filename)
+
+        try:
+            id_ = mimetypes.fileclasstypes[mimetype]
+        except:
+            try:
+                id_ = mimetypes.fileclasstypes[encoding]
+            except:
+                id_ = 'default'
+
+        return id_
+                
+    #-------------------------------------------------------------------
+    #
+    # Function getcls
+    #
+    # Get the class for the filetype we are working with.
+    #
+    # Inputs
+    # ------
+    #    @param: filename
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    @staticmethod
+    def __new__(cls, *args, **kwargs):
+
+        if 'filelist' in kwargs:
+            files = kwargs['filelist']
+            name = Files.id_file_class(files[0])
+        else:
+            files = []
+            name = 'default'
+
+        share_class = Files.__file_classes.get(name.lower(), None)        
+        if share_class:
+            return share_class(*args, **kwargs)
+        else:
+            raise NotImplementedError("The requested File Class has not been implemented")
 
 
 #-----------------------------------------------------------------------

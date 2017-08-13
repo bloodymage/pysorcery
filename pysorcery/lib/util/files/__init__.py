@@ -76,6 +76,43 @@ from pysorcery.lib.util import text
 # create logger
 logger = logging.getLogger(__name__)
 
+pkg_mgr = distro.distro_group[distro.distro_id]
+# Supported package commands
+Commands = ('get_alien',
+            'get_from')
+
+# List of programs supporting the given archive format and command.
+# If command is None, the program supports all commands (list, extract,
+# ...)
+# Programs starting with "py_" are Python modules.
+Programs = {
+    'smgl': {
+        'basefile': {
+            'get_from': ('gaze',),
+        },
+        'basefiles': {
+            'get_installed': ('py_smgl',),
+            'get_alien': ('py_smgl',),
+        },
+        'basedirectory': {
+        },
+        'basedirectories': {
+        },
+    },
+    'apt': {
+        'basefile': {
+            'get_from': ('dpkg',),
+        },
+        'basefiles' : {
+            'get_alien': ('cruft',),
+        },
+        'basedirectory': {
+        },
+        'basedirectories': {
+        },
+    }
+}
+
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -142,7 +179,35 @@ class BaseFile():
 
     #-------------------------------------------------------------------
     #
-    # Function list_from
+    # Function get_info
+    #
+    # ...
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #    @param: which_queue
+    #
+    # Returns
+    # -------
+    #    @return: self.spells
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_info(self, info):
+        program = find_program(self.program, info)
+        func = util.get_module_func(scmd='util_file',
+                                    program=program,
+                                    cmd=info)
+        info = func(self.filename)
+        return info
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_from
     #
     # List package(s) that provide a file
     #
@@ -161,32 +226,9 @@ class BaseFile():
     #    ...
     #
     #-------------------------------------------------------------------
-    def list_from(self):
-        logger.debug("Begin Function")
-
-
-        id_from = { 'deb' : subprocess.check_output(["dpkg",
-                                                     "-S",
-                                                     self.filename]),
-                    'smgl': 'NotImplemented'
-        }
-        
-        try:
-            var = id_from[distro.distro_pkg[distro.distro_id]]
-        except NotImplementedError as msg:
-            logger.error(msg)
-        except Exception as msg:
-            logger.critical(msg)
-            logger.critical('Missing Exception')
-            
-        pkg_list = []
-        for line in var.splitlines():
-            line_list = str(line).split(',')
-            item = line_list[0].split("'")[1]
-            pkg_list.append(item)
-
-        logger.debug("End Function")
-        return pkg_list
+    def get_from(self):
+        packages = get_info('get_from')
+        return packages
 
     #-------------------------------------------------------------------
     #
@@ -275,9 +317,11 @@ class BaseFile():
     def check_existing_filename (self, onlyfiles=True):
         """Ensure that given filename is a valid, existing file."""
         if not os.path.exists(self.filename):
-            raise FileNotFoundError("file `%s' was not found" % self.filename)
+            raise FileNotFoundError("file `%s' was not found"
+                                    % self.filename)
         if not os.access(self.filename, os.R_OK):
-            raise PermissionError("file `%s' is not readable" % self.filename)
+            raise PermissionError("file `%s' is not readable"
+                                  % self.filename)
         if onlyfiles and not os.path.isfile(self.filename):
             raise NotAFileError("`%s' is not a file" % self.filename)
         return 
@@ -436,7 +480,7 @@ class BaseFile():
         logger.debug("Begin Function")
         return results
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function stripext
     #
@@ -455,13 +499,13 @@ class BaseFile():
     #    DepreciationWarning - This function duplicates the 'pne'
     #                          function.
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def stripext (self):
         """Return the basename without extension of given filename."""
         raise DeprecationWarning('BaseFile.stripext is being depreciated')
         return self.basename
     
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function get_filesize
     #
@@ -480,12 +524,12 @@ class BaseFile():
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def get_filesize(self):
         """Return file size in Bytes, or -1 on error."""
         return os.path.getsize(self.filename)
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function _extract_archive
     #
@@ -504,14 +548,14 @@ class BaseFile():
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def make_file_readable(self):
         """Make file user readable if it is not a link."""
         if not os.path.islink(self.filename):
             self.set_mode(stat.S_IRUSR)
         return
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function _extract_archive
     #
@@ -530,7 +574,7 @@ class BaseFile():
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def isfile(self):
         """Make file user readable if it is not a link."""
         if os.path.isfile(self.filename):
@@ -584,7 +628,7 @@ class BaseDirectory(BaseFile):
         logger.debug("End Function")
         return
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function tmpdir
     #
@@ -604,12 +648,12 @@ class BaseDirectory(BaseFile):
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def tmpdir(self, dir=None):
         """Return a temporary directory for extraction."""
         return tempfile.mkdtemp(suffix='', prefix='Unpack_', dir=dir)
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function _extract_archive
     #
@@ -627,13 +671,13 @@ class BaseDirectory(BaseFile):
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def make_dir_readable (self):
         """Make directory user readable and executable."""
         self.set_mode(stat.S_IRUSR|stat.S_IXUSR)
         return
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function _extract_archive
     #
@@ -651,20 +695,25 @@ class BaseDirectory(BaseFile):
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def make_user_readable(self):
-        """Make all files in given directory user readable. Also recurse into
-        subdirectories."""
-        for root, dirs, files in os.walk(self.filename, onerror=logger.error):
+        """
+        Make all files in given directory user readable.
+        Also recurse into subdirectories.
+        """
+        for root, dirs, files in os.walk(self.filename,
+                                         onerror=logger.error):
             for filename in files:
-                file_ = BaseFile(os.path.join(root, filename))
+                file_ = BaseFile(os.path.join(root,
+                                              filename))
                 file_.make_file_readable()
             for dirname in dirs:
-                dir_ = BaseDirectory(os.path.join(root, dirname))
+                dir_ = BaseDirectory(os.path.join(root,
+                                                  dirname))
                 dir_.make_dir_readable()
         return
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function _extract_archive
     #
@@ -683,7 +732,7 @@ class BaseDirectory(BaseFile):
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def isdir(self):
         """Make file user readable if it is not a link."""
         if os.path.isdir(self.filename):
@@ -691,11 +740,12 @@ class BaseDirectory(BaseFile):
         else:
             return False
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function listfiles
     #
-    # Get output filename if archive is in a single file format like gzip.
+    # Get output filename if archive is in a single file format like
+    # gzip.
     #
     # Inputs
     # ------
@@ -709,7 +759,7 @@ class BaseDirectory(BaseFile):
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def listfiles(self):
         files = glob.glob(self.filename + "/*")
 
@@ -745,43 +795,91 @@ class BaseFiles():
     def __init__(self, *args, **kwargs):
         logger.debug("Begin Function")
 
-        self.files = kwargs['filelist']
+        if 'filelist' in kwargs:
+            self.files = kwargs['filelist']
+        else:
+            self.files = []
 
         logger.debug("End Function")
         return
 
     #-------------------------------------------------------------------
     #
-    # Function list_installed_files
+    # Function get_info
     #
-    # Generate a list of all files installed by sorcery
+    # ...
     #
     # Inputs
     # ------
     #    @param: self
+    #    @param: which_queue
     #
     # Returns
     # -------
-    #    @return: installed_files - List of files
+    #    @return: self.spells
     #
     # Raises
     # ------
     #    ...
     #
     #-------------------------------------------------------------------
-    def list_installed_files(self):
-        logger.debug("Begin Function")
+    def get_info(self, info):
+        program = find_program('basefiles', info)
+        func = util.get_module_func(scmd='util_file',
+                                    program=program,
+                                    cmd=info)
+        info = func()
+        return info
 
-        install_log_dir = '/var/log/sorcery/install'
-        installed_files = []
-        for root, dirs, files  in os.walk(install_log_dir):
-            for i in files:
-                install_log = install_log_dir + '/'+ i
-                f = Files(install_log)
-                installed_files = install_files + f.read()
-        
-        logger.debug("End Function")
-        return installed_files
+    #-------------------------------------------------------------------
+    #
+    # Function get_from
+    #
+    # List package(s) that provide a file
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_installed(self):
+        self.files = self.get_info('get_installed')
+        return self.files
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_from
+    #
+    # List package(s) that provide a file
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.filename - Filename to identify which package(s)
+    #                            install that file
+    #
+    # Returns
+    # -------
+    #    @param: pkg_list - list of packages that install filename
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_alien(self):
+        self.files = self.get_info('get_alien')
+        return self.files
 
     #-------------------------------------------------------------------
     #
@@ -802,7 +900,7 @@ class BaseFiles():
     #    ...
     #
     #-------------------------------------------------------------------
-    def list_system_files(self):
+    def get_system(self):
         logger.debug("Begin Function")
 
         # List of directories to check        
@@ -810,16 +908,16 @@ class BaseFiles():
                      '/opt', '/sbin', '/share', '/usr','/var' ]
         ignore_dirs = ['/home']
 
-        sys_files = []
+        self.files = []
         for sys_dir in sys_dirs:
             for root, dirs, files in os.walk(sys_dir):
                 for i in dirs:
                     for j in files:
                         system_file = str(os.path.join(root,i,j))
-                        sys_files.append(system_file)
+                        self.files.append(system_file)
         
         logger.debug("End Function")
-        return sys_files
+        return self.files
 
     #-------------------------------------------------------------------
     #
@@ -847,10 +945,11 @@ class BaseFiles():
     #
     #-------------------------------------------------------------------
     def is_same_file (self):
-        """Check if filename1 and filename2 point to the same file object.
-        There can be false negatives, ie. the result is False, but it is
-        the same file anyway. Reason is that network filesystems can create
-        different paths to the same physical file.
+        """Check if filename1 and filename2 point to the same file 
+        object.  There can be false negatives, ie. the result is False, 
+        but it is the same file anyway. Reason is that network 
+        filesystems can create different paths to the same physical 
+        file.
         """
         if self.files[0] == self.files[1]:
             return True
@@ -881,7 +980,7 @@ class BaseFiles():
         """Check if filename1 and filename2 are the same filename."""
         return os.path.realpath(self.files[0]) == os.path.realpath(self.files[1])
 
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function check_filelist
     #
@@ -899,9 +998,12 @@ class BaseFiles():
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def check_filelist (self):
-        """Check that file list is not empty and contains only existing files."""
+        """
+        Check that file list is not empty and contains only existing 
+        files.
+        """
         if not self.files:
             raise Exception("cannot create archive with empty filelist")
         for filename in self.files:
@@ -931,7 +1033,7 @@ class BaseFiles():
 #
 #-----------------------------------------------------------------------
 class BaseDirectories(BaseFiles):
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     #
     # Function stripbackup
     #
@@ -949,7 +1051,7 @@ class BaseDirectories(BaseFiles):
     # ------
     #    ...
     #
-    #-----------------------------------------------------------------------
+    #-------------------------------------------------------------------
     def stripbackup(self):
         newfiles = []
         for f in self.files:
@@ -1028,7 +1130,10 @@ def pne(ifilename):
 #
 #-----------------------------------------------------------------------
 def get_single_outfile (directory, archive, extension=""):
-    """Get output filename if archive is in a single file format like gzip."""
+    """
+    Get output filename if archive is in a single file format 
+    like gzip.
+    """
     archname = BaseFile(archive)
     outfile = os.path.join(directory, archname.basename)
     if os.path.exists(outfile + extension):
@@ -1040,3 +1145,44 @@ def get_single_outfile (directory, archive, extension=""):
             i += 1
         outfile = newfile
     return outfile + extension
+
+#-----------------------------------------------------------------------
+#
+# Function find_archive_program
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    none
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def find_program(class_, command, program=None):
+    """Find suitable archive program for given format and mode."""
+    commands = Programs[pkg_mgr][class_]
+    programs = []
+    if program is not None:
+        # try a specific program first
+        programs.append(program)
+    # first try the universal programs with key None
+    for key in (None, command):
+        if key in commands:
+            programs.extend(commands[key])
+    if not programs:
+        raise Exception("%s program class `%s' is not supported"
+                        % (command, class_))
+    # return the first existing program
+    for program in programs:
+        if program.startswith('py_'):
+            # it's a Python module and therefore always supported
+            return program
+        exe = util.find_program(program)
+        return exe
