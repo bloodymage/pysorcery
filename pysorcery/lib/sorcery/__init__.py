@@ -108,6 +108,7 @@ Programs = {
         'spells': {
             'get_queue': ('py_api_01',),
             'get_installed': ('py_api_01',),
+            'get_orphans': ('gaze',),
         },
         'section': {
             'get_section_maintainer': ('py_api_01',),
@@ -142,6 +143,7 @@ Programs = {
         'packages': {
             'get_installed': ('apt',),
             'get_queue': ('py_apt',),
+            'get_orphans': ('deborphan',),
         },
         'section': {
             'get_maintainer': ('py_apt',),
@@ -611,7 +613,7 @@ class BasePackages:
     #    ...
     #
     #-------------------------------------------------------------------
-    def get_info(self, info, which_info):
+    def get_info(self, info, which_info=None):
         program = find_program(self.pkg_mgr, self.program, info)
         func = util.get_module_func(scmd=self.scmd,
                                     program=program,
@@ -666,6 +668,34 @@ class BasePackages:
     #-------------------------------------------------------------------
     def get_installed(self, status=None):
         self.packages = self.get_info('get_installed', status)
+        return self.packages
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_queue
+    #
+    # Get a list of spells in a queue
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #    @param: which_queue
+    #
+    # Returns
+    # -------
+    #    @return: self.spells
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_orphans(self):
+        program = find_program(self.pkg_mgr, self.program, 'get_orphans')
+        func = util.get_module_func(scmd=self.scmd,
+                                    program=program,
+                                    cmd='get_orphans')
+        self.packages = func()
         return self.packages
 
 #-----------------------------------------------------------------------
