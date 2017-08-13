@@ -322,3 +322,37 @@ def get_orphans():
     logger.debug2(orphan_list)
     logger.debug('End Function')
     return orphan_list
+
+#---------------------------------------------------------------
+#
+# Function get_orphans
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------
+def get_sources(spell, **kwargs):
+    logger.debug('Begin Function')
+    
+    var = subprocess.check_output(['gaze','sources', spell])
+
+    sources = []
+    for line in var.splitlines():
+        line_list = str(line).split(',')
+        item = line_list[0].split("'")[1]
+        sources.append(item)
+
+    logger.debug2(sources)
+    logger.debug('End Function')
+    return sources

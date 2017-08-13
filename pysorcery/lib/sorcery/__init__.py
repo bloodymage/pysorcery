@@ -102,6 +102,7 @@ Programs = {
             'is_spell': ('py_api_01',),
             'get_size': ('gaze',),
             'get_log': ('py_api_01',),
+            'get_sources': ('gaze',),
         },
         'spellversions': {
         },
@@ -516,6 +517,29 @@ class BasePackage:
                        version=self.version,
                        extension=extension)
         return content
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_version
+    #
+    # Get a spell version.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_sources(self):
+        self.sources = self.get_info('get_sources')
+        return self.sources
 
     #-------------------------------------------------------------------
     #
