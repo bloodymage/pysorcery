@@ -106,11 +106,11 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 class Package(sorcery.BasePackage):
-    def __init__(self, name, repository=None):
+    def __init__(self, name, repository=None, version=None):
         self.scmd = 'sorcery_apt'
         self.program = 'package'
         self.pkg_mgr = 'apt'
-        super(Package, self).__init__(name, repository)
+        super(Package, self).__init__(name, repository, version)
         return
 
 #-----------------------------------------------------------------------

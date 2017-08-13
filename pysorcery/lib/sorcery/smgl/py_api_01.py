@@ -53,6 +53,8 @@ from pysorcery.lib import logging
 from pysorcery.lib.sorcery import smgl
 from pysorcery.lib.sorcery.smgl import bashspell
 from pysorcery.lib.util import files
+from pysorcery.lib.util import config
+from pysorcery.lib.util.files import compressed
 
 #-----------------------------------------------------------------------
 #
@@ -568,6 +570,44 @@ def read_file(name, **kwargs):
     file_ = fileclass(spell_directory)
     content = file_.read()
     
+    return content
+
+#-----------------------------------------------------------------------
+#
+# Function get_section
+#
+# Read a spells FILE.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: content
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_log(spell, **kwargs):
+    if kwargs['extension'] is None:
+        extension = ''
+    else:
+        extension = kwargs['extension']
+        
+    filename = (config.log_dirs[config.pkg_mgr][kwargs['log']]
+                + spell
+                + '-'
+                + kwargs['version']
+                + extension)
+    if extension == '':
+        file_ = files.BaseFile(filename)
+    else:
+        file_ = compressed.CompressedFile(filename)
+        
+    content = file_.read()
     return content
 
 #-----------------------------------------------------------------------

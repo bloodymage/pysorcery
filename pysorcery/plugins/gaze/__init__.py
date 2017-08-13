@@ -355,19 +355,8 @@ def gaze_file(args):
         file_ = lib.File(args.filename)
         content = file_.read()
     elif args.spell and args.log:
-        if args.version:
-            spell_version = args.version
-        else:
-            spell = lib.Package(args.spell[0])
-            spell_version = spell.get_version()
-
-        filename = (config.log_dirs[config.pkg_mgr][args.log]
-                    + args.spell[0]
-                    + '-'
-                    + spell_version
-                    + conf.extension)
-        file_ = lib.File(filename)
-        content = file_.read()
+        spell = lib.Package(args.spell[0], version=args.version)
+        content = spell.get_log(args.log)
     else:
         raise NotImplementedError
 

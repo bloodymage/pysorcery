@@ -86,20 +86,12 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# Parser
 #
 #-----------------------------------------------------------------------
 
-
-
+#-----------------------------------------------------------------------
+#
 # Function parser
 #
 # Create subcommand parsing options

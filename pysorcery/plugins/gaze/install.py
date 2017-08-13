@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugin/gaze/install.py
 #
 # This file is part of Sorcery.
 #
@@ -25,19 +25,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze: install
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#   View a spell install log.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+pyGaze: install
+
+View a spell install log.
 """
 #-----------------------------------------------------------------------
 #
@@ -102,26 +98,34 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-
-
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
+#
+# Returns
+# -------
+#    @return: cmd
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser, repo_parent_parser=None):
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
     cmd = subparsers.add_parser('install',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 help = 'Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files. If no optional version was given, try the installed version. (Not Working)'
     )
     cmd.add_argument('spell',
@@ -129,10 +133,11 @@ def parser(subparsers, parent_parser, repo_parent_parser=None):
                      help = 'Spell'
     )
     cmd.add_argument('version',
-                     nargs = 1,
+                     nargs = '?',
                      help = 'Specifies which version of spell to view'
     )
-    cmd.set_defaults(func = gaze.log,
-                     log = 'install')
+    cmd.set_defaults(func = gaze.gaze_file,
+                     log = 'install',
+                     sudo = False)
 
     return cmd

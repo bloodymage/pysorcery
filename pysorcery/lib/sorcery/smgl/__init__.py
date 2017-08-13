@@ -113,11 +113,11 @@ Commands = ('get_description',
 #
 #-----------------------------------------------------------------------
 class Spell(sorcery.BasePackage):
-    def __init__(self, name, repository=None):
+    def __init__(self, name, repository=None, version=None):
         self.scmd = 'sorcery_smgl'
         self.program = 'spell'
         self.pkg_mgr = 'smgl'
-        super(Spell, self).__init__(name, repository)
+        super(Spell, self).__init__(name, repository, version)
         return
 
     #-------------------------------------------------------------------
