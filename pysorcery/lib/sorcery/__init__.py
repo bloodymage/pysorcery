@@ -52,6 +52,7 @@ from pysorcery.lib.system import logging
 
 # Other Application Libraries
 from pysorcery.lib import util
+from pysorcery.lib.util import config
 
 # Conditional Libraries
 
@@ -64,6 +65,7 @@ from pysorcery.lib import util
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
+conf = config.SorceryConfig()
 
 # Supported package commands
 Commands = ('get_description',
@@ -78,7 +80,8 @@ Commands = ('get_description',
             'is_spell',
             'get_size',
             'get_queue',
-            'get_installed')
+            'get_installed',
+            'get_log')
 
 # List of programs supporting the given archive format and command.
 # If command is None, the program supports all commands (list, extract,
@@ -98,6 +101,7 @@ Programs = {
             'is_package': ('py_api_01',),
             'is_spell': ('py_api_01',),
             'get_size': ('gaze',),
+            'get_log': ('py_api_01',),
         },
         'spellversions': {
         },
@@ -187,9 +191,10 @@ Programs = {
 #
 #-----------------------------------------------------------------------
 class BasePackage:
-    def __init__(self, name, repository=None):
+    def __init__(self, name, repository=None, version=None):
         self.name = name
         self.repository = repository
+        self.version = version
         return
 
     #-------------------------------------------------------------------
@@ -469,6 +474,46 @@ class BasePackage:
     def get_size(self):
         self.size = self.get_info('get_size')
         return self.size
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_size
+    #
+    # Get a spell short description.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.name
+    #            self.repository
+    #
+    # Returns
+    # -------
+    #    @return: size - The amount of disk space of an installed
+    #                    spell.
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_log(self, log):
+        if self.version is None:
+            self.version = self.get_version()
+        if log == 'compile':
+            extension = conf.extension
+        else:
+            extension = None
+
+        program = find_program(self.pkg_mgr, self.program, 'get_log')
+        func = util.get_module_func(scmd=self.scmd,
+                                    program=program,
+                                    cmd='get_log')
+        content = func(self.name,
+                       log=log,
+                       version=self.version,
+                       extension=extension)
+        return content
 
     #-------------------------------------------------------------------
     #

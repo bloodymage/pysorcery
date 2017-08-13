@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugin/gaze/install.py
 #
 # This file is part of Sorcery.
 #
@@ -25,15 +25,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyGaze: compile
+# pyGaze: install
 #
-#   View package compile log.
+#   View a spell install log.
 #
 #-----------------------------------------------------------------------
 """
-pyGaze: compile
+pyGaze: install
 
-View package compile log.
+View a spell install log.
 """
 #-----------------------------------------------------------------------
 #
@@ -86,7 +86,15 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# Parser
+# archive_extract
+# archive_list
+# archive_create
+# archive_test
+# archive_repack
+# archive_recompress
+# archive_diff
+# archive_search
+# archive_formats
 #
 #-----------------------------------------------------------------------
 
@@ -116,9 +124,9 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('compile',
+    cmd = subparsers.add_parser('install',
                                 parents = parent_parsers,
-                                help = 'Show the compiler output generated when the spell was built.  If no optional version was given, try the installed version.  If the spell is not installed use the version in the grimoire.'
+                                help = 'Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files. If no optional version was given, try the installed version. (Not Working)'
     )
     cmd.add_argument('spell',
                      nargs = 1,
@@ -126,11 +134,10 @@ def parser(*args, **kwargs):
     )
     cmd.add_argument('version',
                      nargs = '?',
-                     help = 'Specifies which Version of spell to view.'
-    )        
-    cmd.set_defaults(func = gaze.gaze_file,
-                     log = 'compile',
-                     sudo = False
+                     help = 'Specifies which version of spell to view'
     )
+    cmd.set_defaults(func = gaze.gaze_file,
+                     log = 'install',
+                     sudo = False)
 
     return cmd
