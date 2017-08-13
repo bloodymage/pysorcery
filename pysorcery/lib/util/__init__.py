@@ -77,6 +77,8 @@ colortext = text.ConsoleText()
 
 # Set paths for sorcery resources:
 # Utilities
+UTIL_FILE_PATH = pkg_resources.resource_filename('pysorcery',
+                                                    'lib/util/files/')
 UTIL_ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery',
                                                     'lib/util/files/archive/')
 UTIL_COMPRESSED_PATH = pkg_resources.resource_filename('pysorcery',
@@ -94,6 +96,7 @@ SORCERY_SMGL_PATH = pkg_resources.resource_filename('pysorcery','lib/sorcery/smg
 
 cmd_dir = {
     'util_archive': UTIL_ARCHIVE_PATH,
+    'util_file': UTIL_FILE_PATH,
     'util_compressed': UTIL_COMPRESSED_PATH,
     'util_url': UTIL_URL_PATH,
     'gaze': GAZE_PATH,
@@ -103,6 +106,7 @@ cmd_dir = {
 }
 
 import_path = {
+    'util_file': 'pysorcery.lib.util.files.',
     'util_archive': 'pysorcery.lib.util.files.archive.',
     'util_compressed': 'pysorcery.lib.util.files.compressed.',
     'util_url': 'pysorcery.lib.util.url.',

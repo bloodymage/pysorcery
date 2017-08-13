@@ -571,7 +571,7 @@ class CompressedFile(files.BaseFile):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Compressions(files.BaseFiles):
+class CompressedFiles(files.BaseFiles):
     #-------------------------------------------------------------------
     #
     # Function search

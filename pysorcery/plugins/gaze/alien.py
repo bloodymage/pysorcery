@@ -55,6 +55,7 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
+from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
 
@@ -78,7 +79,7 @@ from pysorcery.lib.util.files import archive
 logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
-
+pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -122,38 +123,51 @@ def gaze_alien(args):
     logger.debug('Begin Function')
 
     # create 'alien' object
-    alien = libsystem.Alien()
-    alien.identify()
+    files = lib.Files()
+    alien = files.get_alien()
+
+    for f in alien:
+        print(f)
 
     logger.debug('End Function')
     return
 
 #-----------------------------------------------------------------------
 #
-# Function archive_extract
+# Function parser
 #
-# Extract files listed.
+# Create subcommand parsing options
 #
-# Input:  args
-#         args.quiet - Decrease Output Verbosity
-#         args.files - List of files to extract
-#         args.recursive - Extract all files in all subfolders
-#         args.depth (Add me) - if recursive, limit to depth #
-#         args.output_dir - Directory to extract to
-# Return: None
+# Inputs
+# ------
+#    @param: *args    - tuple of all subparsers and parent parsers
+#                       args[0]: the subparser
+#                       args[1:] the parent parsers
+#    @param: **kwargs - Not used (Future?)
+#
+# Returns
+# -------
+#    @return: cmd
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
-def parser(subparsers, parent_parser, repo_parent_parser=None):
-    #------------------------------------------
-    #
-    # Create the parser for the 'alien' command
-    #
-    #-------------------------------------------
+def parser(*args, **kwargs):
+    subparsers = args[0]
+    parent_parsers = list(args[1:])
+
     alien_help = 'Find and Display all files not tracked by the Sorcery Package Management System.'
     cmd = subparsers.add_parser('alien',
-                                parents = [parent_parser],
+                                parents = parent_parsers,
                                 aliases = ['aliens'],
                                 help = alien_help)
-    cmd.set_defaults(func = gaze_alien)
+    if pkg_mgr == 'apt':
+        cmd.set_defaults(func = gaze_alien,
+                         sudo = True)
+    else:
+        cmd.set_defaults(func = gaze_alien,
+                         sudo = False)
 
     return cmd
