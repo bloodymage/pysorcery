@@ -198,7 +198,7 @@ class BaseFile():
     #
     #-------------------------------------------------------------------
     def get_info(self, info):
-        program = find_program(self.program, info)
+        program = find_program('basefile', info)
         func = util.get_module_func(scmd='util_file',
                                     program=program,
                                     cmd=info)
@@ -227,7 +227,7 @@ class BaseFile():
     #
     #-------------------------------------------------------------------
     def get_from(self):
-        packages = get_info('get_from')
+        packages = self.get_info('get_from')
         return packages
 
     #-------------------------------------------------------------------

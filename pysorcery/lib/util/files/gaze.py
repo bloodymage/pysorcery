@@ -43,6 +43,7 @@ Apt:
 import sys
 import subprocess
 import os
+import json
 
 # 3rd Party Libraries
 
@@ -94,11 +95,13 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
-# Function get_orphans
+# Function get_from
 #
-# ...
+# Get package(s) that provide a file.
+#
+# This code is ugly.  'gaze from' returns an error code, not sure why.
 #
 # Inputs
 # ------
@@ -112,15 +115,26 @@ logger = logging.getLogger(__name__)
 # ------
 #    ...
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def get_from(filename):
-    var = subprocess.check_output(['gaze',
-                                   'from',
-                                   filename])
-    packages = []
-    for line in var.splitlines():
-        tmpline = str(line).split("'")[1]
-        name = tmpline.split(':')[0]
-        packages.append(name)
+    try:
+        var = subprocess.check_output(['gaze',
+                                       'from',
+                                       filename])
 
-    return packages
+        packages = []
+        for line in var.splitlines():
+            tmpline = str(line).split("'")[1]
+            name = tmpline.split(':')[0]
+            packages.append(name)
+
+        return packages
+
+    except subprocess.CalledProcessError as e:
+        logger.error(e.output)
+        tmpline = str(e.output).split("'")[1]
+        name = tmpline.split(':')[0]
+        packages = [name]
+        return packages
+    finally:
+        pass
