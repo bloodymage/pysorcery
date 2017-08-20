@@ -13,7 +13,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/cli/__init__.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
