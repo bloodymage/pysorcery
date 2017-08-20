@@ -50,7 +50,6 @@ underlying code, this application was developed.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 import os
 import sys
