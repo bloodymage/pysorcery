@@ -73,15 +73,15 @@ logger = logging.getLogger(__name__)
 colortext = text.ConsoleText()
 
 # Set paths for sorcery resources:
-# Utilities
+# Utilities and Files
 UTIL_FILE_PATH = pkg_resources.resource_filename('pysorcery',
-                                                    'lib/util/files/')
+                                                    'lib/files/')
 UTIL_ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery',
-                                                    'lib/util/files/archive/')
+                                                    'lib/files/archive/')
 UTIL_COMPRESSED_PATH = pkg_resources.resource_filename('pysorcery',
-                                                       'lib/util/files/compressed/')
+                                                       'lib/files/compressed/')
 UTIL_URL_PATH = pkg_resources.resource_filename('pysorcery',
-                                                'lib/util/url/')
+                                                'lib/url/')
 
 # Command Plugins
 ARCHIVE_PATH = pkg_resources.resource_filename('pysorcery', 'plugins/archive/')
@@ -103,10 +103,10 @@ cmd_dir = {
 }
 
 import_path = {
-    'util_file': 'pysorcery.lib.util.files.',
-    'util_archive': 'pysorcery.lib.util.files.archive.',
-    'util_compressed': 'pysorcery.lib.util.files.compressed.',
-    'util_url': 'pysorcery.lib.util.url.',
+    'util_file': 'pysorcery.lib.files.',
+    'util_archive': 'pysorcery.lib.files.archive.',
+    'util_compressed': 'pysorcery.lib.files.compressed.',
+    'util_url': 'pysorcery.lib.url.',
     'archive': 'pysorcery.plugins.archive.',
     'gaze': 'pysorcery.plugins.gaze.',
     'sorcery_apt': 'pysorcery.lib.sorcery.apt.',
