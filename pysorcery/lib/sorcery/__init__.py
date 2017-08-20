@@ -90,39 +90,39 @@ Programs = {
     'smgl': {
         'spell': {
             #None: ('apt', 'apt-get', 'apt-cache'),
-            'get_description': ('py_api_01', 'gaze'),
-            'get_version': ('py_api_01',),
-            'get_url': ('py_api_01',),
-            'get_short': ('py_api_01',),
+            'get_description': ('py_smgl', 'gaze'),
+            'get_version': ('py_smgl',),
+            'get_url': ('py_smgl',),
+            'get_short': ('py_smgl',),
             'get_license': ('py_api_01',),
-            'get_pkg_maintainer': ('py_api_01',),
-            'get_section': ('py_api_01',),
-            'is_package': ('py_api_01',),
-            'is_spell': ('py_api_01',),
+            'get_pkg_maintainer': ('py_smgl',),
+            'get_section': ('py_smgl',),
+            'is_package': ('py_smgl',),
+            'is_spell': ('py_smgl',),
             'get_size': ('gaze',),
-            'get_log': ('py_api_01',),
+            'get_log': ('py_smgl',),
             'get_sources': ('gaze',),
             'get_source_uris': ('gaze',),
         },
         'spellversions': {
         },
         'spells': {
-            'get_queue': ('py_api_01',),
-            'get_installed': ('py_api_01',),
+            'get_queue': ('py_smgl',),
+            'get_installed': ('py_smgl',),
             'get_orphans': ('gaze',),
         },
         'section': {
-            'get_section_maintainer': ('py_api_01',),
-            'get_section_packages': ('py_api_01',),
-            'get_section_spells': ('py_api_01',),
+            'get_section_maintainer': ('py_smgl',),
+            'get_section_packages': ('py_smgl',),
+            'get_section_spells': ('py_smgl',),
         },
         'sections': {
         },
         'grimoire': {
-            'get_repository': ('py_api_01',),
+            'get_repository': ('py_smgl',),
         },
         'codex': {
-            'get_codex': ('py_api_01',),
+            'get_codex': ('py_smgl',),
         }
     },
     'apt': {
@@ -169,6 +169,8 @@ Programs = {
 # crash.
 #
 # BasePackage
+# BasePackages
+#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------

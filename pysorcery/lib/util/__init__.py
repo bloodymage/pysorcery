@@ -40,7 +40,6 @@ Provides common utilities.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 import glob
 import importlib
@@ -48,18 +47,16 @@ import os
 import pkg_resources
 from shutil import which
 import subprocess
+
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
 from pysorcery import lib
-#from pysorcery.lib.util import files
 from pysorcery.lib.util import text
-
 
 # Conditional Libraries
 
@@ -131,7 +128,6 @@ CompressedModules = {
 }
 
 SMGLModules = {
-    'gaze': 'smgl_orig'
 }
 
 UrlModules = {
@@ -379,7 +375,6 @@ def run (cmd, verbosity=0, **kwargs):
     else:
         res = subprocess.call(cmd, **kwargs)
     return res
-
 
 #-----------------------------------------------------------------------
 #
