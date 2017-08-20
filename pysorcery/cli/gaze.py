@@ -10,10 +10,12 @@
 #
 # This file is part of Sorcery.
 #
+# File: pysorcery/cli/gaze.py
+#
 #    Sorcery is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+#    it under the terms of the GNU General Public License as published
+#    by the Free Software Foundation, either version 3 of the License,
+#    or (at your option) any later version.
 #
 #    Sorcery is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,14 +28,14 @@
 #
 # pyGaze
 #
-# is part of the Sorcery source-based package management suite. It is a
-# general purpose command-line tool for displaying package logs, version 
-# information, checking for installed packages, checksums, message
-# digests, maintainer information, package URL information, removing
-# obsolete packages, displaying new packages, untracked files, sections,
-# searching for files that are installed, finding when spells were
-# created and packages in the software catalogue. It can even take and
-# retrieve snap shots of currently installed packages for easy
+# Gaze is part of the Sorcery source-based package management suite. It
+# is a general purpose command-line tool for displaying package logs,
+# version information, checking for installed packages, checksums,
+# message digests, maintainer information, package URL information,
+# removing obsolete packages, displaying new packages, untracked files,
+# sections, searching for files that are installed, finding when spells
+# were created and packages in the software catalogue. It can even take
+# and retrieve snap shots of currently installed packages for easy
 # duplication.
 #
 #
@@ -57,7 +59,6 @@ duplication.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 import sys
 import os
@@ -72,13 +73,12 @@ from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import __version__, DEBUG
-
-#from pysorcery.lib.sorcery import repositories
-#from pysorcery.lib.sorcery import packages
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.plugins import gaze
+
+# Conditional Libraries
 
 
 #-----------------------------------------------------------------------
@@ -144,7 +144,6 @@ Report bugs to ...
         description = 'Display system, package information',
         epilog = epilog_text
     )
-
     parser.add_version_option()
     parent_parser = parser.add_logging_option()
     repo_parent_parser = argparse.ArgumentParser(add_help=False)
@@ -154,13 +153,14 @@ Report bugs to ...
                                        metavar = 'Command',
                                        help = 'Description'
     )
-
     repo_parent_parser.add_argument('-g','--grimoire',
                                     nargs = '*',
                                     help = 'Specify which grimoire(s) to look in.')
 
     for i in subcommands:
-        subcommand = util.get_module_func(scmd='gaze',program=i,cmd='parser')
+        subcommand = util.get_module_func(scmd='gaze',
+                                          program=i,
+                                          cmd='parser')
         subcommand(subparsers, parent_parser, repo_parent_parser)
 
     # Parser Arguments
