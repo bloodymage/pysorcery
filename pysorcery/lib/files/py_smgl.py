@@ -82,21 +82,14 @@ logger = logging.getLogger(__name__)
 #
 # Functions
 #
-# get_description
-# get_version
-# get_url
-# get_short
-# get_section
-# read_file
-# is_package
-# get_license
-# get_size
+# get_installed
+# get_alien
 #
 #-----------------------------------------------------------------------
 
 #-------------------------------------------------------------------
 #
-# Function list_installed_files
+# Function get_installed
 #
 # Generate a list of all files installed by sorcery
 #
@@ -129,7 +122,7 @@ def get_installed():
 
 #-------------------------------------------------------------------
 #
-# Function list_installed_files
+# Function get_alien
 #
 # Generate a list of all files installed by sorcery
 #

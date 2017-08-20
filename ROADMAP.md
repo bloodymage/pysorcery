@@ -76,6 +76,8 @@
 - pyarchive
   - Functions
     - [X] read (for compressed files, ex. txtfile.gz)
+#### Other
+- Begin implementation of multiple smgl api versions.
   
 ### 0.0.3
 #### Functional Scripts
@@ -325,7 +327,7 @@
 ### 0.5.2
 #### Supported Distributions
 - Debian
-  
+
 
 ## 0.6
 - Sorcery Pockage Management Complete

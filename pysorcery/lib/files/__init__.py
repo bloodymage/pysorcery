@@ -43,7 +43,6 @@ directories.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 import glob
 import os
@@ -186,11 +185,11 @@ class BaseFile():
     # Inputs
     # ------
     #    @param: self
-    #    @param: which_queue
+    #    @param: info
     #
     # Returns
     # -------
-    #    @return: self.spells
+    #    @return: info
     #
     # Raises
     # ------
@@ -214,12 +213,10 @@ class BaseFile():
     # Inputs
     # ------
     #    @param: self
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @param: packages - list of packages that install filename
     #
     # Raises
     # ------
