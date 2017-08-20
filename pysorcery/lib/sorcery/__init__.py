@@ -991,7 +991,7 @@ def get_repository(pkg_mgr, scmd, cmd, name=None, repo_dir=None):
 
 #-----------------------------------------------------------------------
 #
-# Function get_codex
+# Function get_repositories
 #
 # Inputs
 # ------
