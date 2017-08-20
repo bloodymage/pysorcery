@@ -37,7 +37,6 @@ This file provides the top level Sorcery API.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 
 
@@ -52,7 +51,6 @@ from pysorcery.lib.system import mimetypes
 # Other Application Libraries
 from pysorcery.lib.sorcery import apt
 from pysorcery.lib.sorcery import smgl
-#from pysorcery.lib.util import config
 from pysorcery.lib.util import files
 from pysorcery.lib.util.files import archive
 from pysorcery.lib.util.files import audio
@@ -60,6 +58,7 @@ from pysorcery.lib.util.files import compressed
 from pysorcery.lib.util.files import package
 
 # Conditional Libraries
+
 
 #-----------------------------------------------------------------------
 #
@@ -72,6 +71,7 @@ logger = logging.getLogger(__name__)
 
 # Get System Package Manoager
 pkg_mgr = distro.distro_group[distro.distro_id]
+
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -103,7 +103,6 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #   Archive
 #   Compressed
 #   Audio
-# 
 #
 # Inputs
 # ------
@@ -356,7 +355,7 @@ class Directories(files.BaseDirectories):
 #
 #-----------------------------------------------------------------------
 class Package():
-    __file_classes = {
+    __package_classes = {
         'smgl': smgl.Spell,
         'apt': apt.Package
     }
@@ -383,7 +382,7 @@ class Package():
     #
     #-------------------------------------------------------------------
     def __new__(cls, name, *args, **kwargs):
-        share_class = Package.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Package.__package_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -407,7 +406,7 @@ class Package():
 #
 #-----------------------------------------------------------------------
 class PackageVersions():
-    __file_classes = {
+    __package_classes = {
         'smgl': smgl.SpellVersions,
         'apt': apt.PackageVersions
     }
@@ -436,7 +435,7 @@ class PackageVersions():
     @staticmethod
     def __new__(cls, name, *args, **kwargs):
         
-        share_class = PackageVersions.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = PackageVersions.__package_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -460,7 +459,7 @@ class PackageVersions():
 #
 #-----------------------------------------------------------------------
 class Packages():
-    __file_classes = {
+    __package_classes = {
         'smgl': smgl.Spells,
         'apt': apt.Packages
     }
@@ -488,7 +487,7 @@ class Packages():
     #-------------------------------------------------------------------
     @staticmethod
     def __new__(cls, *args, **kwargs):
-        share_class = Packages.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Packages.__package_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(*args, **kwargs)
         else:
@@ -512,7 +511,7 @@ class Packages():
 #
 #-----------------------------------------------------------------------
 class Section():
-    __file_classes = {
+    __package_classes = {
         'smgl': smgl.Section,
         'apt': apt.Section
     }
@@ -541,7 +540,7 @@ class Section():
     @staticmethod
     def __new__(cls, name, *args, **kwargs):
         
-        share_class = Section.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Section.__package_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -565,7 +564,7 @@ class Section():
 #
 #-----------------------------------------------------------------------
 class Sections():
-    __file_classes = {
+    __package_classes = {
         'smgl': smgl.Sections,
         'apt': apt.Sections
     }
@@ -593,7 +592,7 @@ class Sections():
     #-------------------------------------------------------------------
     def __new__(cls, *args, **kwargs):
         
-        share_class = Sections.__file_classes.get(pkg_mgr.lower(), None)        
+        share_class = Sections.__package_classes.get(pkg_mgr.lower(), None)        
         if share_class:
             return share_class(*args, **kwargs)
         else:
@@ -617,7 +616,7 @@ class Sections():
 #
 #-----------------------------------------------------------------------
 class Repository():
-    __file_classes = {
+    __package_classes = {
         'smgl': smgl.Grimoire,
         'apt': apt.Repository
     }
@@ -644,7 +643,7 @@ class Repository():
     #
     #-------------------------------------------------------------------
     def __new__(cls, name, *args, **kwargs):
-        share_class = Repository.__file_classes.get(pkg_mgr.lower(), None)
+        share_class = Repository.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -668,7 +667,7 @@ class Repository():
 #
 #-----------------------------------------------------------------------
 class Repositories():
-    __file_classes = {
+    __package_classes = {
         'smgl': smgl.Codex,
         'apt': apt.Repositories
     }
@@ -697,7 +696,7 @@ class Repositories():
     @staticmethod
     def __new__(cls, *args, **kwargs):
         
-        share_class = Repositories.__file_classes.get(pkg_mgr.lower(), None)
+        share_class = Repositories.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(*args, **kwargs)
         else:
