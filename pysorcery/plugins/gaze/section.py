@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/section.py
 #
 # This file is part of Sorcery.
 #
@@ -40,27 +40,19 @@ View ...
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -90,12 +82,12 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function gaze_section
 #
-# view a list of all sections in the software catalogue or display a list
-# of packages from a specific section
+# view a list of all sections in the software catalogue or display a
+# list of packages from a specific section.
 #
 # Inputs
 # ------
@@ -112,7 +104,7 @@ colortext = text.ConsoleText()
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def gaze_section(args):
     section = lib.Section(args.section)
     packages = section.get_packages()
@@ -149,9 +141,10 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
+    help_ = 'View a list of all sections in the software catalogue or display a list of packages from a specific section.'
     cmd = subparsers.add_parser('section',
                                 parents = parent_parsers,
-                                help = 'View a list of all sections in the software catalogue or display a list of packages from a specific section. (Not Working)'
+                                help = help_
     )
     cmd.add_argument('section',
                      nargs = '?',

@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/installed.py
 #
 # This file is part of Sorcery.
 #
@@ -40,23 +40,19 @@ View all installed packages and corresponding version numbers.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.plugins import gaze
+
 # Conditional Libraries
 
 
@@ -110,9 +106,11 @@ colortext = text.ConsoleText()
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
+
+    cmd_help = 'View all installed packages and corresponding version numbers.'
     cmd = subparsers.add_parser('installed',
                                 parents = parent_parsers,
-                                help = 'View all installed packages and corresponding version numbers.'
+                                help = cmd_help
     )
     cmd.add_argument('spell',
                      nargs = '*',

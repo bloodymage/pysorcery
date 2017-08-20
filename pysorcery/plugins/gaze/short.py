@@ -40,27 +40,19 @@ Provide a package short description
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -90,7 +82,7 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function gaze_short
 #
@@ -107,7 +99,7 @@ colortext = text.ConsoleText()
 # -------
 #    @return: None
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def gaze_short(args):
     logger.debug('Begin Function')
 
@@ -121,7 +113,6 @@ def gaze_short(args):
         
         message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
-
         message = colortext.colorize(short, 'none','white','black')
         logger.info1(message)
 

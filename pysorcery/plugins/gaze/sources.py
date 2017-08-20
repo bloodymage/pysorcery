@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/sources.py
 #
 # This file is part of Sorcery.
 #
@@ -27,26 +27,21 @@
 #
 # pyGaze: sources
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#    List all source files contained in a spell.
 #
 #-----------------------------------------------------------------------
 """
 pyGaze: sources
 
-
+List all source files contained in a spell.
 """
 #-----------------------------------------------------------------------
 #
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
@@ -54,10 +49,10 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
 from pysorcery import lib
 from pysorcery.lib.util import text
+
 # Conditional Libraries
 
 
@@ -82,6 +77,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
+# gaze_sources
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -91,14 +88,20 @@ colortext = text.ConsoleText()
 #
 # list all source files contained in a spell
 #
-# Input:  args
-#         args.spell - List of spells to get section.
-#                      Minimum 1
-#         args.quiet - decrease verbosity
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell - List of spells to get section.
+#                         Minimum 1
+#            args.quiet - decrease verbosity
 #
-# Status: Not implimented
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ______
+#    ...
 #
 #-----------------------------------------------------------------------
 def gaze_sources(args):
@@ -108,17 +111,14 @@ def gaze_sources(args):
         logger.debug2('Loop iteration: ' + i)
         
         spell = lib.Package(i)
-
         sources = spell.get_sources()
-
         
         logger.debug3('Spell: ' + str(spell))
         
         message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
-
         for source in sources:
-            print(source)
+            logger.info1(source)
 
     logger.debug('End Function')
     return

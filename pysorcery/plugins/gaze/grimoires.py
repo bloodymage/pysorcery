@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/grimoires.py
 #
 # This file is part of Sorcery.
 #
@@ -40,21 +40,19 @@ Display installed grimoires by name only.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.plugins import gaze
+
 # Conditional Libraries
 
 
@@ -109,13 +107,13 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
+    cmd_help = 'Display installed grimoires by name only.'
     cmd = subparsers.add_parser('grimoires',
                                 parents = parent_parsers,
-                                help = 'Display installed grimoires by name only.'
+                                help = cmd_help
     )
     cmd.set_defaults(func = gaze.gaze_grimoires,
                      multi = True,
                      display_format = 'console',
                      sudo = False)
-
     return cmd

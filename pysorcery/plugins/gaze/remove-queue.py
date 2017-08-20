@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/remove-queue.py
 #
 # This file is part of Sorcery.
 #
@@ -40,28 +40,20 @@ View remove-queue
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 from pysorcery.plugins import gaze
+
 # Conditional Libraries
 
 
@@ -116,10 +108,10 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    remove_help = 'Show spells to be removed.'
+    cmd_help = 'Show spells to be removed.'
     cmd = subparsers.add_parser('remove-queue',
                                 parents = parent_parsers,
-                                help = remove_help)
+                                help = cmd_help)
     cmd.set_defaults(func = gaze.gaze_queue,
                      queue = 'remove',
                      sudo = False

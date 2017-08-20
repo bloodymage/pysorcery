@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/from.py
 #
 # This file is part of Sorcery.
 #
@@ -27,7 +27,7 @@
 #
 # pyGaze: from
 #
-#
+# ...
 #
 #-----------------------------------------------------------------------
 """
@@ -40,25 +40,19 @@ pyGaze: from
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
+
 # Conditional Libraries
 
 
@@ -83,7 +77,8 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_formats
+# gaze_from
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -148,9 +143,10 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
+    cmd_help = "find out which spell has installed 'path/file.'  Matching is done literally against the end of the path names in the lists of installed files."
     cmd = subparsers.add_parser('from',
                              parents = parent_parsers,
-                             help = "find out which spell has installed 'path/file.'  Matching is done literally against the end of the path names in the lists of installed files."
+                             help = cmd_help
     )
     cmd.add_argument('filename',
                      nargs = 1,
@@ -162,5 +158,4 @@ def parser(*args, **kwargs):
     )        
     cmd.set_defaults(func = gaze_from,
                      sudo = False)
-
     return cmd

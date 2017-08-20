@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/orphans.py
 #
 # This file is part of Sorcery.
 #
@@ -27,10 +27,7 @@
 #
 # pyGaze: orphans
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#
 #
 #-----------------------------------------------------------------------
 """
@@ -43,10 +40,8 @@ pyGaze: orphans
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
@@ -54,10 +49,10 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
 from pysorcery import lib
 from pysorcery.lib.util import text
+
 # Conditional Libraries
 
 
@@ -105,13 +100,10 @@ colortext = text.ConsoleText()
 def gaze_orphans(args):
     logger.debug('Begin Function')
 
-    # Create Orphan object
     spells = lib.Packages()
-    # Gather List of orphans
     orphans = spells.get_orphans()
-    # Print Orphan List
     for orphan in orphans:
-        print(orphan)
+        logger.info1(orphan)
 
     logger.debug('End Function')
     return
@@ -142,12 +134,11 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    orphans_help = 'Display installed spells that do not have any explicit dependencies on them.'
+    cmd_help = 'Display installed spells that do not have any explicit dependencies on them.'
     cmd = subparsers.add_parser('orphans',
                                 parents = parent_parsers,
-                                help = orphans_help
+                                help = cmd_help
     )    
     cmd.set_defaults(func = gaze_orphans,
                      sudo = False)
-
     return cmd

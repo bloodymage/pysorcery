@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/licenses.py
 #
 # This file is part of Sorcery.
 #
@@ -44,24 +44,20 @@ input, the package license will be identified.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 
 # Other Application Libraries
 from pysorcery import lib
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -185,9 +181,11 @@ Raises
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
+
+    cmd_help = 'View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s).'
     cmd = subparsers.add_parser('license',
                                 parents = parent_parsers,
-                                help = 'View the license(s) of the given spell(s), or spells in given section(s), or view the information about given license(s).'
+                                help = cmd_help
     )
     cmd.add_argument('ssl',
                      nargs = '+',
@@ -195,5 +193,4 @@ def parser(*args, **kwargs):
     )
     cmd.set_defaults(func = gaze_license,
                      sudo = False)
-
     return cmd

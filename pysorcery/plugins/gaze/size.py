@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/size.py
 #
 # This file is part of Sorcery.
 #
@@ -40,20 +40,16 @@ View...
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
 from pysorcery import lib
 from pysorcery.lib import util
@@ -88,12 +84,13 @@ colortext = text.ConsoleText()
 #
 #-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function gaze_size
 #
-# print the sizes and file counts of the passed installed spell(s) or if -all is
-# specified, of all the spells. In addition, this will print the largest spell.
+# print the sizes and file counts of the passed installed spell(s) or if
+# '-all' is specified, of all the spells. In addition, this will print
+# the largest spell.
 #
 # Inputs
 # ------
@@ -111,19 +108,18 @@ colortext = text.ConsoleText()
 # ------
 #    ...
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def gaze_size(args):
     logger.debug('Begin Function')
 
     for i in args.spell:
         spell = lib.Package(i)
-
         size = spell.get_size()
+
         logger.debug3('Spell: ' + str(spell))
         
         message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
-
         message = colortext.colorize(str(spell.size) + 'kb', 'none','white','black')
         logger.info1(message)
 
@@ -155,28 +151,30 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    help_ = { 'apt': 'Print the sizes and file counts of the passed installed Package(s).',
+    help_ = { 'apt': 'Print the sizes and file counts of the passed installed package(s).',
               'smgl': 'Print the sizes and file counts of the passed installed spell(s).'
     }
     cmd = subparsers.add_parser('size',
                                 parents = parent_parsers,
                                 help = help_[pkg_mgr]
     )
-
     arg = { 'apt': 'package',
             'smgl': 'spell'
     }
     help_ = { 'apt': 'Package to view size',
               'smgl': 'Spell to view size'
-              }
+    }
     cmd.add_argument('spell',
                      nargs = '+',
                      metavar = arg[pkg_mgr],
-                     help = help_[pkg_mgr])
+                     help = help_[pkg_mgr]
+    )
     cmd.add_argument('-a','-all','--all',
                      action = 'store_true',
-                     help = 'Display sizes of all the spells. In addition, this will print the largest spell.')
+                     help = 'Display sizes of all the spells. In addition, this will print the largest spell.'
+    )
     cmd.set_defaults(func = gaze_size,
-                     sudo = False)
+                     sudo = False
+    )
 
     return cmd

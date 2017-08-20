@@ -40,27 +40,18 @@ View a spell install log.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 from pysorcery.plugins import gaze
 # Conditional Libraries
 
@@ -86,15 +77,7 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -124,9 +107,10 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
+    cmd_help = 'Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files. If no optional version was given, try the installed version.'
     cmd = subparsers.add_parser('install',
                                 parents = parent_parsers,
-                                help = 'Used to determine what files were installed by a spell and where those files are located, excludes sorcery state files. If no optional version was given, try the installed version. (Not Working)'
+                                help = cmd_help
     )
     cmd.add_argument('spell',
                      nargs = 1,

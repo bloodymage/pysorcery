@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/what.py
 #
 # This file is part of Sorcery.
 #
@@ -40,7 +40,6 @@ View the long package description
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 import os
 import sys
@@ -50,17 +49,11 @@ import sys
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -94,24 +87,29 @@ colortext = text.ConsoleText()
 #
 # Function gaze_what
 #
-# view the long package description
+# View the long package description
 #
-# Input:  args
-#         args.spell    - List of spells to get description.
-#                         Minimum 1
-#         args.grimoire - Grimoire(s) to check for spell
-#         args.quiet    - Limit print output
-# Output: Prints spell description
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell    - List of spells to get description.
+#                            Minimum 1
+#            args.grimoire - Grimoire(s) to check for spell
+#            args.quiet    - Limit print output
 #
-# Status: Working for Source Mage
-#         Working for Ubuntu
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def gaze_what(args):
     logger.debug('Begin Function')
 
-    
+    # Misc fun ...
     terms = {
         'the_force': 'The Force is an energy field created by all living things. It surrounds us, penetrates us, and binds the galaxy together.',
         '42': '42 is the answer to life, the universe, and everything.',

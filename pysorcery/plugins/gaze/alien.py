@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/alien.py
 #
 # This file is part of Sorcery.
 #
@@ -25,47 +25,35 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze: alien
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+#    Find files not installed by sorcery
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+pyGaze: alien
+
+Find files not installed by sorcery.
 """
 #-----------------------------------------------------------------------
 #
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import distro
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -80,6 +68,7 @@ logger = logging.getLogger(__name__)
 # Allow Color text on console
 colortext = text.ConsoleText()
 pkg_mgr = distro.distro_group[distro.distro_id]
+
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -90,15 +79,8 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 # Functions
 #
-# archive_extract
-# archive_list
-# archive_create
-# archive_test
-# archive_repack
-# archive_recompress
-# archive_diff
-# archive_search
-# archive_formats
+# gaze_alien
+# parser
 #
 #-----------------------------------------------------------------------
 
@@ -125,7 +107,6 @@ def gaze_alien(args):
     # create 'alien' object
     files = lib.Files()
     alien = files.get_alien()
-
     for f in alien:
         print(f)
 
@@ -158,11 +139,11 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    alien_help = 'Find and Display all files not tracked by the Sorcery Package Management System.'
+    cmd_help = 'Find and Display all files not tracked by the Sorcery Package Management System.'
     cmd = subparsers.add_parser('alien',
                                 parents = parent_parsers,
                                 aliases = ['aliens'],
-                                help = alien_help)
+                                help = cmd_help)
     if pkg_mgr == 'apt':
         cmd.set_defaults(func = gaze_alien,
                          sudo = True)

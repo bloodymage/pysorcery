@@ -40,27 +40,19 @@ Display the section a spell belongs to.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -72,7 +64,7 @@ from pysorcery.lib.util.files import archive
 # Enable Logging
 # create logger
 logger = logging.getLogger(__name__)
-# Allow Color text on console
+# Allow Color text on csole
 colortext = text.ConsoleText()
 
 #-----------------------------------------------------------------------
@@ -97,18 +89,23 @@ colortext = text.ConsoleText()
 # display the section a spell belongs to.
 # If -path is given, display the full path to spell
 #
-# Input:  args
-#         args.spell     - List of spells to get section.
-#                          Minimum 1
-#         args.grimoires - 
-#         args.path      - Print spell path information instead
-#                          of section name.
-#         args.quiet     - decrease verbosity
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell     - List of spells to get section.
+#                             Minimum 1
+#            args.grimoires - 
+#            args.path      - Print spell path information instead
+#                             of section name.
+#            args.quiet     - decrease verbosity
 #
-# Status: Working for Source Mage
-#         Working for Ubuntu
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-------------------------------------------------------------------------------
 def gaze_where(args):

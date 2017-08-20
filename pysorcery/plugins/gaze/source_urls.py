@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/source_urls.py
 #
 # This file is part of Sorcery.
 #
@@ -27,22 +27,21 @@
 #
 # pyGaze: source_urls
 #
+#    Lists the urls to all files contained in a spell.
 #
 #-----------------------------------------------------------------------
 """
 pyGaze: source_urls
 
-
+Lists the urls to all files contained in a spell.
 """
 #-----------------------------------------------------------------------
 #
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
@@ -50,14 +49,9 @@ import sys
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
 # Conditional Libraries
 
 
@@ -91,15 +85,21 @@ colortext = text.ConsoleText()
 #
 # lists the urls to all files contained in a spell
 #
-# Input:  args
-#         args.spell    - List of spells to get section.
-#                         Minimum 1
-#         args.grimoire -
-#         args.quiet    - decrease verbosity
-# Output:
-# Return: None
+# Inputs
+# ------
+#    @param: args
+#            args.spell    - List of spells to get section.
+#                            Minimum 1
+#            args.grimoire -
+#            args.quiet    - decrease verbosity
 #
-# Status: Not implimented
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    ...
 #
 #-----------------------------------------------------------------------
 def gaze_source_urls(args):
@@ -119,7 +119,6 @@ def gaze_source_urls(args):
     
     logger.debug('End Function')
     return
-
 
 #-----------------------------------------------------------------------
 #

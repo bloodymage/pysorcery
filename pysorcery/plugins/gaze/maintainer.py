@@ -41,27 +41,19 @@ specified spell.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
-from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib import util
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+
 # Conditional Libraries
 
 
@@ -133,7 +125,6 @@ def gaze_maintainer(args):
         
         message = colortext.colorize(spell.name, 'bold','white','black')
         logger.info(message)
-
         message = colortext.colorize(maintainer, 'none','white','black')
         logger.info1(message)
     
@@ -167,9 +158,10 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
+    cmd_help = 'Display the email address of the person responsible for maintaining a specified spell.'
     cmd = subparsers.add_parser('maintainer',
                                 parents = parent_parsers,
-                                help = 'Display the email address of the person responsible for maintaining a specified spell.'
+                                help = cmd_help
     )
     cmd.add_argument('spell',
                      nargs = '+',

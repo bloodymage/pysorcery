@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/gaze/history.py
 #
 # This file is part of Sorcery.
 #
@@ -40,23 +40,19 @@ Show spell hisotry.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
 
 # Application Libraries
 # System Library Overrides
-from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
-from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.plugins import gaze
+
 # Conditional Libraries
 
 
@@ -124,6 +120,5 @@ def parser(*args, **kwargs):
     # PreBuild, class: HistoryFile becomes History.
     cmd.set_defaults(func = gaze.gaze_spell_file,
                      filename = 'History',
-                     sudo = False)
-    
+                     sudo = False)    
     return cmd
