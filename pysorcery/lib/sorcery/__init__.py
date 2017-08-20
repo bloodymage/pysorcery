@@ -94,7 +94,7 @@ Programs = {
             'get_version': ('py_smgl',),
             'get_url': ('py_smgl',),
             'get_short': ('py_smgl',),
-            'get_license': ('py_api_01',),
+            'get_license': ('py_smgl',),
             'get_pkg_maintainer': ('py_smgl',),
             'get_section': ('py_smgl',),
             'is_package': ('py_smgl',),
@@ -591,7 +591,6 @@ class BasePackage:
                                     program=self.program,
                                     cmd='install')
         func(args)
-        
         return
 
 #-----------------------------------------------------------------------
@@ -995,6 +994,10 @@ def get_repository(pkg_mgr, scmd, cmd, name=None, repo_dir=None):
 #
 # Inputs
 # ------
+#    @param: pkg_mgr,
+#    @param: scmd,
+#    @param: program,
+#    @param: cmd,
 #    @param: *args
 #    @param: **kwargs
 #
@@ -1018,17 +1021,21 @@ def get_repositories(pkg_mgr, scmd, program, cmd, *args, **kwargs):
 
 #-----------------------------------------------------------------------
 #
-# Function find_archive_program
+# Function find_program
 #
 # ...
 #
 # Inputs
 # ------
-#    @param:
+#    @param: pkg_mgr
+#    @param: class_
+#    @param: command
+#    @param: program
 #
 # Returns
 # -------
-#    none
+#    @return: program
+#    @return: exe
 #
 # Raises
 # ------
