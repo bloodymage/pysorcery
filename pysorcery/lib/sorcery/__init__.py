@@ -49,7 +49,6 @@ Library for sorcery works with the package manager's packages.
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import logging
-
 # Other Application Libraries
 from pysorcery.lib import util
 from pysorcery.lib.util import config
@@ -376,7 +375,6 @@ class BasePackage:
     def read_file(self, filename):
         contents = self.get_info('read_file')
         return contents
-
 
     #-------------------------------------------------------------------
     #
@@ -926,7 +924,7 @@ class BaseRepository():
 
 #-----------------------------------------------------------------------
 #
-# Class Codex
+# Class BaseRepositories
 #
 # Provide support for a list of codex.
 # 
