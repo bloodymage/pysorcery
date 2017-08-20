@@ -40,7 +40,6 @@ These functions are common to multiple gaze plugins.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 import os
 import sys
@@ -53,11 +52,10 @@ import sys
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
-from pysorcery.lib.sorcery.smgl import bashspell
+from pysorcery.lib.sorcery.smgl import py_smgl
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 # Conditional Libraries
@@ -310,7 +308,7 @@ def gaze_versions(args):
 def gaze_spell_file(args):
     logger.debug('Begin Function')
 
-    if args.filename.upper() in bashspell.spellfiles:
+    if args.filename.upper() in py_smgl.spellfiles:
         spell = lib.Package(args.spell)
         content = spell.read_file(args.filename)
     else:
