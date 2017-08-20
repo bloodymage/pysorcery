@@ -50,7 +50,6 @@ compression options along with status on underlying system support.
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 import os
 import sys
@@ -63,17 +62,17 @@ import sys
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
-from pysorcery.lib.util.files import audio
-from pysorcery.lib.util.files import compressed
-from pysorcery.lib.util.files import package
+from pysorcery.lib.files import archive
+from pysorcery.lib.files import audio
+from pysorcery.lib.files import compressed
+from pysorcery.lib.files import package
+
 # Conditional Libraries
 
 

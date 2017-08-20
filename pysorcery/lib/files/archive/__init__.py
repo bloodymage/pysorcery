@@ -45,7 +45,6 @@ Impliments classes for working with archive files.
 # System Libraries
 import os
 
-
 # 3rd Party Libraries
 
 # Application Libraries
@@ -55,7 +54,7 @@ from pysorcery.lib.system import mimetypes
 from pysorcery.lib.system import shutil
 # Other Application Libraries
 from pysorcery.lib import util
-from pysorcery.lib.util import files
+from pysorcery.lib import files
 
 # Condiional Libraries
 try:
@@ -64,7 +63,6 @@ try:
     py_lzma = ('py_lzma',)
 except ImportError:
     py_lzma = ()
-
 
 #-----------------------------------------------------------------------
 #
@@ -76,46 +74,162 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 # Supported archive commands
-ArchiveCommands = ('list', 'extract', 'test', 'create', 'play')
+ArchiveCommands = ('list', 'extract', 'test', 'create', 'read')
 
 # List of programs supporting the given archive format and command.
-# If command is None, the program supports all commands (list, extract, ...)
+# If command is None, the program supports all commands (list, extract,
+# ...)
 # Programs starting with "py_" are Python modules.
 ArchivePrograms = {
-    'ape': {
-        'create': ('mac',),
-        'extract': ('mac',),
-        'list': ('py_echo',),
-        'test': ('mac',),
+    '7z': {
+        None: ('7z', '7za', '7zr'),
     },
-    'flac': {
-        'extract': ('flac',),
-        'test': ('flac',),
-        'create': ('flac',),
+    'ace': {
+        'extract': ('unace',),
+        'test': ('unace',),
+        'list': ('unace',),
+    },
+    'adf': {
+        'extract': ('unadf',),
+        'test': ('unadf',),
+        'list': ('unadf',),
+    },
+    'alzip': {
+        'extract': ('unalz',),
+        'test': ('unalz',),
+        'list': ('unalz',),
+    },
+    'ar': {
+        None: ('ar',),
+    },
+    'arc': {
+        None: ('arc',),
+        'extract': ('nomarch',),
+        'test': ('nomarch',),
+        'list': ('nomarch',),
+    },
+    'arj': {
+        None: ('arj',),
+        'extract': ('7z',),
+        'list': ('7z',),
+        'test': ('7z',),
+    },
+    'cab': {
+        'extract': ('cabextract', '7z'),
+        'create': ('lcab',),
+        'list': ('cabextract', '7z'),
+        'test': ('cabextract', '7z'),
+    },
+    'chm': {
+        'extract': ('archmage', 'extract_chmLib'),
+        'test': ('archmage',),
+    },
+    'compress': {
+        'extract': ('7z', '7za', 'uncompress.real'),
+        'list': ('7z', '7za', 'py_echo',),
+        'test': ('7z', '7za'),
+        'create': ('compress',),
+    },
+    'cpio': {
+        'extract': ('cpio', 'bsdcpio', '7z'),
+        'list': ('cpio', 'bsdcpio', '7z'),
+        'test': ('cpio', 'bsdcpio', '7z',),
+        'create': ('cpio', 'bsdcpio'),
+    },
+    'dms': {
+        'extract': ('xdms',),
+        'list': ('xdms',),
+        'test': ('xdms',),
+    },
+    'iso': {
+        'extract': ('7z',),
+        'list': ('7z', 'isoinfo'),
+        'test': ('7z',),
+        'create': ('genisoimage',),
+    },
+    'lrzip': {
+        'extract': ('lrzip',),
         'list': ('py_echo',),
-        'play': ('sox',)
+        'test': ('lrzip',),
+        'create': ('lrzip',),
+    },
+    'lzh': {
+        None: ('lha',),
+        'extract': ('lhasa',),
+    },
+    'lzip': {
+        'extract': ('plzip', 'lzip', 'clzip', 'pdlzip'),
+        'list': ('py_echo',),
+        'test': ('plzip', 'lzip', 'clzip', 'pdlzip'),
+        'create': ('plzip', 'lzip', 'clzip', 'pdlzip'),
+    },
+    'lzma': {
+        'extract': ('7z', 'lzma', 'xz') + py_lzma,
+        'list': ('7z', 'py_echo'),
+        'test': ('7z', 'lzma', 'xz'),
+        'create': ('lzma', 'xz') + py_lzma,
+    },
+    'rar': {
+        None: ('rar',),
+        'extract': ('unrar', '7z'),
+        'list': ('unrar', '7z'),
+        'test': ('unrar', '7z'),
+    },
+    'rzip': {
+        'extract': ('rzip',),
+        'list': ('py_echo',),
+        'create': ('rzip',),
+    },
+    'shar': {
+        'create': ('shar',),
+        'extract': ('unshar',),
     },
     'shn': {
         'extract': ('shorten',),
         'list': ('py_echo',),
-        'create': ('shorten',)
+        'create': ('shorten',),
+    },
+    'tar': {
+        None: ('tar', 'star', 'bsdtar', 'py_tarfile'),
+    },
+    'vhd': {
+        'extract': ('7z',),
+        'list': ('7z',),
+        'test': ('7z',),
+    },
+    'zip': {
+        None: ('7z', '7za', 'py_zipfile'),
+        'extract': ('unzip',),
+        'list': ('unzip',),
+        'test': ('zip', 'unzip',),
+        'create': ('zip',),
+    },
+    'zpaq': {
+        None: ('zpaq',),
+    },
+    'zoo': {
+        None: ('zoo',),
     }
 }
+
 
 #-----------------------------------------------------------------------
 #
 # Classes
 #
-# AudioFile
-# AudioFiles
+# Archive
+# Archives
 #
 #-----------------------------------------------------------------------
 
+class ArchiveError(OSError):
+    pass
+
 #-----------------------------------------------------------------------
 #
-# Class AudioFile
+# Class Archive
 #
-# This is the base File Class
+# This is the Archive File Class
 #
 # Inputs
 # ------
@@ -130,7 +244,7 @@ ArchivePrograms = {
 #    ...
 #
 #-----------------------------------------------------------------------
-class AudioFile(files.BaseFile):        
+class Archive(files.BaseFile):        
     #-------------------------------------------------------------------
     #
     # Function extract
@@ -202,14 +316,14 @@ class AudioFile(files.BaseFile):
         check_names = files.BaseFiles(filelist = filenames)
         check_names.check_filelist()
         if verbosity >= 0:
-            logger.info("Creating %s ..." % self.filename)
+            logger.info("Creating {self.filename} ...")
             res = _create_archive(self.filename,
                                   filenames,
                                   verbosity=verbosity,
                                   interactive=interactive,
                                   program=program)
             if verbosity >= 0:
-                logger.info("... %s created." % self.filename)
+                logger.info('... {self.filename} created.')
         return res
 
     #-------------------------------------------------------------------
@@ -233,10 +347,11 @@ class AudioFile(files.BaseFile):
     #-------------------------------------------------------------------
     def listfiles(self, verbosity=1, program=None, interactive=True):
         """List given archive."""
-        # Set default verbosity to 1 since the listing output should be visible.
-        util.check_existing_filename(self.filename)
+        # Set default verbosity to 1 since the listing output should
+        # be visible.
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Listing %s ..." % self.filename)
+            logger.info('Listing {self.filename} ...')
             return _handle_archive(self.filename,
                                    'list',
                                    verbosity=verbosity,
@@ -251,11 +366,13 @@ class AudioFile(files.BaseFile):
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self
+    #     @param: verbosity
+    #     @param: interactive
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
@@ -264,10 +381,10 @@ class AudioFile(files.BaseFile):
     #-------------------------------------------------------------------
     def recompress_archive(self, verbosity=0, interactive=True):
         """Recompress an archive to hopefully smaller size."""
-        util.check_existing_filename(self.filename)
-        util.check_writable_filename(self.filename)
+        self.check_existing_filename(self.filename)
+        self.check_writable_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Recompressing %s ..." % (self.filename,))
+            logger.info('Recompressing {self.filename} ...')
         res = _recompress_archive(self.filename,
                                   verbosity=verbosity,
                                   interactive=interactive)
@@ -296,8 +413,8 @@ class AudioFile(files.BaseFile):
     #-------------------------------------------------------------------
     def repack_archive (self, archive_new, verbosity=0, interactive=True):
         """Repack archive to different file and/or format."""
-        util.check_existing_filename(self.filename)
-        util.check_new_filename(archive_new)
+        self.check_existing_filename(self.filename)
+        self.check_new_filename(archive_new)
         if verbosity >= 0:
             logger.info("Repacking %s to %s ..." % (self.filename, archive_new))
         res = _repack_archive(self.filename,
@@ -329,7 +446,7 @@ class AudioFile(files.BaseFile):
     #-------------------------------------------------------------------
     def test_archive(self, verbosity=0, program=None, interactive=True):
         """Test given archive."""
-        util.check_existing_filename(self.filename)
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
             logger.info("Testing %s ..." % self.filename)
         res = _handle_archive(self.filename,
@@ -364,10 +481,11 @@ class AudioFile(files.BaseFile):
     def search(self, pattern, verbosity=0, interactive=True):
         """Search pattern in archive members."""
         if not pattern:
-            raise Exception("empty search pattern")
-        util.check_existing_filename(self.filename)
+            raise ArchiveError("empty search pattern")
+        self.check_existing_filename(self.filename)
         if verbosity >= 0:
-            logger.info("Searching %r in %s ..." % (pattern, self.filename))
+            logger.info("Searching %r in %s ..."
+                        % (pattern, self.filename))
         res = _search_archive(pattern,
                               self.filename,
                               verbosity=verbosity,
@@ -398,7 +516,7 @@ class AudioFile(files.BaseFile):
     #-------------------------------------------------------------------
     def read(self, filename, verbosity=0, interactive=True):
         """Print the content of a file within an archive"""
-        content = 'Audio Read is not implemented'
+        content = 'Archive Read is not implemented'
         raise NotImplementedError
         return content
 
@@ -421,7 +539,7 @@ class AudioFile(files.BaseFile):
 #    ...
 #
 #-----------------------------------------------------------------------
-class AudioFiles(files.BaseFiles):
+class Archives(files.BaseFiles):
     #-------------------------------------------------------------------
     #
     # Function search
@@ -445,8 +563,8 @@ class AudioFiles(files.BaseFiles):
         logger.debug('Begin Function')
 
         """Print differences between two archives."""
-        util.check_existing_filename(self.files[0])
-        util.check_existing_filename(self.files[1])
+        self.check_existing_filename(self.files[0])
+        self.check_existing_filename(self.files[1])
         if verbosity >= 0:
             logger.info("Comparing %s with %s ..." % (self.files[0], self.files[1]))
             res = _diff_archives(self.files,
@@ -462,6 +580,7 @@ class AudioFiles(files.BaseFiles):
 #
 # Functions
 #
+# program_supports_compression
 # find_archive_program
 # _extract_archive
 #
@@ -520,13 +639,13 @@ def program_supports_compression (program, compression):
 def check_archive_format (format_, compression):
     """Make sure format and compression is known."""
     if format_ not in mimetypes.ArchiveFormats:
-        raise Exception("unknown archive format `%s'" % format)
+        raise ArchiveError("unknown archive format `%s'" % format)
     if compression is not None and compression not in mimetypes.ArchiveCompressions:
-        raise Exception("unkonwn archive compression `%s'" % compression)
+        raise ArchiveError("unkonwn archive compression `%s'" % compression)
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function list_formats
 #
 # This is the base File Class
 #
@@ -545,7 +664,7 @@ def check_archive_format (format_, compression):
 #-----------------------------------------------------------------------
 def list_formats ():
     """Print information about available archive formats to stdout."""
-    for format_ in mimetypes.AudioFormats:
+    for format_ in mimetypes.ArchiveFormats:
         print(format_, "files:")
         for command in ArchiveCommands:
             programs = ArchivePrograms[format_]
@@ -555,8 +674,17 @@ def list_formats ():
             try:
                 program = find_archive_program(format_, command)
                 print("   %8s: %s" % (command, program), end=' ')
+                if format_ == 'tar':
+                    encs = [x for x in mimetypes.ArchiveCompressions if util.find_program(x)]
+                    if encs:
+                        print("(supported compressions: %s)" % ", ".join(encs), end=' ')
+                elif format_ == '7z':
+                    if p7zip_supports_rar():
+                        print("(rar archives supported)", end=' ')
+                    else:
+                        print("(rar archives not supported)", end=' ')
                 print()
-            except Exception:
+            except ArchiveError as msg:
                 # display information what programs can handle this archive format
                 handlers = programs.get(None, programs.get(command))
                 print("   %8s: - (no program found; install %s)" %
@@ -585,11 +713,11 @@ def get_archive_format (filename):
     """Detect filename archive format and optional compression."""
     mime, compression = mimetypes.guess_type(filename)
     if not (mime or compression):
-        raise Exception("unknown archive format for file `%s'" % filename)
+        raise ArchiveError("unknown archive format for file `%s'" % filename)
     if mime in mimetypes.ArchiveMimetypes:
         format_ = mimetypes.ArchiveMimetypes[mime]
     else:
-        raise Exception("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
+        raise ArchiveError("unknown archive format for file `%s' (mime-type is `%s')" % (filename, mime))
     if format_ == compression:
         # file cannot be in same format compressed
         compression = None
@@ -659,7 +787,7 @@ def find_archive_program (format_, command, program=None):
         if key in commands:
             programs.extend(commands[key])
     if not programs:
-        raise Exception("%s archive format `%s' is not supported" % (command, format))
+        raise ArchiveError("%s archive format `%s' is not supported" % (command, format))
     # return the first existing program
     for program in programs:
         if program.startswith('py_'):
@@ -671,7 +799,8 @@ def find_archive_program (format_, command, program=None):
                 continue
             return exe
     # no programs found
-    raise Exception("could not find an executable program to %s format %s; candidates are (%s)," % (command, format, ",".join(programs)))
+    raise ArchiveError("could not find an executable program to %s format %s; candidates are (%s),"
+                       % (command, format, ",".join(programs)))
 
 #-----------------------------------------------------------------------
 #
@@ -705,7 +834,7 @@ def check_program_compression(archive, command, program, compression):
             comp_prog = find_archive_program(compression, comp_command)
             if not comp_prog:
                 msg = "cannot %s archive `%s': compression `%s' not supported"
-                raise util.PatoolError(msg % (command, archive, compression))
+                raise ArchiveError(msg % (command, archive, compression))
 
 #-----------------------------------------------------------------------
 #
@@ -792,7 +921,6 @@ def rmtree_log_error (func, path, exc):
     """Error function for shutil.rmtree(). Raises a PatoolError."""
     msg = "Error in %s(%s): %s" % (func.__name__, path, str(exc[1]))
     logger.error(msg)
-
 
 #-----------------------------------------------------------------------
 #
@@ -937,7 +1065,7 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
         format, compression = get_archive_format(archive)
     check_archive_format(format, compression)
     if command not in ('list', 'test'):
-        raise Exception("invalid archive command `%s'" % command)
+        raise ArchiveError("invalid archive command `%s'" % command)
     program = find_archive_program(format, command, program=program)
     check_program_compression(archive, command, program, compression)
     get_archive_cmdlist = util.get_module_func(scmd='util_archive',
@@ -974,7 +1102,7 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
 def _diff_archives (archives, verbosity=0, interactive=True):
     """Show differences between two archives.
     @return 0 if archives are the same, else 1
-    @raises: PatoolError on errors
+    @raises: ArchiveError on errors
     """
 
     files = files.Files(archives)
@@ -983,7 +1111,7 @@ def _diff_archives (archives, verbosity=0, interactive=True):
     diff = util.find_program("diff")
     if not diff:
         msg = "The diff(1) program is required for showing archive differences, please install it."
-        raise Exception(msg)
+        raise ArchiveError(msg)
     tmpdir1 = files.BaseDirectory.tmpdir()
     try:
         path1 = _extract_archive(archive1, outdir=tmpdir1, verbosity=-1)
@@ -998,7 +1126,7 @@ def _diff_archives (archives, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _recompress_archive
 #
 # This is the base File Class
 #
@@ -1170,7 +1298,7 @@ def _search_archive(pattern, archive, verbosity=0, interactive=True):
     grep = util.find_program("grep")
     if not grep:
         msg = "The grep(1) program is required for searching archive contents, please install it."
-        raise Exception(msg)
+        raise ArchiveErrors(msg)
     tmpdir = util.tmpdir()
     try:
         path = _extract_archive(archive, outdir=tmpdir, verbosity=-1)

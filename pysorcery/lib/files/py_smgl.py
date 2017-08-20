@@ -51,7 +51,7 @@ import os
 # System Library Overrides
 from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery.lib.util import files
+from pysorcery.lib import files
 # Other Optional Libraries
 
 

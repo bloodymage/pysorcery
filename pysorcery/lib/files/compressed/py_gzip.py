@@ -19,7 +19,7 @@ from __future__ import absolute_import
 # now gzip refers to the Python standard module, not the local one
 import gzip
 
-from pysorcery.lib.util import files
+from pysorcery.lib import files
 
 READ_SIZE_BYTES = 1024*1024
 

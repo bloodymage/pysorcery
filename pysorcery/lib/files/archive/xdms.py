@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the xdms program."""
-from pysorcery.lib.util.files import archive
+from pysorcery.lib.files import archive
 
 class XdmsError(archive.ArrhiveError):
     pass

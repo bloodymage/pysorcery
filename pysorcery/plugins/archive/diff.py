@@ -39,7 +39,7 @@
 #
 #-----------------------------------------------------------------------
 """
-Plugin: Diff
+pyArchive: Diff
 
 This plugin provides the ability to compare archive and compressed files.
 """
@@ -67,7 +67,7 @@ from pysorcery import lib
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+from pysorcery.lib.files import archive
 
 # Conditional Libraries
 

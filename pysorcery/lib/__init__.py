@@ -51,11 +51,11 @@ from pysorcery.lib.system import mimetypes
 # Other Application Libraries
 from pysorcery.lib.sorcery import apt
 from pysorcery.lib.sorcery import smgl
-from pysorcery.lib.util import files
-from pysorcery.lib.util.files import archive
-from pysorcery.lib.util.files import audio
-from pysorcery.lib.util.files import compressed
-from pysorcery.lib.util.files import package
+from pysorcery.lib import files
+from pysorcery.lib.files import archive
+from pysorcery.lib.files import audio
+from pysorcery.lib.files import compressed
+from pysorcery.lib.files import package
 
 # Conditional Libraries
 

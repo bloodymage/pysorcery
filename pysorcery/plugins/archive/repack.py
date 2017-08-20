@@ -25,25 +25,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
-#
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
-#
-# Plugin: Repack
+# pyArchive: Repack
 #
 #   Repacks an archive file from one format to another.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
-Plugin: Repack
+pyArchive: Repack
 
 Repacks an archive file from one format to another.
 """
@@ -72,7 +60,7 @@ from pysorcery import lib
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+from pysorcery.lib.files import archive
 # Conditional Libraries
 
 

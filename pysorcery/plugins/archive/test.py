@@ -10,7 +10,7 @@
 #
 # This file is part of Sorcery.
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/plugins/archive/test.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -38,12 +38,7 @@
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
-
-Plugin: Test
+pyArchive: Test
 
 This plugin checks to ensure an archive file is valid.
 """
@@ -72,7 +67,7 @@ from pysorcery import lib
 from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
-from pysorcery.lib.util.files import archive
+from pysorcery.lib.files import archive
 
 # Conditional Libraries
 

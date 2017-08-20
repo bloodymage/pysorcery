@@ -16,7 +16,7 @@
 """Archive commands for the rpm2cpio program."""
 import os
 from pysorcery.lib import util
-from pysorcery.lib.util.files import archive
+from pysorcery.lib.files import archive
 
 class RPM2CpioError(archive.ArchiveError):
     pass

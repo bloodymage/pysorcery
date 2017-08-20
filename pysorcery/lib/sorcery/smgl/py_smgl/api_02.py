@@ -1,3 +1,4 @@
+
 #! /usr/bin/env python3
 #-----------------------------------------------------------------------
 #
@@ -50,9 +51,9 @@ import os
 from pysorcery.lib import logging
 # Other Application Libraries
 from pysorcery.lib.sorcery import smgl
-from pysorcery.lib.util import files
+from pysorcery.lib import files
 from pysorcery.lib.util import config
-from pysorcery.lib.util.files import compressed
+from pysorcery.lib.files import compressed
 
 # Conditional Libraries
 

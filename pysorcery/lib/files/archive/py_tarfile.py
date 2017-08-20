@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the tarfile Python module."""
 from pysorcery.lib import util
-from pysorcery.lib.util.files import archive
-from pysorcery.lib.util.files.compression import py_lzma
+from pysorcery.lib.files import archive
+from pysorcery.lib.files.compression import py_lzma
 import tarfile
 
 READ_SIZE_BYTES = 1024*1024
