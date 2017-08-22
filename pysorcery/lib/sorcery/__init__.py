@@ -103,6 +103,7 @@ Programs = {
             'get_log': ('py_smgl',),
             'get_sources': ('gaze',),
             'get_source_uris': ('gaze',),
+            'get_depends': ('gaze',),
         },
         'spellversions': {
         },
@@ -564,6 +565,29 @@ class BasePackage:
     def get_source_uris(self):
         self.source_uris = self.get_info('get_source_uris')
         return self.source_uris
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_depends
+    #
+    # Get a tree of spells a spell depends on.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_depends(self):
+        depends = self.get_info('get_depends')
+        return depends
 
     #-------------------------------------------------------------------
     #
