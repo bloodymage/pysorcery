@@ -133,3 +133,28 @@ def get_repositories(*args, **kwargs):
                         repositories.append(repo)
 
     return repositories, None
+
+
+#-----------------------------------------------------------------------
+#
+# Function get_repositories
+#
+# Inputs
+# ------
+#    @param: 
+#
+# Returns
+# -------
+#    @return: repositories
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_depends(name, *args, **kwargs):
+    var = subprocess.check_output(['apt-cache', 'depends', name])
+    depends = []
+    for line in var.splitlines():
+        depends.append(str(line).split("'")[1])
+    return depends

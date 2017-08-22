@@ -139,6 +139,7 @@ Programs = {
             'is_package': ('py_apt',),
             'read_file': ('apt',),
             'install' : ('apt', 'apt-get'),
+            'get_depends': ('apt-cache',),
         },
         'packageversions' : {
         },
