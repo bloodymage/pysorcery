@@ -8,7 +8,7 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# File: pysorcery/plugins/gaze/what.py
+# File: pysorcery/plugins/gaze/depends.py
 #
 # This file is part of Sorcery.
 #
@@ -25,15 +25,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyGaze: what
+# pyGaze: depends
 #
-#    View the long package description.
+#    ...
 #
 #-----------------------------------------------------------------------
 """
-pyGaze: what
+pyGaze: depends
 
-View the long package description
+
+...
 """
 #-----------------------------------------------------------------------
 #
@@ -41,8 +42,7 @@ View the long package description
 #
 #-----------------------------------------------------------------------
 # System Libraries
-import os
-import sys
+
 
 # 3rd Party Libraries
 
@@ -78,71 +78,43 @@ colortext = text.ConsoleText()
 #
 # Functions
 #
-# gaze_what
+# gaze_depends
 # parser
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 #
-# Function gaze_what
+# Function gaze_depends
 #
-# View the long package description
+# shows the spells that explicitly or recursively depend on this
+# installed spell.  Up to level $level if specified. Only enabled
+# dependencies are shown.
 #
-# Inputs
-# ------
-#    @param: args
-#            args.spell    - List of spells to get description.
-#                            Minimum 1
-#            args.grimoire - Grimoire(s) to check for spell
-#            args.quiet    - Limit print output
+# If --fast is specified more limited output is produced, but it run
+#s much faster.
+# If --required is specified only the required dependencies are shown and the
+# runtime ones are skipped.
 #
-# Returns
-# -------
-#    @return: None
+# Input:  args
+#         args.spell - Spell to print compile log.
+#                      Maximum 1
+#         args.quiet - decrease verbosity
+# Output:
+# Return: None
 #
-# Raises
-# ------
-#    ...
+# Status: Not implimented
 #
-#-----------------------------------------------------------------------
-def gaze_what(args):
+#-------------------------------------------------------------------------------
+def gaze_depends(args):
     logger.debug('Begin Function')
 
-    # Misc fun ...
-    terms = {
-        'the_force': 'The Force is an energy field created by all living things. It surrounds us, penetrates us, and binds the galaxy together.',
-        '42': '42 is the answer to life, the universe, and everything.',
-        'the_matrix': '"The Matrix is everywhere. It is all around us, even now in this very room. You can see it when you look out your window or when you turn on your television. You can feel it when you go to work, when you go to church, when you pay your taxes; it is the world that has been pulled over your eyes to blind you from the truth."'
-        
-    }
+    spell = lib.Package(args.spell[0])
+    depends = spell.get_depends()
 
-    # Provide hidden easter egg:
-    if (args.spell[0] == 'is' and
-        args.spell[1] in terms):
-        logger.info(terms[args.spell[1]])
-        
-    else:
-        # For each spell in the spell list...
-        for i in args.spell:
-            logger.debug2('Loop iteration: ' + i)
-            
-            spell = lib.Package(i)
-            description = spell.get_description()
-#            try:
-#                description = spell.get_description()
-#            except:
-#                description = 'Fall back description, something went wrong'
+    for dep in depends:
+        print(dep)
 
-            logger.debug3('Spell: ' + str(spell))
-            
-            message = colortext.colorize(spell.name, 'bold','white','black')
-            logger.info(message)
-
-            message = colortext.colorize(description, 'none','white','black')
-            logger.info1(message)
-
-    
     logger.debug('End Function')
     return
 
@@ -173,14 +145,24 @@ def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
 
-    cmd = subparsers.add_parser('what',
+    cmd_help = 'shows the spells that explicitly or recursively depend on this installed spell.  Only enabled dependencies are shown.'
+    cmd = subparsers.add_parser('depends',
                                 parents = parent_parsers,
-                                help = 'Display spell description.'
+                                help = cmd_help
     )
     cmd.add_argument('spell',
-                     nargs = '+',
+                     nargs = 1,
                      help = 'Display System Info')
-    cmd.set_defaults(func = gaze_what,
+    cmd.add_argument('level',
+                     nargs = '?',
+                     help='Up to level $level if specified')
+    cmd.add_argument('--fast',
+                     action = 'store_true',
+                     help = 'Limit output, but runs much faster.')
+    cmd.add_argument('--required',
+                     action = 'store_true',
+                     help = 'Show only the required dependencies and skip the runtime dependencies.')
+    cmd.set_defaults(func = gaze_depends,
                      sudo = False)
 
     return cmd

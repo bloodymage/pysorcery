@@ -73,146 +73,6 @@ logger = logging.getLogger(__name__)
 #
 #-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-#
-# Class Spell
-# 
-# ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class Spell():
-    pass
-    
-#-----------------------------------------------------------------------
-#
-# Class Spells
-# 
-# ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class Spells():
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class Spells
-# 
-# ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class SpellVersions():
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class Section
-# 
-# ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class Section():
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class Sections
-# 
-# ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class Sections():
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class Grimoire
-# 
-# Grimoire ...
-#
-# Inputs
-# ------
-#    @param: name
-#
-# Returns
-# -------
-#    @return: version
-#
-# Raises
-# ------
-#    ...
-#
-#-----------------------------------------------------------------------
-class Grimoire():
-    pass
-
-#-----------------------------------------------------------------------
-#
-# Class Codex
-# 
-#
-#-----------------------------------------------------------------------
-class Codex():
-    pass
 
 #-----------------------------------------------------------------------
 #
@@ -390,3 +250,47 @@ def get_source_uris(spell, **kwargs):
     logger.debug2(source_uris)
     logger.debug('End Function')
     return source_uris
+
+#-----------------------------------------------------------------------
+#
+# Function get_description
+#
+# Gets a spell's description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_depends(name, **kwargs):
+    try:
+        print(name)
+        var = subprocess.check_output(['gaze',
+                                       'depends',
+                                       name])
+
+        depends = []
+        for line in var.splitlines():
+            tmpline = str(line).split("'")[1]
+            name = tmpline.split(':')[0]
+            depends.append(name)
+
+        return depends
+
+    except subprocess.CalledProcessError as e:
+        logger.error(e.output)
+        tmpline = str(e.output).split("'")[1]
+        name = tmpline.split(':')[0]
+        depends = [name]
+        return depends
+    finally:
+        pass
+
