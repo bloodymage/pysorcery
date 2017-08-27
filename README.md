@@ -28,12 +28,12 @@ Incorporates ledger directly into sorcery
 ### pyupstream (I need a new Name)
 This program checks upstream versions of software.  Alt generates a new grimoire (Repository) with the latest version on the software.  If using the '--debian' switch will check the version of software in the debian sid repository.
 
-
 ### pycauldron
 Create Custom Install Disks
 
 ### pyenchant
 ...
+
 
 ## The Commands
 
@@ -93,12 +93,13 @@ Downloads spell source files.
 ### pyvcast
 
 ### pyxsorcery
-
 Menu-driven software package management utility
+
 
 ## Supported Distros
 - Source Mage (Tested using python 3.6.1)
 - Ubuntu (Tested on X-Ubuntu 16.04 LTS using python 3.5)
+
 
 ## Further information:
 - [Roadmap](ROADMAP.md)

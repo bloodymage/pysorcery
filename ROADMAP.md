@@ -34,7 +34,7 @@
     - [ ] checkmd5s
     - [X] compile
     - [ ] dependencies
-    - [ ] depends
+    - [X] depends
     - [ ] export
     - [X] from
     - [ ] grimoire
@@ -78,7 +78,8 @@
     - [X] read (for compressed files, ex. txtfile.gz)
 #### Other
 - Begin implementation of multiple smgl api versions.
-  
+- Pretty print capability
+
 ### 0.0.3
 #### Functional Scripts
 - pysummon
@@ -114,13 +115,21 @@
 
 ### 0.0.5
 #### Functional Scripts
+- pyscribbler
+  - Functions
+    - [ ] add
+    - [ ] remove
+    - [ ] add-grimoire
+
+### 0.0.6
+#### Functional Scripts
 - pycast
 #### Modified scripts
 - pyarchive
   - Functions
     - [ ] delete (file from archive)
     
-### 0.0.6
+### 0.0.7
 #### Functional Scripts
 - pydispel
 #### Modified scripts
@@ -128,17 +137,9 @@
   - Functions
     - [ ] update
 
-### 0.0.7
-#### Functional Scripts
-- pycleanse
-
 ### 0.0.8
 #### Functional Scripts
-- pyscribbler
-  - Functions
-    - [ ] add
-    - [ ] remove
-    - [ ] add-grimoire
+- pycleanse
 
 ### 0.0.9
 #### Functional Scripts
@@ -274,6 +275,7 @@
 ### 0.1.2
 ####
 - Maximize native python code (minimize calls to outside programs).
+- If sorcery needs outside program for a feature, create option to install.
 
 ### 0.1.3
 - Ensure proper exception handling

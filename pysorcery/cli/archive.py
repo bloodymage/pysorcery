@@ -55,19 +55,13 @@ import os
 import sys
 
 # 3rd Party Libraries
-try:
-    # to all bash completion, doesn't seem to work
-    import argcomplete 
-    BASHCOMPLETE = True
-except ImportError as msg:
-    BASHCOMPLETE = False
-    
+
+
 # Application Libraries
 # System Library Overrides
 from pysorcery.lib.system import argparse
 from pysorcery.lib.system import logging
 from pysorcery.lib.system import mimetypes
-
 # Other Application Libraries
 from pysorcery import *
 from pysorcery import lib
@@ -75,6 +69,14 @@ from pysorcery.lib import util
 from pysorcery.lib.util import config
 from pysorcery.lib.util import text
 from pysorcery.lib.files import archive
+
+# Conditional Libraries
+try:
+    # to all bash completion, doesn't seem to work
+    import argcomplete 
+    BASHCOMPLETE = True
+except ImportError as msg:
+    BASHCOMPLETE = False
 
 #-----------------------------------------------------------------------
 #
@@ -153,7 +155,7 @@ Report bugs to ...
         subcommand(subparsers, parent_parser)
 
     # This doesn't work...
-    if BASHCOMPLETE:
+    if BASHCOMPLETE is True:
         argcomplete.autocomplete(parser)
     #
     args = parser.parse_args()
