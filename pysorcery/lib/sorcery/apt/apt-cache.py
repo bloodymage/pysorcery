@@ -158,3 +158,27 @@ def get_depends(name, *args, **kwargs):
     for line in var.splitlines():
         depends.append(str(line).split("'")[1])
     return depends
+
+#-----------------------------------------------------------------------
+#
+# Function get_repositories
+#
+# Inputs
+# ------
+#    @param: 
+#
+# Returns
+# -------
+#    @return: repositories
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_dependencies(name, *args, **kwargs):
+    var = subprocess.check_output(['apt-cache', 'rdepends', name])
+    depends = []
+    for line in var.splitlines():
+        depends.append(str(line).split("'")[1])
+    return depends

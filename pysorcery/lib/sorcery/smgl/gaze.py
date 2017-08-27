@@ -294,3 +294,46 @@ def get_depends(name, **kwargs):
     finally:
         pass
 
+    #-----------------------------------------------------------------------
+#
+# Function get_description
+#
+# Gets a spell's description.
+#
+# Inputs
+# ------
+#    @param: name
+#
+# Returns
+# -------
+#    @return: description
+#
+# Raises
+# ------
+#    ...
+#
+#-----------------------------------------------------------------------
+def get_dependencies(name, **kwargs):
+    try:
+        print(name)
+        var = subprocess.check_output(['gaze',
+                                       'dependencies',
+                                       name])
+
+        depends = []
+        for line in var.splitlines():
+            tmpline = str(line).split("'")[1]
+            name = tmpline.split(':')[0]
+            depends.append(name)
+
+        return depends
+
+    except subprocess.CalledProcessError as e:
+        logger.error(e.output)
+        tmpline = str(e.output).split("'")[1]
+        name = tmpline.split(':')[0]
+        depends = [name]
+        return depends
+    finally:
+        pass
+

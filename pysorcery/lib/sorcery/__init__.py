@@ -104,6 +104,7 @@ Programs = {
             'get_sources': ('gaze',),
             'get_source_uris': ('gaze',),
             'get_depends': ('gaze',),
+            'get_dependencies': ('gaze',),
         },
         'spellversions': {
         },
@@ -140,6 +141,7 @@ Programs = {
             'read_file': ('apt',),
             'install' : ('apt', 'apt-get'),
             'get_depends': ('apt-cache',),
+            'get_dependencies': ('apt-cache',),
         },
         'packageversions' : {
         },
@@ -589,6 +591,29 @@ class BasePackage:
     def get_depends(self):
         depends = self.get_info('get_depends')
         return depends
+
+    #-------------------------------------------------------------------
+    #
+    # Function get_depends
+    #
+    # Get a tree of spells a spell depends on.
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #
+    # Returns
+    # -------
+    #    @return: results
+    #
+    # Raises
+    # ------
+    #    ...
+    #
+    #-------------------------------------------------------------------
+    def get_dependencies(self):
+        dependencies = self.get_info('get_dependencies')
+        return dependencies
 
     #-------------------------------------------------------------------
     #
