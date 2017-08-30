@@ -78,6 +78,7 @@ __all__ = ['__author__',
            '__version__',
            'DEBUG'
            ]
+
 __author__ = 'Geoff S Derber'
 __contact__ = 'gd.smlinux@gmail.com'
 __copyright__ = 2017
@@ -90,7 +91,6 @@ __version__ = 'HEAD'
 # Libraries
 #
 #-----------------------------------------------------------------------
-
 # System Libraries
 
 

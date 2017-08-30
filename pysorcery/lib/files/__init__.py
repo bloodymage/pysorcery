@@ -10,6 +10,9 @@
 #
 # This file is part of Sorcery.
 #
+# Additional code from 'patool'
+# Copyright (C) 2010-2015 Bastian Kleineidam
+#
 # File: pysorcery/lib/util/files/__init__.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify

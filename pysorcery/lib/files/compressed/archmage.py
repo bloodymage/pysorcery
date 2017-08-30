@@ -8,12 +8,12 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# This file is part of Sorcery.
-#
 # Additional code from 'patool'
 # Copyright (C) 2010-2015 Bastian Kleineidam
 #
-# File: pysorcery/lib/util/files/archive/arc.py
+# This file is part of Sorcery.
+#
+# File: pysorcery/lib/util/files/archive/archmage.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -29,16 +29,17 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Archive: Arc
+# Archive: Archmage
 #
-#    Archive commands for the arc program.
+#    Archive commands for the archmage program.
 #
 #-----------------------------------------------------------------------
 """
-Archive: Arc
+Archive: Archmage
 
-Archive commands for the arc program.
+Archive commands for the archmage program.
 """
+
 #-----------------------------------------------------------------------
 #
 # Libraries
@@ -52,7 +53,7 @@ import os
 
 # Application Libraries
 # System Library Overrides
-
+from .. import util
 # Other Application Libraries
 
 
@@ -80,16 +81,14 @@ logger = logging.getLogger(__name__)
 #
 # Functions
 #
-# extract_arc
-# list_arc
-# test_arc
-# create_arc
+# extract_chm
+# test_chm
 #
 #-------------------------------------------------------------------
 
 #-------------------------------------------------------------------
 #
-# Function extract_arc
+# Function extract_chm
 #
 # Extract a CHM archive.
 #
@@ -111,26 +110,28 @@ logger = logging.getLogger(__name__)
 #    ...
 #
 #-------------------------------------------------------------------
-def extract_arc (archive, compression, cmd, verbosity, interactive, outdir):
-    """Extract a ARC archive."""
-    # Since extracted files will be placed in the current directory,
-    # the cwd argument has to be the output directory.
-    cmdlist = [cmd, 'x', os.path.abspath(archive)]
-    return (cmdlist, {'cwd': outdir})
+def extract_chm (archive, compression, cmd, verbosity, interactive, outdir):
+    """Extract a CHM archive."""
+    # archmage can only extract in non-existing directories
+    # so a nice dirname is created
+    name = util.get_single_outfile("", archive)
+    outfile = os.path.join(outdir, name)
+    return [cmd, '-x', os.path.abspath(archive), outfile]
+
 
 #-------------------------------------------------------------------
 #
-# Function list_arc
+# Function test_chm
 #
-# List a ARC archive.
+# Test a CHM archive.
 #
 # Inputs
 # ------
-#    @param: archive
-#    @param: compression
-#    @param: cmd
-#    @param: verbosity
-#    @param: interactive
+#    @param: archive     -
+#    @param: compression -
+#    @param: cmd         -
+#    @param: verbosity   -
+#    @param: interactive -
 #
 # Returns
 # -------
@@ -141,69 +142,6 @@ def extract_arc (archive, compression, cmd, verbosity, interactive, outdir):
 #    ...
 #
 #-------------------------------------------------------------------
-def list_arc (archive, compression, cmd, verbosity, interactive):
-    """List a ARC archive."""
-    cmdlist = [cmd]
-    if verbosity > 1:
-        cmdlist.append('v')
-    else:
-        cmdlist.append('l')
-    cmdlist.append(archive)
-    return cmdlist
-
-#-------------------------------------------------------------------
-#
-# Function test_arc
-#
-# Test a ARC archive.
-#
-# Inputs
-# ------
-#    @param: archive
-#    @param: compression
-#    @param: cmd
-#    @param: verbosity
-#    @param: interactive
-#
-# Returns
-# -------
-#    @return: 
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------
-def test_arc (archive, compression, cmd, verbosity, interactive):
-    """Test a ARC archive."""
-    return [cmd, 't', archive]
-
-#-------------------------------------------------------------------
-#
-# Function create_arc
-#
-# Create a ARC archive.
-#
-# Inputs
-# ------
-#    @param: archive
-#    @param: compression
-#    @param: cmd
-#    @param: verbosity
-#    @param: interactive
-#    @param: filenames
-#
-# Returns
-# -------
-#    @return: 
-#
-# Raises
-# ------
-#    ...
-#
-#-------------------------------------------------------------------
-def create_arc (archive, compression, cmd, verbosity, interactive, filenames):
-    """Create a ARC archive."""
-    cmdlist = [cmd, 'a', archive]
-    cmdlist.extend(filenames)
-    return cmdlist
+def test_chm (archive, compression, cmd, verbosity, interactive):
+    """Test a CHM archive."""
+    return [cmd, '-d', os.path.abspath(archive)]
