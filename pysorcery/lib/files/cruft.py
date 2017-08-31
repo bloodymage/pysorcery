@@ -40,9 +40,7 @@ Apt:
 #-----------------------------------------------------------------------
 
 # System Libraries
-import sys
 import subprocess
-import os
 
 # 3rd Party Libraries
 
@@ -67,13 +65,6 @@ logger = logging.getLogger(__name__)
 #
 # Classes
 #
-# AptPackage
-# AptPackageVersions
-# AptPackages
-# AptSection
-# AptSections
-# AptRepository
-# AptRepositories
 #
 #-----------------------------------------------------------------------
 
@@ -82,21 +73,13 @@ logger = logging.getLogger(__name__)
 #
 # Functions
 #
-# get_description
-# get_version
-# get_url
-# get_short
-# get_section
-# read_file
-# is_package
-# get_license
-# get_size
+# get_alien
 #
 #-----------------------------------------------------------------------
 
 #---------------------------------------------------------------
 #
-# Function get_orphans
+# Function get_alien
 #
 # ...
 #
