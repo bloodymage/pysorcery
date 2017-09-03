@@ -33,7 +33,7 @@
     - [X] alien
     - [ ] checkmd5s
     - [X] compile
-    - [ ] dependencies
+    - [X] dependencies
     - [X] depends
     - [ ] export
     - [X] from

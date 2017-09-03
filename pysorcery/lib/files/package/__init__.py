@@ -29,7 +29,7 @@
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# This implements the archive classes
+# This implements the packages file classes
 #
 # ...
 #

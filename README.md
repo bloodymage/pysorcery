@@ -32,7 +32,7 @@ This program checks upstream versions of software.  Alt generates a new grimoire
 Create Custom Install Disks
 
 ### pyenchant
-...
+SMGL installation program
 
 
 ## The Commands
@@ -73,7 +73,10 @@ retrieve snap shots of currently installed packages for easy
 duplication.
 
 
-Major changes: Removed prune (This was depreciated sometime between 2001-2005)
+Major changes:
+- Removed prune (This was depreciated sometime between 2001-2005)
+- 'gaze grimoire' and 'gaze html' includes a switch '--...' that will put the different grimoires in columns for comparing spell versions that exist in multiple grimoires.
+- 
 
 ### pyressurect
 Installs software packages from cache tarballs.
@@ -96,10 +99,29 @@ Downloads spell source files.
 Menu-driven software package management utility
 
 
+## Supported Package Managers
+- Sorcery
+- Apt
+- Yum
+- Pacman
+- Ebuild
+- Lunar (name?)
+
+
 ## Supported Distros
 - Source Mage (Tested using python 3.6.1)
 - Ubuntu (Tested on X-Ubuntu 16.04 LTS using python 3.5)
+- Kali (Tested ...)
+- 
 
+## Themes
+Themes allows alternate names for commands on the cli
+- Sorcery (remove 'py' from names, this conflicts with Source Mage's sorcery)
+- Harry Potter
+  - pysummon = achio
+  - ...
+- Lunar (An attempt to try and unify lunar and sorcery development, with themes for each distribution).
+  - ...
 
 ## Further information:
 - [Roadmap](ROADMAP.md)
