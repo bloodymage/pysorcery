@@ -29,7 +29,7 @@
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# This implements the archive classes
+# This implements the video
 #
 # ...
 #
@@ -70,194 +70,25 @@ from pysorcery.lib import files
 logger = logging.getLogger(__name__)
 
 # Supported archive commands
-ArchiveCommands = ('list', 'extract', 'test', 'create')
+ArchiveCommands = ('list', 'extract', 'test', 'create', 'play')
 
 # List of programs supporting the given archive format and command.
 # If command is None, the program supports all commands (list, extract, ...)
 # Programs starting with "py_" are Python modules.
 ArchivePrograms = {
-    'ace': {
-        'extract': ('unace',),
-        'test': ('unace',),
-        'list': ('unace',),
+    'mkv': {
+        'extract': ('handbrake',),
+        'test': ('mkvinfo',),
+        'list': ('mkvinfo',),
     },
-    'adf': {
-        'extract': ('unadf',),
-        'test': ('unadf',),
-        'list': ('unadf',),
-    },
-    'alzip': {
-        'extract': ('unalz',),
-        'test': ('unalz',),
-        'list': ('unalz',),
-    },
-    'ape': {
-        'create': ('mac',),
-        'extract': ('mac',),
-        'list': ('py_echo',),
-        'test': ('mac',),
-    },
-    'ar': {
-        None: ('ar',),
-    },
-    'arc': {
-        None: ('arc',),
-        'extract': ('nomarch',),
-        'test': ('nomarch',),
-        'list': ('nomarch',),
-    },
-    'bzip2': {
-        None: ('7z', '7za'),
-        'extract': ('pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
-        'test': ('pbzip2', 'lbzip2', 'bzip2'),
-        'create': ('pbzip2', 'lbzip2', 'bzip2', 'py_bz2'),
-        'list': ('py_echo'),
-    },
-    'cab': {
-        'extract': ('cabextract', '7z'),
-        'create': ('lcab',),
-        'list': ('cabextract', '7z'),
-        'test': ('cabextract', '7z'),
-    },
-    'chm': {
-        'extract': ('archmage', 'extract_chmLib'),
-        'test': ('archmage',),
-    },
-    'flac': {
-        'extract': ('flac',),
-        'test': ('flac',),
-        'create': ('flac',),
-        'list': ('py_echo',),
-    },
-    'tar': {
-        None: ('tar', 'star', 'bsdtar', 'py_tarfile'),
-    },
-    'zip': {
-        None: ('7z', '7za', 'py_zipfile'),
-        'extract': ('unzip',),
-        'list': ('unzip',),
-        'test': ('zip', 'unzip',),
-        'create': ('zip',),
-    },
-    'gzip': {
-        None: ('7z', '7za', 'pigz', 'gzip'),
-        'extract': ('py_gzip',),
-        'create': ('zopfli', 'py_gzip'),
-    },
-    'iso': {
-        'extract': ('7z',),
-        'list': ('7z', 'isoinfo'),
-        'test': ('7z',),
-        'create': ('genisoimage',),
-    },
-    'lzh': {
-        None: ('lha',),
-        'extract': ('lhasa',),
-    },
-    'lzip': {
-        'extract': ('plzip', 'lzip', 'clzip', 'pdlzip'),
-        'list': ('py_echo',),
-        'test': ('plzip', 'lzip', 'clzip', 'pdlzip'),
-        'create': ('plzip', 'lzip', 'clzip', 'pdlzip'),
-    },
-    'lrzip': {
-        'extract': ('lrzip',),
-        'list': ('py_echo',),
-        'test': ('lrzip',),
-        'create': ('lrzip',),
-    },
-    'compress': {
-        'extract': ('gzip', '7z', '7za', 'uncompress.real'),
-        'list': ('7z', '7za', 'py_echo',),
-        'test': ('gzip', '7z', '7za'),
-        'create': ('compress',),
-    },
-    '7z': {
-        None: ('7z', '7za', '7zr'),
-    },
-    'rar': {
-        None: ('rar',),
-        'extract': ('unrar', '7z'),
-        'list': ('unrar', '7z'),
-        'test': ('unrar', '7z'),
-    },
-    'arj': {
-        None: ('arj',),
-        'extract': ('7z',),
-        'list': ('7z',),
-        'test': ('7z',),
-    },
-    'cpio': {
-        'extract': ('cpio', 'bsdcpio', '7z'),
-        'list': ('cpio', 'bsdcpio', '7z'),
-        'test': ('cpio', 'bsdcpio', '7z',),
-        'create': ('cpio', 'bsdcpio'),
-    },
-    'rpm': {
-        'extract': ('rpm2cpio', '7z'),
-        'list': ('rpm', '7z', '7za'),
-        'test': ('rpm', '7z'),
-    },
-    'deb': {
-        'extract': ('dpkg-deb', '7z'),
-        'list': ('dpkg-deb', '7z'),
-        'test': ('dpkg-deb', '7z'),
-    },
-    'dms': {
-        'extract': ('xdms',),
-        'list': ('xdms',),
-        'test': ('xdms',),
-    },
-    'lzop': {
-        None: ('lzop',),
-    },
-    'lzma': {
-        'extract': ('7z', 'lzma', 'xz') + py_lzma,
-        'list': ('7z', 'py_echo'),
-        'test': ('7z', 'lzma', 'xz'),
-        'create': ('lzma', 'xz') + py_lzma,
-    },
-    'rzip': {
-        'extract': ('rzip',),
-        'list': ('py_echo',),
-        'create': ('rzip',),
-    },
-    'shar': {
-        'create': ('shar',),
-        'extract': ('unshar',),
-    },
-    'shn': {
-        'extract': ('shorten',),
-        'list': ('py_echo',),
-        'create': ('shorten',),
-    },
-    'vhd': {
-        'extract': ('7z',),
-        'list': ('7z',),
-        'test': ('7z',),
-    },
-    'xz': {
-        None: ('xz', '7z'),
-        'extract': py_lzma,
-        'create': py_lzma,
-    },
-    'zoo': {
-        None: ('zoo',),
-    },
-    'zpaq': {
-        None: ('zpaq',),
+    'mp4': {
+        'extract': ('handbrake',),
     },
 }
 
 # List those programs that have different python module names because of
 # Python module naming restrictions.
 ProgramModules = {
-    '7z': 'p7zip',
-    '7za': 'p7azip',
-    '7zr': 'p7rzip',
-    'uncompress.real': 'uncompress',
-    'dpkg-deb': 'dpkg',
-    'extract_chmlib': 'chmlib',
 }
 
 #-----------------------------------------------------------------------
@@ -288,7 +119,7 @@ ProgramModules = {
 #    ...
 #
 #-----------------------------------------------------------------------
-class Archive(files.BaseFile):        
+class VideoFile(files.BaseFile):        
     #-------------------------------------------------------------------
     #
     # Function extract
@@ -536,7 +367,7 @@ class Archive(files.BaseFile):
 
 #-----------------------------------------------------------------------
 #
-# Class Archives
+# Class VideoFiles
 #
 # This is the Archives Class for working with multiple archive files.
 #
@@ -553,7 +384,7 @@ class Archive(files.BaseFile):
 #    ...
 #
 #-----------------------------------------------------------------------
-class Archives(files.BaseFiles):
+class VideoFiles(files.BaseFiles):
     #-------------------------------------------------------------------
     #
     # Function search
@@ -681,7 +512,7 @@ def list_formats ():
     print("Archive programs are searched in the following directories:")
     print(util.system_search_path())
     print()
-    for format_ in mimetypes.ArchiveFormats:
+    for format_ in mimetypes.VideoFormats:
         print(format_, "files:")
         for command in ArchiveCommands:
             programs = ArchivePrograms[format_]

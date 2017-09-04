@@ -72,6 +72,7 @@ from pysorcery.lib.files import archive
 from pysorcery.lib.files import audio
 from pysorcery.lib.files import compressed
 from pysorcery.lib.files import package
+from pysorcery.lib.files import video
 
 # Conditional Libraries
 
@@ -131,11 +132,13 @@ def archive_formats(args):
         if (args.archive is False
             and args.audio is False
             and args.compressed is False
-            and args.package is False):
+            and args.package is False
+            and args.video is False):
             args.archive = True
             args.audio = True
             args.compressed =True
             args.package = True
+            args.video = True
                         
         if args.archive is True:
             App = 'pySorcery ' + __version__
@@ -159,6 +162,13 @@ def archive_formats(args):
             App = 'pySorcery ' + __version__
             print("Package programs of", App)
             package.list_formats()
+            print()
+
+        if args.video is True:
+            App = 'pySorcery ' + __version__
+            print("Video programs of", App)
+            video.list_formats()
+            print()
 
     except Exception as msg:
         logger.critical(msg)
@@ -215,6 +225,11 @@ def parser(*args, **kwargs):
                      default = False,
                      action = 'store_true',
                      help = 'Display supported archive formats')
+    cmd.add_argument('-m',
+                     '--video',
+                     default = False,
+                     action = 'store_true',
+                     help = 'Display supported video formats')
     cmd.set_defaults(func = archive_formats)
 
     return cmd

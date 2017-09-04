@@ -56,6 +56,7 @@ from pysorcery.lib.files import archive
 from pysorcery.lib.files import audio
 from pysorcery.lib.files import compressed
 from pysorcery.lib.files import package
+from pysorcery.lib.files import video
 
 # Conditional Libraries
 
@@ -120,9 +121,10 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 class File():
     __file_classes = {
         'archive': archive.Archive,
-        'compressed': compressed.CompressedFile,
         'audio': audio.AudioFile,
+        'compressed': compressed.CompressedFile,
         'package': package.PackageFile,
+        'video': video.VideoFile,
         'default': files.BaseFile
     }
 

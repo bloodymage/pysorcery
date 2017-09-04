@@ -109,12 +109,18 @@ filetypedefinitions = {
       ): 'compressed',
     ( 'audio/x-ape',
       'audio/x-shn',
-      'audio/flac'
+      'audio/flac',
+      'audio/mpeg',
+      'audio/x-m4a'
       ): 'audio',
     ( 'application/x-debian-package',
       'application/x-redhat-package-manager',
       'application/x-rpm'
     ): 'package',
+    ( 'video/x-matroska',
+      'video/quicktime',
+      'video/mp4'
+    ): 'video',
     ( 'None' ): 'default'
     }
 
@@ -161,7 +167,9 @@ ArchiveMimetypes = {
 AudioMimetypes = {
     'audio/x-ape': 'ape',
     'audio/x-shn': 'shn',
-    'audio/flac': 'flac'
+    'audio/flac': 'flac',
+    'audio/mpeg': 'mpeg',
+    'audio/x-m4a': 'm4a'
 }
 
 CompressionMimetypes = {
@@ -183,6 +191,12 @@ PackageMimetypes = {
     'application/x-rpm': 'rpm'
 }
 
+VideoMimetypes = {
+    'video/x-matroska': 'mkv',
+    'video/quicktime': 'mp4',
+    'video/mp4': 'mp4'
+    }
+
 # Supported archive formats
 ArchiveFormats = (
     '7z', 'ace', 'adf', 'alzip', 'ar', 'arc', 'arj',
@@ -191,11 +205,13 @@ ArchiveFormats = (
     'rar', 'rzip', 'shar', 'tar', 'vhd',
     'zip', 'zoo', 'zpaq')
 
-AudioFormats = ( 'ape', 'flac', 'shn' )
+AudioFormats = ( 'ape', 'flac', 'shn', 'mp3', 'm4a' )
 
 CompressionFormats = ( 'bzip2', 'gzip', 'lzop', 'xz' )
 
 PackageFormats = ( 'rpm', 'deb' )
+
+VideoFormats = ( 'mkv', 'mp4' )
 
 # Supported compressions (used with tar for example)
 # Note that all compressions must also be archive formats

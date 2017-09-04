@@ -99,7 +99,15 @@ ArchivePrograms = {
         'extract': ('shorten',),
         'list': ('py_echo',),
         'create': ('shorten',)
-    }
+    },
+    'mp3': {
+        'create': ('lame',),
+        'play': ('mpg123', 'mpg321'),
+    },
+    'm4a': {
+        'play': ('mpg123', 'mpg321'),
+    },
+
 }
 
 #-----------------------------------------------------------------------
