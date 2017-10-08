@@ -29,7 +29,7 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Archive: Genisoimage
+# Archive: compress
 #
 #    Archive commands for the genisoimage program.
 #
@@ -69,7 +69,7 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
-# 
+#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -101,7 +101,7 @@ logger = logging.getLogger(__name__)
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def create_compress (archive, compression, cmd, verbosity, interactive, filenames):

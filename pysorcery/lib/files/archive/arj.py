@@ -73,7 +73,7 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
-# 
+#
 #-----------------------------------------------------------------------
 
 
@@ -105,11 +105,11 @@ logger = logging.getLogger(__name__)
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def extract_arj (archive, compression, cmd, verbosity, interactive, outdir):
@@ -137,11 +137,11 @@ def extract_arj (archive, compression, cmd, verbosity, interactive, outdir):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def list_arj (archive, compression, cmd, verbosity, interactive):
@@ -173,11 +173,11 @@ def list_arj (archive, compression, cmd, verbosity, interactive):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def test_arj (archive, compression, cmd, verbosity, interactive):
@@ -205,11 +205,11 @@ def test_arj (archive, compression, cmd, verbosity, interactive):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def create_arj (archive, compression, cmd, verbosity, interactive, filenames):

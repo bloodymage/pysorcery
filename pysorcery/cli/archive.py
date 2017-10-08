@@ -73,7 +73,7 @@ from pysorcery.lib.files import archive
 # Conditional Libraries
 try:
     # to all bash completion, doesn't seem to work
-    import argcomplete 
+    import argcomplete
     BASHCOMPLETE = True
 except ImportError as msg:
     BASHCOMPLETE = False
@@ -122,10 +122,10 @@ colortext = text.ConsoleText()
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
-def real_main(args):    
+def real_main(args):
     logger.debug('Entered Function')
 
     epilog_text = """
@@ -176,7 +176,7 @@ Report bugs to ...
             parser.print_help()
             logger.error('No command was given')
     else:
-        args.func(args)    
+        args.func(args)
 
     #logging.verifydebuglevels()
     logger.debug('End Function')
@@ -200,11 +200,12 @@ Report bugs to ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: KeyboardINterrupt
+#    @raises: Exception
 #
 #-----------------------------------------------------------------------
 def main(args=None):
-    """Run the main command-line interface for pyarchive. Includes 
+    """Run the main command-line interface for pyarchive. Includes
     top-level exception handlers that print friendly error messages.
 
 
@@ -221,9 +222,9 @@ def main(args=None):
          ...
 
     """
-    
+
     if DEBUG is False:
-        try:         
+        try:
             real_main(args)
         except KeyboardInterrupt:
             log_error("aborted")

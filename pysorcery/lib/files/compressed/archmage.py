@@ -29,13 +29,13 @@
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# Archive: Archmage
+# Compressed: Archmage
 #
 #    Archive commands for the archmage program.
 #
 #-----------------------------------------------------------------------
 """
-Archive: Archmage
+Compressed: Archmage
 
 Archive commands for the archmage program.
 """
@@ -73,7 +73,7 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
-# 
+#
 #-----------------------------------------------------------------------
 
 
@@ -103,11 +103,11 @@ logger = logging.getLogger(__name__)
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def extract_chm (archive, compression, cmd, verbosity, interactive, outdir):
@@ -135,11 +135,11 @@ def extract_chm (archive, compression, cmd, verbosity, interactive, outdir):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def test_chm (archive, compression, cmd, verbosity, interactive):

@@ -80,9 +80,9 @@ log_dirs = {
         'install': '/var/log/sorcery/install/',
     },
 }
-        
+
 sound_themes = [ 'off', 'ferris', 'star trek' ]
-command_themes = [ 'sorcery', 'harry potter' ]
+
 
 pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
@@ -92,6 +92,22 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 # SorceryConfig
 #
 #-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Class SorceryTheme
+#
+#-----------------------------------------------------------------------
+class SorceryTheme():
+    def __init__(self):
+        self.command_themes = [ 'sorcery', 'harry potter' ]
+        return
+
+    def enable(self, theme):
+        return
+
+    def disable(self, theme):
+        return
 
 #-----------------------------------------------------------------------
 #
@@ -143,6 +159,7 @@ class SorceryConfig():
         }
 
         self.smgl_official_grimoires = [ 'test',
+                                         'stable-rc',
                                          'stable',
                                          'z-rejected',
                                          'games',
@@ -161,35 +178,32 @@ class SorceryConfig():
         self.cast = 'cast'
         self.compression = 'lzma'
         self.extension = '.xz'
+        self.sustain = True
+        self.tmpfs = False
+        self.view_reports = False
+        self.voyeur = True
+        self.prompt_delay = 150
+        self.pager_timeout = 150
+        self.max_cabals = 16
+        self.net_select = False
+        self.md5sum_dl = 'ask_risky'
+        self.clear_source = False
+        self.archivebin = 'tar'
+        self.set_term_title = False
+        self.per_spell_cflags = False
+        self.show_gaze_short_query = True
+        self.color = True
+        self.config_loc = True
+        self.gather_docs = True
+        self.strict_scm_update = False
+        self.nice = 10
+        self.umask = '0022'
+        self.force_basesystem_depends = False
+        self.ldd_check = True
+        self.find_check = True
+        self.md5sum_check = True
     """
-              SUSTAIN=${SUSTAIN:=on}
-                TMPFS=${TMPFS:=off}
-         VIEW_REPORTS=${VIEW_REPORTS:=off}
-               VOYEUR=${VOYEUR:=on}
-         PROMPT_DELAY=${PROMPT_DELAY:=150}
-        PAGER_TIMEOUT=${PAGER_TIMEOUT:=150}
-           MAX_CABALS=${MAX_CABALS:=16}
-    NET_SELECT=${NET_SELECT:=off}
-            MD5SUM_DL=${MD5SUM_DL:=ask_risky}
-         CLEAN_SOURCE=${CLEAN_SOURCE:=off}
-           ARCHIVEBIN=${ARCHIVEBIN:=tar}
-          COMPRESSBIN=${COMPRESSBIN:-bzip2}
-            EXTENSION=${EXTENSION:-.bz2}
-       SET_TERM_TITLE=${SET_TERM_TITLE:=off}
-     PER_SPELL_CFLAGS=${PER_SPELL_CFLAGS:=off}
-SHOW_GAZE_SHORT_QUERY=${SHOW_GAZE_SHORT_QUERY:=on}
-                COLOR=${COLOR:=on}
-           CONFIG_LOC=${CONFIG_LOC:=on}
-          GATHER_DOCS=${GATHER_DOCS:=on}
-    STRICT_SCM_UPDATE=${STRICT_SCM_UPDATE:=off}
-                 NICE=${NICE:=+10}
-                UMASK=${UMASK:=0022}
          SORCERY_PATH=${SORCERY_PATH:-"/usr/sbin"}
-FORCE_BASESYSTEM_DEPENDS=${FORCE_BASESYSTEM_DEPENDS:-off}
-
-            LDD_CHECK=${LDD_CHECK:=on}
-           FIND_CHECK=${FIND_CHECK:=on}
-         MD5SUM_CHECK=${MD5SUM_CHECK:=on}
             SYM_CHECK=${SYM_CHECK:=off}
 
         # menu defined defaults for dependency following
@@ -237,7 +251,7 @@ SM_CONFIG_OPTION_CACHE=${SM_CONFIG_OPTION_CACHE:-/etc/sorcery/local/config_optio
            GPG_SIG_EXT=${GPG_SIG_EXT:-asc}
     GPG_VERIFY_SORCERY=${GPG_VERIFY_SORCERY:-no}
    GPG_VERIFY_GRIMOIRE=${GPG_VERIFY_GRIMOIRE:-no}
-   
+
 VERIFY_SPELL_LEVELS=${VERIFY_SPELL_LEVELS:-"WORKS_FOR_ME UPSTREAM_HASH UPSTREAM_KEY ESTABLISHED_UPSTREAM_KEY VERIFIED_UPSTREAM_HASH VERIFIED_UPSTREAM_KEY ID_CHECK_UPSTREAM_KEY"}
 DEFAULT_SPELL_VRF_LEVEL=${DEFAULT_SPELL_VRF_LEVEL:-"WORKS_FOR_ME"}
     VRF_ALLOWED_LEVELS=${VRF_ALLOWED_LEVELS:-""}
@@ -322,7 +336,7 @@ CONFIG_STAGE_DIRECTORY=${STATE_ROOT}/var/state/sorcery/staged_configs
       # this is passed directly to installwatch so it can't contain
       # shell expansions or regex's
 CASTFS_UNSTAGED_PATHS="/dev /proc /tmp /var/tmp /sys ${BUILD_DIRECTORY} ${SGL_LIBRARY} ${INSTALL_ROOT}/${SGL_LIBRARY} ${SOURCE_CACHE} ${CONFIG_CACHE} ${INSTALL_ROOT}/${CONFIG_CACHE} ${STATE_DIRECTORY} ${LOG_DIRECTORY} $DEBUG"
-# this value is a mask bits set mean output is done for that particular 
+# this value is a mask bits set mean output is done for that particular
 # component of castfs
 CASTFS_DEBUG_LEVEL=${CASTFS_DEBUG_LEVEL:=255}
 """
@@ -362,7 +376,7 @@ def configure_logging(args, config):
     global consolhandler
 
     logger.debug("Begin Function")
-    
+
     # Ugly hack to make the changes global
     tempname = __name__.split(":")[0].split(".")[0]
     logger = logging.getLogger(tempname)
@@ -388,7 +402,7 @@ def configure_logging(args, config):
     else:
         # Bind loglevel to the upper case string value obtained
         # from the command line argument.  This allows the user to
-        # specify --log=DEBUG or --log=debug            
+        # specify --log=DEBUG or --log=debug
         numeric_level = getattr(logging, args.loglevel.upper(), None)
         if not isinstance(numeric_level, int):
             raise ValueError('Invalid log level: %s' % args.loglevel)
@@ -396,14 +410,14 @@ def configure_logging(args, config):
 
     logger.setLevel(config['logging']['loglevel'])
     consolehandler.setLevel(config['logging']['loglevel'])
-        
+
     # End ugly hack to change logging level globally
     logger = logging.getLogger(__name__)
 
     # If debugging enabled, log the arguments passed to the program
     logger.debug("Arguments Processed")
 #    logger.debug2("Arguments: " + str(args))
-    
+
     logger.debug("End Function")
     return
 
@@ -470,7 +484,7 @@ def defConfiguration():
                'official_grimoires' : smgl_official_grimoires,
                'theme': theme
                }
-    
+
     """
                   CAST=${CAST:-cast}
               ARCHIVE=${ARCHIVE:=on}
@@ -559,7 +573,7 @@ SM_CONFIG_OPTION_CACHE=${SM_CONFIG_OPTION_CACHE:-/etc/sorcery/local/config_optio
            GPG_SIG_EXT=${GPG_SIG_EXT:-asc}
     GPG_VERIFY_SORCERY=${GPG_VERIFY_SORCERY:-no}
    GPG_VERIFY_GRIMOIRE=${GPG_VERIFY_GRIMOIRE:-no}
-   
+
 VERIFY_SPELL_LEVELS=${VERIFY_SPELL_LEVELS:-"WORKS_FOR_ME UPSTREAM_HASH UPSTREAM_KEY ESTABLISHED_UPSTREAM_KEY VERIFIED_UPSTREAM_HASH VERIFIED_UPSTREAM_KEY ID_CHECK_UPSTREAM_KEY"}
 DEFAULT_SPELL_VRF_LEVEL=${DEFAULT_SPELL_VRF_LEVEL:-"WORKS_FOR_ME"}
     VRF_ALLOWED_LEVELS=${VRF_ALLOWED_LEVELS:-""}
@@ -644,7 +658,7 @@ CONFIG_STAGE_DIRECTORY=${STATE_ROOT}/var/state/sorcery/staged_configs
       # this is passed directly to installwatch so it can't contain
       # shell expansions or regex's
 CASTFS_UNSTAGED_PATHS="/dev /proc /tmp /var/tmp /sys ${BUILD_DIRECTORY} ${SGL_LIBRARY} ${INSTALL_ROOT}/${SGL_LIBRARY} ${SOURCE_CACHE} ${CONFIG_CACHE} ${INSTALL_ROOT}/${CONFIG_CACHE} ${STATE_DIRECTORY} ${LOG_DIRECTORY} $DEBUG"
-# this value is a mask bits set mean output is done for that particular 
+# this value is a mask bits set mean output is done for that particular
 # component of castfs
 CASTFS_DEBUG_LEVEL=${CASTFS_DEBUG_LEVEL:=255}
 """

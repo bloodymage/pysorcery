@@ -68,11 +68,10 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
-# 
+#
 #-----------------------------------------------------------------------
 
-
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Functions
 #
@@ -80,9 +79,9 @@ logger = logging.getLogger(__name__)
 # list_arc
 # test_arc
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function extract_cab
 #
@@ -99,13 +98,13 @@ logger = logging.getLogger(__name__)
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def extract_cab (archive, compression, cmd, verbosity, interactive, outdir):
     """Extract a CAB archive."""
     cmdlist = [cmd, '-d', outdir]
@@ -114,7 +113,7 @@ def extract_cab (archive, compression, cmd, verbosity, interactive, outdir):
     cmdlist.append(archive)
     return cmdlist
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function list_cab
 #
@@ -130,13 +129,13 @@ def extract_cab (archive, compression, cmd, verbosity, interactive, outdir):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 def list_cab (archive, compression, cmd, verbosity, interactive):
     """List a CAB archive."""
     cmdlist = [cmd, '-l']
@@ -145,7 +144,7 @@ def list_cab (archive, compression, cmd, verbosity, interactive):
     cmdlist.append(archive)
     return cmdlist
 
-#-------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Function test_cab
 #
@@ -161,11 +160,11 @@ def list_cab (archive, compression, cmd, verbosity, interactive):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raisses: ...
 #
 #-------------------------------------------------------------------
 def test_cab (archive, compression, cmd, verbosity, interactive):

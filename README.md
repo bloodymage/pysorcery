@@ -23,7 +23,7 @@ A Universal Compressed File manager.
 This is a bonus application.  Sorcery needed to do these various tasks internally.  I simply added a script that calls these functions directly.
 
 ### pyledger
-Incorporates ledger directly into sorcery
+Incorporates ledger directly into sorcery.  This program provides analytics to help us understand which applications are actively being used.  This is entirely up to the user to enable or disable.
 
 ### pyupstream (I need a new Name)
 This program checks upstream versions of software.  Alt generates a new grimoire (Repository) with the latest version on the software.  If using the '--debian' switch will check the version of software in the debian sid repository.
@@ -38,19 +38,18 @@ SMGL installation program
 ## The Commands
 
 ### pyalter
-Changes spells after they have been installed
+Changes spells after they have been installed.
 
 ### pycabal
+...
 
 ### pycast
-    is part of the sorcery package management suite. It is a command-line
-    tool for automatically retrieving, unpacking, compiling, installing,
-    and tracking software installations.
+Pycast is a command-line tool for automatically retrieving, unpacking, compiling, installing,
+and tracking software installations.
 
 ### pycleanse
 cleanse is part of the sorcery source-code package management suite. It
-       is a command-line tool for fixing and cleaning files maintained by sor‐
-       cery.
+is a command-line tool for fixing and cleaning files maintained by sorcery.
 
 ### pyconfmeld
 ...
@@ -118,7 +117,7 @@ Menu-driven software package management utility
 Themes allows alternate names for commands on the cli
 - Sorcery (remove 'py' from names, this conflicts with Source Mage's sorcery)
 - Harry Potter
-  - pysummon = achio
+  - pysummon = accio
   - ...
 - Lunar (An attempt to try and unify lunar and sorcery development, with themes for each distribution).
   - ...

@@ -44,20 +44,20 @@ try:
 except ImportError as msg:
     __version__ = '0.0.2'
     print(msg)
-    
+
 # Get the long description from the README file
 #with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 #    long_description = f.read()
 
 setup(
     name='pysorcery',
-    version = __version__, 
+    version = __version__,
     description='Sorcery Package Management System',
     long_description='Sorcery Package Management System ...',
     url='https://www.github.com/gderber/python-sorcery/',
     author='Geoff S Derber',
     author_email='gd.smlinux@gmail.com',
-    license='GPLv3+',    
+    license='GPLv3+',
 
     classifiers=[
         # How mature is this project? Values are:
@@ -69,16 +69,16 @@ setup(
         #   6 - Mature
         #   7 - Inactive
         'Development Status :: 2 - Pre-Alpha',
-        
+
         # Indicate who your project is intended for
         'Intended Audience :: System Administrators',
         'Intended Audience :: System Administrators',
 
         # Operating Systems
-	'Operating System :: POSIX',
-        
+        'Operating System :: POSIX',
+
         # Pick your license as you wish (should match "license" above)
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',        
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 3',
@@ -92,7 +92,7 @@ setup(
     ],
 
     keywords='Package Management',
-    
+
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=["bin", "doc*"]),

@@ -122,7 +122,7 @@ class ConsoleText():
             "magenta": 45,
             "turquoise": 46,
             "cyan": 46,
-            "white": 47    
+            "white": 47
         }
 
         return
@@ -139,16 +139,15 @@ class ConsoleText():
     #
     # Returns
     # -------
-    #    textstring - 
+    #    textstring -
     #
     # Raises
     # ------
     #    ...
-    # 
+    #
     #
     #-------------------------------------------------------------------------------
     def colorize(self,text,attribute="none",fgcolor="white",bgcolor="black"):
-        
         if attribute in self.attributes:
             begincolor = self.escape + str(self.attributes[attribute])
         else:
@@ -158,7 +157,7 @@ class ConsoleText():
             begincolor = begincolor + ";" + str(self.fgcolors[fgcolor])
         else:
             begincolor = begincolor + ";" + str(self.fgcolors['white'])
-    
+
         if bgcolor in self.bgcolors:
             begincolor = begincolor + ";" + str(self.bgcolors[bgcolor]) + "m"
         else:
@@ -167,7 +166,6 @@ class ConsoleText():
         resetcolor = self.escape + str(self.attributes['none']) + ";" + str(self.fgcolors['white']) + ";" + str(self.bgcolors['black']) + "m"
 
         textstring = begincolor + text + resetcolor
-    
         return textstring
 
 
@@ -216,22 +214,20 @@ def column_print(obj, cols=4, columnwise=True, gap=4):
     term_height, term_width = os.popen('stty size', 'r').read().split()
 
     column_width = int(term_width)
-    
+
     sobj = [str(item) for item in obj]
     if cols > len(sobj):
         cols = len(sobj)
 
-    
     imax = max([len(item) for item in sobj])
     cmax = column_width // cols
 
     max_len = min(imax,cmax - gap)
-    
+
     if columnwise:
         cols = int(math.ceil(float(len(sobj)) / float(cols)))
-        
+
     plist = [sobj[i: i+cols] for i in range(0, len(sobj), cols)]
-    
     if columnwise:
         if not len(plist[-1]) == cols:
             plist[-1].extend(['']*(len(sobj) - len(plist[-1])))
