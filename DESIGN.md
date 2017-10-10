@@ -4,23 +4,53 @@ Sorcery is a package management system writen in python.  It is based off of the
 
 ## Programs
 
-All programs have their main name, which in general is 'py___' for example Cast is 'pycast.'  The names also have themes which can be activated through sorcery's menus.  Each theme when active, creates a symlink from the them command to the main program.  The themes include, 'Sorcery' which can only be installed if the BASH version is not also installed.  Other Themes, 'Harry Potter', 
+All programs have their main name, which in general is 'py___' for example Cast is 'pycast.'  The names also have themes which can be activated through sorcery's menus.  Each theme when active, creates a symlink from the them command to the main program.  The themes include, 'Sorcery' which can only be installed if the BASH version is not also installed.  Other Themes, 'Harry Potter', ...
 
 ### Sorcery
 
-This is the menu driven program of the same name.  From the menus, you can set the options, 
+This is the menu driven program of the same name.  From the menus, you can set the options, ...
 
 ### Cast / Erecto
 
-This program is used to install programs.  
+This program is used to install programs.
+
+On Sourced based distributions, running this program will:
+1. Download the source tarball (file?) (If not already downloaded)
+2. Extract the package to an appropriate folder.
+3. Compile
+4. Install
+
+All others:
+If compile switch is specified:
+1. Download the source package installer (If not alreaded downloaded)
+2. Compile
+3. Install
+Else if the package is not provided by the system's native package manage and is in Sorcery:
+1. Download the source tarball
+2. Extract the package to an appropriate folder.
+3. Compile
+4. Create native package per the system package manager (ie. create a *.deb file for Debian based systems).
+5. Install the built package.
+Else:
+1. Interface with the system's native package manager to install the program.
 
 ### Gaze / Aparecium
 
+Print requested information.
+
 ### Archive (rename?)
 
+Work with files:
+Extract,
+Compresss,
+Read,
+...
+
 ### Dispel / Deletrius
+Uninstall program.
 
 ### Alter
+
 
 ### Cabal
 
@@ -33,10 +63,25 @@ This program is used to install programs.
 ### Resurrect
 
 ### Scribe
+Manage package manager repositories.
+Add/Remove/Update/...
 
 ### Scribbler
 
 ### Summon / Accio
+Download files.
+
+Download source files specified by a spell.
+If a URL is provided rather than a spell, download the URL (act like wget, but for ALL url types)
+Supported url types:
+http(s)
+ftp(s)
+torrent
+git
+cvs
+svn
+rsync
+...
 
 ### VCast
 
