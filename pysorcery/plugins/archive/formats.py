@@ -25,12 +25,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
-#
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
 #
 # Plugin: Formats
 #
@@ -42,7 +36,7 @@
 """
 Plugin: Formats
 
-This plugin prints a list of all Sorcery supported archive and 
+This plugin prints a list of all Sorcery supported archive and
 compression options along with status on underlying system support.
 """
 #-----------------------------------------------------------------------
@@ -115,11 +109,11 @@ colortext = text.ConsoleText()
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def archive_formats(args):
@@ -139,7 +133,7 @@ def archive_formats(args):
             args.compressed =True
             args.package = True
             args.video = True
-                        
+
         if args.archive is True:
             App = 'pySorcery ' + __version__
             print("Archive programs of", App)
@@ -190,18 +184,16 @@ def archive_formats(args):
 #
 # Returns
 # -------
-#    cmd - the subcommand parsing options
+#    @return: cmd - the subcommand parsing options
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
-
     subparsers = args[0]
     parent_parsers = list(args[1:])
-
     cmd = subparsers.add_parser('formats',
                                 parents = parent_parsers,
                                 help = 'Display supported file formats and functions')

@@ -25,12 +25,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
-#
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
 #
 # Plugin: Create
 #
@@ -41,7 +35,7 @@
 """
 Plugin: Create
 
-This plugin adds archive/compressed file creation and the applicable 
+This plugin adds archive/compressed file creation and the applicable
 command line arguments.
 """
 #-----------------------------------------------------------------------
@@ -115,16 +109,16 @@ colortext = text.ConsoleText()
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def archive_create(args):
     logger.debug('Begin Function')
-    
+
     cfile = lib.File(args.archive)
 
     cfile.create(args.pathname,
@@ -149,11 +143,11 @@ def archive_create(args):
 #
 # Returns
 # -------
-#    cmd - the subcommand parsing options
+#    @return: cmd - the subcommand parsing options
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -205,7 +199,7 @@ def parser(*args, **kwargs):
     exclude.add_argument('--exclude-vcs-ignore',
                          action = 'store_true',
                          help = 'Exclude Files listed within version control ignore files.')
-    
+
     permission = cmd.add_argument_group('File Permission Options')
     permission.add_argument('-p',
                             '--preserve',
@@ -219,7 +213,7 @@ def parser(*args, **kwargs):
                             '--group',
                             action = 'store_true',
                             help = 'Set group to GROUP.')
-    
+
     cmd.set_defaults(func = archive_create)
 
     return cmd
