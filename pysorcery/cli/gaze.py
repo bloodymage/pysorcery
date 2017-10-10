@@ -112,7 +112,7 @@ colortext = text.ConsoleText()
 # Function Real_Main
 #
 # 1. Creates the argument parser
-# 2. Eshablishes configuration
+# 2. Establishes configuration
 # 3. Runs the function specified by the arguments
 #
 # Inputs
