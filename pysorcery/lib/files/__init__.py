@@ -28,7 +28,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
 # Files:
 #
 #    Library for sorcery that provides for interfacing with
@@ -123,7 +122,7 @@ Programs = {
 # BaseFiles
 # BaseDirectory
 # BaseDirectories
-# 
+#
 #-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
@@ -143,11 +142,12 @@ Programs = {
 #
 # Raises
 # ------
-#    None
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class NotAFileException(OSError):
     pass
+
 
 #-----------------------------------------------------------------------
 #
@@ -165,13 +165,12 @@ class NotAFileException(OSError):
 #
 # Raises
 # ------
-#    None
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class BaseFile():
     def __init__(self, filename, *args, **kwargs):
         logger.debug("Begin Function")
-        
         self.filename = filename
         self.mimetype, self.encoding = mimetypes.guess_type(self.filename)
         self.path, self.basename, self.extention = pne(self.filename)
@@ -196,7 +195,7 @@ class BaseFile():
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def get_info(self, info):
@@ -223,7 +222,7 @@ class BaseFile():
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def get_from(self):
@@ -247,7 +246,7 @@ class BaseFile():
     #
     # Raises
     # ------
-    #    NotImplementedError
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     def remove(self):
@@ -258,7 +257,7 @@ class BaseFile():
             raise NotImplementedError('Remove File not implemented')
         except Exception as msg:
             logger.critical('BaseFile.remove fucked up')
-            
+
         logger.debug("End Function")
         return
 
@@ -272,14 +271,14 @@ class BaseFile():
     # ------
     #     @param: self
     #             self.filename - filename to check
-    #         
+    #
     # Returns
     # -------
     #    @return: None
     #
     # Raises
     # ------
-    #    PermissionError
+    #    @raises: PermissionError
     #
     #-------------------------------------------------------------------
     def check_writable_filename(self):
@@ -288,7 +287,7 @@ class BaseFile():
             raise PermissionError("file `%s' is not writable"
                                   % self.filename)
         return
-    
+
     #-------------------------------------------------------------------
     #
     # Function check_existing_filename
@@ -302,16 +301,16 @@ class BaseFile():
     #     @param: onlyfiles - True - Verify filename is an actual file
     #                         False - Verify filename exists regardless of
     #                                 if it is a file, directory, ...
-    #         
+    #
     # Returns
     # -------
     #     @return: None
     #
     # Raises
     # ------
-    #    FileNotFoundError
-    #    PermissionError
-    #    NotAFileError
+    #    @raises: FileNotFoundError
+    #    @raises: PermissionError
+    #    @raises: NotAFileError
     #
     #-------------------------------------------------------------------
     def check_existing_filename (self, onlyfiles=True):
@@ -324,7 +323,7 @@ class BaseFile():
                                   % self.filename)
         if onlyfiles and not os.path.isfile(self.filename):
             raise NotAFileError("`%s' is not a file" % self.filename)
-        return 
+        return
 
     #-------------------------------------------------------------------
     #
@@ -336,14 +335,14 @@ class BaseFile():
     # ------
     #     @param: self
     #             self.filename - Filename to verify
-    #         
+    #
     # Returns
     # -------
     #     @return: None
     #
     # Raises
     # ------
-    #    FileExistsError
+    #     @raises: FileExistsError
     #
     #-------------------------------------------------------------------
     def check_new_filename (self):
@@ -364,14 +363,14 @@ class BaseFile():
     # ------
     #     @param: self
     #             self.filename - File to set mode on.
-    #         
+    #
     # Returns
     # -------
     #     @return: None
     #
     # Raises
     # ------
-    #    OSError
+    #     @raises: OSError
     #
     #-------------------------------------------------------------------
     def set_mode (self, flags):
@@ -388,7 +387,7 @@ class BaseFile():
                 logger.error("could not set mode flags for `%s': %s"
                              % (self.filename, msg))
         return
-    
+
     #-------------------------------------------------------------------
     #
     # Function read
@@ -406,8 +405,8 @@ class BaseFile():
     #
     # Raises
     # ------
-    #    FileNotFoundError
-    #    EOFError
+    #    @raises: FileNotFoundError
+    #    @raises: EOFError
     #
     #-------------------------------------------------------------------
     def read(self):
@@ -419,7 +418,7 @@ class BaseFile():
                 line_list.append(line[:-1])
         except FileNotFoundError as msg:
             line_list.append(msg)
-            
+
         logger.debug("End Function")
         return line_list
 
@@ -439,7 +438,7 @@ class BaseFile():
     #
     # Raises
     # ------
-    #    NotImplementedError
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     def write(self):
@@ -468,7 +467,7 @@ class BaseFile():
     #
     # Raisis
     # ------
-    #    NotImplementedError
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     def search(self, searchstring):
@@ -489,22 +488,22 @@ class BaseFile():
     # Inputs
     # ------
     #     @param: self
-    #         
+    #
     # Returns
     # -------
     #     @param: self.basename
     #
     # Raises
     # ------
-    #    DepreciationWarning - This function duplicates the 'pne'
-    #                          function.
+    #    @raises DepreciationWarning - This function duplicates the 'pne'
+    #                                  function.
     #
     #-------------------------------------------------------------------
     def stripext (self):
         """Return the basename without extension of given filename."""
         raise DeprecationWarning('BaseFile.stripext is being depreciated')
         return self.basename
-    
+
     #-------------------------------------------------------------------
     #
     # Function get_filesize
@@ -522,7 +521,7 @@ class BaseFile():
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def get_filesize(self):
@@ -531,9 +530,9 @@ class BaseFile():
 
     #-------------------------------------------------------------------
     #
-    # Function _extract_archive
+    # Function make_file_readable
     #
-    # This is the base File Class
+    # Make a file user readable if it is not a symlink.
     #
     # Inputs
     # ------
@@ -546,7 +545,7 @@ class BaseFile():
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def make_file_readable(self):
@@ -557,9 +556,9 @@ class BaseFile():
 
     #-------------------------------------------------------------------
     #
-    # Function _extract_archive
+    # Function isfile
     #
-    # This is the base File Class
+    # Check if the provided filename really is a file.
     #
     # Inputs
     # ------
@@ -568,11 +567,12 @@ class BaseFile():
     #
     # Returns
     # -------
-    #    @return: None
+    #    @return: True
+    #    @return: False
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def isfile(self):
@@ -581,6 +581,34 @@ class BaseFile():
             return True
         else:
             return False
+
+    #-------------------------------------------------------------------
+    #
+    # Function print_name
+    #
+    # Print the file's name.
+    #
+    # Note: This may be redundant...
+    #
+    # Inputs
+    # ------
+    #    @param: self
+    #            self.filename - name of directory to print.
+    #
+    # Returns
+    # -------
+    #    @param: None
+    #
+    # Raises
+    # ------
+    #    @raises: ...
+    #
+    #-------------------------------------------------------------------
+    def print_name(self):
+        logger.debug("Begin Function")
+        logger.info(self.filename)
+        logger.debug("End Function")
+        return
 
 #-----------------------------------------------------------------------
 #
@@ -598,36 +626,10 @@ class BaseFile():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class BaseDirectory(BaseFile):
-    #-------------------------------------------------------------------
-    #
-    # Function 
-    #
-    # Prints the name of the directory
-    #
-    # Inputs
-    # ------
-    #    @param: self
-    #            self.filename - name of directory to print.
-    #
-    # Returns
-    # -------
-    #    @param: None
-    #
-    # Raises
-    # ------
-    #    ...
-    #
-    #-------------------------------------------------------------------
-    def print_name(self):
-        logger.debug("Begin Function")
-        logger.info(self.filename)
-        logger.debug("End Function")
-        return
-
     #-------------------------------------------------------------------
     #
     # Function tmpdir
@@ -639,14 +641,14 @@ class BaseDirectory(BaseFile):
     #     @param: self
     #     @param: dir -
     #                 - Default: None
-    #         
+    #
     # Returns
     # -------
     #     @return: tempfilemkdtemp()
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def tmpdir(self, dir=None):
@@ -655,21 +657,21 @@ class BaseDirectory(BaseFile):
 
     #-------------------------------------------------------------------
     #
-    # Function _extract_archive
+    # Function make_dir_readable
     #
-    # This is the base File Class
+    # Makes a directory user readable and executable.
     #
     # Inputs
     # ------
-    #    @param:
+    #    @param: self
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def make_dir_readable (self):
@@ -679,9 +681,9 @@ class BaseDirectory(BaseFile):
 
     #-------------------------------------------------------------------
     #
-    # Function _extract_archive
+    # Function make_user_readable
     #
-    # This is the base File Class
+    # Recursively, make all files in a given directory user readable.
     #
     # Inputs
     # ------
@@ -689,11 +691,11 @@ class BaseDirectory(BaseFile):
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def make_user_readable(self):
@@ -715,9 +717,9 @@ class BaseDirectory(BaseFile):
 
     #-------------------------------------------------------------------
     #
-    # Function _extract_archive
+    # Function isdir
     #
-    # This is the base File Class
+    # Check to see if named "file" is a directory.
     #
     # Inputs
     # ------
@@ -726,11 +728,12 @@ class BaseDirectory(BaseFile):
     #
     # Returns
     # -------
-    #    @return: None
+    #    @return: True
+    #    @return: False
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def isdir(self):
@@ -744,36 +747,35 @@ class BaseDirectory(BaseFile):
     #
     # Function listfiles
     #
-    # Get output filename if archive is in a single file format like
-    # gzip.
+    # List the files within a directory.
+    #
     #
     # Inputs
     # ------
     #     @param: self
-    #         
+    #
     # Returns
     # -------
-    #     @return: outfile + extention
+    #     @return: dirfiles
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def listfiles(self):
         files = glob.glob(self.filename + "/*")
 
-        newfiles = []
+        dirfiles = []
         for f in files:
             file_ = f.split('/')[-1]
-            newfiles.append(file_)
-        
-        return newfiles
+            dirfiles.append(file_)
+        return dirfiles
 
 #-----------------------------------------------------------------------
 #
 # Class BaseFiles
-# 
+#
 # ...
 #
 # Inputs
@@ -788,7 +790,7 @@ class BaseDirectory(BaseFile):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class BaseFiles():
@@ -812,15 +814,15 @@ class BaseFiles():
     # Inputs
     # ------
     #    @param: self
-    #    @param: which_queue
+    #    @param: info
     #
     # Returns
     # -------
-    #    @return: self.spells
+    #    @return: info
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def get_info(self, info):
@@ -833,9 +835,9 @@ class BaseFiles():
 
     #-------------------------------------------------------------------
     #
-    # Function get_from
+    # Function get_installed
     #
-    # List package(s) that provide a file
+    # ...
     #
     # Inputs
     # ------
@@ -849,7 +851,7 @@ class BaseFiles():
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def get_installed(self):
@@ -858,23 +860,22 @@ class BaseFiles():
 
     #-------------------------------------------------------------------
     #
-    # Function get_from
+    # Function get_alien
     #
-    # List package(s) that provide a file
+    # List files that were not installed by Sorcery.
     #
     # Inputs
     # ------
     #    @param: self
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @param: self.files - List of files that were not installed by
+    #                         Sorcery.
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def get_alien(self):
@@ -883,7 +884,7 @@ class BaseFiles():
 
     #-------------------------------------------------------------------
     #
-    # Function list_system_files
+    # Function get_system
     #
     # List all files on the system.
     #
@@ -897,13 +898,13 @@ class BaseFiles():
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def get_system(self):
         logger.debug("Begin Function")
 
-        # List of directories to check        
+        # List of directories to check
         sys_dirs = [ '/bin', '/boot', '/etc', '/lib', '/lib64',
                      '/opt', '/sbin', '/share', '/usr','/var' ]
         ignore_dirs = ['/home']
@@ -915,7 +916,7 @@ class BaseFiles():
                     for j in files:
                         system_file = str(os.path.join(root,i,j))
                         self.files.append(system_file)
-        
+
         logger.debug("End Function")
         return self.files
 
@@ -932,7 +933,7 @@ class BaseFiles():
     # ------
     #     @param: self
     #             self.files - list of 2 files to check
-    #         
+    #
     # Returns
     # -------
     #     @return: True
@@ -941,14 +942,14 @@ class BaseFiles():
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def is_same_file (self):
-        """Check if filename1 and filename2 point to the same file 
-        object.  There can be false negatives, ie. the result is False, 
-        but it is the same file anyway. Reason is that network 
-        filesystems can create different paths to the same physical 
+        """Check if filename1 and filename2 point to the same file
+        object.  There can be false negatives, ie. the result is False,
+        but it is the same file anyway. Reason is that network
+        filesystems can create different paths to the same physical
         file.
         """
         if self.files[0] == self.files[1]:
@@ -966,14 +967,14 @@ class BaseFiles():
     # Inputs
     # ------
     #     @param: self
-    #         
+    #
     # Returns
     # -------
     #     @return: True/False
     #
     # Raises
     # ------
-    #    ...
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def is_same_filename(self):
@@ -996,12 +997,12 @@ class BaseFiles():
     #
     # Raises
     # ------
-    #    ...
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def check_filelist (self):
         """
-        Check that file list is not empty and contains only existing 
+        Check that file list is not empty and contains only existing
         files.
         """
         if not self.files:
@@ -1014,7 +1015,7 @@ class BaseFiles():
 #-----------------------------------------------------------------------
 #
 # Class BaseDirectories
-# 
+#
 # ...
 #
 # Inputs
@@ -1029,7 +1030,7 @@ class BaseFiles():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class BaseDirectories(BaseFiles):
@@ -1049,7 +1050,7 @@ class BaseDirectories(BaseFiles):
     #
     # Raises
     # ------
-    #    ...
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def stripbackup(self):
@@ -1091,7 +1092,7 @@ class BaseDirectories(BaseFiles):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def pne(ifilename):
@@ -1100,7 +1101,7 @@ def pne(ifilename):
     """
     # Add extra extensions where desired.
     DOUBLE_EXTENSIONS = ['tar.gz','tar.bz2','tar.xz']
-    
+
     path, filename=os.path.split(ifilename)
     root,ext = os.path.splitext(filename)
     if any([filename.endswith(x) for x in DOUBLE_EXTENSIONS]):
@@ -1119,19 +1120,19 @@ def pne(ifilename):
 #     @param: directory
 #     @param: archive
 #     @param: extention
-#         
+#
 # Returns
 # -------
 #     @return: outfile + extention
 #
 # Raises
 # ------
-#    ...
+#     @raises: ...
 #
 #-----------------------------------------------------------------------
 def get_single_outfile (directory, archive, extension=""):
     """
-    Get output filename if archive is in a single file format 
+    Get output filename if archive is in a single file format
     like gzip.
     """
     archname = BaseFile(archive)
@@ -1158,11 +1159,12 @@ def get_single_outfile (directory, archive, extension=""):
 #
 # Returns
 # -------
-#    none
+#    @return: program
+#    @return: exe
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def find_program(class_, command, program=None):

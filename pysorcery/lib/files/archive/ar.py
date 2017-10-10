@@ -71,18 +71,17 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
-# 
+#
 #-----------------------------------------------------------------------
-
 
 #-------------------------------------------------------------------
 #
 # Functions
 #
-# extract_arc
-# list_arc
-# test_arc
-# create_arc
+# extract_ar
+# list_ar
+# test_ar
+# create_ar
 #
 #-------------------------------------------------------------------
 
@@ -103,11 +102,11 @@ logger = logging.getLogger(__name__)
 #
 # Returns
 # -------
-#    @return: 
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def extract_ar (archive, compression, cmd, verbosity, interactive, outdir):
@@ -134,11 +133,11 @@ def extract_ar (archive, compression, cmd, verbosity, interactive, outdir):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def list_ar (archive, compression, cmd, verbosity, interactive):
@@ -164,11 +163,11 @@ def list_ar (archive, compression, cmd, verbosity, interactive):
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 test_ar = list_ar
@@ -194,7 +193,7 @@ test_ar = list_ar
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def create_ar (archive, compression, cmd, verbosity, interactive, filenames):

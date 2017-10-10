@@ -25,13 +25,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
-#
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
-#
 # Plugin: Test
 #
 #    This plugin checks to ensure an archive file is valid.
@@ -112,17 +105,16 @@ colortext = text.ConsoleText()
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
-#    Error
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def archive_test(args):
     """Test files in archive(s)."""
     logger.debug('Begin Function')
-
     for i in args.archive:
         try:
             cfile = lib.File(i)
@@ -149,18 +141,16 @@ def archive_test(args):
 #
 # Returns
 # -------
-#    cmd - the subcommand parsing options
+#    @return: cmd - the subcommand parsing options
 #
 # Raises
 # ------
-#    Error
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
-
     subparsers = args[0]
     parent_parsers = list(args[1:])
-
     cmd = subparsers.add_parser('test',
                                 aliases = ['verify'],
                                 parents = parent_parsers,
@@ -176,5 +166,4 @@ def parser(*args, **kwargs):
                      help="Don't query for user input (ie. passwords or when overwriting duplicate files); use with care since overwriting files or ignoring passwords could be unintended"
     )
     cmd.set_defaults(func = archive_test)
-
     return cmd

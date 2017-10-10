@@ -43,8 +43,8 @@
 """
 pyGaze
 
-Gaze is part of the Sorcery source-based package management suite. It 
-is a general purpose command-line tool for displaying package logs, 
+Gaze is part of the Sorcery source-based package management suite. It
+is a general purpose command-line tool for displaying package logs,
 version information, checking for installed packages, checksums, message
 digests, maintainer information, package URL information, removing
 obsolete packages, displaying new packages, untracked files, sections,
@@ -105,7 +105,7 @@ colortext = text.ConsoleText()
 # real_main
 # main
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
 #-----------------------------------------------------------------------
 #
@@ -125,14 +125,13 @@ colortext = text.ConsoleText()
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
-def real_main(args):    
+def real_main(args):
     logger.debug('Entered Function')
 
     subcommands = util.get_cmd_types('gaze')
-    
     epilog_text = """
 See man pygaze() for more information.\n
 \n
@@ -170,10 +169,10 @@ Report bugs to ...
                         debug = False,
                         verbosity = 0,
                         loglevel = 'INFO')
-    
+
     # Store all the arguments in a variable
     args = parser.parse_args()
-    
+
     # Ensure we have root access if needed
     if (args.sudo is True and
         os.geteuid() != 0):
@@ -195,7 +194,7 @@ Report bugs to ...
     # 'application' code
     # Run the specified subcommand as per args
     args.func(args)
-    
+
     logger.debug('End Function')
     return
 
@@ -216,7 +215,8 @@ Report bugs to ...
 #
 # Raises
 # ------
-#    ....
+#    @raises: KeyboardInterupt
+#    @raises: Exception
 #
 #-----------------------------------------------------------------------
 def main(args = None):
@@ -227,11 +227,12 @@ def main(args = None):
     logger.debug('Begin Application')
 
     if DEBUG is False:
-        try:         
+        try:
             real_main(args)
-        except KeyboardInterrupt:
-            log_error("aborted")
-        except:
+        except KeyboardInterrupt as msg:
+            logger.error("Aborted")
+        except Exception as msg:
+            logger.critical(msg)
             logger.critical('You Fucked Up')
     else:
         real_main(args)

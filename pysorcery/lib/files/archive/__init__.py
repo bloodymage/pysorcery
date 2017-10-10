@@ -28,13 +28,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
+# Archives:
 #
-# This implements the archive classes
+#     This implements the archive classes
 #
 # ...
 #
 #-----------------------------------------------------------------------
 """
+Archives:
+
 Impliments classes for working with archive files.
 """
 #-----------------------------------------------------------------------
@@ -217,11 +220,31 @@ ArchivePrograms = {
 #
 # Classes
 #
+# ArchiveError
 # Archive
 # Archives
 #
 #-----------------------------------------------------------------------
 
+#-----------------------------------------------------------------------
+#
+# Class ArchiveError
+#
+# ...
+#
+# Inputs
+# ------
+#    @param: ...
+#
+# Returns
+# -------
+#    @return: None
+#
+# Raises
+# ------
+#    @raises: ...
+#
+#-----------------------------------------------------------------------
 class ArchiveError(OSError):
     pass
 
@@ -229,22 +252,22 @@ class ArchiveError(OSError):
 #
 # Class Archive
 #
-# This is the Archive File Class
+# This is the Archive File Class.
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ...
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
-class Archive(files.BaseFile):        
+class Archive(files.BaseFile):
     #-------------------------------------------------------------------
     #
     # Function extract
@@ -262,11 +285,11 @@ class Archive(files.BaseFile):
     #
     # Returns
     # -------
-    #    None
+    #    @return: None
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def extract(self,
@@ -288,7 +311,7 @@ class Archive(files.BaseFile):
 
         logger.debug('End Function')
         return
-    
+
     #-------------------------------------------------------------------
     #
     # Function create
@@ -297,15 +320,15 @@ class Archive(files.BaseFile):
     #
     # Inputs
     # ------
-    #    @param:
+    #    @param: ...
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def create(self, filenames, verbosity=0,
@@ -334,15 +357,15 @@ class Archive(files.BaseFile):
     #
     # Inputs
     # ------
-    #    @param:
+    #    @param: ...
     #
     # Returns
     # -------
-    #    none
+    #    @return: None
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def listfiles(self, verbosity=1, program=None, interactive=True):
@@ -376,8 +399,8 @@ class Archive(files.BaseFile):
     #
     # Raises
     # ------
+    #     @raises: ...
     #
-    # 
     #-------------------------------------------------------------------
     def recompress_archive(self, verbosity=0, interactive=True):
         """Recompress an archive to hopefully smaller size."""
@@ -390,7 +413,7 @@ class Archive(files.BaseFile):
                                   interactive=interactive)
         if res and verbosity >= 0:
             logger.info(res)
-        return 0
+        return
 
     #-------------------------------------------------------------------
     #
@@ -400,16 +423,16 @@ class Archive(files.BaseFile):
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self:
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
+    #     @raises: ...
     #
-    # 
     #-------------------------------------------------------------------
     def repack_archive (self, archive_new, verbosity=0, interactive=True):
         """Repack archive to different file and/or format."""
@@ -424,7 +447,7 @@ class Archive(files.BaseFile):
         if verbosity >= 0:
             logger.info("... repacking successful.")
         return res
-    
+
     #-------------------------------------------------------------------
     #
     # Function testarchive
@@ -433,16 +456,16 @@ class Archive(files.BaseFile):
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self:
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
+    #     @raises: ...
     #
-    # 
     #-------------------------------------------------------------------
     def test_archive(self, verbosity=0, program=None, interactive=True):
         """Test given archive."""
@@ -466,16 +489,16 @@ class Archive(files.BaseFile):
     #
     # Inputs
     # ------
-    #     self:
-    #     searchstring:
+    #     @param: self         -
+    #     @param: searchstring -
     #
     # Returns
     # -------
-    #     result
+    #     @return: result
     #
     # Raises
     # ------
-    #
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def search(self, pattern, verbosity=0, interactive=True):
@@ -507,11 +530,11 @@ class Archive(files.BaseFile):
     #
     # Returns
     # -------
-    #     result
+    #     @return: result
     #
     # Raises
     # ------
-    #
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def read(self, filename, verbosity=0, interactive=True):
@@ -528,15 +551,15 @@ class Archive(files.BaseFile):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ...
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Archives(files.BaseFiles):
@@ -548,15 +571,16 @@ class Archives(files.BaseFiles):
     #
     # Inputs
     # ------
-    #     self:
-    #     searchstring:
+    #     @param: self         - ...
+    #     @param: searchstring - ...
     #
     # Returns
     # -------
-    #     result
+    #     @return: result
     #
     # Raises
     # ------
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def diff(self, verbosity=0, interactive=True):
@@ -572,7 +596,7 @@ class Archives(files.BaseFiles):
                                  interactive=interactive)
         if res == 0 and verbosity >= 0:
             logger.info("... no differences found.")
-        
+
         logger.debug('End Function')
         return res
 
@@ -594,7 +618,8 @@ class Archives(files.BaseFiles):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: program
+#    @param: compression
 #
 # Returns
 # -------
@@ -604,7 +629,7 @@ class Archives(files.BaseFiles):
 #                     compression.
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def program_supports_compression (program, compression):
@@ -629,11 +654,11 @@ def program_supports_compression (program, compression):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def check_archive_format (format_, compression):
@@ -651,15 +676,15 @@ def check_archive_format (format_, compression):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ...
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def list_formats ():
@@ -702,11 +727,11 @@ def list_formats ():
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def get_archive_format (filename):
@@ -735,11 +760,11 @@ def get_archive_format (filename):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def p7zip_supports_rar():
@@ -768,11 +793,11 @@ def p7zip_supports_rar():
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def find_archive_program (format_, command, program=None):
@@ -814,11 +839,11 @@ def find_archive_program (format_, command, program=None):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def check_program_compression(archive, command, program, compression):
@@ -848,11 +873,11 @@ def check_program_compression(archive, command, program, compression):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def move_outdir_orphan (outdir):
@@ -878,15 +903,15 @@ def move_outdir_orphan (outdir):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ...
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def run_archive_cmdlist (archive_cmdlist, verbosity=0):
@@ -902,7 +927,7 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
 #
 # Function rmtree_log_error
 #
-# 
+# ...
 #
 # Inputs
 # ------
@@ -910,11 +935,11 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def rmtree_log_error (func, path, exc):
@@ -926,7 +951,7 @@ def rmtree_log_error (func, path, exc):
 #
 # Function cleanup_outdir
 #
-# 
+# ...
 #
 # Inputs
 # ------
@@ -934,11 +959,11 @@ def rmtree_log_error (func, path, exc):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def cleanup_outdir (outdir, archive):
@@ -962,7 +987,7 @@ def cleanup_outdir (outdir, archive):
 #
 # Function _extract_archive
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
@@ -981,7 +1006,7 @@ def cleanup_outdir (outdir, archive):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
@@ -1051,11 +1076,11 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _handle_archive(archive, command, verbosity=0, interactive=True,
@@ -1082,7 +1107,7 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _diff_archive
 #
 # This is the base File Class
 #
@@ -1092,11 +1117,11 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _diff_archives (archives, verbosity=0, interactive=True):
@@ -1136,11 +1161,11 @@ def _diff_archives (archives, verbosity=0, interactive=True):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _recompress_archive(archive, verbosity=0, interactive=True):
@@ -1180,12 +1205,11 @@ def _recompress_archive(archive, verbosity=0, interactive=True):
         shutil.rmtree(tmpdir2, onerror=rmtree_log_error)
     return "... recompressed file is not smaller, leaving archive as is."
 
-
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _create_archive
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
@@ -1193,11 +1217,11 @@ def _recompress_archive(archive, verbosity=0, interactive=True):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _create_archive(archive, filenames, verbosity=0, interactive=True,
@@ -1226,9 +1250,9 @@ def _create_archive(archive, filenames, verbosity=0, interactive=True,
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _repack_archive
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
@@ -1236,11 +1260,11 @@ def _create_archive(archive, filenames, verbosity=0, interactive=True,
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
@@ -1276,9 +1300,9 @@ def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _search_archive
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
@@ -1286,11 +1310,11 @@ def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _search_archive(pattern, archive, verbosity=0, interactive=True):

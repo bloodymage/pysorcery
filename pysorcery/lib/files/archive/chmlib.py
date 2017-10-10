@@ -72,7 +72,7 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------------------
 #
 # Classes
-# 
+#
 #-----------------------------------------------------------------------
 
 
@@ -101,11 +101,11 @@ logger = logging.getLogger(__name__)
 #
 # Returns
 # -------
-#    @return: 
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-------------------------------------------------------------------
 def extract_chm (archive, compression, cmd, verbosity, interactive, outdir):

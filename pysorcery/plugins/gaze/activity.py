@@ -113,14 +113,12 @@ colortext = text.ConsoleText()
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
-
     config_ = config.SorceryConfig()
-    
     activity_help = 'Show the activity log.  (Note: this is actually a log of all that happened involving sorcery, such as casts, summons etc.).'
     cmd = subparsers.add_parser('activity',
                                 parents = parent_parsers,
                                 help = activity_help
-    )        
+    )
     cmd.set_defaults(func = gaze.gaze_file,
                      sudo = False,
                      spell = None,

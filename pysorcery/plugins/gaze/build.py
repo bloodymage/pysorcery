@@ -100,7 +100,7 @@ colortext = text.ConsoleText()
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
@@ -120,5 +120,4 @@ def parser(*args, **kwargs):
     cmd.set_defaults(func = gaze.gaze_spell_file,
                      filename = 'Build',
                      sudo = False)
-    
     return cmd

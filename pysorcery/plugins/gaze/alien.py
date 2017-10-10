@@ -138,7 +138,6 @@ def gaze_alien(args):
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
-
     cmd_help = 'Find and Display all files not tracked by the Sorcery Package Management System.'
     cmd = subparsers.add_parser('alien',
                                 parents = parent_parsers,
@@ -150,5 +149,4 @@ def parser(*args, **kwargs):
     else:
         cmd.set_defaults(func = gaze_alien,
                          sudo = False)
-
     return cmd

@@ -25,7 +25,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
+#
 # This file is the pysorcery API.  All applications should reference this file.
 #
 #-----------------------------------------------------------------------
@@ -90,11 +90,11 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 # Repositories
 #
 #-----------------------------------------------------------------------
-    
+
 #-----------------------------------------------------------------------
 #
 # Class File
-# 
+#
 # The File API.  This is a factory class that determines which class
 # is used for each of the different file types.
 #
@@ -103,7 +103,9 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #   Text
 #   Archive
 #   Compressed
+#   Package
 #   Audio
+#   Video
 #
 # Inputs
 # ------
@@ -115,7 +117,7 @@ pkg_mgr = distro.distro_group[distro.distro_id]
 #
 # Raises
 # ------
-#    ...
+#    @raises: ,,,
 #
 #-----------------------------------------------------------------------
 class File():
@@ -136,18 +138,20 @@ class File():
     #
     # Inputs
     # ------
-    #    @param: filename - 
+    #    @param: filename - ...
     #
     # Returns
     # -------
     #    @return: 'archive'
     #    @return: 'compressed'
-    #    @return: 'default'
+    #    @return: 'package'
     #    @return: 'audio' - Not yet implemented
+    #    @return: 'video' - Not yet implemented
+    #    @return: 'default'
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     @staticmethod
@@ -163,33 +167,31 @@ class File():
                 id_ = 'default'
 
         return id_
-                
+
     #-------------------------------------------------------------------
     #
-    # Function getcls
+    # Function __new__
     #
     # Get the class for the filetype we are working with.
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls      - ...
+    #    @param: filename - ...
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @param: share_class - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     @staticmethod
     def __new__(cls, filename, *args, **kwargs):
-        
         name = File.id_file_class(filename)
-        share_class = File.__file_classes.get(name.lower(), None)        
+        share_class = File.__file_classes.get(name.lower(), None)
         if share_class:
             return share_class(filename, *args, **kwargs)
         else:
@@ -213,8 +215,8 @@ class File():
 #
 # Raises
 # ------
-#    ...
-# 
+#    @raises: ...
+#
 #-----------------------------------------------------------------------
 class Files():
     __file_classes = {
@@ -233,18 +235,20 @@ class Files():
     #
     # Inputs
     # ------
-    #    @param: filename - 
+    #    @param: filename - ...
     #
     # Returns
     # -------
     #    @return: 'archive'
     #    @return: 'compressed'
-    #    @return: 'default'
+    #    @return: 'package'
     #    @return: 'audio' - Not yet implemented
+    #    @return: 'video' - Not yet implemented
+    #    @return: 'default'
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     @staticmethod
@@ -260,26 +264,24 @@ class Files():
                 id_ = 'default'
 
         return id_
-                
+
     #-------------------------------------------------------------------
     #
-    # Function getcls
+    # Function __new__
     #
     # Get the class for the filetype we are working with.
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls - ...
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @param: share_class - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     @staticmethod
@@ -292,7 +294,7 @@ class Files():
             files = []
             name = 'default'
 
-        share_class = Files.__file_classes.get(name.lower(), None)        
+        share_class = Files.__file_classes.get(name.lower(), None)
         if share_class:
             return share_class(*args, **kwargs)
         else:
@@ -302,7 +304,7 @@ class Files():
 #-----------------------------------------------------------------------
 #
 # Class Directory
-# 
+#
 # Inputs
 # ------
 #    @param: filename
@@ -313,7 +315,7 @@ class Files():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Directory(files.BaseDirectory):
@@ -322,7 +324,7 @@ class Directory(files.BaseDirectory):
 #-----------------------------------------------------------------------
 #
 # Class Directories
-# 
+#
 # Inputs
 # ------
 #    @param: filelist
@@ -333,7 +335,7 @@ class Directory(files.BaseDirectory):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Directories(files.BaseDirectories):
@@ -342,7 +344,7 @@ class Directories(files.BaseDirectories):
 #-----------------------------------------------------------------------
 #
 # Class Package
-# 
+#
 # Inputs
 # ------
 #    @param: name
@@ -353,7 +355,7 @@ class Directories(files.BaseDirectories):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Package():
@@ -361,7 +363,7 @@ class Package():
         'smgl': smgl.Spell,
         'apt': apt.Package
     }
-                
+
     #-------------------------------------------------------------------
     #
     # Function __new__
@@ -370,21 +372,20 @@ class Package():
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls  - ...
+    #    @param: name - ...
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @param: share_class - list of packages that install filename
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     def __new__(cls, name, *args, **kwargs):
-        share_class = Package.__package_classes.get(pkg_mgr.lower(), None)        
+        share_class = Package.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -393,7 +394,7 @@ class Package():
 #-----------------------------------------------------------------------
 #
 # Class Package
-# 
+#
 # Inputs
 # ------
 #    @param: name
@@ -404,7 +405,7 @@ class Package():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class PackageVersions():
@@ -412,7 +413,7 @@ class PackageVersions():
         'smgl': smgl.SpellVersions,
         'apt': apt.PackageVersions
     }
-                
+
     #-------------------------------------------------------------------
     #
     # Function __new__
@@ -421,23 +422,22 @@ class PackageVersions():
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls
+    #    @param: name - ...
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @return: share_class - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     @staticmethod
     def __new__(cls, name, *args, **kwargs):
-        
-        share_class = PackageVersions.__package_classes.get(pkg_mgr.lower(), None)        
+
+        share_class = PackageVersions.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -446,7 +446,7 @@ class PackageVersions():
 #-----------------------------------------------------------------------
 #
 # Class Packages
-# 
+#
 # Inputs
 # ------
 #    @param: name
@@ -457,7 +457,7 @@ class PackageVersions():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Packages():
@@ -465,7 +465,7 @@ class Packages():
         'smgl': smgl.Spells,
         'apt': apt.Packages
     }
-                
+
     #-------------------------------------------------------------------
     #
     # Function __new__
@@ -474,22 +474,20 @@ class Packages():
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @param: share_class
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     @staticmethod
     def __new__(cls, *args, **kwargs):
-        share_class = Packages.__package_classes.get(pkg_mgr.lower(), None)        
+        share_class = Packages.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(*args, **kwargs)
         else:
@@ -498,7 +496,7 @@ class Packages():
 #-----------------------------------------------------------------------
 #
 # Class Section
-# 
+#
 # Inputs
 # ------
 #    @param: name
@@ -509,7 +507,7 @@ class Packages():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Section():
@@ -517,7 +515,7 @@ class Section():
         'smgl': smgl.Section,
         'apt': apt.Section
     }
-                
+
     #-------------------------------------------------------------------
     #
     # Function __new__
@@ -526,23 +524,21 @@ class Section():
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls - ...
+    #    @param: name - ...
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @return: share_class - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     @staticmethod
     def __new__(cls, name, *args, **kwargs):
-        
-        share_class = Section.__package_classes.get(pkg_mgr.lower(), None)        
+        share_class = Section.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(name, *args, **kwargs)
         else:
@@ -551,7 +547,7 @@ class Section():
 #-----------------------------------------------------------------------
 #
 # Class Sections
-# 
+#
 # Inputs
 # ------
 #    @param: name
@@ -562,7 +558,7 @@ class Section():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Sections():
@@ -570,7 +566,7 @@ class Sections():
         'smgl': smgl.Sections,
         'apt': apt.Sections
     }
-                
+
     #-------------------------------------------------------------------
     #
     # Function __new__
@@ -579,22 +575,19 @@ class Sections():
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls - ...
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @return: share_class - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises
     #
     #-------------------------------------------------------------------
     def __new__(cls, *args, **kwargs):
-        
-        share_class = Sections.__package_classes.get(pkg_mgr.lower(), None)        
+        share_class = Sections.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(*args, **kwargs)
         else:
@@ -603,7 +596,7 @@ class Sections():
 #-----------------------------------------------------------------------
 #
 # Class Repository
-# 
+#
 # Inputs
 # ------
 #    @param: name
@@ -614,7 +607,7 @@ class Sections():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Repository():
@@ -622,7 +615,7 @@ class Repository():
         'smgl': smgl.Grimoire,
         'apt': apt.Repository
     }
-                
+
     #-------------------------------------------------------------------
     #
     # Function __new__
@@ -631,17 +624,16 @@ class Repository():
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls
+    #    @param: name
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @return: share_class - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: NotImplementedError
     #
     #-------------------------------------------------------------------
     def __new__(cls, name, *args, **kwargs):
@@ -654,10 +646,10 @@ class Repository():
 #-----------------------------------------------------------------------
 #
 # Class Repositories
-# 
+#
 # Inputs
 # ------
-#    @param: name
+#    @param: None
 #
 # Returns
 # -------
@@ -665,7 +657,7 @@ class Repository():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class Repositories():
@@ -673,7 +665,7 @@ class Repositories():
         'smgl': smgl.Codex,
         'apt': apt.Repositories
     }
-                
+
     #-------------------------------------------------------------------
     #
     # Function __new__
@@ -682,22 +674,19 @@ class Repositories():
     #
     # Inputs
     # ------
-    #    @param: filename
-    #            self.filename - Filename to identify which package(s)
-    #                            install that file
+    #    @param: cls
     #
     # Returns
     # -------
-    #    @param: pkg_list - list of packages that install filename
+    #    @return: share_class - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     @staticmethod
     def __new__(cls, *args, **kwargs):
-        
         share_class = Repositories.__package_classes.get(pkg_mgr.lower(), None)
         if share_class:
             return share_class(*args, **kwargs)
@@ -707,7 +696,7 @@ class Repositories():
 #-----------------------------------------------------------------------
 #
 # Functions
-# 
+#
 #
 #
 #-----------------------------------------------------------------------

@@ -25,21 +25,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
-#
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
-#
-# Plugin: list
+# Plugin: List
 #
 #    This plugin lists the contents of an archive file.  If the file is
 #    a compressed file, it will read the contents of the file.
 #
 #-----------------------------------------------------------------------
 """
-Plugin: list
+Plugin: List
 
 This plugin lists the contents of an archive file.  If the file is
 a compressed file, it will read the contents of the file.
@@ -113,11 +106,11 @@ colortext = text.ConsoleText()
 #
 # Returns
 # -------
-#    None
+#    @returns: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def archive_list(args):
@@ -126,7 +119,7 @@ def archive_list(args):
     for i in args.files:
         cfile = lib.File(i)
         content = cfile.listfiles()
-    
+
     logger.debug('End Function')
     return
 
@@ -145,18 +138,16 @@ def archive_list(args):
 #
 # Returns
 # -------
-#    cmd   - the subcommand parsing options
+#    @return: cmd   - the subcommand parsing options
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
-
     subparsers = args[0]
     parent_parsers = list(args[1:])
-
     cmd= subparsers.add_parser('list',
                                parents = parent_parsers,
                                help = 'List files')
@@ -166,6 +157,6 @@ def parser(*args, **kwargs):
     cmd.add_argument('-r', '--recursive',
                      action = 'store_true',
                      help = 'Recursive')
-    cmd.set_defaults(func = archive_list) 
+    cmd.set_defaults(func = archive_list)
 
     return cmd

@@ -104,11 +104,12 @@ colortext = text.ConsoleText()
 #
 # Returns
 # -------
-#    None
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
+#
 #-----------------------------------------------------------------------
 def archive_repack(args):
     logger.debug('Begin Function')
@@ -117,7 +118,6 @@ def archive_repack(args):
     res = 0
     try:
         archive = lib.File(args.srcfile)
-        
         archive.repack_archive(args.dstfile, verbosity=args.verbosity, interactive=args.interactive)
     except Exception as msg:
         logging.error("error repacking %s: %s" % (args.srcfile, msg))
@@ -141,17 +141,16 @@ def archive_repack(args):
 #
 # Returns
 # -------
-#    cmd - the subcommand parsing options
+#    @return: cmd - the subcommand parsing options
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def parser(*args, **kwargs):
     subparsers = args[0]
     parent_parsers = list(args[1:])
-
     cmd = subparsers.add_parser('repack',
                                 parents = parent_parsers,
                                 help = 'Repack files')

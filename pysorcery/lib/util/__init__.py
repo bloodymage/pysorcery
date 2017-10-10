@@ -153,7 +153,7 @@ UrlModules = {
 # ------
 #     @param: self
 #     @param: func
-#         
+#
 # Returns
 # -------
 #     @return: None
@@ -185,7 +185,7 @@ class memoized (object):
     # ------
     #     @param: self -
     #     @param: *args -
-    #         
+    #
     # Returns
     # -------
     #     @return: self.cache[args]
@@ -219,7 +219,7 @@ class memoized (object):
     # Inputs
     # ------
     #     @param: self
-    #         
+    #
     # Returns
     # -------
     #     @return: self.func.__doc__
@@ -255,7 +255,7 @@ class memoized (object):
 # Inputs
 # ------
 #     @param: alist
-#         
+#
 # Returns
 # -------
 #     @return:
@@ -311,7 +311,7 @@ def shell_quote (value):
 # Inputs
 # ------
 #     @param: cmd_class - I really need a new name for this...
-#        
+#
 # Returns
 # -------
 #     @return:
@@ -340,7 +340,7 @@ def shell_quote_nt (value):
 #   @param: cmd -
 #           verbosity -
 #           **kwargs -
-#         
+#
 # Returns
 # -------
 #   @return: res - command return code
@@ -387,7 +387,7 @@ def run (cmd, verbosity=0, **kwargs):
 #     @param: cmd -
 #     @param: ret_ok -
 #     @param: **kwargs -
-#         
+#
 # Returns
 # -------
 #     @return: retcode
@@ -414,7 +414,7 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
 # Inputs
 # ------
 #     @param: cmd_class - Command classification to check on.
-#         
+#
 # Returns
 # -------
 #     @return: supformats - 'Supported Formats'
@@ -430,7 +430,6 @@ def get_cmd_types(cmd_class):
     # Use [a-z] to allow finding directories, but ignoring
     # '__pycache__', etc
     modules = glob.glob(os.path.dirname(cmd_dir[cmd_class]) + "/[a-z]*")
-    
     logger.debug(modules)
 
     supformats = []
@@ -459,7 +458,7 @@ def get_cmd_types(cmd_class):
 #            *kwargs['scmd'] - Sorcery Command
 #            *kwargs['program'] - Program
 #            *kwargs['cmd'] - Command
-#            *kwargs['format_'] - 
+#            *kwargs['format_'] - ...
 #
 # Returns
 # -------
@@ -490,7 +489,7 @@ def get_module_func(*args, **kwargs):
         # Turn this into a dictionary
         basemodname = import_path[scmd]
         if scmd == 'util_archive':
-            modulename = basemodname + ArchiveModules.get(key, key)            
+            modulename = basemodname + ArchiveModules.get(key, key)
         elif scmd == 'util_compressed':
             modulename = basemodname + CompressedModules.get(key, key)
         elif scmd == 'sorcery_smgl':

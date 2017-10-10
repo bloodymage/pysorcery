@@ -15,6 +15,69 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Archive commands for the lcab program."""
 
+#-----------------------------------------------------------------------
+#
+# Libraries
+#
+#-----------------------------------------------------------------------
+# System Libraries
+
+
+# 3rd Party Libraries
+
+
+# Application Libraries
+# System Library Overrides
+
+# Other Application Libraries
+
+
+# Conditional Libraries
+
+
+#-----------------------------------------------------------------------
+#
+# Global Variables
+#
+#-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
+#
+# Classes
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Functions
+#
+# create_iso
+#
+#-----------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+#
+# Function create_cab
+#
+# ...
+#
+# Inputs
+# ------
+#    @param: archive
+#    @param: compression
+#    @param: cmd
+#    @param: verbosity
+#    @param: interactive
+#    @param: filenames
+#
+# Returns
+# -------
+#    @return: cmdlist
+#
+# Raises
+# ------
+#    @raises: ...
+#
+#-------------------------------------------------------------------
 def create_cab (archive, compression, cmd, verbosity, interactive, filenames):
     """Create a CAB archive."""
     cmdlist = [cmd, '-r']

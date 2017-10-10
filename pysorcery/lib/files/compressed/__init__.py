@@ -11,7 +11,7 @@
 # Additional code from 'patool'
 # Copyright (C) 2010-2015 Bastian Kleineidam
 #
-# File: pysorcery/lib/util/files/archive/__init__.py
+# File: pysorcery/lib/util/files/compressed/__init__.py
 #
 # This file is part of Sorcery.
 #
@@ -29,12 +29,16 @@
 #    along with Dionysius.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-# This implements classes for working with compressed files
+# Compressed:
+#
+#     This implements classes for working with compressed files
 #
 # ...
 #
 #-----------------------------------------------------------------------
 """
+Compressed:
+
 Impliments classes for working with compressed files.
 """
 #-----------------------------------------------------------------------
@@ -263,11 +267,11 @@ CompressionPrograms = {
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class CompressedFile(files.BaseFile):
@@ -275,7 +279,7 @@ class CompressedFile(files.BaseFile):
     #
     # Function extract
     #
-    # Extract archive
+    # Extract compressed file.  (Decompress file).
     #
     # Inputs
     # ------
@@ -288,11 +292,11 @@ class CompressedFile(files.BaseFile):
     #
     # Returns
     # -------
-    #    None
+    #    @return: None
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def extract(self,
@@ -314,24 +318,28 @@ class CompressedFile(files.BaseFile):
 
         logger.debug('End Function')
         return
-    
+
     #-------------------------------------------------------------------
     #
     # Function create
     #
-    # Cruate archive
+    # Create compressed file.
     #
     # Inputs
     # ------
-    #    @param:
+    #    @param: self        - ...
+    #    @param: filenames   - ...
+    #    @param: verbosity   - ...
+    #    @param: program     - ...
+    #    @param: interactive - ...
     #
     # Returns
     # -------
-    #    none
+    #    @return: res - ...
     #
     # Raises
     # ------
-    #    ...
+    #    @raises: ...
     #
     #-------------------------------------------------------------------
     def create(self, filenames, verbosity=0,
@@ -356,19 +364,24 @@ class CompressedFile(files.BaseFile):
     #
     # Function listfiles
     #
-    # This is the base File Class
+    # List the contents of a compressed file.
+    #
+    # Note: Rename this function? ...
     #
     # Inputs
     # ------
-    #    @param:
+    #   @param: self        - ...
+    #   @param: verbosity   - ...
+    #   @param: program     - ...
+    #   @param: interactive - ...
     #
     # Returns
     # -------
-    #    none
+    #   @return: _handle_archive()
     #
     # Raises
     # ------
-    #    ...
+    #   @raises: ...
     #
     #-------------------------------------------------------------------
     def listfiles(self, verbosity=1, program=None, interactive=True):
@@ -385,22 +398,24 @@ class CompressedFile(files.BaseFile):
 
     #-------------------------------------------------------------------
     #
-    # Function testarchive
+    # Function recompress_archive
     #
-    # Test to ensure the archive is a valid archive
+    # Recompress an archive to make it smaller.
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self        - ...
+    #     @param: verbosity   - ...
+    #     @param: interactive - ...
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
+    #    @raises: ...
     #
-    # 
     #-------------------------------------------------------------------
     def recompress_archive(self, verbosity=0, interactive=True):
         """Recompress an archive to hopefully smaller size."""
@@ -413,26 +428,29 @@ class CompressedFile(files.BaseFile):
                                   interactive=interactive)
         if res and verbosity >= 0:
             logger.info(res)
-        return 0
+        return
 
     #-------------------------------------------------------------------
     #
     # Function testarchive
     #
-    # Test to ensure the archive is a valid archive
+    # Test to ensure the compressed file is a valid compressed file.
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self        - ...
+    #     @param: achive_new  - ...
+    #     @param: verbosity   - ...
+    #     @param: interactive - ...
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
+    #     @raises: ...
     #
-    # 
     #-------------------------------------------------------------------
     def repack_archive (self, archive_new, verbosity=0, interactive=True):
         """Repack archive to different file and/or format."""
@@ -447,25 +465,25 @@ class CompressedFile(files.BaseFile):
         if verbosity >= 0:
             logger.info("... repacking successful.")
         return res
-    
+
     #-------------------------------------------------------------------
     #
-    # Function testarchive
+    # Function test_archive
     #
     # Test to ensure the archive is a valid archive
     #
     # Inputs
     # ------
-    #     self:
+    #     @param: self
     #
     # Returns
     # -------
-    #     None (change this to True or False?)
+    #     @return: None (change this to True or False?)
     #
     # Raises
     # ------
+    #     @raises: ...
     #
-    # 
     #-------------------------------------------------------------------
     def test_archive(self, verbosity=0, program=None, interactive=True):
         """Test given archive."""
@@ -485,20 +503,20 @@ class CompressedFile(files.BaseFile):
     #
     # Function search
     #
-    # Searches archive files
+    # Searches compressed files
     #
     # Inputs
     # ------
-    #     self:
-    #     searchstring:
+    #     @param: self         - ...
+    #     @param: searchstring - ...
     #
     # Returns
     # -------
-    #     result
+    #     @return: result
     #
     # Raises
     # ------
-    #
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def search(self, pattern, verbosity=0, interactive=True):
@@ -530,11 +548,11 @@ class CompressedFile(files.BaseFile):
     #
     # Returns
     # -------
-    #     result
+    #     @return: result
     #
     # Raises
     # ------
-    #
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def read(self, verbosity=0, interactive=True, program=None):
@@ -556,7 +574,8 @@ class CompressedFile(files.BaseFile):
 #
 # Class Compressions
 #
-# This is the Compressions Class for working with multiple archive files.
+# This is the Compressions Class for working with multiple compressed
+# files.
 #
 # Inputs
 # ------
@@ -564,31 +583,32 @@ class CompressedFile(files.BaseFile):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 class CompressedFiles(files.BaseFiles):
     #-------------------------------------------------------------------
     #
-    # Function search
+    # Function diff
     #
-    # Searches archive files
+    # Diff compressed files
     #
     # Inputs
     # ------
-    #     self:
-    #     searchstring:
+    #     @param: self         - ...
+    #     @param: searchstring - ...
     #
     # Returns
     # -------
-    #     result
+    #     @return: result
     #
     # Raises
     # ------
+    #     @raises: ...
     #
     #-------------------------------------------------------------------
     def diff(self, verbosity=0, interactive=True):
@@ -604,7 +624,7 @@ class CompressedFiles(files.BaseFiles):
                                  interactive=interactive)
         if res == 0 and verbosity >= 0:
             logger.info("... no differences found.")
-        
+
         logger.debug('End Function')
         return res
 
@@ -612,6 +632,7 @@ class CompressedFiles(files.BaseFiles):
 #
 # Functions
 #
+# program_supports_compression
 # find_archive_program
 # _extract_archive
 #
@@ -635,7 +656,7 @@ class CompressedFiles(files.BaseFiles):
 #                     compression.
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def program_supports_compression (program, compression):
@@ -660,11 +681,11 @@ def program_supports_compression (program, compression):
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def check_archive_format (format_, compression):
@@ -690,7 +711,7 @@ def check_archive_format (format_, compression):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def list_formats ():
@@ -730,7 +751,7 @@ def list_formats ():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def get_archive_format (filename):
@@ -768,7 +789,7 @@ def get_archive_format (filename):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def p7zip_supports_rar():
@@ -793,8 +814,8 @@ def p7zip_supports_rar():
 #
 # Inputs
 # ------
-#    @param: format_ - 
-#    @param: command -
+#    @param: format_ - ...
+#    @param: command - ...
 #    @param: program - ... , default = None
 #
 # Returns
@@ -804,7 +825,7 @@ def p7zip_supports_rar():
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def find_archive_program (format_, command, program=None):
@@ -852,7 +873,7 @@ def find_archive_program (format_, command, program=None):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def check_program_compression(archive, command, program, compression):
@@ -893,7 +914,7 @@ def check_program_compression(archive, command, program, compression):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def move_outdir_orphan (outdir):
@@ -928,7 +949,7 @@ def move_outdir_orphan (outdir):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def run_archive_cmdlist (archive_cmdlist, verbosity=0):
@@ -961,7 +982,7 @@ def run_archive_cmdlist (archive_cmdlist, verbosity=0):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def rmtree_log_error (func, path, exc):
@@ -989,7 +1010,7 @@ def rmtree_log_error (func, path, exc):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def cleanup_outdir (outdir, archive):
@@ -1032,7 +1053,7 @@ def cleanup_outdir (outdir, archive):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
@@ -1102,11 +1123,11 @@ def _extract_archive(archive, verbosity=0, interactive=True, outdir=None,
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _handle_archive(archive, command, verbosity=0, interactive=True,
@@ -1141,16 +1162,18 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archives    - ...
+#    @param: verbosity   - ...
+#    @param: interactive - ...
 #
 # Returns
 # -------
-#    @return: 0 -
-#    @return: 1 - 
+#    @return: 0 - ...
+#    @return: 1 - ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _diff_archives (archives, verbosity=0, interactive=True):
@@ -1188,15 +1211,20 @@ def _diff_archives (archives, verbosity=0, interactive=True):
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive     - ...
+#    @param: compression - ...
+#    @param: cmd         - ...
+#    @param: verbosity   - ...
+#    @param: interactive - ...
+#    @param: outdir      - ...
 #
 # Returns
 # -------
-#    none
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def extract_singlefile_standard (archive, compression, cmd, verbosity, interactive, outdir):
@@ -1215,19 +1243,23 @@ def extract_singlefile_standard (archive, compression, cmd, verbosity, interacti
 #
 # Standard routine to test a singlefile archive (like gzip).
 #
-# This is what Compressed file format is for...
+# This is what Compressed file format is for ...
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive     - ...
+#    @param: compression - ...
+#    @param: cmd         - ...
+#    @param: verbosity   - ...
+#    @param: interactive - ...
 #
 # Returns
 # -------
-#    none
+#    @return: cmdlist - ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def test_singlefile_standard (archive, compression, cmd, verbosity, interactive):
@@ -1240,21 +1272,26 @@ def test_singlefile_standard (archive, compression, cmd, verbosity, interactive)
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function create_singlefile_standard
 #
 # This is the base File Class
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive     - ...
+#    @param: compression - ...
+#    @param: cmd         - ...
+#    @param: verbosity   - ...
+#    @param: interactive - ...
+#    @param: filenames   - ...
 #
 # Returns
 # -------
-#    none
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def create_singlefile_standard (archive, compression, cmd, verbosity, interactive, filenames):
@@ -1269,21 +1306,26 @@ def create_singlefile_standard (archive, compression, cmd, verbosity, interactiv
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _recompress_archive
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
-#    @param:
+#    @param: archive     - ...
+#    @param: verbosity   - ...
+#                          Default: 0
+#    @param: interactive - ...
+#                          Default: True
 #
 # Returns
 # -------
-#    none
+#    @return: ...
+#    @return: ...
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _recompress_archive(archive, verbosity=0, interactive=True):
@@ -1325,21 +1367,21 @@ def _recompress_archive(archive, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _create_archive
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ...
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _create_archive(archive, filenames, verbosity=0, interactive=True,
@@ -1368,21 +1410,21 @@ def _create_archive(archive, filenames, verbosity=0, interactive=True,
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _repack_archive
 #
-# This is the base File Class
+# ...
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ...
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
@@ -1418,21 +1460,21 @@ def _repack_archive (archive1, archive2, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _search_archive
 #
 # This is the base File Class
 #
 # Inputs
 # ------
-#    @param:
+#    @param: ...
 #
 # Returns
 # -------
-#    none
+#    @return: None
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _search_archive(pattern, archive, verbosity=0, interactive=True):
@@ -1450,7 +1492,7 @@ def _search_archive(pattern, archive, verbosity=0, interactive=True):
 
 #-----------------------------------------------------------------------
 #
-# Function _extract_archive
+# Function _read_archive
 #
 # Read the contents of a compressed file
 #
@@ -1471,7 +1513,7 @@ def _search_archive(pattern, archive, verbosity=0, interactive=True):
 #
 # Raises
 # ------
-#    ...
+#    @raises: ...
 #
 #-----------------------------------------------------------------------
 def _read_archive(archive, verbosity=0, interactive=True, outdir=None,
