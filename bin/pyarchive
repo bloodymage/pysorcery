@@ -51,7 +51,7 @@ try:
     here = os.path.abspath(os.path.dirname(__file__))
     if here.split('/')[1] == 'home':
         home = os.path.expanduser('~')
-        private_module_path = home + "/src/python-sorcery/"
+        private_module_path = home + "/src/python-sorcery/src/"
         if private_module_path:
             sys.path.insert(1, private_module_path)
             from pysorcery.cli import archive
