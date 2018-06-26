@@ -49,12 +49,12 @@ if here.split('/')[1] == 'home':
     private_module_path = home + "/src/pysorcery/src/"
     if private_module_path:
         sys.path.insert(1, private_module_path)
-        from pysorcery.cli import gaze
-        sys.exit(
-            gaze.main()
-        )
-else:
-    import pysorcery
+
+from pysorcery.cli import gaze
+sys.exit(
+    gaze.main()
+)
+
 #8except Exception as msg:
 #    print(msg)
 #    pass
