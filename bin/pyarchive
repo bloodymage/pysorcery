@@ -54,11 +54,10 @@ try:
         private_module_path = home + "/src/python-sorcery/src/"
         if private_module_path:
             sys.path.insert(1, private_module_path)
-            from pysorcery.cli import archive
-            sys.exit(
-                archive.main()
-            )
-    else:
-        import pysorcery
 except Exception as msg:
     print(msg)
+
+from pysorcery.cli import archive
+sys.exit(
+    archive.main()
+)
