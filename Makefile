@@ -7,6 +7,9 @@
 #
 #
 # ---------------------------------------------------------------------
+NAME=pysorcery-systools
+VERSION=0.0.1a
+DESCRIPTION="pySocerery System Tools"
 
 # -------
 #
@@ -20,7 +23,7 @@ YELLOW := $(shell tput -Txterm setaf 3)
 RESET  := $(shell tput -Txterm sgr0)
 
 #
-PYTHON_MODULES := mypkg
+PYTHON_MODULES := pysorcery
 PYTHONPATH := .
 VENV := .venv
 PYTEST := env PYTHONPATH=$(PYTHONPATH) PYTEST=1 $(VENV)/bin/py.test
@@ -33,6 +36,12 @@ DEFAULT_PYTHON := /usr/bin/python3
 VIRTUALENV := /usr/local/bin/virtualenv
 
 REQUIREMENTS := -r requirements.txt
+
+# Packaging
+PKG_DIR=pkg
+PKG_NAME=$(NAME)-$(VERSION)
+PKG=$(PKG_DIR)/$(PKG_NAME).tar.xz
+SIG=$(PKG_DIR)/$(PKG_NAME).asc
 
 
 # Add the following 'help' target to your Makefile
@@ -52,8 +61,6 @@ HELP_FUN = \
 
 help: ##@other Show this help.
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
-
-
 
 default: check-coding-style ##@Other: default ...
 
@@ -93,3 +100,27 @@ clean-build:
 	rm --force --recursive build/
 	rm --force --recursive dist/
 	rm --force --recursive *.egg-info
+
+pkg: ##@Packaging
+	mkdir -p $(PKG_DIR)
+
+$(PKG): pkg ##@Packaging
+	git archive --output=$(PKG) --prefix=$(PKG_NAME)/ HEAD
+
+build: $(PKG) ##@Packaging
+
+$(SIG): $(PKG) ##@Packaging
+	gpg --sign --detach-sign --armor $(PKG)
+
+sign: $(SIG) ##@Packaging
+
+clean: ##@Packaging
+	rm -f $(PKG) $(SIG)
+
+all: $(PKG) $(SIG)
+
+tag:
+	git tag v$(VERSION)
+	git push --tags
+
+release: $(PKG) $(SIG) tag
