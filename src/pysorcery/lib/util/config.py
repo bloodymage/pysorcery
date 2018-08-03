@@ -83,7 +83,6 @@ log_dirs = {
 
 sound_themes = [ 'off', 'ferris', 'star trek' ]
 
-
 pkg_mgr = distro.distro_group[distro.distro_id]
 #-----------------------------------------------------------------------
 #
