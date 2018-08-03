@@ -8,12 +8,9 @@
 # Python rewrite
 # Copyright 2017 Geoff S Derber
 #
-# Additional code from 'patool'
-# Copyright (C) 2010-2015 Bastian Kleineidam
-#
 # This file is part of Sorcery.
 #
-# File: pysorcery/cli/archive.py
+# File: pysorcery/bin/pygaze.py
 #
 #    Sorcery is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published
@@ -28,36 +25,37 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Sorcery.  If not, see <http://www.gnu.org/licenses/>.
 #
-# pyArchive
+# pyGaze
 #
-#   This is a bonus application for pysorcery.  PySorcery for multiple
-#   reasons to internally extract, create, list the contents, etc.
-#   archive files of multiple formats.  To test the capabilities of the
-#   underlying code, this application was developed.
+# Testing startup script.  Allows the program to be executed without
+# installing for development purposes.
 #
 #-----------------------------------------------------------------------
 """
-This is a bonus application for pysorcery.  PySorcery for multiple
-reasons to internally extract, create, list the contents, etc.
-archive files of multiple formats.  To test the capabilities of the
-underlying code, this application was developed.
+pyGaze
+
+Testing startup script.  Allows the program to be executed without
+installing for development purposes.
 """
 
 import sys
 import os
-# EASY-INSTALL-ENTRY-SCRIPT: 'pysorcery==0.0.1','console_scripts','pyarchive'
+
 try:
     # added so distributors can consistently specify a private module location
     here = os.path.abspath(os.path.dirname(__file__))
     if here.split('/')[1] == 'home':
         home = os.path.expanduser('~')
-        private_module_path = home + "/src/python-sorcery/src/"
+        private_module_path = home + "/src/pysorcery/src/"
         if private_module_path:
             sys.path.insert(1, private_module_path)
+
 except Exception as msg:
     print(msg)
 
-from pysorcery.cli import archive
+from pysorcery.cli import gaze
 sys.exit(
-    archive.main()
+    gaze.main()
 )
+
+#    pass
