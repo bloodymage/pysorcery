@@ -74,7 +74,7 @@ from pysorcery.lib.system import logging
 # Other Application Libraries
 from pysorcery import __version__, DEBUG
 from pysorcery.lib import util
-from pysorcery.lib.util import config
+from pysorcery.lib import config
 from pysorcery.lib.util import text
 from pysorcery.plugins import gaze
 

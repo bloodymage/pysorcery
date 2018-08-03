@@ -66,7 +66,7 @@ from pysorcery.lib.system import mimetypes
 from pysorcery import *
 from pysorcery import lib
 from pysorcery.lib import util
-from pysorcery.lib.util import config
+from pysorcery.lib import config
 from pysorcery.lib.util import text
 from pysorcery.lib.files import archive
 

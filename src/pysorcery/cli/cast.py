@@ -42,40 +42,43 @@
 #
 #-------------------------------------------------------------------------------
 
+#-----------------------------------------------------------------------
+#
+# Libraries
+#
+#-----------------------------------------------------------------------
 # System Libraries
 import sys
 import os
 import copy
-import subprocess
 
-# Other Libraries
+# 3rd Party Libraries
 
 
 # Application Libraries
-# Application Overrides
-from pysorcery.lib import argparse
-from pysorcery.lib import distro
-from pysorcery.lib import logging
+# System Library Overrides
+from pysorcery.lib.system import argparse
+from pysorcery.lib.system import logging
 # Other Application Libraries
-from pysorcery import __version__, enable_debugging_mode
-from pysorcery.lib import libtext
-from pysorcery.lib import libconfig
-from pysorcery.lib import libspell
-from pysorcery.lib import libgrimoire
-from pysorcery.lib import libcodex
+from pysorcery import __version__, DEBUG
+from pysorcery.lib import util
+from pysorcery.lib import config
+from pysorcery.lib.util import text
+from pysorcery.plugins import gaze
 
-# Other Optional Libraries
-#if pysorcery.distro_id in pysorcery.distro_dict['deb']:
-#    import apt
+# Conditional Libraries
 
 
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 #
 # Global Variables
 #
-#-------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Enable Logging
+# create logger
 logger = logging.getLogger(__name__)
+# Allow color text on console
+colortext = text.ConsoleText()
 
 #-------------------------------------------------------------------------------
 #
@@ -113,7 +116,7 @@ def cast(args):
     logger.debug("Begin Function")
 
     for i in args.spell:
-        spell = libspell.Spell(i)
+        spell = spell.Spell(i)
         spell.install(args)
     
     logger.debug("End Function")
