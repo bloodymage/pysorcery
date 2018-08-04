@@ -46,7 +46,7 @@ PYDIR=$(LIBDIR)/python3.6/dist-packages/
 SORCERYDIR=$(PYDIR)/pysorcery
 PKGPYSRCDIR=src/pysorcery
 
-INSTALL_FILES=`cd bin; find . -type f 2>/dev/null`
+INSTALL_FILES=`find bin -type f 2>/dev/null`
 DOC_FILES=*.md
 
 # Packaging
