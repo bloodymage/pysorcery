@@ -161,3 +161,28 @@ def get_installed(status):
             packages.append('-')
 
     return packages
+
+#---------------------------------------------------------------
+#
+# Function get_installed
+#
+# ...
+#
+# Inputs
+# ------
+#    @param:
+#
+# Returns
+# -------
+#    @return:
+#
+# Raises
+# ------
+#    ...
+#
+#-------------------------------------------------------------------
+def install(name, **kwargs):
+    var = subprocess.check_output(['apt', 'list', name)
+
+    return None
+

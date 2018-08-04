@@ -80,7 +80,8 @@ Commands = ('get_description',
             'get_size',
             'get_queue',
             'get_installed',
-            'get_log')
+            'get_log',
+            'install')
 
 # List of programs supporting the given archive format and command.
 # If command is None, the program supports all commands (list, extract,

@@ -7,9 +7,9 @@
 #
 #
 # ---------------------------------------------------------------------
-NAME=pysorcery-systools
+NAME=pysorcery
 VERSION=0.0.1a
-DESCRIPTION="pySocerery System Tools"
+DESCRIPTION="pySocerery"
 
 # -------
 #
@@ -36,6 +36,18 @@ DEFAULT_PYTHON := /usr/bin/python3
 VIRTUALENV := /usr/local/bin/virtualenv
 
 REQUIREMENTS := -r requirements.txt
+
+#
+PREFIX=/usr/local
+BINDIR=$(PREFIX)/bin
+LIBDIR=$(PREFIX)/lib
+MANDIR=$(PREFIX)/man
+PYDIR=$(LIBDIR)/python3.6/dist-packages/
+SORCERYDIR=$(PYDIR)/pysorcery
+PKGPYSRCDIR=src/pysorcery
+
+INSTALL_FILES=`cd $(BINDIR); find . -type f 2>/dev/null`
+DOC_FILES=*.md
 
 # Packaging
 PKG_DIR=pkg
@@ -124,3 +136,10 @@ tag:
 	git push --tags
 
 release: $(PKG) $(SIG) tag
+
+# Ugly hack until setup.py is further developed
+install:
+	@ln -nsvrf $(PWD)/$(PYSRCDIR) $(SORCERYDIR)
+	for file in $(INSTALL_FILES); do ln -nsvrf bin/$$file $(BINDIR)/$$file; done
+	#mkdir -p $(DOC_DIR)
+	#cp -r $(DOC_FILES) $(DOC_DIR)/
