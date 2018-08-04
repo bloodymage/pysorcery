@@ -124,6 +124,12 @@
 ### 0.0.6
 #### Functional Scripts
 - pycast
+  - apt
+    [ ] individual packages
+    [ ] multiple packages
+  - sorcery
+    [X] individual spells
+    [ ] multiple spells
 #### Modified scripts
 - pyarchive
   - Functions
