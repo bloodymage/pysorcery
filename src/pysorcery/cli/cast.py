@@ -64,7 +64,6 @@ from pysorcery import __version__, DEBUG
 from pysorcery.lib import util
 from pysorcery.lib import config
 from pysorcery.lib.util import text
-from pysorcery.plugins import gaze
 
 # Conditional Libraries
 
@@ -116,8 +115,20 @@ def cast(args):
     logger.debug("Begin Function")
 
     for i in args.spell:
-        spell = spell.Spell(i)
-        spell.install(args)
+        logger.debug2('Loop iteration: ' + i)
+        
+        spell = lib.Package(i)
+        spell.install()
+        #try:
+        #    description = spell.get_description()
+        #except:
+        #    description = 'Fall back description, something went wrong'
+
+        logger.debug3('Spell: ' + str(spell))
+            
+        message = colortext.colorize(spell.name, 'bold','white','black')
+        logger.info(message)
+
     
     logger.debug("End Function")
     return
