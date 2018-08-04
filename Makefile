@@ -149,7 +149,7 @@ release: $(PKG) $(SIG) tag
 
 # Ugly hack until setup.py is further developed
 install:
-	@ln -nsvrf $(PWD)/$(PYSRCDIR) $(SORCERYDIR)
+	@ln -nsvrf $(PWD)/$(SRCDIR) $(SORCERYDIR)
 	@for file in $(INSTALL_FILES); \
 	do \
 		ln -nsvrf $$file $(PREFIX)/$$file; \
