@@ -141,7 +141,7 @@ release: $(PKG) $(SIG) tag
 install:
 	@ln -nsvrf $(PWD)/$(PYSRCDIR) $(SORCERYDIR)
 	@for file in $(INSTALL_FILES); do
-		@ln -nsvrf $$file $(PREFIX)/$$file
+		ln -nsvrf $$file $(PREFIX)/$$file
 	@done
 	#mkdir -p $(DOC_DIR)
 	#cp -r $(DOC_FILES) $(DOC_DIR)/
