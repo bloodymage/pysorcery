@@ -41,19 +41,29 @@ REQUIREMENTS := -r requirements.txt
 PREFIX=/usr/local
 BINDIR=$(PREFIX)/bin
 LIBDIR=$(PREFIX)/lib
-MANDIR=$(PREFIX)/man
+SHAREDIR=$(PREFIX)/share
+MANDIR=$(SHARE)/man
 PYDIR=$(LIBDIR)/python3.6/dist-packages/
 SORCERYDIR=$(PYDIR)/pysorcery
-PKGPYSRCDIR=src/pysorcery
 
-INSTALL_FILES=`find bin -type f 2>/dev/null`
-DOC_FILES=*.md
+
+SRCDIR=src/pysorcery
+SRCDOCDIR=doc
+
 
 # Packaging
 PKG_DIR=pkg
 PKG_NAME=$(NAME)-$(VERSION)
 PKG=$(PKG_DIR)/$(PKG_NAME).tar.xz
 SIG=$(PKG_DIR)/$(PKG_NAME).asc
+
+# Installation
+INSTALL_FILES=`find bin -type f 2>/dev/null`
+DOCDIRS=`find $(SRCDOCDIR) -type d 2>/dev/null`
+DOCFILES=`find $(SRCDOCDIR) -type f 2>/dev/null`
+DOC_DIR=$(PREFIX)/share/doc/$(PKG_NAME)
+DOC_FILES=*.md
+
 
 
 # Add the following 'help' target to your Makefile
@@ -141,7 +151,9 @@ release: $(PKG) $(SIG) tag
 install:
 	@ln -nsvrf $(PWD)/$(PYSRCDIR) $(SORCERYDIR)
 	@for file in $(INSTALL_FILES); do
-		ln -nsvrf $$file $(PREFIX)/$$file
+		ln -nsvrf $$file $(PREFIX)/$$file;
 	@done
-	#mkdir -p $(DOC_DIR)
-	#cp -r $(DOC_FILES) $(DOC_DIR)/
+	for dir in $(DOCDIRS); do mkdir -p $(SHAREDIR)/$$dir; done
+	for file in $(DOCFILES); do cp $$file $(SHAREDIR)/$$file; done
+	mkdir -p $(DOC_DIR)
+	cp -r $(DOC_FILES) $(DOC_DIR)/
