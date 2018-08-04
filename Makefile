@@ -150,10 +150,16 @@ release: $(PKG) $(SIG) tag
 # Ugly hack until setup.py is further developed
 install:
 	@ln -nsvrf $(PWD)/$(PYSRCDIR) $(SORCERYDIR)
-	@for file in $(INSTALL_FILES); do
-		ln -nsvrf $$file $(PREFIX)/$$file;
-	@done
-	for dir in $(DOCDIRS); do mkdir -p $(SHAREDIR)/$$dir; done
-	for file in $(DOCFILES); do cp $$file $(SHAREDIR)/$$file; done
+	@for file in $(INSTALL_FILES); \
+	do \
+		ln -nsvrf $$file $(PREFIX)/$$file; \
+	done
+	@for dir in $(DOCDIRS); \
+	do \
+		mkdir -p $(SHAREDIR)/$$dir; \
+	done
+	@for file in $(DOCFILES); \
+		do cp $$file $(SHAREDIR)/$$file; \
+	done
 	mkdir -p $(DOC_DIR)
 	cp -r $(DOC_FILES) $(DOC_DIR)/
