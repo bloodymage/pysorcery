@@ -102,7 +102,7 @@ cmd_dir = {
     'sorcery_smgl': SORCERY_SMGL_PATH
 }
 
-import_path = {
+IMPORT_PATH = {
     'util_file': 'pysorcery.lib.files.',
     'util_archive': 'pysorcery.lib.files.archive.',
     'util_compressed': 'pysorcery.lib.files.compressed.',
@@ -431,7 +431,7 @@ def get_cmd_types(cmd_class, path=None):
     # Use [a-z] to allow finding directories, but ignoring
     # '__pycache__', etc
     if path is not None:
-        modules=glob.glob(path)
+        modules=glob.glob(path + "/[a-z]*")
     else:
         modules = glob.glob(os.path.dirname(cmd_dir[cmd_class]) + "/[a-z]*")
     logger.debug(modules)
@@ -484,6 +484,11 @@ def get_module_func(*args, **kwargs):
         format_ = kwargs['format_']
     else:
         format_ = False
+
+    if 'import_path' in kwargs:
+        import_path = kwargs['import_path']
+    else:
+        import_path = IMPORT_PATH
 
     """Get the Python function that executes the given program."""
     # get python module for given archive program
