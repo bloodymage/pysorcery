@@ -414,6 +414,7 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
 # Inputs
 # ------
 #     @param: cmd_class - Command classification to check on.
+#     @param: path - 
 #
 # Returns
 # -------
@@ -424,12 +425,15 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_cmd_types(cmd_class):
+def get_cmd_types(cmd_class, path=None):
     logger.debug('Begin Function')
 
     # Use [a-z] to allow finding directories, but ignoring
     # '__pycache__', etc
-    modules = glob.glob(os.path.dirname(cmd_dir[cmd_class]) + "/[a-z]*")
+    if path is not None:
+        modules=glob.glob(path)
+    else:
+        modules = glob.glob(os.path.dirname(cmd_dir[cmd_class]) + "/[a-z]*")
     logger.debug(modules)
 
     supformats = []
