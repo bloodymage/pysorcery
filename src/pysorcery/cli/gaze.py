@@ -130,8 +130,9 @@ colortext = text.ConsoleText()
 #-----------------------------------------------------------------------
 def real_main(args):
     logger.debug('Entered Function')
+    pluginpath = pkg_resources.resource_filename('gaze','plugins')
 
-    subcommands = util.get_cmd_types('gaze')
+    subcommands = util.get_cmd_types('gaze',pluginpath)
     epilog_text = """
 See man pygaze() for more information.\n
 \n

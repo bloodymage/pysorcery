@@ -425,7 +425,7 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
 #    ...
 #
 #-----------------------------------------------------------------------
-def get_cmd_types(cmd_class, path=None):
+def get_cmd_types(cmd_class=None, path=None):
     logger.debug('Begin Function')
 
     # Use [a-z] to allow finding directories, but ignoring

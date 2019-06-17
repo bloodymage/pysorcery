@@ -128,6 +128,8 @@ colortext = text.ConsoleText()
 def real_main(args):
     logger.debug('Entered Function')
 
+    pluginpath = pkg_resources.resource_filename('archive','plugins')
+
     epilog_text = """
 See man pyarchive() for more information.\n
 \n
@@ -145,7 +147,7 @@ Report bugs to ...
     subparsers = parser.create_subparsers()
 
     # Get list of subcommands
-    subcommands = util.get_cmd_types('archive')
+    subcommands = util.get_cmd_types('archive',pluginpath)
 
     # Create the subcommand arguments
     for i in subcommands:
