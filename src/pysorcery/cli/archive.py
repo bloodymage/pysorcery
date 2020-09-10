@@ -128,7 +128,7 @@ colortext = text.ConsoleText()
 def real_main(args):
     logger.debug('Entered Function')
 
-    pluginpath = pkg_resources.resource_filename('archive','plugins')
+    pluginpath = util.ARCHIVE_PATH
 
     epilog_text = """
 See man pyarchive() for more information.\n
