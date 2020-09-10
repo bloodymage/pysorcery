@@ -124,15 +124,6 @@ ArchiveModules = {
     'extract_chmlib': 'chmlib',
 }
 
-CompressedModules = {
-}
-
-SMGLModules = {
-}
-
-UrlModules = {
-}
-
 #-----------------------------------------------------------------------
 #
 # Classes
@@ -499,10 +490,6 @@ def get_module_func(*args, **kwargs):
         basemodname = import_path[scmd]
         if scmd == 'util_archive':
             modulename = basemodname + ArchiveModules.get(key, key)
-        elif scmd == 'util_compressed':
-            modulename = basemodname + CompressedModules.get(key, key)
-        elif scmd == 'sorcery_smgl':
-            modulename = basemodname + SMGLModules.get(key, key)
         else:
             modulename = basemodname + key
 
