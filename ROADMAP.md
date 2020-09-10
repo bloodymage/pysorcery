@@ -14,7 +14,7 @@
     - [X] search
     - [X] diff
     - [X] formats
-    - [X] recompress    
+    - [X] recompress
   - Archive Formats
     - [X] tar
     - [X] zip
@@ -23,99 +23,193 @@
     - [X] bz2
     - [X] iso
     - [X] others ...
+- setup.py
 
 ### 0.0.2    
 #### Functional Scripts
 - pygaze
-    - [ ] activity
-    - [ ] alien
+  - Functions
+    - [X] activity
+    - [X] alien
     - [ ] checkmd5s
-    - [ ] compile
-    - [ ] dependencies
-    - [ ] depends
+    - [X] compile
+    - [X] dependencies
+    - [X] depends
     - [ ] export
-    - [ ] from
+    - [X] from
     - [ ] grimoire
-    - [ ] grimoires
-    - [ ] history
+    - [X] grimoires
+    - [X] history
     - [ ] html
     - [ ] import
-    - [ ] installed
+    - [X] installed
     - [ ] install-full
-    - [ ] install
-    - [ ] install-queue
+    - [X] install
+    - [X] install-queue
     - [ ] install-spell
-    - [ ] licenses
-    - [ ] maintainer
+    - [X] licenses
+    - [X] maintainer
     - [ ] md5sum
     - [ ] newer
     - [ ] older
-    - [ ] orphans
+    - [X] orphans
     - [ ] provides
-    - [ ] remove-queue
+    - [X] remove-queue - Theoretical, haven't had data to truly test with.
     - [ ] search
-    - [ ] section
-    - [ ] short
-    - [ ] show-exiled
-    - [ ] show-held
-    - [ ] size
-    - [ ] sources
-    - [ ] source_urls
+    - [X] section
+    - [X] short
+    - [X] show-exiled
+    - [X] show-held
+    - [X] size
+    - [X] sources
+    - [X] source_urls
     - [ ] sum
     - [ ] time
     - [ ] time-system
-    - [ ] url
-    - [ ] version
+    - [X] url
+    - [X] version
     - [ ] versions
     - [ ] voyeur
-    - [ ] what
-    - [ ] where
-    
-  
+    - [X] what
+    - [X] where
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [X] read (for compressed files, ex. txtfile.gz)
+#### Other
+- Begin implementation of multiple smgl api versions.
+- Pretty print capability
+
 ### 0.0.3
 #### Functional Scripts
 - pysummon
-  - [ ] http
-  - [ ] ftp
-  - [ ] git
-  - [ ] svn
-  - [ ] cvs
-  - [ ] rsync
-  - [ ] bzr
-  - [ ] file (Include Directories)
-  
+  - URI formats:
+    - [ ] http
+    - [ ] ftp
+    - [ ] git
+    - [ ] svn
+    - [ ] cvs
+    - [ ] rsync
+    - [ ] bzr
+    - [ ] file (Include Directories)
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] add (file)
+    
 ### 0.0.4
 #### Functional Scripts
 - pyscribe
-  - [ ] add
-  - [ ] remove
-  - [ ] update
-
+  - Functions
+    - [ ] add
+    - [ ] remove
+    - [ ] update
+    - [ ] localize
+    - [ ] unlocalize
+    - [ ] set
+    - [ ] swap
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] append (concatenate two archives, ex. tar1.tar.gz + tar2.tar.gz = tar3.tar.gz)
 
 ### 0.0.5
 #### Functional Scripts
-- pycast
-
+- pyscribbler
+  - Functions
+    - [ ] add
+    - [ ] remove
+    - [ ] add-grimoire
 
 ### 0.0.6
 #### Functional Scripts
-- pydispel
-
-
+- pycast
+  - apt
+    [ ] individual packages
+    [ ] multiple packages
+  - sorcery
+    [X] individual spells
+    [ ] multiple spells
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] delete (file from archive)
+    
 ### 0.0.7
 #### Functional Scripts
-- pycleanse
-
+- pydispel
+#### Modified scripts
+- pyarchive
+  - Functions
+    - [ ] update
 
 ### 0.0.8
 #### Functional Scripts
-- pyscribbler
-
+- pycleanse
 
 ### 0.0.9
 #### Functional Scripts
 - pysorcery
-
+  - Functions
+    - [ ] system-update
+    - [ ] update
+    - [ ] upgrade
+    - [ ] rebuild
+    - [ ] queue
+    - [ ] queue-security
+    - [ ] review-queue
+    - [ ] add-queue
+    - [ ] remove-queue
+    - [ ] hold
+    - [ ] unhold
+    - [ ] exile
+    - [ ] unexile
+    - [ ] default ...
+  - Menus
+    - [ ] Spell
+      - [ ] Add
+      - [ ] Rebuild (same as 'sorcery rebuild')
+      - [ ] Hold
+      - [ ] Remove
+      - [ ] Select
+      - [ ] Update
+    - [ ] Option
+      - [ ] Sorcery Branch
+      - [ ] Color Scheme
+      - [ ] Prompt Delay
+      - [ ] Download Rate
+      - [ ] Nice Level
+      - [ ] Umask Value
+      - [ ] Email of Sorcerer (SysAdmin)
+      - [ ] Feature Menu
+      - [ ] Integrity Checking
+      - [ ] Parallel / Cached / Distributed Compiling
+      - [ ] Dependency Following
+      - [ ] Software Mirrors
+      - [ ] Optimize Architecture
+      - [ ] Compression Type
+      - [ ] Sorcery Development
+      - [ ] Summon Timeout
+      - [ ] Default Download Tool
+      - [ ] init.d and xinet.d defaults
+      - [ ] Themes
+        - [ ] Sound Scheme (only one at a time)
+	  - [ ] Star Trek
+	  - [ ] Ferris
+	  - [ ] Misc
+	  - [ ] Simpsons
+	  - [ ] Off
+	- [ ] Command Theme (multiple allowed)
+	  - [ ] Sorcery (only if bash sorcery is not installed)
+	  - [ ] Harry Potter
+	  - [ ] Lunar (only if bash lunar not installed)
+	  - [ ] ...
+    - [ ] Log
+    - [ ] Queue
+    - [ ] Install Root
+  - Execute (Menu Options for Execution)
+    - [ ] Foreground
+    - [ ] Background  
 
 ### 0.0.10
 #### Functional Scripts
@@ -136,7 +230,7 @@
 - pyupstream
   - Check Debian Upstream
   - Create Spell From Debian Upstream
-
+#### Sorcery Spell API 3
 
 ### 0.0.12
 #### Script Modifications
@@ -175,11 +269,10 @@
 
 ## 0.1
 
-- Sorcery CLI functional replacement for BASH version
+~- Sorcery CLI functional replacement for BASH version
 #### Supported Distributions
 - [ ] Source Mage
 - [ ] Xubuntu
-
 
 ### 0.1.1
 ####
@@ -187,30 +280,23 @@
 
 ### 0.1.2
 ####
-- Maximize native python code
+- Maximize native python code (minimize calls to outside programs).
+- If sorcery needs outside program for a feature, create option to install.
 
 ### 0.1.3
 - Ensure proper exception handling
 
 ### 0.1.4
-- Setup.py
-
-### 0.1.5
 #### Functional Scripts
 - pyenchant
-#### Script Modifications
-- pyarchive
-  - formats
-    - [ ] iso
  
-### 0.1.6
+### 0.1.5
 #### Functional Scripts
 - pycauldron
 
 
 ## 0.2
 - Framework functionally complete
-- Open to the public?
 
 ### 0.2.1
 #### Functional Scripts
@@ -225,12 +311,11 @@
 
 ### 0.4.1
 #### Modified Scripts
-- Guru toolsr
+- Guru tools
   - [ ] Fix History
   - [ ] Report
     - [ ] Grimoire Image
     - [ ] Compare Images
-  - [ ] MD5unpack - Obtain MD5/SHA256/SHA512 for a tarball
   - [ ] Rebuild packages (Repairs /var/state/sorcery/packages
   - [ ] Cherry-pick
 
@@ -238,8 +323,10 @@
 #### Functional Scripts
 - pysmgl-ledger
 
+
 ## 0.5
 - Base Code Functional
+- Open to the public?
 
 ### 0.5.1
 #### Supported Distributions
@@ -248,7 +335,7 @@
 ### 0.5.2
 #### Supported Distributions
 - Debian
-  
+
 
 ## 0.6
 - Sorcery Pockage Management Complete
@@ -258,6 +345,7 @@
 #### New Package Manager
 - Add support for Lunar Linux '...'
   - Ensure commands are compatible with Lunar Linux commands
+  - Add Lunar 'Theme' for commands.
 
 ### 0.6.2
 #### New Package Manager
@@ -275,11 +363,11 @@
 ## 0.7
 - Major Linux distributions package managers supported
 
+
 ## 0.8
 - Add support for 'pip' package manager
 
 ### 0.8.1
-
 
 
 ## 0.9
@@ -289,16 +377,23 @@
 Debug, debug, debug
 
 
+
 ## 1.0
 - Release 1
+
+
+### 1.1.0
+#### New Package Manager
+- Add support for MacOS 'Homebrew'
+
 
 
 ## 2.0
 - Release 2
 
-### 2.0.1
-#### New Package Manager
-- Add support for MacOS 'Homebrew'
+
+### 2.1.0
 
 
 ## 3.0
+####
