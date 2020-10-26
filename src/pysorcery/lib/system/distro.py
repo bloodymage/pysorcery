@@ -60,8 +60,9 @@ distro_definitions = {
     ('Ubuntu',
      'Linux Mint',
      'Debian',
-     'Kali',
-     'Debian GNU/Linux'
+     'Kali GNU/Linux',
+     'Debian GNU/Linux',
+     'Rasbian GNU/Linux
     ): 'apt',
     ('Source Mage',
      'SMGL'
